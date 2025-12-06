@@ -1,0 +1,62 @@
+
+---
+
+## Fichier 3 – `.q-context/blueprint-draft-vectora-inbox.yaml`
+
+👉 Ce fichier, c’est une **“maquette déclarative”** :  
+on y décrit **quoi** on veut (projet, buckets, layout du repo), pas comment coder.
+
+Colle ceci dans `blueprint-draft-vectora-inbox.yaml` :
+
+```yaml
+# .q-context/blueprint-draft-vectora-inbox.yaml
+# High-level declarative blueprint for the Vectora Inbox MVP.
+# Goal: describe WHAT infra and layout we want, not low-level code.
+
+project:
+  name: "Vectora Inbox"
+  description: "MVP automated sector intelligence & newsletter engine."
+  aws_profile: "vectora-inbox"
+  region: "eu-west-3"
+  envs:
+    - "mvp"
+
+naming:
+  resource_prefix: "vectora-inbox"
+  stack_prefix: "vectora-inbox"
+  stacks:
+    - "s0-core"
+    # later: "s0-iam", "s1-engine" can be added in future iterations
+
+repo_layout:
+  root: "vectora-inbox/"
+  folders:
+    - path: "canonical/"
+      purpose: "Canonical scopes and shared domain rules; no client-specific logic."
+    - path: "client-config-examples/"
+      purpose: "Example client config YAML files used as templates."
+    - path: "contracts/"
+      purpose: "Business contracts for Lambdas and components, written for humans and Q."
+    - path: "src/"
+      purpose: "Runtime code (Lambda functions, helpers). For the MVP: a single engine Lambda."
+    - path: "infra/"
+      purpose: "Infrastructure-as-code (CloudFormation/SAM/CDK). No business logic."
+    - path: ".q-context/"
+      purpose: "Guidance files for Amazon Q Developer (overview, rules, blueprint)."
+    - path: "docs/"
+      purpose: "Architecture and workflow documentation for humans."
+
+infra_stacks:
+  s0-core:
+    description: "Core storage buckets required by the MVP."
+    resources:
+      s3_buckets:
+        - id: "config_bucket"
+          name: "vectora-inbox-config"
+          purpose: "Canonical scopes and client config files."
+        - id: "data_bucket"
+          name: "vectora-inbox-data"
+          purpose: "Raw, normalized and matched items for each client."
+        - id: "newsletters_bucket"
+          name: "vectora-inbox-newsletters"
+          purpose: "Rendered newsletters (Markdown first, later HTML/PDF)."
