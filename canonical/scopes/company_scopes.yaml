@@ -1,0 +1,169 @@
+# Scopes d'entreprises.
+# Chaque scope regroupe des entreprises clés impliquées dans le développement,
+# la fabrication ou la commercialisation de formulations.
+
+# Entreprises globales actives dans les LAI (tous segments confondus).
+lai_companies_global:
+  - 89bio
+  - AbbVie
+  - Activate Therapeutics
+  - Adare Pharmaceuticals
+  - Adocia
+  - Akari Therapeutics
+  - Akero Therapeutics
+  - Alar Pharmaceuticals
+  - Alcon
+  - Alexion Pharmaceuticals
+  - ALK-Abello
+  - Alkermes
+  - Allay Therapeutics
+  - Allysta Pharmaceuticals
+  - Alma Therapeutics
+  - Alteogen
+  - Amgen
+  - Amplicore
+  - Anhui Anke Biotechnology
+  - Ankyra Therapeutics
+  - Anthos Therapeutics
+  - Antlia Bioscience
+  - AprilBio
+  - Asahi Kasei Pharma
+  - Ascendis Pharma
+  - Ascletis Biopharmaceutical
+  - ASTA Medica (Baxter)
+  - Astellas Pharma
+  - AstraZeneca
+  - Astria Therapeutics
+  - Bayer
+  - BeOne
+  - Betta Pharmaceuticals
+  - Biocon
+  - Bioverativ
+  - Bolder BioTechnology
+  - Boston Pharmaceuticals
+  - Braeburn
+  - Brii Biosciences
+  - Cali Pharmaceuticals
+  - Camurus
+  - Canwell Pharma
+  - Carmot Therapeutics
+  - CHEPLAPHARM
+  - Chong Kun Dang Holdings
+  - Chongqing Chen'an Biopharmaceutical Co LtdCo Ltd
+  - Chugai Pharmaceutical
+  - Cidara Therapeutics
+  - Cipla USA
+  - Consegna Pharma
+  - Contura
+  - Covis Pharma
+  - Cristal Therapeutics
+  - CSL Behring
+  - Daewon Pharm
+  - Daewoong Pharmaceutical
+  - Dare Bioscience
+  - Debiopharm
+  - Debiopharm International
+  - DelSiTech
+  - Durect
+  - Eagle Pharmaceuticals
+  - Eisai
+  - Eli Lilly
+  - Endo International
+  - EnhanX Biopharm
+  - Eupraxia Pharmaceuticals
+  - Exavir Therapeutics
+  - Ferring
+  - Foresee Pharmaceuticals
+  - Frontier Biotechnologies
+  - G2GBio
+  - Genexine
+  - Gilead Sciences
+  - GlaxoSmithKline
+  - Hanmi Pharmaceutical
+  - Hansoh Pharmaceutical
+  - Harrow
+  - Heron Therapeutics
+  - Immunoforge Co
+  - Immunwork
+  - IMV
+  - Indivior
+  - InSitu Biologics
+  - Intra-Cellular Therapies
+  - Ipsen
+  - Janssen
+  - Janssen Pharmaceuticals
+  - Jazz Pharmaceuticals
+  - JCR Pharmaceuticals
+  - Jiangsu Hengrui Medicine
+  - Jiangxi Puheng Pharmaceuticals Ltd; LIDDS AB
+  - Laboratorios Farmaceuticos Rovi
+  - LeaderMed Health Group Ltd;
+  - Lee's Pharmaceutical Holdings
+  - Lepu Medical Technology (Beijing) Co Ltd
+  - LIDDS
+  - LipoCure
+  - Lisata Therapeutics Inc; Qilu Pharmaceutical Co Ltd
+  - LTT Bio-Pharma Co
+  - Lundbeck
+  - Luye Pharma
+  - Mallinckrodt
+  - Mapi Pharma
+  - MedinCell
+  - Merck & Co
+  - Metsera
+  - Molecular Partners
+  - Mundipharma
+  - NanOlogy
+  - Neuraly
+  - NKD Pharm
+  - Novartis
+  - Novo Nordisk
+  - Omeros
+  - OPKO Health
+  - Original BioMedicals Implants
+  - Pacira BioSciences
+  - PainReform
+  - PDX Pharmaceuticals
+  - Peptron
+  - Peregrine Ophthalmic
+  - Persica Pharmaceuticals
+  - Pfizer
+  - PharmaEssentia
+  - PhaseBio Pharmaceuticals
+  - PolyPid
+  - Prolynx
+  - Protheragen
+  - QuiaPEG Pharmaceuticals
+  - RebelMedicine
+  - Recordati
+  - Regeneron Pharmaceuticals
+  - Reliance Life Sciences
+  - Revance Therapeutics
+  - Rhythm Pharmaceuticals
+  - Roxall Medizin
+  - Samyang Corp
+  - Sanofi
+  - Scilex Holding
+  - Serina Therapeutics
+  - Shionogi & Co
+  - Silexion Therapeutics
+  - Sonoran Biosciences
+  - Spectrum Pharmaceuticals
+  - SpineThera
+  - Spinnaker Biosciences
+  - Spiral Therapeutics
+  - Sun Pharmaceutical
+  - Synartro
+  - Taiwan Liposome
+  - Takeda Pharmaceutical
+  - TargTex
+  - Teva Pharmaceutical
+  - Theraly Fibrosis
+  - UroGen Pharma
+  - Vanda Pharmaceuticals
+  - Vasa Therapeutics
+  - Vifor Pharma
+  - ViiV Healthcare
+  - Viriom
+  - Zealand Pharma
+

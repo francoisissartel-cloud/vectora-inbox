@@ -1,0 +1,309 @@
+# canonical/event_type_patterns.yaml
+# Event type classification patterns for Vectora Inbox
+# Used by the engine Lambda to classify normalized items into business-relevant categories
+
+event_types:
+  clinical_update:
+    label: "Clinical Update"
+    description: >
+      Clinical trial results, study data, patient enrollment updates, trial initiation or completion.
+      Includes Phase 1/2/3 results, interim analyses, trial design announcements.
+    typical_sources:
+      - press_corporate
+      - press_sector
+      - clinicaltrials
+      - pubmed
+    title_keywords:
+      - "phase 1"
+      - "phase 2"
+      - "phase 3"
+      - "phase I"
+      - "phase II"
+      - "phase III"
+      - "clinical trial"
+      - "study results"
+      - "trial data"
+      - "patient enrollment"
+      - "topline results"
+      - "interim analysis"
+      - "primary endpoint"
+      - "efficacy"
+      - "safety data"
+      - "pivotal trial"
+      - "positive results"
+      - "meets primary endpoint"
+    body_keywords:
+      - "enrolled patients"
+      - "statistically significant"
+      - "placebo"
+      - "adverse events"
+      - "dosing"
+      - "randomized"
+      - "double-blind"
+      - "open-label"
+      - "investigator"
+      - "clinical development"
+    negative_keywords:
+      - "preclinical"
+      - "in vitro"
+      - "animal model"
+
+  partnership:
+    label: "Partnership / Deal"
+    description: >
+      Collaborations, licensing agreements, co-development deals, strategic alliances,
+      option agreements, research partnerships.
+    typical_sources:
+      - press_corporate
+      - press_sector
+    title_keywords:
+      - "partnership"
+      - "collaboration"
+      - "licensing agreement"
+      - "license agreement"
+      - "strategic alliance"
+      - "co-development"
+      - "joint venture"
+      - "option agreement"
+      - "research collaboration"
+      - "exclusive license"
+      - "non-exclusive license"
+      - "distribution agreement"
+      - "commercialization agreement"
+      - "announces deal"
+      - "signs agreement"
+      - "enters into agreement"
+    body_keywords:
+      - "upfront payment"
+      - "milestone payments"
+      - "royalties"
+      - "development rights"
+      - "commercialization rights"
+      - "territory"
+      - "exclusive rights"
+      - "option to license"
+      - "co-promote"
+    negative_keywords:
+      - "acquisition"
+      - "merger"
+
+  scientific_paper:
+    label: "Scientific Publication"
+    description: >
+      Peer-reviewed publications, preprints, conference presentations, posters,
+      scientific abstracts, research articles.
+    typical_sources:
+      - pubmed
+      - press_sector
+      - press_corporate
+    title_keywords:
+      - "published in"
+      - "publication"
+      - "journal"
+      - "peer-reviewed"
+      - "preprint"
+      - "research article"
+      - "study published"
+      - "paper"
+      - "abstract"
+      - "poster presentation"
+      - "oral presentation"
+      - "conference presentation"
+      - "data presented at"
+    body_keywords:
+      - "authors"
+      - "manuscript"
+      - "peer review"
+      - "citation"
+      - "methodology"
+      - "findings"
+      - "conclusion"
+      - "abstract"
+      - "supplementary materials"
+    negative_keywords: []
+
+  regulatory:
+    label: "Regulatory Event"
+    description: >
+      Regulatory submissions, approvals, rejections, label updates, pricing decisions,
+      reimbursement decisions, HTA assessments, orphan drug designations, fast track designations.
+    typical_sources:
+      - press_corporate
+      - press_sector
+      - fda
+    title_keywords:
+      - "FDA approval"
+      - "EMA approval"
+      - "regulatory approval"
+      - "NDA"
+      - "BLA"
+      - "MAA"
+      - "submission"
+      - "filing"
+      - "orphan drug designation"
+      - "fast track"
+      - "breakthrough therapy"
+      - "priority review"
+      - "accelerated approval"
+      - "label expansion"
+      - "indication approval"
+      - "pricing decision"
+      - "reimbursement"
+      - "HTA"
+      - "NICE"
+      - "complete response letter"
+      - "CRL"
+    body_keywords:
+      - "regulatory authority"
+      - "marketing authorization"
+      - "indication"
+      - "prescribing information"
+      - "label"
+      - "PDUFA"
+      - "regulatory pathway"
+      - "conditional approval"
+      - "post-marketing"
+    negative_keywords: []
+
+  corporate_move:
+    label: "Corporate / Strategic Move"
+    description: >
+      Management changes, executive appointments, board changes, corporate strategy updates,
+      restructuring, organizational changes, pipeline prioritization.
+    typical_sources:
+      - press_corporate
+      - press_sector
+    title_keywords:
+      - "appoints"
+      - "names"
+      - "CEO"
+      - "CFO"
+      - "CMO"
+      - "chief"
+      - "executive"
+      - "board of directors"
+      - "management team"
+      - "strategic update"
+      - "corporate strategy"
+      - "restructuring"
+      - "reorganization"
+      - "pipeline update"
+      - "portfolio prioritization"
+      - "leadership change"
+    body_keywords:
+      - "effective immediately"
+      - "reporting to"
+      - "brings experience"
+      - "strategic direction"
+      - "organizational structure"
+      - "cost reduction"
+      - "focus on"
+    negative_keywords:
+      - "clinical trial"
+      - "phase"
+      - "approval"
+
+  financial_results:
+    label: "Financial Results"
+    description: >
+      Quarterly earnings, annual results, financial guidance, revenue updates,
+      cash position, fundraising announcements.
+    typical_sources:
+      - press_corporate
+      - press_sector
+    title_keywords:
+      - "earnings"
+      - "financial results"
+      - "quarterly results"
+      - "Q1"
+      - "Q2"
+      - "Q3"
+      - "Q4"
+      - "fiscal year"
+      - "revenue"
+      - "guidance"
+      - "raises"
+      - "financing"
+      - "IPO"
+      - "public offering"
+      - "cash position"
+      - "reports financial"
+    body_keywords:
+      - "net income"
+      - "net loss"
+      - "GAAP"
+      - "non-GAAP"
+      - "earnings per share"
+      - "EPS"
+      - "operating expenses"
+      - "R&D expenses"
+      - "cash and cash equivalents"
+      - "runway"
+      - "investors"
+    negative_keywords: []
+
+  safety_signal:
+    label: "Safety / Pharmacovigilance"
+    description: >
+      Safety alerts, adverse event reports, recalls, black box warnings, REMS programs,
+      post-marketing safety updates, drug safety communications.
+    typical_sources:
+      - fda
+      - press_sector
+      - press_corporate
+    title_keywords:
+      - "safety alert"
+      - "recall"
+      - "adverse event"
+      - "black box warning"
+      - "safety update"
+      - "drug safety"
+      - "pharmacovigilance"
+      - "REMS"
+      - "safety concern"
+      - "side effect"
+      - "safety signal"
+      - "FDA warning"
+    body_keywords:
+      - "serious adverse event"
+      - "SAE"
+      - "mortality"
+      - "hospitalization"
+      - "contraindication"
+      - "risk mitigation"
+      - "safety monitoring"
+      - "post-marketing surveillance"
+    negative_keywords:
+      - "positive safety profile"
+      - "well-tolerated"
+
+  manufacturing_supply:
+    label: "Manufacturing / Supply"
+    description: >
+      Manufacturing agreements, supply chain updates, production capacity expansions,
+      CMO partnerships, drug shortages, manufacturing issues.
+    typical_sources:
+      - press_corporate
+      - press_sector
+      - fda
+    title_keywords:
+      - "manufacturing"
+      - "production"
+      - "supply agreement"
+      - "CMO"
+      - "contract manufacturing"
+      - "facility"
+      - "capacity expansion"
+      - "drug shortage"
+      - "supply chain"
+      - "GMP"
+      - "manufacturing site"
+    body_keywords:
+      - "commercial scale"
+      - "production capacity"
+      - "manufacturing partner"
+      - "supply chain"
+      - "quality control"
+      - "batch release"
+      - "scale-up"
+    negative_keywords: []

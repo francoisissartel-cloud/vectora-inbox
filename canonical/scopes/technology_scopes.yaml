@@ -1,0 +1,93 @@
+# Scopes de technologies.
+# Mots-clés et expressions indiquant des formulations ou technologies.
+
+# Mots-clés génériques pour identifier les technologies cibles dans les textes.
+lai_keywords:
+  - long-acting
+  - long acting
+  - long-acting formulation
+  - extended-release injection
+  - extended-release injectable
+  - controlled-release injection
+  - injectable controlled release
+  - sustained release injectable
+  - depot injection
+  - long-acting depot
+  - drug delivery system
+  - DDS
+  - half-life extension
+  - polymeric microspheres
+  - PLGA microspheres
+  - microsphere
+  - microspheres
+  - in-situ forming depot
+  - ISFD
+  - in situ depot
+  - Atrigel
+  - FluidCrystal
+  - SmartDepot
+  - multivesicular liposomes
+  - MVL
+  - DepoFoam
+  - BioSeizer
+  - liposomes
+  - liposomal
+  - PLEX
+  - thermo-responsive hydrogel
+  - hydrogel
+  - thermo-gel
+  - RTGel
+  - liquid crystalline depot
+  - liquid crystal
+  - nanosuspension
+  - nanocrystal
+  - nanosizing
+  - long-acting emulsion
+  - emulsion
+  - lipid emulsion
+  - oil-based
+  - depot-forming prodrug
+  - depot prodrug
+  - long-acting prodrug
+  - PASylation
+  - PAS
+  - PEGylation
+  - PEGylated
+  - PEG
+  - site-specific PEGylation
+  - Fc fusion
+  - Fc-fusion
+  - IgG Fc fusion
+  - albumin binding
+  - albumin fusion
+  - albumin-binding
+  - lipidation
+  - fatty acid conjugation
+  - XTEN
+  - polypeptide extension
+  - glyco-engineering
+  - glycan engineering
+  - sialylation
+  - protein engineering
+  - subcutaneous
+  - intramuscular
+  - intravenous
+  - intravitreal
+  - intratumoral
+  - intra-articular
+  - intrathecal
+  - intravesical
+  - epidural
+  - once-monthly
+  - q4w
+  - q8w
+  - q12w
+  - 6-month
+  - quarterly injection
+  - once-weekly injection
+
+# Systèmes de délivrance spécifiques (optionnel, à compléter si pertinent).
+lai_delivery_systems: []
+
+# Technologies de formulation (optionnel, à compléter si pertinent).
+lai_formulation_technologies: []

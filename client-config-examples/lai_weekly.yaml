@@ -1,0 +1,96 @@
+# client-config-examples/lai_weekly.yaml
+# Configuration client pour "LAI Intelligence Weekly"
+# Newsletter hebdomadaire centrée sur les technologies LAI (Long-Acting Injectables)
+#
+# Ce fichier configure :
+# - Les scopes métier (entreprises, molécules, mots-clés) à surveiller
+# - Les sources d'information (via des bouquets réutilisables)
+# - La structure de la newsletter finale
+#
+# Pour modifier cette config :
+# 1. Les clés de scopes (ex: "lai_companies_global") doivent exister dans canonical/scopes/*.yaml
+# 2. Les bouquets (ex: "lai_corporate_mvp") doivent être définis dans canonical/sources/source_catalog.yaml
+# 3. Tous les commentaires sont en français pour faciliter la maintenance
+
+client_profile:
+  name: "LAI Intelligence Weekly"
+  client_id: "lai_weekly"
+  language: "en"              # Langue de la newsletter finale
+  tone: "executive"           # Ton professionnel et synthétique
+  voice: "concise"            # Style concis
+  frequency: "weekly"         # Fréquence de génération : hebdomadaire
+
+# Domaines de veille : définit ce que le client souhaite surveiller.
+# Pour le MVP LAI, on se concentre sur l'écosystème LAI global (pas de découpage par indication).
+watch_domains:
+  - id: "tech_lai_ecosystem"
+    type: "technology"
+    # Références aux scopes canonical (ces clés DOIVENT exister dans canonical/scopes/)
+    technology_scope: "lai_keywords"           # Mots-clés LAI (voir technology_scopes.yaml)
+    company_scope: "lai_companies_global"      # Entreprises LAI (voir company_scopes.yaml)
+    molecule_scope: "lai_molecules_global"     # Molécules LAI (voir molecule_scopes.yaml)
+    priority: "high"                           # Priorité haute pour ce domaine
+
+  # SCOPES NON-MVP : Les domaines ci-dessous sont commentés car ils nécessitent
+  # des scopes d'indication (addiction, schizophrenia) qui ne sont pas encore remplis.
+  # Ils seront activés dans une version ultérieure.
+  #
+  # - id: "indication_addiction"
+  #   type: "indication"
+  #   indication_scope: "addiction_keywords"
+  #   company_scope: "addiction_companies"
+  #   molecule_scope: "lai_molecules_addiction"
+  #   priority: "high"
+  #
+  # - id: "indication_schizophrenia"
+  #   type: "indication"
+  #   indication_scope: "schizophrenia_keywords"
+  #   company_scope: "schizophrenia_companies"
+  #   molecule_scope: "lai_molecules_psychiatry"
+  #   priority: "medium"
+
+  - id: "regulatory_lai"
+    type: "regulatory"
+    technology_scope: "lai_keywords"           # Surveillance réglementaire LAI
+    priority: "high"
+
+# Configuration des sources d'information.
+# On utilise des BOUQUETS (groupes de sources prédéfinis) plutôt que de lister
+# chaque source individuellement. Cela simplifie la maintenance.
+source_config:
+  # Bouquets activés : liste des bouquets à utiliser pour l'ingestion.
+  # Ces bouquets sont définis dans canonical/sources/source_catalog.yaml
+  source_bouquets_enabled:
+    - "lai_corporate_mvp"        # Sous-ensemble MVP de sites corporate LAI (5-10 sources)
+    - "press_biotech_premium"    # Presse sectorielle pharma/biotech (FiercePharma, Endpoints, etc.)
+  
+  # Sources supplémentaires (optionnel) : permet d'ajouter des sources spécifiques
+  # en plus des bouquets, si besoin.
+  sources_extra_enabled: []
+
+# Structure de la newsletter finale.
+# Pour le MVP LAI, on simplifie avec 2 sections principales.
+newsletter_layout:
+  sections:
+    - id: "top_signals"
+      title: "Top Signals – LAI Ecosystem"
+      source_domains:
+        - "tech_lai_ecosystem"    # Signaux technologiques LAI
+        - "regulatory_lai"        # Signaux réglementaires LAI
+      max_items: 5                # Maximum 5 items dans cette section
+
+    - id: "partnerships_deals"
+      title: "Partnerships & Deals"
+      source_domains:
+        - "tech_lai_ecosystem"
+      max_items: 3
+      filter_event_types:
+        - "partnership"           # Ne garder que les événements de type "partnership"
+
+# Configuration de la livraison de la newsletter.
+newsletter_delivery:
+  format: "markdown"            # Format de sortie : Markdown
+  include_tldr: true            # Inclure un résumé exécutif (TL;DR)
+  include_intro: true           # Inclure une introduction
+  delivery_method: "s3"         # Méthode de livraison : stockage S3
+  notification_email: "client@example.com"  # Email de notification

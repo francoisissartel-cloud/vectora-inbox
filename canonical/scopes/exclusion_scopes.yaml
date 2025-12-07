@@ -1,0 +1,25 @@
+# Scopes d'exclusion.
+# Mots-clés et contextes à exclure pour réduire le bruit (faux positifs).
+
+# Termes génériques à exclure (cosmétique, vétérinaire, etc.).
+lai_exclude_noise:
+  - implantable device
+  - surgically implanted
+  - transdermal patch
+  - oral tablet
+  - oral capsule
+  - topical cream
+  - gene therapy
+  - cell therapy
+  - CAR-T
+  - vaccine
+  - vaccination
+  - prophylactic vaccine
+  - cosmetic
+  - veterinary
+  - diagnostic
+
+# Contextes non pertinents (optionnel, à compléter si besoin).
+exclude_contexts: []
+
+lai_exclusion_scopes: []

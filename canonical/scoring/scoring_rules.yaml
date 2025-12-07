@@ -1,0 +1,70 @@
+# Règles de scoring métier pour Vectora Inbox.
+# Ces poids et facteurs guident le calcul du score de pertinence de chaque item
+# avant sa sélection dans la newsletter.
+#
+# Idée générale : un bon signal (clinique / réglementaire, sur un domaine prioritaire,
+# impliquant un compétiteur ou une molécule clé, récent et issu d'une bonne source)
+# doit naturellement remonter en tête de la liste.
+
+event_type_weights:
+  # Poids relatifs par type d'évènement.
+  # Valeurs plus élevées = événements plus importants pour la veille.
+  # Ces valeurs pourront être ajustées plus tard selon le ressenti des utilisateurs.
+
+  clinical_update: 5          # Résultats, débuts/fins d'étude : cœur de la veille.
+  regulatory: 5               # Approvals, CRL, mises à jour de label : hyper stratégique.
+  partnership: 6              # Deals, licensing, co-développement : très important.
+  corporate_move: 2           # Changements de management, restructuration : signal utile mais secondaire.
+  financial_results: 3        # Contexte business, mais moins ciblé que le clinique/réglementaire.
+  scientific_publication: 3   # Publications scientifiques importantes, plutôt "background" stratégique.
+  other: 1                    # Autres évènements : faible priorité par défaut.
+
+domain_priority_weights:
+  # Poids par priorité de domaine (high > medium > low).
+  # Reflète l'importance stratégique des domaines suivis pour un client donné.
+
+  high: 3     # Domaines "core" pour le client.
+  medium: 2   # Domaines importants mais pas critiques.
+  low: 1      # Domaines périphériques.
+
+other_factors:
+  # Bonus ou facteurs additionnels modulant le score.
+
+  # Bonus si l'item mentionne un compétiteur clé du client.
+  competitor_company_bonus: 2
+
+  # Bonus si l'item mentionne une molécule / produit clé pour le client.
+  key_molecule_bonus: 1.5
+
+  # Demi-vie de décroissance pour la récence (en jours).
+  # Exemple : avec une demi-vie de 7 jours, l'impact de la récence est divisé par 2
+  # au bout d'une semaine.
+  recency_decay_half_life_days: 7
+
+  # Bonus pour la "profondeur" du signal (nombre d'entités pertinentes détectées).
+  # Par exemple, la Lambda de scoring peut ajouter +0.3 par entité pertinente
+  # au-delà de la première.
+  signal_depth_bonus: 0.3
+
+  # Poids par type de source.
+  # Corporate = communiqué officiel / site de l'entreprise.
+  # Sector = presse spécialisée (FiercePharma, Endpoints, etc.).
+  # Generic = sources plus généralistes ou moins ciblées.
+
+  source_type_weight_corporate: 2
+  source_type_weight_sector: 1.5
+  source_type_weight_generic: 1
+
+# Seuils de sélection pour la newsletter.
+# Ces seuils déterminent quels items seront inclus dans la newsletter finale.
+selection_thresholds:
+  # Score minimum pour qu'un item soit inclus dans la newsletter.
+  # Les items avec un score inférieur à ce seuil sont exclus.
+  min_score: 10
+
+  # Nombre minimum d'items par section.
+  # Si une section a moins de X items au-dessus du seuil min_score,
+  # on inclut quand même les X meilleurs items de cette section
+  # (même s'ils sont en dessous du seuil).
+  # Cela garantit qu'une section ne soit jamais complètement vide.
+  min_items_per_section: 1

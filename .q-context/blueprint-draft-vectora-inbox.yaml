@@ -1,32 +1,41 @@
-
----
-
-## Fichier 3 – `.q-context/blueprint-draft-vectora-inbox.yaml`
-
-👉 Ce fichier, c’est une **“maquette déclarative”** :  
-on y décrit **quoi** on veut (projet, buckets, layout du repo), pas comment coder.
-
-Colle ceci dans `blueprint-draft-vectora-inbox.yaml` :
-
-```yaml
 # .q-context/blueprint-draft-vectora-inbox.yaml
 # High-level declarative blueprint for the Vectora Inbox MVP.
 # Goal: describe WHAT infra and layout we want, not low-level code.
+#
+# Key architecture principles:
+# - 3 S3 buckets: config, data, newsletters
+# - 2 Lambda functions: ingest-normalize, engine
+# - Amazon Bedrock as the "linguistic brain" (entity extraction, event classification, editorial writing)
+# - Bedrock NOT used for: HTTP plumbing, matching (set intersections), scoring (numeric rules)
 
 project:
   name: "Vectora Inbox"
   description: "MVP automated sector intelligence & newsletter engine."
-  aws_profile: "vectora-inbox"
+  aws_profile: "rag-lai-prod"
+  aws_account_id: "786469175371"
   region: "eu-west-3"
   envs:
     - "mvp"
+
+bedrock:
+  region: "eu-west-3"
+  usage: "Linguistic brain for normalization (entity extraction, event classification) and newsletter assembly (editorial writing)"
+  models:
+    normalize: "configured-via-env-var"  # e.g., BEDROCK_MODEL_NORMALIZE
+    editorial: "configured-via-env-var"  # e.g., BEDROCK_MODEL_EDITORIAL
+  notes:
+    - "Bedrock IS used for: entity extraction, event classification, summaries, newsletter writing"
+    - "Bedrock is NOT used for: HTTP requests, RSS parsing, matching (set intersections), scoring (numeric rules)"
+    - "Model IDs must come from environment variables, not hardcoded"
+    - "IAM roles must include bedrock:InvokeModel permission restricted to eu-west-3"
 
 naming:
   resource_prefix: "vectora-inbox"
   stack_prefix: "vectora-inbox"
   stacks:
-    - "s0-core"
-    # later: "s0-iam", "s1-engine" can be added in future iterations
+    - "s0-core"      # Core S3 buckets
+    - "s1-ingest"    # Lambda for ingestion + normalization (with Bedrock)
+    - "s1-engine"    # Lambda for matching + scoring + newsletter assembly (with Bedrock)
 
 repo_layout:
   root: "vectora-inbox/"
@@ -38,7 +47,7 @@ repo_layout:
     - path: "contracts/"
       purpose: "Business contracts for Lambdas and components, written for humans and Q."
     - path: "src/"
-      purpose: "Runtime code (Lambda functions, helpers). For the MVP: a single engine Lambda."
+      purpose: "Runtime code (Lambda functions, helpers). For the MVP: 2 Lambdas (ingest-normalize, engine)."
     - path: "infra/"
       purpose: "Infrastructure-as-code (CloudFormation/SAM/CDK). No business logic."
     - path: ".q-context/"
@@ -49,6 +58,9 @@ repo_layout:
 infra_stacks:
   s0-core:
     description: "Core storage buckets required by the MVP."
+    requirements:
+      region: "eu-west-3"
+      profile: "rag-lai-prod"
     resources:
       s3_buckets:
         - id: "config_bucket"
@@ -56,7 +68,69 @@ infra_stacks:
           purpose: "Canonical scopes and client config files."
         - id: "data_bucket"
           name: "vectora-inbox-data"
-          purpose: "Raw, normalized and matched items for each client."
+          purpose: >
+            Stores RAW ingested data and normalized items per client.
+            
+            RAW layer (optional, for debugging and replays):
+              raw/<client_id>/<source_key>/<YYYY>/<MM>/<DD>/raw.json
+              - Per-client and per-source (source_key)
+              - Examples: press_corporate__fiercepharma, press_sector__endpointsnews, pubmed_lai, ctgov_lai
+            
+            Normalized layer (input for engine):
+              normalized/<client_id>/<YYYY>/<MM>/<DD>/items.json
+              - Per-client and per-day, aggregating all sources
+              - Each item MUST contain source_key and source_type fields
+            
+            The engine Lambda only reads from normalized/, not from raw/.
         - id: "newsletters_bucket"
           name: "vectora-inbox-newsletters"
           purpose: "Rendered newsletters (Markdown first, later HTML/PDF)."
+
+  s1-ingest:
+    description: "Lambda for ingestion (HTTP/RSS) and normalization (Bedrock-assisted entity extraction and event classification)."
+    requirements:
+      region: "eu-west-3"
+      profile: "rag-lai-prod"
+    resources:
+      lambdas:
+        - id: "ingest_normalize_lambda"
+          name: "vectora-inbox-ingest-normalize"
+          runtime: "python3.12"  # or as specified
+          needs_bedrock: true
+          bedrock_permissions:
+            - "bedrock:InvokeModel"
+            - "bedrock:InvokeModelWithResponseStream"  # if streaming is used
+          s3_permissions:
+            - "s3:GetObject on vectora-inbox-config/*"
+            - "s3:PutObject on vectora-inbox-data/normalized/*"
+            - "s3:PutObject on vectora-inbox-data/raw/*"  # optional
+          environment_variables:
+            - "BEDROCK_MODEL_NORMALIZE"  # e.g., anthropic.claude-3-sonnet-20240229-v1:0
+          phases:
+            - "Phase 1A: Ingestion (no Bedrock) - HTTP requests, RSS parsing, JSON decoding"
+            - "Phase 1B: Normalization (with Bedrock) - entity extraction, event classification, summaries"
+
+  s1-engine:
+    description: "Lambda for matching (rule-based), scoring (rule-based), and newsletter generation (Bedrock-assisted editorial writing)."
+    requirements:
+      region: "eu-west-3"
+      profile: "rag-lai-prod"
+    resources:
+      lambdas:
+        - id: "engine_lambda"
+          name: "vectora-inbox-engine"
+          runtime: "python3.12"  # or as specified
+          needs_bedrock: true
+          bedrock_permissions:
+            - "bedrock:InvokeModel"
+            - "bedrock:InvokeModelWithResponseStream"  # if streaming is used
+          s3_permissions:
+            - "s3:GetObject on vectora-inbox-config/*"
+            - "s3:GetObject on vectora-inbox-data/normalized/*"
+            - "s3:PutObject on vectora-inbox-newsletters/*"
+          environment_variables:
+            - "BEDROCK_MODEL_EDITORIAL"  # e.g., anthropic.claude-3-sonnet-20240229-v1:0
+          phases:
+            - "Phase 2: Matching (no Bedrock) - set intersections, domain matching"
+            - "Phase 3: Scoring (no Bedrock) - numeric rules, transparent scoring"
+            - "Phase 4: Newsletter Assembly (with Bedrock) - intros, TL;DR, editorial summaries"
