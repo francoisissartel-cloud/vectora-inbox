@@ -191,7 +191,31 @@ vectora-inbox-engine-role
 
 ---
 
-## 3. Règles de nommage des scopes canonical
+## 3. Priorité de lecture pour Amazon Q Developer
+
+Avant de proposer ou d'appliquer des changements importants sur le projet (architecture, contrats métier, canonical, infra, code source), Amazon Q Developer doit systématiquement :
+
+1. **Relire `.q-context/vectora-inbox-overview.md`** (vue d'ensemble du produit Vectora Inbox).
+   - Ce fichier décrit l'architecture fonctionnelle, le workflow end-to-end, les 5 phases, les 3 buckets S3, les 2 Lambdas, le rôle de Bedrock.
+   - Il sert de "brain court terme" pour Q : une vue synthétique et structurée du projet.
+
+2. **Relire `docs/diagnostics/vectora-inbox-deep-diagnostic.md`** (diagnostic 360° : objectifs, workflow, gouvernance, état de préparation).
+   - Ce fichier est la référence fonctionnelle et architecturale détaillée du projet.
+   - Il contient le diagnostic complet : vision produit, architecture technique, gouvernance, extensibilité, risques, recommandations.
+   - Il doit être consulté avant toute modification importante de l'architecture, des contrats métier, des scopes canonical, de l'infrastructure ou du code.
+
+**Ces deux fichiers sont les références canoniques du projet.**
+
+Les propositions de Q doivent rester alignées avec ces documents, sauf demande explicite de l'utilisateur pour faire évoluer l'architecture.
+
+**Important :**
+- `.q-context/` = "brain court terme" pour Q (vue synthétique, règles de travail).
+- `docs/diagnostics/vectora-inbox-deep-diagnostic.md` = "vue 360° détaillée" à consulter avant de changer l'architecture, les contrats ou la gouvernance.
+- Ne PAS dupliquer le contenu complet du diagnostic dans `.q-context/`. Simplement le référencer et expliquer quand Q doit le lire.
+
+---
+
+## 4. Règles de nommage des scopes canonical
 
 ### 3.1 Principes fondamentaux
 
@@ -296,7 +320,7 @@ La Lambda ne "sait" pas que c'est LAI. Elle charge juste la liste à la clé `"l
 
 ---
 
-## 4. Règles pour le catalogue de sources et les bouquets
+## 5. Règles pour le catalogue de sources et les bouquets
 
 ### 4.1 Nommage des `source_key`
 
@@ -529,7 +553,7 @@ bouquets:
 
 ---
 
-## 5. Repository map (how the codebase is organized)
+## 6. Repository map (how the codebase is organized)
 
 You are working in the GitHub repo:
 
@@ -601,7 +625,7 @@ blueprint-draft-vectora-inbox.yaml
 
 ---
 
-## 6. Amazon Bedrock usage rules
+## 7. Amazon Bedrock usage rules
 
 ### 6.1 Where Bedrock IS used
 
@@ -640,9 +664,13 @@ Bedrock is NOT used for:
 
 **Model configuration:**
 - Model IDs and variants must be provided via **environment variables**, not hardcoded:
-  - `BEDROCK_MODEL_NORMALIZE` (for Phase 1B normalization)
-  - `BEDROCK_MODEL_EDITORIAL` (for Phase 4 newsletter assembly)
-- Example values: `anthropic.claude-3-sonnet-20240229-v1:0`, `anthropic.claude-3-haiku-20240307-v1:0`
+  - `BEDROCK_MODEL_ID` (used for both normalization and editorial generation)
+- Default model: **Claude Sonnet 4.5 (Amazon Bedrock Edition)** via **cross-region EU inference profile** - `eu.anthropic.claude-sonnet-4-5-20250929-v1:0`
+- ARN: `arn:aws:bedrock:eu-west-3:786469175371:inference-profile/eu.anthropic.claude-sonnet-4-5-20250929-v1:0`
+- Cross-region routing: eu-north-1, eu-west-3, eu-south-1, eu-south-2, eu-west-1, eu-central-1
+- Recent Anthropic models (Claude Sonnet 4.5) require using an **inference profile** instead of direct model ID
+- For region `eu-west-3`, use the EU cross-region profile with prefix `eu.`
+- The model is configurable and can be changed without modifying code
 
 **IAM permissions:**
 - Both Lambda execution roles must include:
@@ -666,7 +694,7 @@ Bedrock is NOT used for:
 
 ---
 
-## 7. Guardrails against complexity
+## 8. Guardrails against complexity
 
 To keep the project simple and maintainable:
 
@@ -696,7 +724,7 @@ The priority is to get one small but complete workflow running end-to-end, not a
 
 ---
 
-## 8. Fundamental business rules (never break these)
+## 9. Fundamental business rules (never break these)
 
 **No client-specific logic in code:**
 - All client-specific behavior must come from:

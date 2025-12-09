@@ -1,0 +1,69 @@
+# Règles de matching par type de domaine.
+# Ces règles définissent comment combiner les différentes dimensions (company, molecule, technology, indication)
+# pour décider si un item matche un domaine.
+#
+# Principe : Le code ne contient AUCUNE logique métier spécifique (pas de "if LAI").
+# Tout est piloté par ces règles déclaratives.
+
+# Règle pour les domaines de type "technology"
+# Exemple : tech_lai_ecosystem, tech_oncology_ecosystem, etc.
+technology:
+  match_mode: all_required
+  description: "Pour un domaine technology, l'item doit contenir au moins un mot-clé technology ET au moins une entité (company ou molecule)"
+  dimensions:
+    technology:
+      requirement: required
+      min_matches: 1
+      description: "Au moins un mot-clé du technology_scope doit être détecté"
+    entity:
+      requirement: required
+      min_matches: 1
+      sources: [company, molecule]
+      description: "Au moins une company OU une molecule doit être détectée"
+
+# Règle pour les domaines de type "indication"
+# Exemple : indication_addiction, indication_schizophrenia, etc.
+indication:
+  match_mode: all_required
+  description: "Pour un domaine indication, l'item doit contenir au moins un mot-clé indication ET au moins une entité (company ou molecule)"
+  dimensions:
+    indication:
+      requirement: required
+      min_matches: 1
+      description: "Au moins un mot-clé du indication_scope doit être détecté"
+    entity:
+      requirement: required
+      min_matches: 1
+      sources: [company, molecule]
+      description: "Au moins une company OU une molecule doit être détectée"
+
+# Règle pour les domaines de type "regulatory"
+# Exemple : regulatory_lai, regulatory_oncology, etc.
+regulatory:
+  match_mode: any_required
+  description: "Pour un domaine regulatory, l'item doit contenir au moins une entité (company, molecule ou technology)"
+  dimensions:
+    company:
+      requirement: optional
+      description: "Company optionnelle"
+    molecule:
+      requirement: optional
+      description: "Molecule optionnelle"
+    technology:
+      requirement: optional
+      description: "Technology optionnelle"
+
+# Règle par défaut (si le type de domaine n'est pas défini ci-dessus)
+# Logique OR classique : au moins une dimension doit matcher
+default:
+  match_mode: any_required
+  description: "Règle par défaut : au moins une dimension doit matcher (logique OR)"
+  dimensions:
+    company:
+      requirement: optional
+    molecule:
+      requirement: optional
+    technology:
+      requirement: optional
+    indication:
+      requirement: optional

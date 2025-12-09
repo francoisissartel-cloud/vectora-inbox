@@ -1,0 +1,8 @@
+{
+  "client_id": "lai_weekly",
+  "period_days": 1,
+  "sources": [
+    "press_sector__fiercebiotech",
+    "press_sector__fiercepharma"
+  ]
+}

@@ -20,13 +20,18 @@ project:
 bedrock:
   region: "eu-west-3"
   usage: "Linguistic brain for normalization (entity extraction, event classification) and newsletter assembly (editorial writing)"
+  default_model: "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"  # Claude Sonnet 4.5 via cross-region EU inference profile
   models:
-    normalize: "configured-via-env-var"  # e.g., BEDROCK_MODEL_NORMALIZE
-    editorial: "configured-via-env-var"  # e.g., BEDROCK_MODEL_EDITORIAL
+    normalize: "configured-via-env-var"  # BEDROCK_MODEL_ID (default: Claude Sonnet 4.5 via EU profile)
+    editorial: "configured-via-env-var"  # BEDROCK_MODEL_ID (default: Claude Sonnet 4.5 via EU profile)
   notes:
+    - "Default model: Claude Sonnet 4.5 (Amazon Bedrock Edition) via cross-region EU inference profile - eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+    - "ARN: arn:aws:bedrock:eu-west-3:786469175371:inference-profile/eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+    - "Cross-region routing: eu-north-1, eu-west-3, eu-south-1, eu-south-2, eu-west-1, eu-central-1"
+    - "Recent Anthropic models require using an inference profile (prefix eu. for eu-west-3) instead of direct model ID"
     - "Bedrock IS used for: entity extraction, event classification, summaries, newsletter writing"
     - "Bedrock is NOT used for: HTTP requests, RSS parsing, matching (set intersections), scoring (numeric rules)"
-    - "Model IDs must come from environment variables, not hardcoded"
+    - "Model IDs must come from environment variables (BEDROCK_MODEL_ID), not hardcoded"
     - "IAM roles must include bedrock:InvokeModel permission restricted to eu-west-3"
 
 naming:

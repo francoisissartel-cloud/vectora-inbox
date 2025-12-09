@@ -1,0 +1,187 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "S0 IAM layer for Vectora Inbox: IAM roles for Lambda functions (ingest-normalize and engine) in eu-west-3."
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: "vectora-inbox"
+    Description: "Nom du projet (utilisé pour tagger les ressources)."
+
+  Env:
+    Type: String
+    Default: "dev"
+    AllowedValues:
+      - dev
+      - stage
+      - prod
+    Description: "Environnement cible (dev, stage, prod)."
+
+  ConfigBucketName:
+    Type: String
+    Description: "Nom du bucket S3 de configuration (ex: vectora-inbox-config-dev)."
+
+  DataBucketName:
+    Type: String
+    Description: "Nom du bucket S3 de données (ex: vectora-inbox-data-dev)."
+
+  NewslettersBucketName:
+    Type: String
+    Description: "Nom du bucket S3 de newsletters (ex: vectora-inbox-newsletters-dev)."
+
+  PubmedApiKeyParamPath:
+    Type: String
+    Default: "/rag-lai/dev/pubmed/api-key"
+    Description: >
+      Chemin du paramètre SSM pour la clé API PubMed (sera utilisé par la Lambda
+      d'ingestion plus tard, via GetParameter avec déchiffrement).
+
+Resources:
+  # Rôle IAM pour la Lambda d'ingestion + normalisation
+  IngestNormalizeRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: IngestNormalizePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              # CloudWatch Logs : écriture des logs
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+              
+              # S3 config bucket : lecture seule
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub "arn:aws:s3:::${ConfigBucketName}"
+                  - !Sub "arn:aws:s3:::${ConfigBucketName}/*"
+              
+              # S3 data bucket : lecture + écriture
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub "arn:aws:s3:::${DataBucketName}"
+                  - !Sub "arn:aws:s3:::${DataBucketName}/*"
+              
+              # SSM : lecture de la clé API PubMed
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource:
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${PubmedApiKeyParamPath}"
+              
+              # Bedrock : appel des modèles pour normalisation
+              - Effect: Allow
+                Action:
+                  - bedrock:InvokeModel
+                  - bedrock:InvokeModelWithResponseStream
+                Resource:
+                  - "arn:aws:bedrock:*::foundation-model/*"
+                  - !Sub "arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Env
+          Value: !Ref Env
+        - Key: RoleType
+          Value: "ingest-normalize"
+
+  # Rôle IAM pour la Lambda d'orchestration / engine
+  EngineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: EnginePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              # CloudWatch Logs : écriture des logs
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+              
+              # S3 config bucket : lecture seule
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub "arn:aws:s3:::${ConfigBucketName}"
+                  - !Sub "arn:aws:s3:::${ConfigBucketName}/*"
+              
+              # S3 data bucket : lecture seule
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub "arn:aws:s3:::${DataBucketName}"
+                  - !Sub "arn:aws:s3:::${DataBucketName}/*"
+              
+              # S3 newsletters bucket : écriture
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub "arn:aws:s3:::${NewslettersBucketName}"
+                  - !Sub "arn:aws:s3:::${NewslettersBucketName}/*"
+              
+              # Bedrock : appel des modèles pour génération éditoriale
+              - Effect: Allow
+                Action:
+                  - bedrock:InvokeModel
+                  - bedrock:InvokeModelWithResponseStream
+                Resource:
+                  - "arn:aws:bedrock:*::foundation-model/*"
+                  - !Sub "arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Env
+          Value: !Ref Env
+        - Key: RoleType
+          Value: "engine"
+
+Outputs:
+  IngestNormalizeRoleArn:
+    Description: "ARN du rôle IAM pour la Lambda d'ingestion + normalisation."
+    Value: !GetAtt IngestNormalizeRole.Arn
+
+  IngestNormalizeRoleName:
+    Description: "Nom du rôle IAM pour la Lambda d'ingestion + normalisation."
+    Value: !Ref IngestNormalizeRole
+
+  EngineRoleArn:
+    Description: "ARN du rôle IAM pour la Lambda d'orchestration / engine."
+    Value: !GetAtt EngineRole.Arn
+
+  EngineRoleName:
+    Description: "Nom du rôle IAM pour la Lambda d'orchestration / engine."
+    Value: !Ref EngineRole

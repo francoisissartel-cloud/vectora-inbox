@@ -1,0 +1,21 @@
+# Dépendances Python pour Vectora Inbox MVP
+# Ces dépendances sont minimales et suffisantes pour le MVP.
+# Pas de frameworks lourds (pandas, numpy, web frameworks).
+
+# SDK AWS pour S3, Bedrock, SSM
+boto3>=1.34.0
+
+# Parsing YAML (configurations canonical + client)
+pyyaml>=6.0
+
+# Appels HTTP vers sources externes (RSS, APIs)
+requests>=2.31.0
+
+# Parsing RSS/Atom
+feedparser>=6.0.10
+
+# Manipulation de dates
+python-dateutil>=2.8.2
+
+# Parsing HTML (pour sources corporate sans RSS)
+beautifulsoup4>=4.12.0

@@ -55,6 +55,11 @@ other_factors:
   source_type_weight_sector: 1.5
   source_type_weight_generic: 1
 
+  # Bonus pour les pure players (défini par un scope canonical).
+  # Le scope référencé doit exister dans canonical/scopes/company_scopes.yaml
+  pure_player_bonus: 3
+  pure_player_scope: "lai_companies_mvp_core"  # Référence à un scope
+
 # Seuils de sélection pour la newsletter.
 # Ces seuils déterminent quels items seront inclus dans la newsletter finale.
 selection_thresholds:

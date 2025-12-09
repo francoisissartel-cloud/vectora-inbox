@@ -30,6 +30,7 @@ watch_domains:
     company_scope: "lai_companies_global"      # Entreprises LAI (voir company_scopes.yaml)
     molecule_scope: "lai_molecules_global"     # Molécules LAI (voir molecule_scopes.yaml)
     priority: "high"                           # Priorité haute pour ce domaine
+    notes: "Domaine principal pour le MVP LAI - couvre l'écosystème complet"
 
   # SCOPES NON-MVP : Les domaines ci-dessous sont commentés car ils nécessitent
   # des scopes d'indication (addiction, schizophrenia) qui ne sont pas encore remplis.
@@ -60,9 +61,10 @@ watch_domains:
 source_config:
   # Bouquets activés : liste des bouquets à utiliser pour l'ingestion.
   # Ces bouquets sont définis dans canonical/sources/source_catalog.yaml
+  # Bouquets MVP avec nouveau modèle (ingestion_mode, enabled)
   source_bouquets_enabled:
-    - "lai_corporate_mvp"        # Sous-ensemble MVP de sites corporate LAI (5-10 sources)
-    - "press_biotech_premium"    # Presse sectorielle pharma/biotech (FiercePharma, Endpoints, etc.)
+    - "lai_press_mvp"        # 3 sources presse sectorielle avec flux RSS (FierceBiotech, FiercePharma, Endpoints)
+    - "lai_corporate_mvp"    # 5 sources corporate LAI avec ingestion HTML (MedinCell, Camurus, DelSiTech, Nanexa, Peptron)
   
   # Sources supplémentaires (optionnel) : permet d'ajouter des sources spécifiques
   # en plus des bouquets, si besoin.

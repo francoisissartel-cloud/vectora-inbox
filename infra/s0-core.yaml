@@ -1,0 +1,109 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "S0 core infrastructure for Vectora Inbox: S3 buckets (config, data, newsletters) in eu-west-3."
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: "vectora-inbox"
+    Description: "Nom du projet (préfixe des ressources S3)."
+
+  Env:
+    Type: String
+    Default: "dev"
+    AllowedValues:
+      - dev
+      - stage
+      - prod
+    Description: "Environnement cible (dev, stage, prod)."
+
+Resources:
+  # Bucket de configuration : fichiers canonical, configs clients, paramètres
+  ConfigBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${ProjectName}-config-${Env}"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Env
+          Value: !Ref Env
+
+  # Bucket de données : items ingérés (raw), items normalisés, métadonnées
+  DataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${ProjectName}-data-${Env}"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Env
+          Value: !Ref Env
+
+  # Bucket de newsletters : sorties finales (Markdown, HTML)
+  NewslettersBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${ProjectName}-newsletters-${Env}"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Env
+          Value: !Ref Env
+
+Outputs:
+  ConfigBucketName:
+    Description: "Nom du bucket S3 de configuration."
+    Value: !Ref ConfigBucket
+
+  ConfigBucketArn:
+    Description: "ARN du bucket S3 de configuration."
+    Value: !GetAtt ConfigBucket.Arn
+
+  DataBucketName:
+    Description: "Nom du bucket S3 de données."
+    Value: !Ref DataBucket
+
+  DataBucketArn:
+    Description: "ARN du bucket S3 de données."
+    Value: !GetAtt DataBucket.Arn
+
+  NewslettersBucketName:
+    Description: "Nom du bucket S3 de newsletters."
+    Value: !Ref NewslettersBucket
+
+  NewslettersBucketArn:
+    Description: "ARN du bucket S3 de newsletters."
+    Value: !GetAtt NewslettersBucket.Arn

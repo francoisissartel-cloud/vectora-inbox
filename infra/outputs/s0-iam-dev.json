@@ -1,0 +1,68 @@
+{
+    "StackId": "arn:aws:cloudformation:eu-west-3:786469175371:stack/vectora-inbox-s0-iam-dev/47fcdf20-d41d-11f0-85f3-0abfde8adc83",
+    "StackName": "vectora-inbox-s0-iam-dev",
+    "ChangeSetId": "arn:aws:cloudformation:eu-west-3:786469175371:changeSet/awscli-cloudformation-package-deploy-1765188274/f0a99e1c-b00a-4a3b-98d9-259a442b4c77",
+    "Description": "S0 IAM layer for Vectora Inbox: IAM roles for Lambda functions (ingest-normalize and engine) in eu-west-3.",
+    "Parameters": [
+        {
+            "ParameterKey": "DataBucketName",
+            "ParameterValue": "vectora-inbox-data-dev"
+        },
+        {
+            "ParameterKey": "ProjectName",
+            "ParameterValue": "vectora-inbox"
+        },
+        {
+            "ParameterKey": "PubmedApiKeyParamPath",
+            "ParameterValue": "/rag-lai/dev/pubmed/api-key"
+        },
+        {
+            "ParameterKey": "Env",
+            "ParameterValue": "dev"
+        },
+        {
+            "ParameterKey": "NewslettersBucketName",
+            "ParameterValue": "vectora-inbox-newsletters-dev"
+        },
+        {
+            "ParameterKey": "ConfigBucketName",
+            "ParameterValue": "vectora-inbox-config-dev"
+        }
+    ],
+    "CreationTime": "2025-12-08T10:04:27.608000+00:00",
+    "LastUpdatedTime": "2025-12-08T10:04:33.003000+00:00",
+    "RollbackConfiguration": {},
+    "StackStatus": "CREATE_COMPLETE",
+    "DisableRollback": false,
+    "NotificationARNs": [],
+    "Capabilities": [
+        "CAPABILITY_IAM"
+    ],
+    "Outputs": [
+        {
+            "OutputKey": "IngestNormalizeRoleArn",
+            "OutputValue": "arn:aws:iam::786469175371:role/vectora-inbox-s0-iam-dev-IngestNormalizeRole-aefpODOGz3Lx",
+            "Description": "ARN du r??le IAM pour la Lambda d'ingestion + normalisation."
+        },
+        {
+            "OutputKey": "EngineRoleArn",
+            "OutputValue": "arn:aws:iam::786469175371:role/vectora-inbox-s0-iam-dev-EngineRole-x4yGG8dAutT9",
+            "Description": "ARN du r??le IAM pour la Lambda d'orchestration / engine."
+        },
+        {
+            "OutputKey": "IngestNormalizeRoleName",
+            "OutputValue": "vectora-inbox-s0-iam-dev-IngestNormalizeRole-aefpODOGz3Lx",
+            "Description": "Nom du r??le IAM pour la Lambda d'ingestion + normalisation."
+        },
+        {
+            "OutputKey": "EngineRoleName",
+            "OutputValue": "vectora-inbox-s0-iam-dev-EngineRole-x4yGG8dAutT9",
+            "Description": "Nom du r??le IAM pour la Lambda d'orchestration / engine."
+        }
+    ],
+    "Tags": [],
+    "EnableTerminationProtection": false,
+    "DriftInformation": {
+        "StackDriftStatus": "NOT_CHECKED"
+    }
+}

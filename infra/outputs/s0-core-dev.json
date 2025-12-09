@@ -1,0 +1,59 @@
+{
+    "StackId": "arn:aws:cloudformation:eu-west-3:786469175371:stack/vectora-inbox-s0-core-dev/08992640-d41d-11f0-8b3e-0aff7e2c80b7",
+    "StackName": "vectora-inbox-s0-core-dev",
+    "ChangeSetId": "arn:aws:cloudformation:eu-west-3:786469175371:changeSet/awscli-cloudformation-package-deploy-1765188168/234ff17f-022d-4fee-8469-4717e25678f6",
+    "Description": "S0 core infrastructure for Vectora Inbox: S3 buckets (config, data, newsletters) in eu-west-3.",
+    "Parameters": [
+        {
+            "ParameterKey": "ProjectName",
+            "ParameterValue": "vectora-inbox"
+        },
+        {
+            "ParameterKey": "Env",
+            "ParameterValue": "dev"
+        }
+    ],
+    "CreationTime": "2025-12-08T10:02:41.267000+00:00",
+    "LastUpdatedTime": "2025-12-08T10:02:46.644000+00:00",
+    "RollbackConfiguration": {},
+    "StackStatus": "CREATE_COMPLETE",
+    "DisableRollback": false,
+    "NotificationARNs": [],
+    "Outputs": [
+        {
+            "OutputKey": "DataBucketName",
+            "OutputValue": "vectora-inbox-data-dev",
+            "Description": "Nom du bucket S3 de donn??es."
+        },
+        {
+            "OutputKey": "NewslettersBucketArn",
+            "OutputValue": "arn:aws:s3:::vectora-inbox-newsletters-dev",
+            "Description": "ARN du bucket S3 de newsletters."
+        },
+        {
+            "OutputKey": "ConfigBucketArn",
+            "OutputValue": "arn:aws:s3:::vectora-inbox-config-dev",
+            "Description": "ARN du bucket S3 de configuration."
+        },
+        {
+            "OutputKey": "DataBucketArn",
+            "OutputValue": "arn:aws:s3:::vectora-inbox-data-dev",
+            "Description": "ARN du bucket S3 de donn??es."
+        },
+        {
+            "OutputKey": "NewslettersBucketName",
+            "OutputValue": "vectora-inbox-newsletters-dev",
+            "Description": "Nom du bucket S3 de newsletters."
+        },
+        {
+            "OutputKey": "ConfigBucketName",
+            "OutputValue": "vectora-inbox-config-dev",
+            "Description": "Nom du bucket S3 de configuration."
+        }
+    ],
+    "Tags": [],
+    "EnableTerminationProtection": false,
+    "DriftInformation": {
+        "StackDriftStatus": "NOT_CHECKED"
+    }
+}

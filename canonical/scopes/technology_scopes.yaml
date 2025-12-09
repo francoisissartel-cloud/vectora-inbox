@@ -1,93 +1,144 @@
 # Scopes de technologies.
 # Mots-clés et expressions indiquant des formulations ou technologies.
 
-# Mots-clés génériques pour identifier les technologies cibles dans les textes.
+# Scope LAI restructuré pour améliorer la précision du matching.
+# Structure : core_phrases (haute précision) + technology_terms_high_precision (DDS/HLE spécifiques)
+# + technology_use (usage) + route_admin_terms (routes) + interval_patterns (dosage prolongé)
+# + generic_terms (trop larges, conservés pour mémoire) + negative_terms (exclusions).
 lai_keywords:
-  - long-acting
-  - long acting
-  - long-acting formulation
-  - extended-release injection
-  - extended-release injectable
-  - controlled-release injection
-  - injectable controlled release
-  - sustained release injectable
-  - depot injection
-  - long-acting depot
-  - drug delivery system
-  - DDS
-  - half-life extension
-  - polymeric microspheres
-  - PLGA microspheres
-  - microsphere
-  - microspheres
-  - in-situ forming depot
-  - ISFD
-  - in situ depot
-  - Atrigel
-  - FluidCrystal
-  - SmartDepot
-  - multivesicular liposomes
-  - MVL
-  - DepoFoam
-  - BioSeizer
-  - liposomes
-  - liposomal
-  - PLEX
-  - thermo-responsive hydrogel
-  - hydrogel
-  - thermo-gel
-  - RTGel
-  - liquid crystalline depot
-  - liquid crystal
-  - nanosuspension
-  - nanocrystal
-  - nanosizing
-  - long-acting emulsion
-  - emulsion
-  - lipid emulsion
-  - oil-based
-  - depot-forming prodrug
-  - depot prodrug
-  - long-acting prodrug
-  - PASylation
-  - PAS
-  - PEGylation
-  - PEGylated
-  - PEG
-  - site-specific PEGylation
-  - Fc fusion
-  - Fc-fusion
-  - IgG Fc fusion
-  - albumin binding
-  - albumin fusion
-  - albumin-binding
-  - lipidation
-  - fatty acid conjugation
-  - XTEN
-  - polypeptide extension
-  - glyco-engineering
-  - glycan engineering
-  - sialylation
-  - protein engineering
-  - subcutaneous
-  - intramuscular
-  - intravenous
-  - intravitreal
-  - intratumoral
-  - intra-articular
-  - intrathecal
-  - intravesical
-  - epidural
-  - once-monthly
-  - q4w
-  - q8w
-  - q12w
-  - 6-month
-  - quarterly injection
-  - once-weekly injection
+  core_phrases:
+    # Expressions explicites LAI (haute précision, match immédiat)
+    - "long-acting injectable"
+    - "long acting injectable"
+    - "long-acting formulation"
+    - "extended-release injection"
+    - "extended-release injectable"
+    - "controlled-release injection"
+    - "injectable controlled release"
+    - "sustained release injectable"
+    - "sustained-release injectable"
+    - "depot injection"
+    - "long-acting depot"
+    - "long-acting"
+    - "long acting"
+    
+  technology_terms_high_precision:
+    # Termes technologiques spécifiques LAI (DDS + HLE)
+    # DDS families (Drug Delivery Systems)
+    - "polymeric microspheres"
+    - "PLGA microspheres"
+    - "PLA microspheres"
+    - "in-situ forming depot"
+    - "ISFD"
+    - "in situ depot"
+    - "Atrigel"
+    - "FluidCrystal"
+    - "SmartDepot"
+    - "multivesicular liposomes"
+    - "MVL"
+    - "DepoFoam"
+    - "BioSeizer"
+    - "thermo-responsive hydrogel"
+    - "RTGel"
+    - "liquid crystalline depot"
+    - "liquid crystal depot"
+    - "depot-forming prodrug"
+    - "depot prodrug"
+    - "long-acting prodrug"
+    - "long-acting emulsion"
+    - "Medisorb"
+    - "CriPec"
+    - "DiffuSphere"
+    # HLE strategies (Half-Life Extension)
+    - "PASylation"
+    - "site-specific PEGylation"
+    - "Fc fusion"
+    - "Fc-fusion"
+    - "IgG Fc fusion"
+    - "albumin binding"
+    - "albumin fusion"
+    - "albumin-binding"
+    - "lipidation"
+    - "fatty acid conjugation"
+    - "XTEN"
+    - "polypeptide extension"
+    - "glyco-engineering"
+    - "glycan engineering"
+    - "sialylation"
+    - "half-life extension"
+    
+  technology_use:
+    # Termes d'usage (doivent être combinés avec d'autres signaux)
+    - "injectable"
+    - "injection"
+    - "depot"
+    - "microsphere"
+    - "microspheres"
+    - "thermo-gel"
+    - "nanocrystal"
+    - "nanosizing"
+    - "oil-based"
+    - "liquid crystal"
+    
+  route_admin_terms:
+    # Routes d'administration (contexte nécessaire mais non suffisant seul)
+    - "intramuscular"
+    - "subcutaneous"
+    - "intravenous"
+    - "intravitreal"
+    - "intratumoral"
+    - "intra-articular"
+    - "intrathecal"
+    - "intravesical"
+    - "epidural"
+    - "intraocular"
+    - "intradermal"
+    - "intratympanic"
+    - "surgical site instillation"
+    
+  interval_patterns:
+    # Patterns d'intervalle typiques LAI (signaux forts de dosage prolongé)
+    - "once-monthly"
+    - "once-weekly injection"
+    - "once every 2 weeks"
+    - "once every 3 months"
+    - "once every 6 months"
+    - "q4w"
+    - "q8w"
+    - "q12w"
+    - "q2w"
+    - "6-month"
+    - "3-month"
+    - "quarterly injection"
+    - "biweekly injection"
+    - "monthly injection"
+    
+  generic_terms:
+    # Termes trop génériques (conservés pour mémoire, ne matchent plus seuls)
+    - "drug delivery system"
+    - "liposomes"
+    - "liposomal"
+    - "PLEX"
+    - "hydrogel"
+    - "nanosuspension"
+    - "emulsion"
+    - "lipid emulsion"
+    - "PEGylation"
+    - "PEGylated"
+    - "PEG"
+    - "protein engineering"
+    
+  negative_terms:
+    # Signaux forts de NON-LAI (exclusions explicites)
+    - "oral tablet"
+    - "oral capsule"
+    - "oral administration"
+    - "topical cream"
+    - "topical gel"
+    - "topical ointment"
+    - "transdermal patch"
+    - "inhalation"
+    - "nasal spray"
+    - "sublingual"
+    - "buccal"
 
-# Systèmes de délivrance spécifiques (optionnel, à compléter si pertinent).
-lai_delivery_systems: []
-
-# Technologies de formulation (optionnel, à compléter si pertinent).
-lai_formulation_technologies: []
