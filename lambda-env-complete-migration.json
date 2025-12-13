@@ -1,0 +1,8 @@
+{
+  "Variables": {
+    "BEDROCK_REGION": "us-east-1",
+    "BEDROCK_MODEL_ID": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+    "CONFIG_BUCKET": "vectora-inbox-config-dev",
+    "DATA_BUCKET": "vectora-inbox-data-dev"
+  }
+}

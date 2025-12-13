@@ -61,6 +61,7 @@ event_types:
       - "collaboration"
       - "licensing agreement"
       - "license agreement"
+      - "license and option agreement"  # Pattern partenariat Nanexa/Moderna
       - "strategic alliance"
       - "co-development"
       - "joint venture"

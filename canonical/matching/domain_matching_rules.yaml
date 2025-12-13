@@ -5,21 +5,81 @@
 # Principe : Le code ne contient AUCUNE logique métier spécifique (pas de "if LAI").
 # Tout est piloté par ces règles déclaratives.
 
+# Profiles de technologies (pour matching avancé par catégories)
+technology_profiles:
+  technology_complex:
+    description: "Technologies complexes nécessitant plusieurs types de signaux (ex: LAI)"
+    signal_requirements:
+      high_precision_signals:
+        categories: [core_phrases, technology_terms_high_precision]
+        min_matches: 1
+        weight: 3.0
+      supporting_signals:
+        categories: [route_admin_terms, interval_patterns]
+        min_matches: 1
+        weight: 2.0
+      context_signals:
+        categories: [technology_use]
+        min_matches: 0
+        weight: 1.0
+      excluded_categories: [generic_terms]
+      negative_filters:
+        categories: [negative_terms]
+        action: reject_match
+    entity_requirements:
+      min_matches: 1
+      sources: [company, molecule, trademark]  # Ajout trademark Phase 3
+      company_scope_modifiers:
+        pure_player_scopes: [lai_companies_pure_players, lai_companies_mvp_core]
+        pure_player_rule: contextual_matching  # Phase 3: Utilise matching contextuel
+        hybrid_scopes: [lai_companies_hybrid]
+        hybrid_rule: high_precision_plus_supporting
+    combination_logic: |
+      MATCH if:
+        (high_precision_signal AND entity) OR
+        (supporting_signal AND supporting_signal AND entity) OR
+        (high_precision_signal AND pure_player_company) OR
+        (trademark_detected AND contextual_matching_passed)  # Phase 3
+      REJECT if:
+        negative_term detected OR anti_lai_detected
+  
+  technology_simple:
+    description: "Technologies simples avec signaux clairs (ex: oral tablets)"
+    signal_requirements:
+      high_precision_signals:
+        categories: [core_phrases]
+        min_matches: 1
+        weight: 3.0
+    entity_requirements:
+      min_matches: 1
+      sources: [company, molecule]
+    combination_logic: |
+      MATCH if:
+        (high_precision_signal AND entity)
+
 # Règle pour les domaines de type "technology"
 # Exemple : tech_lai_ecosystem, tech_oncology_ecosystem, etc.
 technology:
   match_mode: all_required
-  description: "Pour un domaine technology, l'item doit contenir au moins un mot-clé technology ET au moins une entité (company ou molecule)"
+  description: "Pour un domaine technology, l'item doit contenir au moins 2 mots-clés technology ET au moins une entité (company ou molecule)"
   dimensions:
     technology:
       requirement: required
-      min_matches: 1
-      description: "Au moins un mot-clé du technology_scope doit être détecté"
+      min_matches: 2
+      description: "Au moins 2 mots-clés du technology_scope doivent être détectés (règle durcie pour réduire faux positifs)"
     entity:
       requirement: required
       min_matches: 1
       sources: [company, molecule]
       description: "Au moins une company OU une molecule doit être détectée"
+  
+  # Phase 3: Pattern matching pour LAI (si pas déjà présent)
+  pattern_matching:
+    lai_patterns:
+      - ".*LAI$"              # Suffixe LAI
+      - ".*Injectable$"       # Suffixe Injectable
+      - ".*Depot$"           # Suffixe Depot
+    enable_pattern_matching: true
 
 # Règle pour les domaines de type "indication"
 # Exemple : indication_addiction, indication_schizophrenia, etc.

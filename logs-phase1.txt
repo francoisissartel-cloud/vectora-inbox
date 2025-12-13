@@ -1,0 +1,39 @@
+
+'charmap' codec can't encode character '\u2192' in position 140: character maps to <undefined>
+2025-12-09T17:22:38 INIT_START Runtime Version: python:3.12.v99	Runtime Version ARN: arn:aws:lambda:eu-west-3::runtime:42569371fb03ced3fe5b4d63763662bf9b13a5d4299cb453cc55a71374cbf30c
+2025-12-09T17:22:38 START RequestId: 2b5a0f9e-f348-4548-9912-c2a63dbff52d Version: $LATEST
+2025-12-09T17:22:38 [INFO]	2025-12-09T17:22:38.192Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Démarrage de vectora-inbox-engine
+2025-12-09T17:22:38 [INFO]	2025-12-09T17:22:38.192Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Event reçu : {"client_id": "lai_weekly", "period_days": 7}
+2025-12-09T17:22:38 [INFO]	2025-12-09T17:22:38.192Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Variables d'environnement chargées : ENV=dev, CONFIG_BUCKET=vectora-inbox-config-dev, DATA_BUCKET=vectora-inbox-data-dev, NEWSLETTERS_BUCKET=vectora-inbox-newsletters-dev
+2025-12-09T17:22:40 [INFO]	2025-12-09T17:22:40.741Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Démarrage du moteur de newsletter pour le client : lai_weekly
+2025-12-09T17:22:40 [INFO]	2025-12-09T17:22:40.741Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Chargement des configurations depuis S3
+2025-12-09T17:22:40 [INFO]	2025-12-09T17:22:40.741Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Chargement de la configuration client : lai_weekly
+2025-12-09T17:22:40 [INFO]	2025-12-09T17:22:40.799Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Found credentials in environment variables.
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.299Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Lecture du fichier YAML depuis s3://vectora-inbox-config-dev/clients/lai_weekly.yaml
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.458Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Fichier YAML chargé avec succès : 4494 caractères
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.460Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Configuration client chargée : LAI Intelligence Weekly
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.460Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Chargement des scopes canonical
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.479Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Lecture du fichier YAML depuis s3://vectora-inbox-config-dev/canonical/scopes/company_scopes.yaml
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.598Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Fichier YAML chargé avec succès : 3565 caractères
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.600Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Scope companies chargé : 1 clés
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.623Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Lecture du fichier YAML depuis s3://vectora-inbox-config-dev/canonical/scopes/molecule_scopes.yaml
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.756Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Fichier YAML chargé avec succès : 2047 caractères
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.758Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Scope molecules chargé : 5 clés
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.781Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Lecture du fichier YAML depuis s3://vectora-inbox-config-dev/canonical/scopes/trademark_scopes.yaml
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.925Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Fichier YAML chargé avec succès : 1095 caractères
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.926Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Scope trademarks chargé : 1 clés
+2025-12-09T17:22:41 [INFO]	2025-12-09T17:22:41.957Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Lecture du fichier YAML depuis s3://vectora-inbox-config-dev/canonical/scopes/technology_scopes.yaml
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.097Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Fichier YAML chargé avec succès : 3906 caractères
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.099Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Scope technologies chargé : 1 clés
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.118Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Lecture du fichier YAML depuis s3://vectora-inbox-config-dev/canonical/scopes/indication_scopes.yaml
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.208Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Fichier YAML chargé avec succès : 673 caractères
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.210Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Scope indications chargé : 3 clés
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.220Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Lecture du fichier YAML depuis s3://vectora-inbox-config-dev/canonical/scopes/exclusion_scopes.yaml
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.361Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Fichier YAML chargé avec succès : 550 caractères
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.362Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Scope exclusions chargé : 3 clés
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.363Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Chargement des règles de scoring
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.381Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Lecture du fichier YAML depuis s3://vectora-inbox-config-dev/canonical/scoring/scoring_rules.yaml
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.490Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Fichier YAML chargé avec succès : 4110 caractères
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.491Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Règles de scoring chargées
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.658Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Règles de matching chargées : ['technology_profiles', 'technology', 'indication', 'regulatory', 'default']
+2025-12-09T17:22:42 [INFO]	2025-12-09T17:22:42.660Z	2b5a0f9e-f348-4548-9912-c2a63dbff52d	Calcul de la fenêtre temporelle

@@ -159,12 +159,12 @@ def _extract_canonical_examples(canonical_scopes: Dict[str, Any]) -> Dict[str, L
         'technologies': []
     }
     
-    # Extraire des exemples de sociétés (limiter à 30 pour ne pas surcharger le prompt)
+    # Extraire des exemples de sociétés (augmenter à 50 pour meilleure couverture)
     company_scopes = canonical_scopes.get('companies', {})
     for scope_key, companies in company_scopes.items():
         if isinstance(companies, list):
-            examples['companies'].extend(companies[:30])
-            if len(examples['companies']) >= 30:
+            examples['companies'].extend(companies[:50])
+            if len(examples['companies']) >= 50:
                 break
     
     # Extraire des exemples de molécules

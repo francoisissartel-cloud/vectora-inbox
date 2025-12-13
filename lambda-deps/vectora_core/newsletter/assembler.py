@@ -23,7 +23,7 @@ def generate_newsletter(
     target_date: str,
     from_date: str,
     to_date: str
-) -> Tuple[str, Dict[str, Any]]:
+) -> Tuple[str, Dict[str, Any], Dict[str, Any]]:
     """
     Génère la newsletter complète.
     
@@ -36,7 +36,7 @@ def generate_newsletter(
         to_date: Date de fin de la période
     
     Returns:
-        Tuple (newsletter_markdown, stats)
+        Tuple (newsletter_markdown, stats, editorial_content)
     """
     logger.info("Démarrage de la génération de newsletter")
     
@@ -58,7 +58,7 @@ def generate_newsletter(
         logger.warning("Aucun item sélectionné pour la newsletter")
         # Générer une newsletter minimale
         newsletter_md = _generate_minimal_newsletter(client_profile, target_date)
-        return newsletter_md, {'items_selected': 0, 'sections_generated': 0}
+        return newsletter_md, {'items_selected': 0, 'sections_generated': 0}, {}
     
     # Générer les textes éditoriaux avec Bedrock
     logger.info("Génération des textes éditoriaux avec Bedrock")
@@ -88,7 +88,7 @@ def generate_newsletter(
     
     logger.info(f"Newsletter générée : {len(newsletter_md)} caractères")
     
-    return newsletter_md, stats
+    return newsletter_md, stats, editorial_content
 
 
 def _select_items_by_section(

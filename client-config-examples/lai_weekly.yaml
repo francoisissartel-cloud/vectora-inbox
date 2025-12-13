@@ -58,6 +58,13 @@ watch_domains:
 # Configuration des sources d'information.
 # On utilise des BOUQUETS (groupes de sources prédéfinis) plutôt que de lister
 # chaque source individuellement. Cela simplifie la maintenance.
+#
+# ARTICULATION AVEC LES PROFILS D'INGESTION :
+# - Les watch_domains (ci-dessus) définissent ce que le CLIENT veut surveiller (matching post-normalisation)
+# - Les profils d'ingestion (dans source_catalog.yaml) définissent ce qui est ingéré/normalisé par SOURCE
+# - Exemple : FierceBiotech utilise le profil "press_technology_focused" qui filtre selon lai_keywords + lai_companies
+# - Puis le matching applique les watch_domains pour sélectionner les items pertinents pour ce client
+# - Cette double couche optimise les coûts (moins de normalisation) et la qualité (meilleur signal/bruit)
 source_config:
   # Bouquets activés : liste des bouquets à utiliser pour l'ingestion.
   # Ces bouquets sont définis dans canonical/sources/source_catalog.yaml

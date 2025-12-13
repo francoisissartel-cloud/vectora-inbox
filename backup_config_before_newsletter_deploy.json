@@ -1,0 +1,25 @@
+{
+  "backup_date": "2025-12-12T14:30:00Z",
+  "backup_reason": "Newsletter optimization deployment - Phase 3",
+  "lambda_function": "vectora-inbox-engine-dev",
+  "changes_applied": [
+    "Newsletter prompt optimization (-60% size)",
+    "Improved JSON parsing with markdown handling",
+    "Bedrock parameters optimization (max_tokens: 6000, temperature: 0.2)",
+    "Enhanced retry logic (4 attempts, 3^n backoff)"
+  ],
+  "files_modified": [
+    "src/vectora_core/newsletter/bedrock_client.py"
+  ],
+  "package_created": "engine-newsletter-optimized.zip",
+  "bedrock_config": {
+    "region": "us-east-1",
+    "model_id": "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+  },
+  "validation_status": {
+    "local_tests": "PASSED",
+    "items_gold_detected": ["Nanexa/Moderna PharmaShell", "UZEDY Extended-Release Injectable", "MedinCell malaria grant"],
+    "performance": "11.74s for 3 items",
+    "fallback_triggered": false
+  }
+}

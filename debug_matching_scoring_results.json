@@ -1,0 +1,121 @@
+{
+  "timestamp": "2025-12-12T14:00:00Z",
+  "total_items_analyzed": 104,
+  "gold_items_analysis": {
+    "nanexa_moderna": {
+      "item_id": "nanexa_moderna",
+      "title": "Nanexa and Moderna enter into license and option agreement for the development of PharmaShell®-based products",
+      "source_key": "press_corporate__nanexa",
+      "date": "2025-12-11",
+      "summary_length": 0,
+      "entities": {
+        "companies_detected": [
+          "Nanexa"
+        ],
+        "molecules_detected": [],
+        "technologies_detected": [],
+        "trademarks_detected": []
+      },
+      "lai_fields": {
+        "lai_relevance_score": null,
+        "anti_lai_detected": null,
+        "pure_player_context": null
+      },
+      "matched_domains": [],
+      "score": 0,
+      "lai_signals_in_content": [
+        "pharmashell"
+      ],
+      "has_lai_signals": true
+    },
+    "uzedy_bipolar": {
+      "item_id": "uzedy_bipolar",
+      "title": "FDA Approves Expanded Indication for UZEDY® (risperidone) Extended-Release Injectable Suspension as a Treatment for Adults Living with Bipolar I Disorder",
+      "source_key": "press_corporate__medincell",
+      "date": "2025-12-11",
+      "summary_length": 200,
+      "entities": {
+        "companies_detected": [],
+        "molecules_detected": [
+          "risperidone"
+        ],
+        "technologies_detected": [],
+        "trademarks_detected": []
+      },
+      "lai_fields": {
+        "lai_relevance_score": null,
+        "anti_lai_detected": null,
+        "pure_player_context": null
+      },
+      "matched_domains": [],
+      "score": 0,
+      "lai_signals_in_content": [
+        "extended-release injectable",
+        "uzedy",
+        "extended-release",
+        "injectable"
+      ],
+      "has_lai_signals": true
+    },
+    "uzedy_growth": {
+      "item_id": "uzedy_growth",
+      "title": "UZEDY® continues strong growth; Teva setting the stage for US NDA Submission for Olanzapine LAI in Q4 2025",
+      "source_key": "press_corporate__medincell",
+      "date": "2025-12-11",
+      "summary_length": 200,
+      "entities": {
+        "companies_detected": [],
+        "molecules_detected": [
+          "olanzapine"
+        ],
+        "technologies_detected": [],
+        "trademarks_detected": []
+      },
+      "lai_fields": {
+        "lai_relevance_score": null,
+        "anti_lai_detected": null,
+        "pure_player_context": null
+      },
+      "matched_domains": [],
+      "score": 0,
+      "lai_signals_in_content": [
+        "extended-release injectable",
+        "lai",
+        "uzedy",
+        "extended-release",
+        "injectable"
+      ],
+      "has_lai_signals": true
+    },
+    "medincell_malaria": {
+      "item_id": "medincell_malaria",
+      "title": "Medincell Awarded New Grant to Fight Malaria",
+      "source_key": "press_corporate__medincell",
+      "date": "2025-12-11",
+      "summary_length": 200,
+      "entities": {
+        "companies_detected": [
+          "MedinCell"
+        ],
+        "molecules_detected": [],
+        "technologies_detected": [],
+        "trademarks_detected": []
+      },
+      "lai_fields": {
+        "lai_relevance_score": null,
+        "anti_lai_detected": null,
+        "pure_player_context": null
+      },
+      "matched_domains": [],
+      "score": 0,
+      "lai_signals_in_content": [],
+      "has_lai_signals": false
+    }
+  },
+  "statistics": {
+    "items_with_summary": 85,
+    "items_with_companies": 38,
+    "items_with_technologies": 0,
+    "items_with_matched_domains": 5
+  }
+}

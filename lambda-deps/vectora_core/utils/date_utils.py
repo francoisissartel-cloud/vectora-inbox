@@ -74,3 +74,20 @@ def get_current_datetime_iso() -> str:
         Date et heure actuelles en ISO8601
     """
     return datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+def generate_run_id() -> str:
+    """
+    Génère un identifiant unique pour un run d'ingestion.
+    
+    Format : run_YYYYMMDDTHHMMSSZ (timestamp ISO compact avec microsecondes)
+    Exemple : run_20250115T143022Z
+    
+    Returns:
+        Run ID unique basé sur le timestamp actuel avec microsecondes pour unicité
+    """
+    import time
+    # Utiliser time.time() pour avoir les microsecondes et garantir l'unicité
+    timestamp = datetime.now().strftime('%Y%m%dT%H%M%S')
+    microseconds = str(int(time.time() * 1000000))[-6:]  # 6 derniers chiffres des microsecondes
+    return f"run_{timestamp}{microseconds}Z"

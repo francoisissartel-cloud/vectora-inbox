@@ -1,0 +1,413 @@
+# ============================================================================
+# VECTORA INBOX - CLIENT CONFIG TEMPLATE v2
+# ============================================================================
+#
+# Ce template définit la structure complète d'une configuration client v2
+# pour Vectora Inbox. Il intègre toutes les nouveautés : technology_profiles,
+# trademark_scopes, ingestion_profiles, matching explicite, et scoring personnalisé.
+#
+# UTILISATION :
+# 1. Copiez ce fichier et renommez-le selon votre client (ex: client_pharma_weekly.yaml)
+# 2. Remplissez les sections selon vos besoins métier
+# 3. Validez que tous les scopes référencés existent dans canonical/scopes/
+# 4. Testez avec le runtime Vectora Inbox
+#
+# DOCUMENTATION :
+# - Diagnostic complet : docs/diagnostics/vectora_inbox_client_config_v2_diagnostic.md
+# - Plan de design : docs/design/vectora_inbox_client_config_v2_template_plan.md
+#
+# ============================================================================
+
+# ============================================================================
+# PROFIL CLIENT
+# ============================================================================
+# Métadonnées et configuration générale du client/newsletter
+
+client_profile:
+  # OBLIGATOIRE : Nom affiché de la newsletter
+  name: "Technology Intelligence Weekly"
+  
+  # OBLIGATOIRE : Identifiant unique (utilisé pour les logs, stockage, etc.)
+  client_id: "tech_weekly_template"
+  
+  # OBLIGATOIRE : Langue de la newsletter finale
+  # Valeurs supportées : "en", "fr", "de", "es", etc.
+  language: "en"
+  
+  # OBLIGATOIRE : Fréquence de génération
+  # Valeurs supportées : "daily", "weekly", "monthly"
+  frequency: "weekly"
+  
+  # OPTIONNEL : Ton de la newsletter
+  # Valeurs supportées : "executive", "technical", "academic", "commercial"
+  tone: "executive"
+  
+  # OPTIONNEL : Style rédactionnel
+  # Valeurs supportées : "concise", "detailed", "bullet_points"
+  voice: "concise"
+  
+  # OPTIONNEL : Audience cible (pour adaptation du contenu)
+  # Valeurs supportées : "executives", "researchers", "business_dev", "mixed"
+  target_audience: "executives"
+
+# ============================================================================
+# CONFIGURATION DU PIPELINE
+# ============================================================================
+# Paramètres généraux du pipeline d'ingestion et de génération
+
+pipeline:
+  # Fenêtre temporelle par défaut (en jours)
+  # Utilisée si period_days n'est pas fourni dans le payload Lambda
+  # Valeurs typiques : 7 (hebdomadaire), 14 (bi-hebdomadaire), 30 (mensuel)
+  default_period_days: 7
+  
+  # Documentation
+  notes: "Ajustez selon la fréquence de votre newsletter et la dynamique de votre secteur"
+
+# ============================================================================
+# DOMAINES DE VEILLE
+# ============================================================================
+# Cœur de la configuration : définit ce que le client souhaite surveiller.
+# Chaque domaine combine plusieurs dimensions (technology, company, molecule, etc.)
+# pour créer un périmètre de veille cohérent.
+
+watch_domains:
+  # ---------------------------------------------------------------------------
+  # DOMAINE PRINCIPAL : Écosystème technologique
+  # ---------------------------------------------------------------------------
+  - id: "tech_ecosystem_primary"
+    
+    # Type de domaine - détermine les règles de matching à appliquer
+    # Valeurs supportées : "technology", "indication", "regulatory", "custom"
+    type: "technology"
+    
+    # Priorité du domaine - influence le scoring et la sélection
+    # Valeurs supportées : "high", "medium", "low"
+    priority: "high"
+    
+    # SCOPES CANONICAL : Références aux fichiers canonical/scopes/
+    # Ces clés DOIVENT exister dans les fichiers correspondants
+    
+    # Technology scope : mots-clés et expressions technologiques
+    # Référence : canonical/scopes/technology_scopes.yaml
+    technology_scope: "lai_keywords"  # Exemple : remplacez par votre technologie
+    
+    # Company scope : entreprises à surveiller
+    # Référence : canonical/scopes/company_scopes.yaml
+    company_scope: "lai_companies_global"  # Exemple : remplacez par votre secteur
+    
+    # Molecule scope : molécules/produits à surveiller
+    # Référence : canonical/scopes/molecule_scopes.yaml
+    molecule_scope: "lai_molecules_global"  # Exemple : remplacez par vos molécules
+    
+    # NOUVEAU v2 : Trademark scope : noms de marque à surveiller
+    # Référence : canonical/scopes/trademark_scopes.yaml
+    # Les trademarks bénéficient d'un traitement privilégié (ingestion + matching + scoring)
+    trademark_scope: "lai_trademarks_global"  # Exemple : remplacez par vos marques
+    
+    # NOUVEAU v2 : Profil de technologie (explicite)
+    # Valeurs supportées : "technology_complex", "technology_simple"
+    # Si absent, déduit automatiquement de technology_scope._metadata.profile
+    technology_profile: "technology_complex"
+    
+    # NOUVEAU v2 : Profil de matching
+    # Valeurs supportées : "strict", "balanced", "broad"
+    # Défaut : "balanced"
+    matching_profile: "balanced"
+    
+    # Contrôle d'activation
+    enabled: true
+    
+    # Documentation libre
+    notes: "Domaine principal couvrant l'écosystème technologique complet"
+
+  # ---------------------------------------------------------------------------
+  # DOMAINE SECONDAIRE : Surveillance réglementaire
+  # ---------------------------------------------------------------------------
+  - id: "regulatory_watch"
+    type: "regulatory"
+    priority: "high"
+    
+    # Pour un domaine regulatory, on peut se contenter de technology + company
+    technology_scope: "lai_keywords"
+    company_scope: "lai_companies_global"
+    trademark_scope: "lai_trademarks_global"
+    
+    # Les domaines regulatory utilisent des règles de matching plus souples
+    matching_profile: "broad"
+    
+    enabled: true
+    notes: "Surveillance des évolutions réglementaires"
+
+  # ---------------------------------------------------------------------------
+  # EXEMPLE : Domaine par indication (commenté - à adapter selon vos besoins)
+  # ---------------------------------------------------------------------------
+  # - id: "indication_specific"
+  #   type: "indication"
+  #   priority: "medium"
+  #   
+  #   # Pour un domaine indication, indication_scope est obligatoire
+  #   indication_scope: "addiction_keywords"  # Doit exister dans canonical/scopes/indication_scopes.yaml
+  #   technology_scope: "lai_keywords"
+  #   company_scope: "lai_companies_global"
+  #   trademark_scope: "lai_trademarks_global"
+  #   
+  #   enabled: false  # Désactivé par défaut
+  #   notes: "Surveillance par indication thérapeutique"
+
+# ============================================================================
+# CONFIGURATION DES SOURCES
+# ============================================================================
+# Définit quelles sources d'information utiliser pour l'ingestion.
+# Utilise le système de bouquets pour simplifier la maintenance.
+
+source_config:
+  # Bouquets activés : groupes de sources prédéfinis
+  # Référence : canonical/sources/source_catalog.yaml
+  source_bouquets_enabled:
+    - "lai_corporate_mvp"    # Exemple : sources corporate LAI
+    - "lai_press_mvp"        # Exemple : sources presse sectorielle LAI
+    # Ajoutez d'autres bouquets selon vos besoins :
+    # - "oncology_press"
+    # - "immunology_corporate"
+    # - "pubmed_academic"
+  
+  # Sources supplémentaires (en plus des bouquets)
+  # Utilisez cette section pour ajouter des sources spécifiques non incluses dans les bouquets
+  sources_extra_enabled: []
+  # Exemple :
+  # - "press_sector__specific_journal"
+  # - "press_corporate__specific_company"
+  
+  # NOUVEAU v2 : Overrides de profils d'ingestion par bouquet
+  # Permet de personnaliser les profils d'ingestion sans modifier le canonical
+  bouquet_ingestion_overrides: {}
+  # Exemple :
+  # "lai_press_mvp":
+  #   profile: "press_technology_focused_strict"
+  #   rationale: "Filtrage plus strict pour réduire le bruit"
+
+# ============================================================================
+# OVERRIDES D'INGESTION (OPTIONNEL)
+# ============================================================================
+# Permet de définir des profils d'ingestion personnalisés pour ce client
+# sans modifier les fichiers canonical. Utile pour des besoins très spécifiques.
+
+ingestion_overrides:
+  # Profils personnalisés
+  profiles: {}
+  # Exemple :
+  # custom_trademark_priority:
+  #   base_profile: "press_technology_focused"
+  #   description: "Profil avec priorité absolue aux trademarks"
+  #   signal_requirements:
+  #     mode: "require_signals"
+  #     required_signal_groups:
+  #       - group_id: "trademark_signals_priority"
+  #         description: "Trademarks avec poids maximum"
+  #         scopes: ["lai_trademarks_global"]
+  #         min_matches: 1
+  #         weight: 10.0
+  #   rationale: "Ce client veut absolument tous les articles mentionnant ses trademarks"
+
+# ============================================================================
+# CONFIGURATION DU MATCHING (NOUVEAU v2)
+# ============================================================================
+# Configuration explicite du comportement de matching.
+# Permet de personnaliser les règles sans modifier le canonical.
+
+matching_config:
+  # Comportement global par défaut
+  # Valeurs supportées : "strict", "balanced", "broad"
+  default_matching_mode: "balanced"
+  
+  # Overrides par type de domaine
+  domain_type_overrides:
+    # Pour les domaines "technology" : règles strictes
+    technology:
+      require_entity_signals: true      # Au moins une entité (company/molecule) requise
+      min_technology_signals: 2         # Au moins 2 signaux technologiques
+    
+    # Pour les domaines "regulatory" : règles souples
+    regulatory:
+      require_entity_signals: false     # Pas d'entité obligatoire
+      min_technology_signals: 1         # 1 seul signal technologique suffit
+  
+  # NOUVEAU v2 : Traitement privilégié des trademarks
+  # Les trademarks bénéficient de règles spéciales dans tout le pipeline
+  trademark_privileges:
+    enabled: true                       # Active le traitement privilégié
+    auto_match_threshold: 0.8           # Seuil de confiance pour match automatique
+    boost_factor: 2.0                   # Facteur de boost pour le scoring
+    ingestion_priority: true            # Toujours ingérer si trademark détecté
+    matching_priority: true             # Toujours matcher si trademark du scope détecté
+
+# ============================================================================
+# CONFIGURATION DU SCORING (NOUVEAU v2)
+# ============================================================================
+# Personnalisation des règles de scoring au niveau client.
+# Permet d'ajuster les poids et bonus selon les priorités métier.
+
+scoring_config:
+  # Overrides des poids par type d'événement
+  # Référence : canonical/scoring/scoring_rules.yaml.event_type_weights
+  event_type_weight_overrides:
+    partnership: 8                      # Plus important que la valeur par défaut
+    clinical_update: 6                  # Ajustement selon les priorités client
+    regulatory: 7                       # Priorité élevée pour le réglementaire
+  
+  # Bonus spécifiques au client
+  client_specific_bonuses:
+    # Bonus pour les pure players (entreprises 100% focalisées sur la technologie)
+    pure_player_companies:
+      scope: "lai_companies_mvp_core"   # Référence à un scope canonical
+      bonus: 4.0                        # Bonus élevé
+      description: "Entreprises core du secteur"
+    
+    # NOUVEAU v2 : Bonus pour les mentions de trademarks
+    trademark_mentions:
+      scope: "lai_trademarks_global"    # Référence au trademark_scope
+      bonus: 3.0                        # Bonus fort pour faire remonter en tête
+      description: "Mentions de marques clés"
+    
+    # Bonus pour les molécules clés
+    key_molecules:
+      scope: "lai_molecules_global"     # Référence au molecule_scope
+      bonus: 2.0                        # Bonus modéré
+      description: "Molécules d'intérêt stratégique"
+  
+  # Seuils de sélection personnalisés
+  selection_overrides:
+    min_score: 12                       # Plus strict que le défaut (10)
+    min_items_per_section: 2            # Au moins 2 items par section
+    max_items_total: 20                 # Limite globale pour éviter les newsletters trop longues
+
+# ============================================================================
+# STRUCTURE DE LA NEWSLETTER
+# ============================================================================
+# Définit l'organisation et la présentation de la newsletter finale.
+
+newsletter_layout:
+  sections:
+    # Section principale : signaux forts
+    - id: "top_signals"
+      title: "Top Signals"
+      
+      # Domaines sources pour cette section
+      source_domains:
+        - "tech_ecosystem_primary"      # Référence aux watch_domains.id
+        - "regulatory_watch"
+      
+      # Nombre maximum d'items dans cette section
+      max_items: 5
+      
+      # NOUVEAU v2 : Filtrage par domaines spécifiques
+      filter_domains: ["tech_ecosystem_primary"]
+      
+      # NOUVEAU v2 : Ordre de tri personnalisé
+      # Valeurs supportées : "score_desc", "date_desc", "relevance_desc"
+      sort_by: "score_desc"
+    
+    # Section secondaire : partenariats et deals
+    - id: "partnerships_deals"
+      title: "Partnerships & Deals"
+      source_domains:
+        - "tech_ecosystem_primary"
+      max_items: 3
+      
+      # Filtrage par type d'événement
+      filter_event_types:
+        - "partnership"
+        - "corporate_move"
+      
+      sort_by: "date_desc"
+    
+    # Section tertiaire : veille réglementaire
+    - id: "regulatory_updates"
+      title: "Regulatory Updates"
+      source_domains:
+        - "regulatory_watch"
+      max_items: 3
+      
+      filter_event_types:
+        - "regulatory"
+      
+      sort_by: "score_desc"
+
+# ============================================================================
+# CONFIGURATION DE LIVRAISON
+# ============================================================================
+# Paramètres de génération et livraison de la newsletter.
+
+newsletter_delivery:
+  # Format de sortie
+  # Valeurs supportées : "markdown", "html", "json"
+  format: "markdown"
+  
+  # Inclure un résumé exécutif (TL;DR)
+  include_tldr: true
+  
+  # Inclure une introduction contextuelle
+  include_intro: true
+  
+  # NOUVEAU v2 : Inclure des métriques de veille
+  include_metrics: true
+  
+  # Méthode de livraison
+  # Valeurs supportées : "s3", "email", "webhook"
+  delivery_method: "s3"
+  
+  # Email de notification (si delivery_method inclut email)
+  notification_email: "client@example.com"
+  
+  # NOUVEAU v2 : Configuration des métriques
+  metrics_config:
+    include_source_breakdown: true      # Répartition par source
+    include_domain_breakdown: true      # Répartition par domaine
+    include_trend_analysis: false       # Analyse de tendances (optionnel)
+
+# ============================================================================
+# MÉTADONNÉES ET VERSIONING
+# ============================================================================
+# Informations de versioning et métadonnées pour la maintenance.
+
+metadata:
+  template_version: "2.0.0"
+  created_date: "2024-12-19"
+  last_modified: "2024-12-19"
+  created_by: "Vectora Inbox Template Generator"
+  
+  # Compatibilité
+  min_runtime_version: "2.0.0"
+  canonical_version: "1.0.0"
+  
+  # Documentation
+  documentation_links:
+    - "docs/diagnostics/vectora_inbox_client_config_v2_diagnostic.md"
+    - "docs/design/vectora_inbox_client_config_v2_template_plan.md"
+  
+  # Notes de migration
+  migration_notes: |
+    Template v2 - Principales nouveautés :
+    - trademark_scope dans watch_domains
+    - matching_config avec trademark_privileges
+    - scoring_config avec bonus personnalisés
+    - ingestion_overrides pour profils custom
+    - newsletter_layout amélioré avec filtres
+
+# ============================================================================
+# FIN DU TEMPLATE
+# ============================================================================
+#
+# PROCHAINES ÉTAPES :
+# 1. Adaptez les scopes selon votre domaine métier
+# 2. Personnalisez les bonus et poids selon vos priorités
+# 3. Testez avec un échantillon de données
+# 4. Ajustez les seuils selon les résultats obtenus
+#
+# SUPPORT :
+# - Validation : scripts/validate_client_config.py (à développer)
+# - Migration : scripts/migrate_v1_to_v2.py (à développer)
+# - Documentation : docs/README.md
+#
+# ============================================================================

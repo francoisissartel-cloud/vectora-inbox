@@ -7,6 +7,7 @@ et obtenir des réponses structurées pour la normalisation d'items.
 
 import json
 import logging
+import os
 import time
 import random
 from typing import Dict, Any, List
@@ -24,7 +25,8 @@ def get_bedrock_client():
     Returns:
         Client boto3 bedrock-runtime configuré
     """
-    return boto3.client('bedrock-runtime', region_name='eu-west-3')
+    region = os.environ.get('BEDROCK_REGION', 'us-east-1')
+    return boto3.client('bedrock-runtime', region_name=region)
 
 
 def normalize_item_with_bedrock(
@@ -118,10 +120,15 @@ EXAMPLES OF ENTITIES TO DETECT:
 TASK:
 1. Generate a concise summary (2-3 sentences) explaining the key information
 2. Classify the event type among: clinical_update, partnership, regulatory, scientific_paper, corporate_move, financial_results, safety_signal, manufacturing_supply, other
-3. Extract mentioned companies (from the examples or similar)
-4. Extract mentioned molecules/drugs (from the examples or similar)
-5. Extract mentioned technologies (from the examples or similar)
-6. Extract therapeutic indications mentioned (e.g., "opioid use disorder", "schizophrenia", "diabetes")
+3. Extract ALL pharmaceutical/biotech company names mentioned in the text (including those in examples and ANY others)
+4. Extract ALL drug/molecule names mentioned (including brand names, generic names, and development codes)
+5. Extract ALL technology keywords mentioned (e.g., "long-acting injectable", "microspheres", "PLGA", "subcutaneous", etc.)
+6. Extract ALL therapeutic indications mentioned (e.g., "opioid use disorder", "schizophrenia", "diabetes")
+
+IMPORTANT:
+- Extract the EXACT company names as they appear in the text (e.g., "WuXi AppTec", "Agios", "Pfizer")
+- Include ALL companies mentioned, not just those in the examples
+- Be comprehensive in entity extraction
 
 RESPONSE FORMAT (JSON only):
 {{

@@ -31,36 +31,36 @@ def run_ingest_normalize_for_client(
     env_vars: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
     """
-    Orchestration de l'ingestion et de la normalisation pour un client.
+    Orchestration de l'ingestion et de la normalisation pour un client avec logique par run.
     
     Cette fonction implémente les Phases 1A et 1B du workflow Vectora Inbox :
     - Phase 1A (Ingestion) : récupération des contenus bruts depuis les sources externes
     - Phase 1B (Normalisation) : transformation en items structurés avec Bedrock
     
-    Processus :
-    1. Charger la configuration client et les scopes canonical depuis S3
-    2. Résoudre les bouquets de sources (développer les source_key)
-    3. Pour chaque source : récupérer le contenu brut (HTTP/RSS)
-    4. Parser les contenus bruts en items structurés
-    5. Normaliser chaque item (détection d'entités + classification + résumé)
-    6. Écrire les items normalisés dans S3 (DATA_BUCKET)
+    NOUVEAU : Logique centrée run :
+    1. Génération d'un run_id unique
+    2. Écriture des items RAW dans S3 avec structure par run
+    3. Normalisation uniquement du RAW de ce run (pas d'historique)
+    4. Écriture des items normalisés avec structure par run
     
     Args:
         client_id: Identifiant unique du client (ex: "lai_weekly")
         sources: Liste optionnelle de source_key à traiter (surcharge la config)
-        period_days: Nombre de jours à remonter dans le passé
-        from_date: Date de début (ISO8601)
-        to_date: Date de fin (ISO8601)
+        period_days: Nombre de jours à remonter dans le passé (non utilisé pour normalisation)
+        from_date: Date de début (ISO8601) (non utilisé pour normalisation)
+        to_date: Date de fin (ISO8601) (non utilisé pour normalisation)
         env_vars: Variables d'environnement (buckets, modèle Bedrock, etc.)
     
     Returns:
         Dict contenant les statistiques d'exécution :
             - client_id (str)
+            - run_id (str)
             - execution_date (str)
             - sources_processed (int)
             - items_ingested (int)
             - items_normalized (int)
-            - s3_output_path (str)
+            - s3_raw_path (str)
+            - s3_normalized_path (str)
             - execution_time_seconds (float)
     
     Raises:
@@ -78,6 +78,10 @@ def run_ingest_normalize_for_client(
     logger.info(f"Démarrage de l'ingestion + normalisation pour le client : {client_id}")
     
     start_time = time.time()
+    
+    # NOUVEAU : Générer un run_id unique
+    run_id = date_utils.generate_run_id()
+    logger.info(f"Run ID généré : {run_id}")
     
     # Récupérer les variables d'environnement
     env_vars = env_vars or {}
@@ -107,7 +111,7 @@ def run_ingest_normalize_for_client(
     
     # Étape 3 : Ingestion et parsing
     logger.info("Phase 1A : Ingestion des sources")
-    all_raw_items = []
+    raw_items_by_source = {}
     sources_processed = 0
     
     for source_meta in resolved_sources:
@@ -119,15 +123,29 @@ def run_ingest_normalize_for_client(
         if raw_content:
             # Parser le contenu en items bruts
             raw_items = parser.parse_source_content(raw_content, source_meta)
-            all_raw_items.extend(raw_items)
+            raw_items_by_source[source_key] = raw_items
             sources_processed += 1
             logger.info(f"Source {source_key} : {len(raw_items)} items récupérés")
         else:
             logger.warning(f"Source {source_key} : aucun contenu récupéré")
     
-    logger.info(f"Total items bruts récupérés : {len(all_raw_items)}")
+    total_raw_items = sum(len(items) for items in raw_items_by_source.values())
+    logger.info(f"Total items bruts récupérés : {total_raw_items}")
     
-    # Étape 4 : Normalisation
+    # NOUVEAU : Étape 4 : Écriture des items RAW dans S3 avec structure par run
+    logger.info("Écriture des items RAW dans S3")
+    raw_prefix = s3_client.write_raw_items_to_s3(data_bucket, client_id, run_id, raw_items_by_source)
+    
+    # NOUVEAU : Étape 5 : Lecture des items RAW depuis S3 pour normalisation
+    logger.info("Lecture des items RAW depuis S3 pour normalisation")
+    raw_items_from_s3 = s3_client.read_raw_items_from_s3(data_bucket, raw_prefix)
+    
+    # Convertir en liste plate pour la normalisation
+    all_raw_items = []
+    for source_items in raw_items_from_s3.values():
+        all_raw_items.extend(source_items)
+    
+    # Étape 6 : Normalisation
     logger.info("Phase 1B : Normalisation des items avec Bedrock")
     normalized_items = normalizer.normalize_items_batch(
         all_raw_items,
@@ -137,14 +155,9 @@ def run_ingest_normalize_for_client(
     
     logger.info(f"Total items normalisés : {len(normalized_items)}")
     
-    # Étape 5 : Écriture dans S3
-    current_date = date_utils.get_current_date_iso()
-    year, month, day = current_date.split('-')
-    
-    s3_key = f"normalized/{client_id}/{year}/{month}/{day}/items.json"
-    
-    logger.info(f"Écriture des items normalisés dans s3://{data_bucket}/{s3_key}")
-    s3_client.write_json_to_s3(data_bucket, s3_key, normalized_items)
+    # NOUVEAU : Étape 7 : Écriture des items normalisés dans S3 avec structure par run
+    logger.info("Écriture des items normalisés dans S3")
+    normalized_key = s3_client.write_normalized_items_to_s3(data_bucket, client_id, run_id, normalized_items)
     
     # Calculer le temps d'exécution
     execution_time = time.time() - start_time
@@ -152,11 +165,13 @@ def run_ingest_normalize_for_client(
     # Construire le résultat
     result = {
         'client_id': client_id,
+        'run_id': run_id,
         'execution_date': date_utils.get_current_datetime_iso(),
         'sources_processed': sources_processed,
-        'items_ingested': len(all_raw_items),
+        'items_ingested': total_raw_items,
         'items_normalized': len(normalized_items),
-        's3_output_path': f"s3://{data_bucket}/{s3_key}",
+        's3_raw_path': f"s3://{data_bucket}/{raw_prefix}/",
+        's3_normalized_path': f"s3://{data_bucket}/{normalized_key}",
         'execution_time_seconds': round(execution_time, 2)
     }
     
@@ -207,7 +222,7 @@ def run_engine_for_client(
     import logging
     import time
     from datetime import datetime, timedelta
-    from vectora_core.config import loader
+    from vectora_core.config import loader, resolver
     from vectora_core.matching import matcher
     from vectora_core.scoring import scorer
     from vectora_core.newsletter import assembler
@@ -238,10 +253,18 @@ def run_engine_for_client(
     client_config = loader.load_client_config(client_id, config_bucket)
     canonical_scopes = loader.load_canonical_scopes(config_bucket)
     scoring_rules = loader.load_scoring_rules(config_bucket)
+    matching_rules = resolver.load_matching_rules(config_bucket)
     
     # Étape 2 : Calculer la fenêtre temporelle et collecter les items normalisés
     logger.info("Calcul de la fenêtre temporelle")
-    from_date_calc, to_date_calc = date_utils.compute_date_range(period_days, from_date, to_date)
+    
+    # Résoudre period_days selon la hiérarchie de priorité
+    from vectora_core.utils.config_utils import resolve_period_days
+    resolved_period_days = resolve_period_days(period_days, client_config)
+    logger.info(f"Period days résolu : {resolved_period_days} (payload: {period_days})")
+    
+    # Calculer la fenêtre temporelle avec la valeur résolue
+    from_date_calc, to_date_calc = date_utils.compute_date_range(resolved_period_days, from_date, to_date)
     
     logger.info(f"Collecte des items normalisés du {from_date_calc} au {to_date_calc}")
     all_items = _collect_normalized_items(data_bucket, client_id, from_date_calc, to_date_calc)
@@ -272,18 +295,18 @@ def run_engine_for_client(
     # Étape 3 : Matching (Phase 2)
     logger.info("Phase 2 : Matching des items aux watch_domains")
     watch_domains = client_config.get('watch_domains', [])
-    matched_items = matcher.match_items_to_domains(all_items, watch_domains, canonical_scopes)
+    matched_items = matcher.match_items_to_domains(all_items, watch_domains, canonical_scopes, matching_rules)
     
     items_matched = sum(1 for item in matched_items if item.get('matched_domains'))
     logger.info(f"Items matchés : {items_matched}/{len(matched_items)}")
     
     # Étape 4 : Scoring (Phase 3)
     logger.info("Phase 3 : Scoring des items matchés")
-    scored_items = scorer.score_items(matched_items, scoring_rules, watch_domains)
+    scored_items = scorer.score_items(matched_items, scoring_rules, watch_domains, canonical_scopes)
     
     # Étape 5 : Génération de la newsletter (Phase 4)
     logger.info("Phase 4 : Génération de la newsletter avec Bedrock")
-    newsletter_md, stats = assembler.generate_newsletter(
+    newsletter_md, stats, editorial_content = assembler.generate_newsletter(
         scored_items,
         client_config,
         bedrock_model_id,
@@ -293,7 +316,7 @@ def run_engine_for_client(
     )
     
     # Étape 6 : Écriture dans S3
-    s3_path = _write_newsletter_to_s3(newsletters_bucket, client_id, target_date, newsletter_md)
+    s3_path = _write_newsletter_to_s3(newsletters_bucket, client_id, target_date, newsletter_md, editorial_content)
     
     # Calculer le temps d'exécution
     execution_time = time.time() - start_time
@@ -322,6 +345,11 @@ def _collect_normalized_items(data_bucket: str, client_id: str, from_date: str, 
     """
     Collecte tous les items normalisés depuis S3 pour une fenêtre temporelle.
     
+    NOUVEAU : Supporte la nouvelle structure par run ET l'ancienne structure pour compatibilité.
+    
+    Nouvelle structure : normalized/{client_id}/YYYY/MM/DD/{run_id}/items.json
+    Ancienne structure : normalized/{client_id}/YYYY/MM/DD/items.json
+    
     Args:
         data_bucket: Nom du bucket S3 de données
         client_id: Identifiant du client
@@ -337,6 +365,31 @@ def _collect_normalized_items(data_bucket: str, client_id: str, from_date: str, 
     
     logger = logging.getLogger(__name__)
     all_items = []
+    
+    # NOUVEAU : Utiliser la nouvelle fonction pour lister tous les runs
+    try:
+        run_keys = s3_client.list_normalized_runs_for_date_range(data_bucket, client_id, from_date, to_date)
+        
+        for key in run_keys:
+            try:
+                items = s3_client.read_json_from_s3(data_bucket, key)
+                if isinstance(items, list):
+                    all_items.extend(items)
+                    logger.info(f"Chargé {len(items)} items depuis {key}")
+                else:
+                    logger.warning(f"Format inattendu pour {key} : attendu list, reçu {type(items)}")
+            except Exception as e:
+                logger.warning(f"Erreur lors de la lecture de {key} : {e}")
+        
+        if run_keys:
+            logger.info(f"Nouvelle structure détectée : {len(run_keys)} runs trouvés")
+            return all_items
+    
+    except Exception as e:
+        logger.info(f"Nouvelle structure non disponible, fallback vers ancienne structure : {e}")
+    
+    # FALLBACK : Ancienne structure pour compatibilité
+    logger.info("Utilisation de l'ancienne structure S3")
     
     # Générer la liste des dates à parcourir
     from_dt = datetime.strptime(from_date, '%Y-%m-%d')
@@ -391,7 +444,13 @@ def _generate_empty_newsletter(client_config: Dict[str, Any], target_date: str) 
     return title + message + footer
 
 
-def _write_newsletter_to_s3(newsletters_bucket: str, client_id: str, target_date: str, newsletter_md: str) -> str:
+def _write_newsletter_to_s3(
+    newsletters_bucket: str,
+    client_id: str,
+    target_date: str,
+    newsletter_md: str,
+    editorial_content: Dict[str, Any] = None
+) -> str:
     """
     Écrit la newsletter dans S3.
     
@@ -400,6 +459,7 @@ def _write_newsletter_to_s3(newsletters_bucket: str, client_id: str, target_date
         client_id: Identifiant du client
         target_date: Date de référence (YYYY-MM-DD)
         newsletter_md: Contenu Markdown de la newsletter
+        editorial_content: Contenu éditorial JSON (optionnel)
     
     Returns:
         Chemin S3 complet (s3://bucket/key)
@@ -410,12 +470,18 @@ def _write_newsletter_to_s3(newsletters_bucket: str, client_id: str, target_date
     logger = logging.getLogger(__name__)
     
     year, month, day = target_date.split('-')
-    key = f"{client_id}/{year}/{month}/{day}/newsletter.md"
+    md_key = f"{client_id}/{year}/{month}/{day}/newsletter.md"
     
-    logger.info(f"Écriture de la newsletter dans s3://{newsletters_bucket}/{key}")
-    s3_client.write_text_to_s3(newsletters_bucket, key, newsletter_md, content_type='text/markdown')
+    logger.info(f"Écriture de la newsletter dans s3://{newsletters_bucket}/{md_key}")
+    s3_client.write_text_to_s3(newsletters_bucket, md_key, newsletter_md, content_type='text/markdown')
     
-    return f"s3://{newsletters_bucket}/{key}"
+    # Écrire aussi le JSON éditorial si fourni
+    if editorial_content:
+        json_key = f"{client_id}/{year}/{month}/{day}/newsletter.json"
+        logger.info(f"Écriture du JSON éditorial dans s3://{newsletters_bucket}/{json_key}")
+        s3_client.write_json_to_s3(newsletters_bucket, json_key, editorial_content)
+    
+    return f"s3://{newsletters_bucket}/{md_key}"
 
 
 __all__ = [

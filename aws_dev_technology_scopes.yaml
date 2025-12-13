@@ -1,0 +1,160 @@
+# Scopes de technologies.
+# Mots-clés et expressions indiquant des formulations ou technologies.
+
+# Scope LAI restructuré pour améliorer la précision du matching.
+# Structure : core_phrases (haute précision) + technology_terms_high_precision (DDS/HLE spécifiques)
+# + technology_use (usage) + route_admin_terms (routes) + interval_patterns (dosage prolongé)
+# + generic_terms (trop larges, conservés pour mémoire) + negative_terms (exclusions).
+lai_keywords:
+  _metadata:
+    profile: technology_complex
+    description: "Long-Acting Injectables - requires multiple signal types for matching"
+  core_phrases:
+    # Expressions explicites LAI (haute précision, match immédiat)
+    - "long-acting injectable"
+    - "long acting injectable"
+    - "long-acting formulation"
+    - "extended-release injection"
+    - "extended-release injectable"
+    - "controlled-release injection"
+    - "injectable controlled release"
+    - "sustained release injectable"
+    - "sustained-release injectable"
+    - "depot injection"
+    - "long-acting depot"
+    - "long-acting"
+    - "long acting"
+    
+  technology_terms_high_precision:
+    # Termes technologiques spécifiques LAI (DDS + HLE)
+    # DDS families (Drug Delivery Systems)
+    - "drug delivery system"
+    - "drug delivery"
+    - "controlled release"
+    - "sustained release"
+    - "extended release"
+    - "modified release"
+    - "PharmaShell®"          # Nanexa technology
+    - "SiliaShell®"           # Technology brand
+    - "BEPO®"                 # Technology brand
+    - "extended-release injectable"
+    - "long-acting injectable"
+    - "LAI"                   # Acronyme direct
+    - "depot injection"
+    - "once-monthly injection"
+    - "atomic layer deposition"
+    - "Half life extension"
+    - "half life extended"
+    - "polymeric microspheres"
+    - "PLGA microspheres"
+    - "PLA microspheres"
+    - "in-situ forming depot"
+    - "Atrigel"
+    - "FluidCrystal"
+    - "SmartDepot"
+    - "multivesicular liposomes"
+    - "DepoFoam"
+    - "BioSeizer"
+    - "thermo-responsive hydrogel"
+    - "RTGel"
+    - "liquid crystalline depot"
+    - "liquid crystal depot"
+    - "depot-forming prodrug"
+    - "depot prodrug"
+    - "long-acting prodrug"
+    - "long-acting emulsion"
+    - "Medisorb"
+    - "CriPec"
+    - "DiffuSphere"
+    # HLE strategies (Half-Life Extension)
+    - "PASylation"
+    - "site-specific PEGylation"
+    - "Fc fusion"
+    - "Fc-fusion"
+    - "IgG Fc fusion"
+    - "albumin binding"
+    - "albumin fusion"
+    - "albumin-binding"
+    - "lipidation"
+    - "fatty acid conjugation"
+    - "polypeptide extension"
+    - "glyco-engineering"
+    - "glycan engineering"
+    - "sialylation"
+    - "half-life extension"
+    
+  technology_use:
+    # Termes d'usage (doivent être combinés avec d'autres signaux)
+    - "injectable"
+    - "injection"
+    - "depot"
+    - "microsphere"
+    - "microspheres"
+    - "thermo-gel"
+    - "nanocrystal"
+    - "nanosizing"
+    - "oil-based"
+    - "liquid crystal"
+    
+  route_admin_terms:
+    # Routes d'administration (contexte nécessaire mais non suffisant seul)
+    - "intramuscular"
+    - "subcutaneous"
+    - "intravenous"
+    - "intravitreal"
+    - "intratumoral"
+    - "intra-articular"
+    - "intrathecal"
+    - "intravesical"
+    - "epidural"
+    - "intraocular"
+    - "intradermal"
+    - "intratympanic"
+    - "surgical site instillation"
+    
+  interval_patterns:
+    # Patterns d'intervalle typiques LAI (signaux forts de dosage prolongé)
+    - "once-monthly"
+    - "once-weekly injection"
+    - "once every 2 weeks"
+    - "once every 3 months"
+    - "once every 6 months"
+    - "q4w"
+    - "q8w"
+    - "q12w"
+    - "q2w"
+    - "6-month"
+    - "3-month"
+    - "quarterly injection"
+    - "biweekly injection"
+    - "monthly injection"
+    
+  generic_terms:
+    # Termes trop génériques (conservés pour mémoire, ne matchent plus seuls)
+    - "drug delivery system"
+    - "liposomes"
+    - "liposomal"
+    - "PLEX"
+    - "hydrogel"
+    - "nanosuspension"
+    - "emulsion"
+    - "lipid emulsion"
+    - "PEGylation"
+    - "PEGylated"
+    - "PEG"
+    - "protein engineering"
+    
+  negative_terms:
+    # Signaux forts de NON-LAI (exclusions explicites)
+    - "oral tablet"
+    - "oral capsule"
+    - "oral administration"
+    - "topical cream"
+    - "topical gel"
+    - "topical ointment"
+    - "transdermal patch"
+    - "inhalation"
+    - "nasal spray"
+    - "sublingual"
+    - "buccal"
+

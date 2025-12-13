@@ -98,9 +98,9 @@ All Vectora Inbox resources are prefixed with `vectora-inbox-` for easy identifi
 ### 2.5 High-Level Data Flow
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                         VECTORA INBOX MVP FLOW                          │
-└─────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────┐
+│                         VECTORA INBOX ENHANCED FLOW                      │
+└───────────────────────────────────────────────────────────────────────────┘
 
   External Sources                    AWS (eu-west-3, account 786469175371)
   ────────────────                    ────────────────────────────────────
@@ -110,47 +110,68 @@ All Vectora Inbox resources are prefixed with `vectora-inbox-` for easy identifi
   • PubMed, FDA, etc.  ──┘
                          │
                          ▼
-              ┌──────────────────────────┐
-              │  Lambda:                 │
-              │  vectora-inbox-          │
-              │  ingest-normalize        │
-              │                          │
-              │  • Fetch raw content     │
-              │  • Extract entities      │
-              │  • Normalize to JSON     │
-              └──────────┬───────────────┘
-                         │
-                         ▼
-              ┌──────────────────────────┐
-              │  S3: vectora-inbox-data  │
-              │  normalized/<client>/    │
-              │  <YYYY>/<MM>/<DD>/       │
-              │  items.json              │
-              └──────────┬───────────────┘
-                         │
-                         ▼
-              ┌──────────────────────────┐
-              │  Lambda:                 │
-              │  vectora-inbox-engine    │
-              │                          │
-              │  • Load client config    │
-              │  • Match items to scopes │
-              │  • Score & rank items    │
-              │  • Assemble newsletter   │
-              └──────────┬───────────────┘
-                         │
-                         ▼
-              ┌──────────────────────────┐
-              │  S3: vectora-inbox-      │
-              │  newsletters/<client>/   │
-              │  <YYYY>/<MM>/<DD>/       │
-              │  newsletter.md           │
-              └──────────────────────────┘
-                         │
-                         ▼
-                    Client receives
-                    newsletter (email,
-                    web portal, etc.)
+              ┌────────────────────────────────────────┐
+              │  Lambda: vectora-inbox-ingest-normalize  │
+              │                                          │
+              │  Phase 1A: Ingestion                     │
+              │  • Fetch raw content (RSS/APIs)         │
+              │  • Parse & extract basic fields         │
+              │                                          │
+              │  Phase 1A-bis: Profile Filtering (NEW)   │
+              │  • Apply ingestion profiles             │
+              │  • Pre-filter by source type            │
+              │  • Reduce Bedrock costs 60-80%          │
+              │                                          │
+              │  Phase 1B: Open-World Normalization      │
+              │  • Bedrock entity detection (all)       │
+              │  • Canonical intersection               │
+              │  • Preserve unknown entities            │
+              └─────────────────────┬────────────────────┘
+                                    │
+                                    ▼
+              ┌────────────────────────────────────────┐
+              │  S3: vectora-inbox-data                  │
+              │  normalized/<client>/<YYYY>/<MM>/<DD>/   │
+              │  items.json                              │
+              │                                          │
+              │  Open-World Schema:                      │
+              │  • *_detected (all entities)            │
+              │  • *_in_scopes (canonical only)         │
+              └─────────────────────┬────────────────────┘
+                                    │
+                                    ▼
+              ┌────────────────────────────────────────┐
+              │  Lambda: vectora-inbox-engine            │
+              │                                          │
+              │  Phase 2: Advanced Matching              │
+              │  • Technology profiles (complex/simple) │
+              │  • Company scope modifiers              │
+              │  • Configurable domain rules            │
+              │                                          │
+              │  Phase 3: Multi-Factor Scoring           │
+              │  • Event type + domain priority         │
+              │  • Company bonuses (pure/hybrid)        │
+              │  • Recency + signal quality             │
+              │                                          │
+              │  Phase 4: Editorial Newsletter           │
+              │  • Bedrock editorial generation         │
+              │  • Section-based assembly              │
+              │  • Multi-language support              │
+              └─────────────────────┬────────────────────┘
+                                    │
+                                    ▼
+              ┌────────────────────────────────────────┐
+              │  S3: vectora-inbox-newsletters           │
+              │  <client>/<YYYY>/<MM>/<DD>/              │
+              │                                          │
+              │  • newsletter.md (Markdown)             │
+              │  • newsletter.json (Editorial metadata) │
+              └────────────────────────────────────────┘
+                                    │
+                                    ▼
+                    Client receives professional
+                    intelligence newsletter
+                    (email, web portal, etc.)
 ```
 
 ---
@@ -609,6 +630,64 @@ for source_key in active_source_keys:
 
 ---
 
+## Ingestion Profiles and Cost Optimization (NEW)
+
+### What are Ingestion Profiles?
+
+Ingestion profiles are **pre-filtering strategies** applied before Bedrock normalization to reduce costs and improve signal quality. They define which content should be normalized based on source type and signal detection.
+
+### Philosophy: Two-Layer Filtering
+
+1. **Ingestion Profiles** (Phase 1A-bis): Pre-filter obvious noise before expensive Bedrock calls
+2. **Matching Rules** (Phase 2): Apply sophisticated business logic after normalization
+
+**Principle**: Ingestion filters out 80% of noise cheaply, matching does precise selection expensively.
+
+### Profile Strategies
+
+**`broad_ingestion`** (Pure Players):
+- Strategy: Ingest everything except explicit exclusions
+- Usage: Companies with high signal-to-noise ratio (MedinCell, Camurus)
+- Retention: ~95% (filter only HR, ESG, financial noise)
+
+**`signal_based_ingestion`** (Hybrid Companies):
+- Strategy: Ingest only if technology signals detected
+- Usage: Big pharma with diverse activities (AbbVie, Pfizer)
+- Retention: ~15% (aggressive filtering to avoid non-LAI content)
+
+**`multi_signal_ingestion`** (Sector Press):
+- Strategy: Require entity + technology signal combination
+- Usage: Broad industry press (FierceBiotech, FiercePharma)
+- Retention: ~25% (filter general pharma news)
+
+**`no_filtering`** (Default):
+- Strategy: Ingest everything (backward compatibility)
+- Usage: When no specific profile assigned
+- Retention: 100%
+
+### Cost Impact
+
+**Without Profiles**: 1000 items → 1000 Bedrock calls → $50/day
+**With Profiles**: 1000 items → 200 items retained → 200 Bedrock calls → $10/day
+
+**Savings**: 60-80% reduction in Bedrock costs while maintaining signal quality.
+
+### Configuration
+
+Profiles are defined in `canonical/ingestion/ingestion_profiles.yaml` and assigned to sources in `source_catalog.yaml`:
+
+```yaml
+# In source_catalog.yaml
+sources:
+  - source_key: "press_corporate__medincell"
+    ingestion_profile: "corporate_pure_player_broad"
+    
+  - source_key: "press_sector__fiercebiotech"
+    ingestion_profile: "press_technology_focused"
+```
+
+---
+
 ### Phase 1A – Ingestion (NO Bedrock)
 
 **What happens:**  
@@ -635,48 +714,100 @@ The `vectora-inbox-ingest-normalize` Lambda fetches raw content from external so
 - Purpose: Debugging, quality checks, and ability to re-normalize later without re-fetching.
 - MVP can skip RAW storage initially and focus directly on producing normalized items.
 
+### Phase 1A-bis – Profile Filtering (NEW - NO Bedrock)
+
+**What happens:**  
+After parsing but before normalization, the system applies **ingestion profiles** to pre-filter content and reduce Bedrock costs.
+
+**Responsibilities:**
+- Load ingestion profiles from `canonical/ingestion/ingestion_profiles.yaml`
+- For each raw item, determine the appropriate profile based on `source_key`
+- Apply filtering logic according to profile strategy:
+  - **`broad_ingestion`**: Ingest everything except explicit exclusions (for pure players)
+  - **`signal_based_ingestion`**: Ingest only if required technology signals detected (for hybrids)
+  - **`multi_signal_ingestion`**: Ingest if combination of entity + technology signals (for press)
+  - **`no_filtering`**: Ingest everything (default/compatibility)
+
+**Profile Examples:**
+- **Pure Player LAI** (MedinCell, Camurus): `corporate_pure_player_broad` → 95% retention
+- **Hybrid Big Pharma** (AbbVie, Pfizer): `corporate_hybrid_technology_focused` → 15% retention
+- **Sector Press** (FierceBiotech): `press_technology_focused` → 25% retention
+
+**Benefits:**
+- Reduces Bedrock normalization costs by 60-80% on noisy sources
+- Maintains signal quality by preserving relevant content
+- Configurable per source type and company category
+
+**No Bedrock here:**
+- Uses rule-based keyword matching against canonical scopes
+- Deterministic filtering logic based on signal combinations
+
 ---
 
 ### Phase 1B – Normalization (WITH Bedrock)
 
 **What happens:**  
-The `vectora-inbox-ingest-normalize` Lambda transforms raw text into a normalized JSON schema.
+The `vectora-inbox-ingest-normalize` Lambda transforms filtered raw text into a normalized JSON schema using **Open-World Normalization**.
 
 **Objective:**
-Transform raw text (title + body/description) into a **normalized item**.
+Transform raw text (title + body/description) into a **normalized item** with comprehensive entity detection.
+
+**Open-World Normalization Approach:**
+The system uses a dual-layer approach to capture both known and unknown entities:
+
+1. **Open-World Detection**: Bedrock detects ALL entities mentioned in text
+2. **Canonical Intersection**: System identifies which detected entities exist in our scopes
 
 **Bedrock IS used here to:**
 1. **Classify event_type** among a predefined set:
    - `clinical_update`, `partnership`, `regulatory`, `scientific_paper`, `corporate_move`, `financial_results`, `safety_signal`, `manufacturing_supply`.
-2. **Detect technologies and indications** when rules are not enough:
-   - Use canonical lists (technologies, indications).
-   - Use event type patterns from `event_type_patterns.yaml`.
-   - Apply explicit instructions in the prompt.
+2. **Detect ALL entities** without scope constraints:
+   - Companies (including unknown ones)
+   - Molecules/drugs (including novel compounds)
+   - Technologies (including emerging terms)
+   - Indications (including rare diseases)
+   - Trademarks (commercial names)
 3. **Produce a concise summary** reflecting the "so what" of the item.
+4. **Generate summaries in client language** (English, French, etc.)
 
 **Hybrid approach:**
-- First-level entity detection uses canonical keywords (scopes, simple rules).
-- Bedrock refines and disambiguates:
-  - Among technologies.
-  - Among indications.
-  - Confirms companies/molecules if needed.
+- Bedrock prompt includes canonical examples (50 companies, 30 molecules, 20 technologies)
+- System performs post-processing intersection with canonical scopes
+- Preserves unknown entities for future scope expansion
 
-**Normalized JSON schema (example):**
+**Open-World Normalized JSON schema (example):**
 ```json
 {
-  "source_key": "press_corporate__fiercepharma",
+  "source_key": "press_corporate__camurus",
   "source_type": "press_corporate",
   "title": "Camurus Announces Positive Phase 3 Results for Brixadi",
-  "summary": "Camurus reported positive results from a Phase 3 trial of Brixadi (buprenorphine) for opioid use disorder...",
+  "summary": "Camurus reported positive results from Phase 3 trial...",
   "url": "https://example.com/article",
   "date": "2025-01-15",
-  "companies_detected": ["Camurus"],
-  "molecules_detected": ["Brixadi", "buprenorphine"],
-  "technologies_detected": ["long acting", "depot"],
-  "indications_detected": ["opioid use disorder"],
+  
+  // OPEN-WORLD: All entities detected by Bedrock
+  "companies_detected": ["Camurus", "Unknown Biotech Partner"],
+  "molecules_detected": ["buprenorphine", "novel_compound_X"],
+  "trademarks_detected": ["Brixadi", "Sublocade"],
+  "technologies_detected": ["long acting", "depot", "nanotechnology"],
+  "indications_detected": ["opioid use disorder", "addiction"],
+  
+  // CANONICAL INTERSECTION: Only entities in our scopes
+  "companies_in_scopes": ["Camurus"],
+  "molecules_in_scopes": ["buprenorphine"],
+  "trademarks_in_scopes": ["Brixadi"],
+  "technologies_in_scopes": ["long acting"],
+  "indications_in_scopes": ["opioid use disorder"],
+  
   "event_type": "clinical_update"
 }
 ```
+
+**Benefits of Open-World Approach:**
+- **No information loss**: Unknown entities preserved for analysis
+- **Scope expansion**: Identify new entities to add to canonical
+- **Quality control**: Compare detected vs canonical for validation
+- **Future-proofing**: System adapts as new entities emerge
 
 **Required fields:**
 - `source_key`: Unique identifier for the source (e.g., `"press_corporate__fiercepharma"`, `"pubmed_lai"`)
@@ -710,39 +841,71 @@ Better normalization = more accurate matching and scoring = higher quality newsl
 ### Phase 2 – Matching (NO Bedrock)
 
 **What happens:**  
-The `vectora-inbox-engine` Lambda loads normalized items and client config, then determines which items are relevant to which watch domains.
+The `vectora-inbox-engine` Lambda loads normalized items and applies sophisticated **domain matching rules** to determine relevance.
+
+**Advanced Matching Features:**
+
+1. **Technology Profiles**: Complex matching logic for sophisticated technologies
+   - **`technology_complex`** (for LAI): Requires multiple signal types + entity requirements
+   - **`technology_simple`**: Basic technology + entity matching
+   - Configurable signal categories (core_phrases, technology_terms_high_precision, etc.)
+
+2. **Company Scope Modifiers**: Different rules for different company types
+   - **Pure Players** (MedinCell, Camurus): High precision signals sufficient
+   - **Hybrid Companies** (AbbVie, Pfizer): Multiple supporting signals required
+   - Prevents false positives from large pharma's non-LAI activities
+
+3. **Configurable Domain Rules**: Matching logic defined in `domain_matching_rules.yaml`
+   - **Technology domains**: Require technology + entity signals
+   - **Indication domains**: Require indication + entity signals  
+   - **Regulatory domains**: Any entity signal sufficient
+   - **Custom domains**: Define new matching logic without code changes
 
 **Conceptual steps:**
 
-1. **Load client config** from `s3://vectora-inbox-config/clients/<client_id>.yaml`.
-2. **Load canonical scopes** from `s3://vectora-inbox-config/canonical/scopes/...`.
-3. **Load normalized items** for a given period (e.g., last 7 days) from `s3://vectora-inbox-data/normalized/<client>/<YYYY>/<MM>/<DD>/items.json`.
-4. **Match items to watch domains**:
-   - For each item, compute intersections:
-     - `technologies_detected` ∩ technology scopes
-     - `indications_detected` ∩ indication scopes
-     - `companies_detected` ∩ company scopes
-     - `molecules_detected` ∩ molecule scopes
-   - Decide which `watch_domains` the item belongs to based on these intersections and domain definitions.
+1. **Load configurations**:
+   - Client config from `s3://vectora-inbox-config/clients/<client_id>.yaml`
+   - Canonical scopes from `s3://vectora-inbox-config/canonical/scopes/...`
+   - Domain matching rules from `canonical/matching/domain_matching_rules.yaml`
+
+2. **For each normalized item**:
+   - Compute intersections using `*_in_scopes` fields (canonical intersection)
+   - Apply technology profile logic if applicable (e.g., LAI complexity)
+   - Evaluate company scope modifiers (pure player vs hybrid rules)
+   - Apply domain-specific matching rules
+   - Calculate match confidence scores
+
+3. **Match to watch domains**:
+   - Each domain references specific scopes (company_scope, technology_scope, etc.)
+   - Apply domain type rules (technology, indication, regulatory)
+   - Generate detailed matching explanations for debugging
+
+**Example LAI Technology Complex Matching:**
+```
+Item: "Camurus announces UZEDY approval for schizophrenia"
+- Companies in scopes: ["Camurus"] (pure player)
+- Technologies in scopes: ["long-acting injectable"] (core phrase)
+- Result: MATCH (high precision signal + pure player company)
+
+Item: "Pfizer reports quarterly earnings with depot mention"
+- Companies in scopes: ["Pfizer"] (hybrid)
+- Technologies in scopes: ["depot"] (supporting signal only)
+- Result: NO MATCH (hybrid company needs high precision + supporting signals)
+```
 
 **No Bedrock here:**
-- This is deterministic, rule-based logic: set intersections, if/else.
-- Matching must stay explainable and governed by config + canonical.
-
-**Inputs:**
-- Normalized items from `s3://vectora-inbox-data/normalized/<client>/...`
-- Client config from `s3://vectora-inbox-config/clients/<client_id>.yaml`
-- Canonical scopes from `s3://vectora-inbox-config/canonical/scopes/...`
-
-**Outputs:**
-- Matched items (in memory, annotated with matching domains).
+- Deterministic, rule-based logic with configurable complexity
+- All matching decisions explainable and auditable
+- Performance optimized with set operations
 
 **Admin levers to improve quality:**
-- **Refine watch domains**: Add/remove scopes, add client-specific entities.
-- **Adjust domain definitions**: Change intersection logic if needed.
+- **Tune technology profiles**: Adjust signal requirements and weights
+- **Refine company scope modifiers**: Update pure player vs hybrid classifications
+- **Add new domain types**: Create custom matching rules
+- **Monitor match confidence**: Track and optimize matching accuracy
 
 **Effect on final newsletter:**  
-Better matching = more relevant items reach the scoring phase.
+Sophisticated matching = higher precision + fewer false positives = better signal quality.
 
 ---
 

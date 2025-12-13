@@ -6,6 +6,9 @@
 # + technology_use (usage) + route_admin_terms (routes) + interval_patterns (dosage prolongé)
 # + generic_terms (trop larges, conservés pour mémoire) + negative_terms (exclusions).
 lai_keywords:
+  _metadata:
+    profile: technology_complex
+    description: "Long-Acting Injectables - requires multiple signal types for matching"
   core_phrases:
     # Expressions explicites LAI (haute précision, match immédiat)
     - "long-acting injectable"
@@ -25,17 +28,34 @@ lai_keywords:
   technology_terms_high_precision:
     # Termes technologiques spécifiques LAI (DDS + HLE)
     # DDS families (Drug Delivery Systems)
+    - "drug delivery system"
+    - "drug delivery"
+    - "controlled release"
+    - "sustained release"
+    - "extended release"
+    - "modified release"
+    - "PharmaShell®"          # Nanexa technology (version avec ®)
+    - "PharmaShell"           # Version sans ® (fallback)
+    - "Pharmashell"           # Variante minuscule
+    - "pharma shell"          # Variante séparée
+    - "SiliaShell®"           # Technology brand
+    - "BEPO®"                 # Technology brand
+    - "extended-release injectable"
+    - "long-acting injectable"
+    - "LAI"                   # Acronyme direct
+    - "depot injection"
+    - "once-monthly injection"
+    - "atomic layer deposition"
+    - "Half life extension"
+    - "half life extended"
     - "polymeric microspheres"
     - "PLGA microspheres"
     - "PLA microspheres"
     - "in-situ forming depot"
-    - "ISFD"
-    - "in situ depot"
     - "Atrigel"
     - "FluidCrystal"
     - "SmartDepot"
     - "multivesicular liposomes"
-    - "MVL"
     - "DepoFoam"
     - "BioSeizer"
     - "thermo-responsive hydrogel"
@@ -60,7 +80,6 @@ lai_keywords:
     - "albumin-binding"
     - "lipidation"
     - "fatty acid conjugation"
-    - "XTEN"
     - "polypeptide extension"
     - "glyco-engineering"
     - "glycan engineering"

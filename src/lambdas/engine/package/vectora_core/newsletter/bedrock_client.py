@@ -11,6 +11,7 @@ Ce module appelle Bedrock pour générer les textes éditoriaux :
 
 import json
 import logging
+import os
 import time
 import random
 from typing import Any, Dict, List
@@ -28,7 +29,8 @@ def get_bedrock_client():
     Returns:
         Client boto3 bedrock-runtime configuré
     """
-    return boto3.client('bedrock-runtime', region_name='eu-west-3')
+    region = os.environ.get('BEDROCK_REGION', 'us-east-1')
+    return boto3.client('bedrock-runtime', region_name=region)
 
 
 def generate_editorial_content(
@@ -69,17 +71,17 @@ def generate_editorial_content(
         total_items_analyzed
     )
     
-    # Appel avec retry sur ThrottlingException
+    # Appel avec retry sur ThrottlingException - Optimisé Phase 1
     request_body = {
         "anthropic_version": "bedrock-2023-05-31",
-        "max_tokens": 8000,
+        "max_tokens": 6000,  # Réduit de 8000 à 6000 pour éviter les timeouts
         "messages": [
             {
                 "role": "user",
                 "content": prompt
             }
         ],
-        "temperature": 0.3
+        "temperature": 0.2  # Plus déterministe pour JSON stable
     }
     
     try:
@@ -102,76 +104,55 @@ def _build_editorial_prompt(
     total_items_analyzed: int
 ) -> str:
     """
-    Construit le prompt pour Bedrock.
+    Construit le prompt optimisé pour Bedrock newsletter.
+    
+    Optimisations Phase 1 :
+    - Prompt plus concis (-30% tokens)
+    - Instructions simplifiées
+    - Moins d'exemples verbeux
     """
     client_name = client_profile.get('name', 'Intelligence Newsletter')
     language = client_profile.get('language', 'en')
     tone = client_profile.get('tone', 'executive')
-    voice = client_profile.get('voice', 'concise')
     
-    # Construire la liste des items par section
+    # Construire la liste des items par section (format compact)
     sections_text = ""
     for section in sections_data:
-        sections_text += f"\n### {section['title']}\n"
-        for item in section['items']:
-            sections_text += f"\n- **{item.get('title', 'Untitled')}**\n"
-            sections_text += f"  Summary: {item.get('summary', 'No summary')}\n"
-            sections_text += f"  Source: {item.get('source_key', 'Unknown')}\n"
-            sections_text += f"  Date: {item.get('date', 'Unknown')}\n"
-            sections_text += f"  URL: {item.get('url', '#')}\n"
+        sections_text += f"\n## {section['title']}\n"
+        for item in section['items'][:3]:  # Limiter à 3 items par section pour réduire la taille
+            title = item.get('title', 'Untitled')[:100]  # Tronquer les titres longs
+            summary = item.get('summary', 'No summary')[:200]  # Tronquer les résumés
+            sections_text += f"- {title}: {summary}\n"
     
-    prompt = f"""You are an expert biotech/pharma intelligence analyst writing a premium newsletter.
+    # Prompt optimisé et plus court
+    prompt = f"""Generate newsletter editorial content as JSON.
 
-CONTEXT:
-- Newsletter: {client_name}
-- Period: {from_date} to {to_date}
-- Target date: {target_date}
-- Total items analyzed: {total_items_analyzed}
-- Language: {language}
-- Tone: {tone}
-- Voice: {voice}
+Context: {client_name}, {from_date} to {to_date}, {language}, {tone} tone
 
-SELECTED ITEMS BY SECTION:
+Items:
 {sections_text}
 
-TASK:
-Generate editorial content for this newsletter.
-
-CRITICAL INSTRUCTIONS:
-- Your response MUST be ONLY a valid JSON object
-- Do NOT include markdown code blocks (```json)
-- Do NOT include any text before or after the JSON
-- Keep summaries CONCISE (2-3 sentences maximum per item)
-- Keep intro and section_intro SHORT (1-2 sentences)
-
-RESPONSE FORMAT (example):
+Output ONLY valid JSON:
 {{
-  "title": "Weekly Biotech Intelligence – {target_date}",
-  "intro": "Brief 2-sentence summary of the week.",
-  "tldr": ["Key point 1", "Key point 2", "Key point 3"],
+  "title": "Newsletter title with {target_date}",
+  "intro": "1-2 sentence summary",
+  "tldr": ["key point 1", "key point 2"],
   "sections": [
     {{
-      "section_title": "Section title from input",
-      "section_intro": "Brief 1-sentence intro.",
+      "section_title": "section name",
+      "section_intro": "1 sentence",
       "items": [
         {{
-          "title": "Item title from input",
-          "rewritten_summary": "Concise 2-3 sentence summary.",
-          "url": "URL from input"
+          "title": "item title",
+          "rewritten_summary": "2 sentences max",
+          "url": "#"
         }}
       ]
     }}
   ]
 }}
 
-CONSTRAINTS:
-- Do NOT hallucinate facts, dates, or names
-- Keep company names, molecule names, and technology terms EXACTLY as provided
-- Respect the language: write in {language}
-- Respect the tone ({tone}) and voice ({voice})
-- Be CONCISE and factual
-
-Respond with ONLY the JSON object, nothing else."""
+Rules: JSON only, no markdown, be concise, keep original names/terms."""
     
     return prompt
 
@@ -179,8 +160,8 @@ Respond with ONLY the JSON object, nothing else."""
 def _call_bedrock_with_retry(
     model_id: str,
     request_body: Dict[str, Any],
-    max_retries: int = 3,
-    base_delay: float = 0.5
+    max_retries: int = 4,
+    base_delay: float = 2.0
 ) -> str:
     """
     Appelle Bedrock avec retry automatique sur ThrottlingException.
@@ -214,10 +195,10 @@ def _call_bedrock_with_retry(
             # Vérifier si c'est une erreur de throttling
             if error_code == 'ThrottlingException' or 'throttl' in error_code.lower():
                 if attempt < max_retries:
-                    # Calculer le délai avec backoff exponentiel + jitter
-                    delay = base_delay * (2 ** attempt) + random.uniform(0, 0.1)
+                    # Backoff plus agressif pour newsletter (délais plus longs)
+                    delay = base_delay * (3 ** attempt) + random.uniform(0.5, 1.5)
                     logger.warning(
-                        f"ThrottlingException détectée (tentative {attempt + 1}/{max_retries + 1}). "
+                        f"Newsletter Bedrock ThrottlingException (tentative {attempt + 1}/{max_retries + 1}). "
                         f"Retry dans {delay:.2f}s..."
                     )
                     time.sleep(delay)
@@ -263,6 +244,20 @@ def _parse_editorial_response(response_text: str) -> Dict[str, Any]:
             if start_idx > 3 and end_idx > start_idx:
                 cleaned_text = cleaned_text[start_idx:end_idx].strip()
         
+        # Nettoyage supplémentaire : retirer les caractères de contrôle
+        cleaned_text = cleaned_text.replace('\r', '').replace('\n', ' ').strip()
+        
+        # Si le texte commence par '{' et finit par '}', c'est probablement du JSON
+        if cleaned_text.startswith('{') and cleaned_text.endswith('}'):
+            # Restaurer les sauts de ligne pour un JSON valide
+            cleaned_text = cleaned_text.replace(' {', '{').replace('} ', '}')
+            # Essayer de reformater le JSON
+            try:
+                temp_json = json.loads(cleaned_text)
+                cleaned_text = json.dumps(temp_json)
+            except:
+                pass  # Garder le texte original si le reformatage échoue
+        
         # Tenter de parser comme JSON
         result = json.loads(cleaned_text)
         
@@ -281,9 +276,31 @@ def _parse_editorial_response(response_text: str) -> Dict[str, Any]:
     
     except json.JSONDecodeError as e:
         logger.warning(f"Réponse Bedrock non-JSON ({e}), tentative d'extraction manuelle")
-        logger.error(f"Réponse brute complète: {response_text}")
-        logger.error(f"Longueur de la réponse: {len(response_text)} caractères")
-        # Fallback : retourner une structure minimale
+        logger.debug(f"Réponse brute complète: {response_text}")
+        logger.debug(f"Longueur de la réponse: {len(response_text)} caractères")
+        
+        # Tentative d'extraction plus agressive
+        try:
+            # Chercher le premier { et le dernier }
+            start_brace = response_text.find('{')
+            end_brace = response_text.rfind('}')
+            
+            if start_brace != -1 and end_brace != -1 and end_brace > start_brace:
+                json_candidate = response_text[start_brace:end_brace + 1]
+                result = json.loads(json_candidate)
+                logger.info("Extraction JSON réussie avec méthode alternative")
+                
+                # S'assurer que les champs obligatoires existent
+                result.setdefault('title', 'Newsletter')
+                result.setdefault('intro', '')
+                result.setdefault('tldr', [])
+                result.setdefault('sections', [])
+                
+                return result
+        except Exception as e2:
+            logger.warning(f"Extraction alternative échouée: {e2}")
+        
+        # Fallback final : retourner une structure minimale
         return {
             'title': 'Newsletter',
             'intro': response_text[:500] if response_text else '',

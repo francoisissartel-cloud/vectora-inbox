@@ -16,6 +16,7 @@ sources:
     source_type: "press_corporate"
     default_language: "en"
     tags: ["LAI", "corporate"]
+    ingestion_profile: "corporate_pure_player_broad"
     notes: "MedinCell (France) - Société LAI leader. Ingestion HTML sur page news."
 
   - source_key: "press_corporate__camurus"
@@ -28,6 +29,7 @@ sources:
     source_type: "press_corporate"
     default_language: "en"
     tags: ["LAI", "corporate"]
+    ingestion_profile: "corporate_pure_player_broad"
     notes: "Camurus (Suède) - Société LAI leader. Ingestion HTML sur page press releases."
 
   - source_key: "press_corporate__delsitech"
@@ -40,6 +42,7 @@ sources:
     source_type: "press_corporate"
     default_language: "en"
     tags: ["LAI", "corporate"]
+    ingestion_profile: "corporate_pure_player_broad"
     notes: "DelSiTech (Finlande) - Technologie LAI. Ingestion HTML sur page news."
 
   - source_key: "press_corporate__nanexa"
@@ -52,6 +55,7 @@ sources:
     source_type: "press_corporate"
     default_language: "en"
     tags: ["LAI", "corporate"]
+    ingestion_profile: "corporate_pure_player_broad"
     notes: "Nanexa (Suède) - Technologie LAI. Ingestion HTML sur page press."
 
   - source_key: "press_corporate__peptron"
@@ -64,6 +68,7 @@ sources:
     source_type: "press_corporate"
     default_language: "en"
     tags: ["LAI", "corporate"]
+    ingestion_profile: "corporate_pure_player_broad"
     notes: "Peptron (Corée du Sud) - Société LAI. Ingestion HTML sur page news."
 
   # ========================================================================
@@ -79,6 +84,7 @@ sources:
     source_type: "press_sector"
     default_language: "en"
     tags: ["pharma-biotech"]
+    ingestion_profile: "press_technology_focused"
     notes: "FierceBiotech - Presse biotech. Flux RSS disponible."
 
   - source_key: "press_sector__fiercepharma"
@@ -90,6 +96,7 @@ sources:
     source_type: "press_sector"
     default_language: "en"
     tags: ["pharma-biotech"]
+    ingestion_profile: "press_technology_focused"
     notes: "FiercePharma - Presse pharma. Flux RSS disponible."
 
   - source_key: "press_sector__endpoints_news"
@@ -101,6 +108,7 @@ sources:
     source_type: "press_sector"
     default_language: "en"
     tags: ["pharma-biotech"]
+    ingestion_profile: "press_technology_focused"
     notes: "Endpoints News - Presse biotech/pharma. Flux RSS disponible."
 
 bouquets:

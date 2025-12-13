@@ -16,6 +16,75 @@ Les règles de matching définissent, pour chaque **type de domaine**, comment c
 
 Ce fichier contient les règles de matching par type de domaine.
 
+### Technology Profiles (Nouveau)
+
+Pour les technologies complexes nécessitant plusieurs types de signaux (ex: LAI), le système supporte maintenant des **profiles de matching avancés** basés sur des catégories de mots-clés.
+
+#### Structure d'un Profile
+
+```yaml
+technology_profiles:
+  <profile_name>:
+    description: "Description du profile"
+    signal_requirements:
+      high_precision_signals:
+        categories: [core_phrases, technology_terms_high_precision]
+        min_matches: 1
+        weight: 3.0
+      supporting_signals:
+        categories: [route_admin_terms, interval_patterns]
+        min_matches: 1
+        weight: 2.0
+      context_signals:
+        categories: [technology_use]
+        min_matches: 0
+        weight: 1.0
+      excluded_categories: [generic_terms]
+      negative_filters:
+        categories: [negative_terms]
+        action: reject_match
+    entity_requirements:
+      min_matches: 1
+      sources: [company, molecule]
+      company_scope_modifiers:
+        pure_player_scopes: [lai_companies_pure_players]
+        pure_player_rule: high_precision_signals_only
+        hybrid_scopes: [lai_companies_hybrid]
+        hybrid_rule: high_precision_plus_supporting
+    combination_logic: |
+      MATCH if:
+        (high_precision_signal AND entity) OR
+        (supporting_signal AND supporting_signal AND entity) OR
+        (high_precision_signal AND pure_player_company)
+      REJECT if:
+        negative_term detected
+```
+
+#### Profiles Disponibles
+
+**`technology_complex`** : Pour technologies complexes (ex: LAI)
+- Nécessite combinaison de signaux haute précision + signaux de support
+- Différencie pure players (seuil bas) vs hybrid companies (seuil élevé)
+- Filtre les termes génériques et négatifs
+
+**`technology_simple`** : Pour technologies simples (ex: oral tablets)
+- Nécessite uniquement signaux haute précision + entité
+- Pas de distinction pure player/hybrid
+
+#### Utilisation dans les Scopes
+
+Pour qu'un scope technologique utilise un profile, ajoutez `_metadata` :
+
+```yaml
+lai_keywords:
+  _metadata:
+    profile: technology_complex
+    description: "Long-Acting Injectables - requires multiple signal types"
+  core_phrases:
+    - "long-acting injectable"
+    # ...
+```
+
 ### Structure
 
 ```yaml
@@ -74,10 +143,18 @@ technology:
       sources: [company, molecule]
 ```
 
-**Résultat** :
+**Résultat (règle simple)** :
 - ✅ Item avec `MedinCell` + `extended-release injectable` → MATCH
 - ❌ Item avec `Pfizer` seul (sans mot-clé technology) → NO MATCH
 - ❌ Item avec `long-acting` seul (sans company/molecule) → NO MATCH
+
+**Résultat (avec profile technology_complex)** :
+- ✅ Item avec `MedinCell` (pure player) + `long-acting injectable` (core_phrase) → MATCH (haute confiance)
+- ✅ Item avec `Camurus` (pure player) + `subcutaneous` (route_admin) + `q4w` (interval) → MATCH (signaux multiples)
+- ❌ Item avec `Pfizer` (hybrid) + `subcutaneous` seul → NO MATCH (signal insuffisant pour hybrid)
+- ✅ Item avec `AbbVie` (hybrid) + `extended-release injectable` (core_phrase) + `PLGA microspheres` (tech_high_precision) → MATCH (signaux multiples)
+- ❌ Item avec `Takeda` + `drug delivery system` (generic_term) → NO MATCH (terme générique exclu)
+- ❌ Item avec `MedinCell` + `oral tablet` (negative_term) → NO MATCH (terme négatif détecté)
 
 ---
 

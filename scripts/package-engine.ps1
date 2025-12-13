@@ -13,28 +13,28 @@ Write-Host "=== Packaging Lambda engine ===" -ForegroundColor Cyan
 # Créer le package ZIP
 Write-Host "Création du package ZIP..." -ForegroundColor Yellow
 Push-Location src
-if (Test-Path "../engine.zip") {
-    Remove-Item "../engine.zip" -Force
+if (Test-Path "../engine-v2.zip") {
+    Remove-Item "../engine-v2.zip" -Force
 }
-Compress-Archive -Path * -DestinationPath ../engine.zip -Force
+Compress-Archive -Path * -DestinationPath ../engine-v2.zip -Force
 Pop-Location
 
-Write-Host "Package créé : engine.zip" -ForegroundColor Green
+Write-Host "Package créé : engine-v2.zip" -ForegroundColor Green
 
 # Uploader dans S3
 Write-Host "Upload du package dans S3..." -ForegroundColor Yellow
-aws s3 cp engine.zip s3://$ARTIFACTS_BUCKET/lambda/engine/latest.zip `
+aws s3 cp engine-v2.zip s3://$ARTIFACTS_BUCKET/lambda/engine/v2-latest.zip `
   --profile $PROFILE `
   --region $REGION
 
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "Package uploadé avec succès dans s3://$ARTIFACTS_BUCKET/lambda/engine/latest.zip" -ForegroundColor Green
+    Write-Host "Package uploadé avec succès dans s3://$ARTIFACTS_BUCKET/lambda/engine/v2-latest.zip" -ForegroundColor Green
 } else {
     Write-Host "Erreur lors de l'upload du package" -ForegroundColor Red
     exit 1
 }
 
 # Nettoyer
-Remove-Item engine.zip -Force
+Remove-Item engine-v2.zip -Force
 
 Write-Host "=== Packaging terminé ===" -ForegroundColor Cyan

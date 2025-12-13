@@ -11,7 +11,8 @@ from typing import Any, Dict, List
 def score_items(
     matched_items: List[Dict[str, Any]],
     scoring_rules: Dict[str, Any],
-    watch_domains: List[Dict[str, Any]]
+    watch_domains: List[Dict[str, Any]],
+    canonical_scopes: Dict[str, Any]
 ) -> List[Dict[str, Any]]:
     """
     Calcule le score de chaque item matché.
@@ -20,6 +21,7 @@ def score_items(
         matched_items: Items annotés avec matched_domains
         scoring_rules: Règles de scoring (poids, facteurs)
         watch_domains: Watch_domains du client (pour les priorités)
+        canonical_scopes: Scopes canonical (pour les pure players)
     
     Returns:
         Items annotés avec le champ score (float)
@@ -46,7 +48,7 @@ def score_items(
             domain_priority = 'low'
         
         # Calculer le score
-        score = compute_score(item, scoring_rules, domain_priority)
+        score = compute_score(item, scoring_rules, domain_priority, canonical_scopes)
         item['score'] = score
         
         logger.debug(f"Item '{item.get('title', '')[:50]}...' : score = {score:.2f}")
@@ -54,7 +56,7 @@ def score_items(
     return matched_items
 
 
-def compute_score(item: Dict[str, Any], scoring_rules: Dict[str, Any], domain_priority: str) -> float:
+def compute_score(item: Dict[str, Any], scoring_rules: Dict[str, Any], domain_priority: str, canonical_scopes: Dict[str, Any]) -> float:
     """
     Calcule le score d'un item selon les règles de scoring.
     
@@ -62,6 +64,7 @@ def compute_score(item: Dict[str, Any], scoring_rules: Dict[str, Any], domain_pr
         item: Item normalisé et matché
         scoring_rules: Règles de scoring
         domain_priority: Priorité du domaine (high/medium/low)
+        canonical_scopes: Scopes canonical (pour les pure players)
     
     Returns:
         Score numérique (float)
@@ -105,11 +108,32 @@ def compute_score(item: Dict[str, Any], scoring_rules: Dict[str, Any], domain_pr
     )
     signal_depth_bonus = max(0, num_entities - 1) * other_factors.get('signal_depth_bonus', 0.3)
     
+    # Facteur 6 : Match confidence multiplier (nouveau)
+    matching_details = item.get('matching_details', {})
+    match_confidence = matching_details.get('match_confidence', 'medium')
+    confidence_multipliers = {
+        'high': other_factors.get('match_confidence_multiplier_high', 1.5),
+        'medium': other_factors.get('match_confidence_multiplier_medium', 1.2),
+        'low': other_factors.get('match_confidence_multiplier_low', 1.0)
+    }
+    confidence_multiplier = confidence_multipliers.get(match_confidence, 1.0)
+    
+    # Facteur 7 : Signal quality score (nouveau)
+    signal_quality_score = _compute_signal_quality_score(matching_details, other_factors)
+    
+    # Facteur 8 : Company scope bonus (amélioré)
+    company_bonus = _compute_company_scope_bonus(item, canonical_scopes, other_factors, matching_details)
+    
+    # Facteur 9 : Negative term penalty (nouveau)
+    negative_penalty = 0
+    if matching_details.get('negative_terms_detected'):
+        negative_penalty = other_factors.get('negative_term_penalty', 10)
+    
     # Formule de scoring
     base_score = event_weight * priority_weight * recency_factor * source_weight
-    final_score = base_score + signal_depth_bonus
+    final_score = (base_score * confidence_multiplier) + signal_depth_bonus + signal_quality_score + company_bonus - negative_penalty
     
-    return round(final_score, 2)
+    return max(0, round(final_score, 2))
 
 
 def _compute_recency_factor(item_date: str, half_life_days: int) -> float:
@@ -147,6 +171,46 @@ def _compute_recency_factor(item_date: str, half_life_days: int) -> float:
     
     except Exception:
         return 0.5  # Valeur par défaut en cas d'erreur
+
+
+def _compute_signal_quality_score(matching_details: Dict[str, Any], other_factors: Dict[str, Any]) -> float:
+    """Calcule le bonus basé sur la qualité des signaux matchés."""
+    if not matching_details:
+        return 0
+    
+    signals_used = matching_details.get('signals_used', {})
+    high_precision = signals_used.get('high_precision', 0)
+    supporting = signals_used.get('supporting', 0)
+    
+    weight_high = other_factors.get('signal_quality_weight_high_precision', 2.0)
+    weight_supporting = other_factors.get('signal_quality_weight_supporting', 1.0)
+    
+    return (high_precision * weight_high) + (supporting * weight_supporting)
+
+
+def _compute_company_scope_bonus(item: Dict[str, Any], canonical_scopes: Dict[str, Any], other_factors: Dict[str, Any], matching_details: Dict[str, Any]) -> float:
+    """Calcule le bonus basé sur le type de company scope (pure_player vs hybrid)."""
+    item_companies = set(item.get('companies_detected', []))
+    if not item_companies:
+        return 0
+    
+    # Vérifier company_scope_type depuis matching_details
+    scopes_hit = matching_details.get('scopes_hit', {})
+    company_scope_type = scopes_hit.get('company_scope_type', 'other')
+    
+    if company_scope_type == 'pure_player':
+        return other_factors.get('pure_player_bonus', 3)
+    elif company_scope_type == 'hybrid':
+        return other_factors.get('hybrid_company_bonus', 1)
+    
+    # Fallback: vérifier pure_player_scope (ancien système)
+    pure_player_scope_key = other_factors.get('pure_player_scope')
+    if pure_player_scope_key:
+        pure_players = set(canonical_scopes.get('companies', {}).get(pure_player_scope_key, []))
+        if item_companies & pure_players:
+            return other_factors.get('pure_player_bonus', 3)
+    
+    return 0
 
 
 def rank_items_by_score(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
