@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-12-18T09:59:44.347691",
+  "layer_info": {
+    "layer_arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-vectora-core-dev",
+    "layer_version_arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-vectora-core-dev:6",
+    "version": 6,
+    "zip_filename": "vectora-core-refactored-20251218-095932.zip"
+  },
+  "lambda_name": "vectora-inbox-normalize-score-v2-dev",
+  "status": "deployed"
+}

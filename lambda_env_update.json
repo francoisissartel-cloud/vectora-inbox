@@ -1,0 +1,10 @@
+{
+  "Variables": {
+    "BEDROCK_MODEL_ID": "anthropic.claude-3-haiku-20240307-v1:0",
+    "CONFIG_BUCKET": "vectora-inbox-config-dev", 
+    "DATA_BUCKET": "vectora-inbox-data-dev",
+    "BEDROCK_REGION": "us-east-1",
+    "ENV": "dev",
+    "MAX_BEDROCK_WORKERS": "1"
+  }
+}

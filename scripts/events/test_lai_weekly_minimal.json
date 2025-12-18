@@ -1,0 +1,9 @@
+{
+  "client_id": "lai_weekly_v3",
+  "sources": [
+    "press_corporate__medincell",
+    "press_corporate__camurus"
+  ],
+  "period_days": 7,
+  "dry_run": false
+}

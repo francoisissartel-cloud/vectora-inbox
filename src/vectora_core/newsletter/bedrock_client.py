@@ -148,8 +148,9 @@ def _build_editorial_prompt(
     """
     Prompt original (backward compatibility).
     P1: Délègue au prompt ultra-compact.
+    Phase 2A: Support prompts canonicalisés.
     """
-    # P1: Déléguer au prompt ultra-compact
+    # P1: Déléguer au prompt ultra-compact (avec support canonicalisé)
     return _build_ultra_compact_prompt(sections_data, client_profile, target_date)
 
 
@@ -451,6 +452,7 @@ def _build_ultra_compact_prompt(
 ) -> str:
     """
     P1: Prompt ultra-réduit (-80% tokens vs version initiale).
+    Phase 2A: Support prompts canonicalisés avec fallback.
     
     Optimisations P1 :
     - Instructions minimales
@@ -458,6 +460,76 @@ def _build_ultra_compact_prompt(
     - Titres 60 chars (vs 100)
     - Résumés 80 chars (vs 200)
     - JSON inline compact
+    """
+    # Phase 2A: Tentative prompt canonicalisé
+    if os.environ.get('USE_CANONICAL_PROMPTS', 'false').lower() == 'true':
+        try:
+            from ..prompts.loader import get_prompt_loader
+            
+            config_bucket = os.environ.get('CONFIG_BUCKET')
+            prompt_loader = get_prompt_loader(config_bucket)
+            canonical_prompt = prompt_loader.get_prompt("newsletter.editorial_generation")
+            
+            if canonical_prompt:
+                logger.info("Utilisation du prompt newsletter canonicalisé")
+                return _build_prompt_from_canonical(
+                    canonical_prompt, sections_data, client_profile, target_date
+                )
+            else:
+                logger.warning("Prompt newsletter canonicalisé non trouvé, fallback vers hardcodé")
+        except Exception as e:
+            logger.warning(f"Erreur chargement prompt canonicalisé: {e}, fallback vers hardcodé")
+    
+    # Fallback: Prompt hardcodé actuel (P1)
+    logger.info("Utilisation du prompt newsletter hardcodé")
+    return _build_hardcoded_prompt(sections_data, client_profile, target_date)
+
+
+def _build_prompt_from_canonical(
+    canonical_prompt: Dict[str, Any],
+    sections_data: List[Dict[str, Any]],
+    client_profile: Dict[str, Any],
+    target_date: str
+) -> str:
+    """
+    Construit le prompt depuis la version canonicalisée.
+    
+    Args:
+        canonical_prompt: Prompt canonicalisé depuis YAML
+        sections_data: Sections avec items sélectionnés
+        client_profile: Profil du client
+        target_date: Date de référence
+    
+    Returns:
+        Prompt complet pour Bedrock
+    """
+    client_name = client_profile.get('name', 'LAI Weekly')
+    
+    # Items ultra-compacts (2 par section max)
+    items_text = ""
+    for section in sections_data:
+        items_text += f"\n{section['title']}:\n"
+        for item in section['items'][:2]:  # P1: Réduction 3→2 items
+            title = item.get('title', '')[:60]  # P1: Réduction 100→60 chars
+            summary = item.get('summary', '')[:80]  # P1: Réduction 200→80 chars
+            items_text += f"• {title}: {summary}\n"
+    
+    # Substituer les placeholders dans le template
+    user_template = canonical_prompt.get('user_template', '')
+    prompt = user_template.replace('{{client_name}}', client_name)
+    prompt = prompt.replace('{{target_date}}', target_date)
+    prompt = prompt.replace('{{items_text}}', items_text)
+    
+    return prompt
+
+
+def _build_hardcoded_prompt(
+    sections_data: List[Dict[str, Any]],
+    client_profile: Dict[str, Any],
+    target_date: str
+) -> str:
+    """
+    Prompt hardcodé original (fallback).
     """
     client_name = client_profile.get('name', 'LAI Weekly')
     

@@ -1,0 +1,11 @@
+{
+  "client_id": "lai_weekly_v3",
+  "sources": [
+    "press_corporate__medincell",
+    "press_sector__fiercebiotech"
+  ],
+  "period_days": 7,
+  "ingestion_mode": "balanced",
+  "temporal_mode": "flexible",
+  "dry_run": true
+}

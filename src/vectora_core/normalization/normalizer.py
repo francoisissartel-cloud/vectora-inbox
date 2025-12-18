@@ -86,7 +86,39 @@ def normalize_item(
     # Étape 4 : Fusionner les résultats
     merged_entities = entity_detector.merge_entity_detections(bedrock_result, rules_result)
     
-    # Étape 5 : Construire l'item normalisé avec champs LAI
+    # Étape 4.5 : Matching Bedrock par domaines (NOUVEAU)
+    bedrock_matching_result = {}
+    if watch_domains:
+        try:
+            from vectora_core.matching import bedrock_matcher
+            
+            # Construire l'item partiel pour le matching
+            item_for_matching = {
+                'title': raw_item.get('title', ''),
+                'summary': bedrock_result.get('summary', ''),
+                'entities': {
+                    'companies': merged_entities['companies_detected'],
+                    'molecules': merged_entities['molecules_detected'],
+                    'technologies': merged_entities['technologies_detected'],
+                    'trademarks': bedrock_result.get('trademarks_detected', []),
+                    'indications': merged_entities['indications_detected']
+                },
+                'event_type': bedrock_result.get('event_type', 'other')
+            }
+            
+            # Appel Bedrock matching
+            bedrock_matching_result = bedrock_matcher.match_watch_domains_with_bedrock(
+                item_for_matching, watch_domains, canonical_scopes, bedrock_model_id
+            )
+            
+            logger.debug(f"Matching Bedrock terminé: {len(bedrock_matching_result.get('matched_domains', []))} domaines")
+            
+        except Exception as e:
+            logger.warning(f"Erreur lors du matching Bedrock: {e}")
+            # Continuer sans matching Bedrock (fallback sur matching déterministe)
+            bedrock_matching_result = {'matched_domains': [], 'domain_relevance': {}}
+    
+    # Étape 5 : Construire l'item normalisé avec champs LAI et matching
     normalized_item = {
         'source_key': raw_item.get('source_key'),
         'source_type': raw_item.get('source_type'),
@@ -103,7 +135,10 @@ def normalize_item(
         'lai_relevance_score': bedrock_result.get('lai_relevance_score', 0),
         'anti_lai_detected': bedrock_result.get('anti_lai_detected', False),
         'pure_player_context': bedrock_result.get('pure_player_context', False),
-        'domain_relevance': bedrock_result.get('domain_relevance', [])
+        'domain_relevance': bedrock_result.get('domain_relevance', []),
+        # NOUVEAU : Résultats du matching Bedrock
+        'bedrock_matched_domains': bedrock_matching_result.get('matched_domains', []),
+        'bedrock_domain_relevance': bedrock_matching_result.get('domain_relevance', {})
     }
     
     return normalized_item

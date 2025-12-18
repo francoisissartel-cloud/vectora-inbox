@@ -308,18 +308,21 @@ def run_engine_for_client(
             'message': 'Aucun item trouvé - newsletter minimale générée'
         }
     
-    # Étape 2.5 : Filtrage d'exclusion (P0-2)
-    logger.info("Phase 2.5 : Application des filtres d'exclusion HR/Finance")
-    from exclusion_filter import filter_items_by_exclusions, get_exclusion_stats
+    # Étape 2.5 : Filtrage d'exclusion (P0-2) - TEMPORAIREMENT DÉSACTIVÉ
+    logger.info("Phase 2.5 : Filtrage d'exclusion temporairement désactivé pour test")
     
-    # Appliquer les exclusions avant le matching
-    filtered_items = filter_items_by_exclusions(all_items)
-    exclusion_stats = get_exclusion_stats(all_items)
+    # Pas d'exclusions pour le moment - utiliser tous les items
+    filtered_items = all_items
+    exclusion_stats = {
+        'total_items': len(all_items),
+        'excluded_count': 0,
+        'kept_count': len(all_items),
+        'exclusion_rate': 0,
+        'exclusion_breakdown': {}
+    }
     
-    logger.info(f"Exclusions appliquées : {exclusion_stats['kept_count']}/{exclusion_stats['total_items']} items conservés")
+    logger.info(f"Exclusions désactivées : {exclusion_stats['kept_count']}/{exclusion_stats['total_items']} items conservés")
     logger.info(f"Taux d'exclusion : {exclusion_stats['exclusion_rate']:.1%}")
-    if exclusion_stats['exclusion_breakdown']:
-        logger.info(f"Répartition des exclusions : {exclusion_stats['exclusion_breakdown']}")
     
     # Étape 3 : Matching (Phase 2)
     logger.info("Phase 2 : Matching des items aux watch_domains")

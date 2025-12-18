@@ -1,1 +1,0 @@
-{"statusCode": 200, "body": {"client_id": "lai_weekly_v3", "execution_date": "2025-12-12T16:20:02Z", "sources_processed": 7, "items_ingested": 104, "items_filtered": 102, "items_filtered_out": 2, "items_normalized": 102, "period_days_used": 1, "s3_output_path": "s3://vectora-inbox-data-dev/normalized/lai_weekly_v3/2025/12/12/items.json", "execution_time_seconds": 17.19}}

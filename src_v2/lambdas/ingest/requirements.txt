@@ -1,0 +1,12 @@
+# Requirements pour Lambda ingest V2
+# Ces dépendances sont fournies par le Lambda Layer vectora-inbox-dependencies
+
+# Dépendances externes (via Lambda Layer)
+# PyYAML>=6.0
+# requests>=2.31.0
+# feedparser>=6.0.10
+# beautifulsoup4>=4.12.0
+
+# Dépendances AWS (fournies par l'environnement Lambda)
+# boto3
+# botocore

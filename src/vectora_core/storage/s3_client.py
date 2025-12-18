@@ -158,3 +158,59 @@ def write_text_to_s3(bucket: str, key: str, text: str, content_type: str = 'text
     except ClientError as e:
         logger.error(f"Erreur lors de l'écriture vers s3://{bucket}/{key}: {e}")
         raise
+
+
+def load_ingested_items(bucket: str, client_id: str, from_date: str, to_date: str) -> list:
+    """
+    Charge les items ingérés pour un client depuis S3.
+    
+    Args:
+        bucket: Nom du bucket S3 de données
+        client_id: Identifiant du client
+        from_date: Date de début (ISO8601)
+        to_date: Date de fin (ISO8601)
+    
+    Returns:
+        Liste des items ingérés
+    """
+    try:
+        s3 = get_s3_client()
+        
+        # Chercher les fichiers d'ingestion récents
+        prefix = f"clients/{client_id}/ingested/"
+        logger.info(f"Recherche des items ingérés dans s3://{bucket}/{prefix}")
+        
+        response = s3.list_objects_v2(Bucket=bucket, Prefix=prefix)
+        
+        if 'Contents' not in response:
+            logger.warning(f"Aucun fichier d'ingestion trouvé pour {client_id}")
+            return []
+        
+        # Prendre le fichier le plus récent
+        files = sorted(response['Contents'], key=lambda x: x['LastModified'], reverse=True)
+        
+        if not files:
+            logger.warning(f"Aucun fichier d'ingestion trouvé pour {client_id}")
+            return []
+        
+        latest_file = files[0]['Key']
+        logger.info(f"Chargement du fichier d'ingestion le plus récent: {latest_file}")
+        
+        # Charger le contenu
+        ingested_data = read_json_from_s3(bucket, latest_file)
+        
+        items = ingested_data.get('items', [])
+        logger.info(f"Items ingérés chargés: {len(items)}")
+        
+        return items
+        
+    except Exception as e:
+        logger.error(f"Erreur lors du chargement des items ingérés: {e}")
+        return []
+
+
+def save_json_to_s3(bucket: str, key: str, data: Any) -> None:
+    """
+    Alias pour write_json_to_s3 pour compatibilité.
+    """
+    write_json_to_s3(bucket, key, data)

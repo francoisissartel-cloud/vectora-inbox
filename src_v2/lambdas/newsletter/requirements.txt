@@ -1,0 +1,13 @@
+# Requirements pour Lambda newsletter V2
+# Ces dépendances sont fournies par le Lambda Layer vectora-inbox-dependencies
+
+# Dépendances externes (via Lambda Layer)
+# PyYAML>=6.0
+# requests>=2.31.0
+
+# Dépendances AWS (fournies par l'environnement Lambda)
+# boto3
+# botocore
+
+# Dépendances spécifiques newsletter
+# Aucune dépendance supplémentaire - génération Markdown native Python

@@ -1,0 +1,17 @@
+{
+  "test_summary": {
+    "success": false,
+    "processing_time": 2.3661417961120605,
+    "input_items": 3
+  },
+  "pipeline_metrics": {},
+  "quality_assessment": {},
+  "workflow_analysis": {},
+  "recommendations": [],
+  "error_analysis": {
+    "error_message": "An error occurred (AccessDenied) when calling the GetObject operation: Access Denied",
+    "likely_causes": [
+      "Erreur inconnue - vérifier les logs détaillés"
+    ]
+  }
+}

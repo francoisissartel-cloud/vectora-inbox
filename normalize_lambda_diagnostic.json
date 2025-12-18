@@ -1,0 +1,142 @@
+{
+  "diagnostic_date": "2025-12-17T10:26:33.229680",
+  "lambda_config": {
+    "status": "success",
+    "config": {
+      "FunctionName": "vectora-inbox-normalize-score-v2-dev",
+      "FunctionArn": "arn:aws:lambda:eu-west-3:786469175371:function:vectora-inbox-normalize-score-v2-dev",
+      "Runtime": "python3.11",
+      "Role": "arn:aws:iam::786469175371:role/vectora-inbox-s0-iam-dev-IngestNormalizeRole-aefpODOGz3Lx",
+      "Handler": "handler.lambda_handler",
+      "CodeSize": 188343,
+      "Description": "",
+      "Timeout": 900,
+      "MemorySize": 1024,
+      "LastModified": "2025-12-17T08:54:31.000+0000",
+      "CodeSha256": "tvwyHE8n3uG88RFYGLB7NzQ9mblw14HB8tEMQ01m+NU=",
+      "Version": "$LATEST",
+      "Environment": {
+        "Variables": {
+          "PYTHONPATH": "/var/task",
+          "CONFIG_BUCKET": "vectora-inbox-config-dev",
+          "MAX_BEDROCK_WORKERS": "1",
+          "BEDROCK_REGION": "us-east-1",
+          "DATA_BUCKET": "vectora-inbox-data-dev",
+          "BEDROCK_MODEL_ID": "anthropic.claude-3-sonnet-20240229-v1:0"
+        }
+      },
+      "TracingConfig": {
+        "Mode": "PassThrough"
+      },
+      "RevisionId": "d62ef46d-ccf3-4eb9-8965-1ff4e0135d9a",
+      "Layers": [
+        {
+          "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-vectora-core-dev:1",
+          "CodeSize": 180388
+        },
+        {
+          "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-common-deps-dev:1",
+          "CodeSize": 1198798
+        }
+      ],
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Zip",
+      "Architectures": [
+        "x86_64"
+      ],
+      "EphemeralStorage": {
+        "Size": 512
+      },
+      "SnapStart": {
+        "ApplyOn": "None",
+        "OptimizationStatus": "Off"
+      },
+      "RuntimeVersionConfig": {
+        "RuntimeVersionArn": "arn:aws:lambda:eu-west-3::runtime:49f733259c7ce7e0deee75ff91c6afe35c7d58b04ed300f32701216263b4590c"
+      },
+      "LoggingConfig": {
+        "LogFormat": "Text",
+        "LogGroup": "/aws/lambda/vectora-inbox-normalize-score-v2-dev"
+      }
+    },
+    "layers": [
+      {
+        "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-vectora-core-dev:1",
+        "CodeSize": 180388
+      },
+      {
+        "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-common-deps-dev:1",
+        "CodeSize": 1198798
+      }
+    ],
+    "env_vars": {
+      "PYTHONPATH": "/var/task",
+      "CONFIG_BUCKET": "vectora-inbox-config-dev",
+      "MAX_BEDROCK_WORKERS": "1",
+      "BEDROCK_REGION": "us-east-1",
+      "DATA_BUCKET": "vectora-inbox-data-dev",
+      "BEDROCK_MODEL_ID": "anthropic.claude-3-sonnet-20240229-v1:0"
+    }
+  },
+  "logs_check": {
+    "status": "success"
+  },
+  "yaml_issues": [
+    {
+      "issue": "PyYAML manquant dans Lambda Layer",
+      "description": "Le module PyYAML n'est pas inclus dans les layers",
+      "solution": "Ajouter PyYAML au layer common-deps",
+      "priority": "HIGH"
+    },
+    {
+      "issue": "Extension C PyYAML incompatible",
+      "description": "Version PyYAML avec extensions C non compatible AWS Lambda",
+      "solution": "Utiliser PyYAML pure Python (--no-binary)",
+      "priority": "HIGH"
+    },
+    {
+      "issue": "Import path incorrect",
+      "description": "Code essaie d'importer yaml mais module pas disponible",
+      "solution": "V\u00e9rifier imports dans handler.py et vectora_core",
+      "priority": "MEDIUM"
+    },
+    {
+      "issue": "Layer non attach\u00e9",
+      "description": "Lambda Layer avec PyYAML pas correctement attach\u00e9",
+      "solution": "V\u00e9rifier configuration layers dans Lambda",
+      "priority": "MEDIUM"
+    }
+  ],
+  "fix_recommendations": [
+    {
+      "step": 1,
+      "action": "V\u00e9rifier contenu Lambda Layer common-deps",
+      "command": "aws lambda get-layer-version --layer-name vectora-inbox-common-deps --version-number X",
+      "expected": "PyYAML pr\u00e9sent dans le layer"
+    },
+    {
+      "step": 2,
+      "action": "Recr\u00e9er layer avec PyYAML pure Python",
+      "command": "pip install --no-binary PyYAML PyYAML==6.0.1 -t layer/",
+      "expected": "PyYAML sans extensions C"
+    },
+    {
+      "step": 3,
+      "action": "Red\u00e9ployer Lambda avec layer corrig\u00e9",
+      "command": "aws lambda update-function-configuration --layers arn:aws:lambda:...",
+      "expected": "Lambda avec layer PyYAML fonctionnel"
+    },
+    {
+      "step": 4,
+      "action": "Tester import yaml",
+      "command": "aws lambda invoke --payload '{\"test\": \"yaml_import\"}'",
+      "expected": "Pas d'erreur ImportModuleError"
+    }
+  ],
+  "test_payload": {
+    "client_id": "lai_weekly_v3",
+    "test_mode": true,
+    "items_limit": 1
+  }
+}

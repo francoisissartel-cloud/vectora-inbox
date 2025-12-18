@@ -18,6 +18,7 @@
 client_profile:
   name: "LAI Intelligence Weekly v3 (Test Bench)"
   client_id: "lai_weekly_v3"
+  active: true
   language: "en"
   frequency: "weekly"
   tone: "executive"
@@ -97,14 +98,39 @@ source_config:
   bouquet_ingestion_overrides: {}
 
 # ============================================================================
-# CONFIGURATION DU MATCHING (Identique v2)
+# CONFIGURATION DU MATCHING V2 - CONFIG-DRIVEN
 # ============================================================================
 
 matching_config:
+  # === SEUILS DE BASE (remplace hardcodé 0.4) ===
+  min_domain_score: 0.25              # Seuil minimum global (baissé de 0.4 → 0.25)
+  min_confidence_level: "low"         # Niveau confiance minimum (permissif pour démarrage)
+  
+  # === SEUILS PAR TYPE DE DOMAINE ===
+  domain_type_thresholds:
+    technology: 0.30                  # Seuil pour domaines technology (modéré)
+    regulatory: 0.20                  # Seuil plus bas pour regulatory (plus facile)
+    
+  # === MODE FALLBACK POUR PURE PLAYERS LAI ===
+  enable_fallback_mode: true          # Active le mode fallback
+  fallback_min_score: 0.15            # Seuil très bas pour pure players
+  fallback_max_domains: 1             # Max 1 domaine en fallback
+  fallback_company_scopes:            # Scopes éligibles au fallback
+    - "lai_companies_global"
+    
+  # === CONTRÔLE QUALITÉ ===
+  max_domains_per_item: 2             # Limite nombre domaines matchés
+  require_high_confidence_for_multiple: false  # Permissif pour démarrage
+  
+  # === MODE DIAGNOSTIC ===
+  enable_diagnostic_mode: true        # Active logs détaillés
+  store_rejection_reasons: true       # Stocke pourquoi items rejetés
+  
+  # === CONFIGURATION LEGACY (maintenue pour compatibilité) ===
   # Comportement équilibré par défaut
   default_matching_mode: "balanced"
   
-  # Règles spécifiques par type de domaine
+  # Règles spécifiques par type de domaine (legacy)
   domain_type_overrides:
     # Technology LAI : règles strictes pour éviter faux positifs
     technology:
@@ -116,7 +142,7 @@ matching_config:
       require_entity_signals: false     # Pas d'entité obligatoire
       min_technology_signals: 1         # 1 signal LAI suffit
   
-  # TRAITEMENT PRIVILÉGIÉ DES TRADEMARKS LAI (Identique v2)
+  # TRAITEMENT PRIVILÉGIÉ DES TRADEMARKS LAI (maintenu)
   trademark_privileges:
     enabled: true                       # Active le traitement privilégié
     auto_match_threshold: 0.8           # Seuil de confiance pour match automatique

@@ -1,0 +1,1 @@
+{"statusCode": 400, "body": {"error": "ConfigurationError", "message": "Le paramètre 'client_id' est obligatoire"}}

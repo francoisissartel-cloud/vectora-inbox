@@ -1,0 +1,18 @@
+{
+    "Layers": [
+        {
+            "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-vectora-core-dev:1",
+            "CodeSize": 180388
+        },
+        {
+            "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-common-deps-dev:1",
+            "CodeSize": 1198798
+        },
+        {
+            "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-yaml-fix-dev:1",
+            "CodeSize": 142129
+        }
+    ],
+    "Runtime": "python3.11",
+    "Handler": "handler.lambda_handler"
+}

@@ -15,6 +15,9 @@ from typing import Dict, Any, List
 import boto3
 from botocore.exceptions import ClientError
 
+# V1: Import PromptLoader pour prompts canonicalisés
+from vectora_core.prompts import PromptLoader, get_prompt_loader
+
 logger = logging.getLogger(__name__)
 
 
@@ -33,7 +36,8 @@ def normalize_item_with_bedrock(
     item_text: str,
     model_id: str,
     canonical_examples: Dict[str, List[str]],
-    domain_contexts: List = None
+    domain_contexts: List = None,
+    config_bucket: str = None
 ) -> Dict[str, Any]:
     """
     Appelle Bedrock pour normaliser un item : extraction d'entités, classification, résumé.
@@ -55,8 +59,10 @@ def normalize_item_with_bedrock(
         - technologies_detected: liste de technologies détectées
         - indications_detected: liste d'indications thérapeutiques
     """
-    # Construction du prompt
-    prompt = _build_normalization_prompt(item_text, canonical_examples, domain_contexts)
+    # V1: Construction du prompt avec prompts canonicalisés ou fallback
+    prompt = _build_normalization_prompt_v1(
+        item_text, canonical_examples, domain_contexts, config_bucket
+    )
     
     # Appel avec retry sur ThrottlingException
     request_body = {
@@ -94,17 +100,103 @@ def normalize_item_with_bedrock(
         }
 
 
-def _build_normalization_prompt(
+def _build_normalization_prompt_v1(
+    item_text: str,
+    canonical_examples: Dict[str, List[str]],
+    domain_contexts: List = None,
+    config_bucket: str = None
+) -> str:
+    """
+    V1: Construction du prompt avec prompts canonicalisés + fallback.
+    
+    Args:
+        item_text: Texte à analyser
+        canonical_examples: Exemples d'entités depuis les scopes
+        domain_contexts: Contextes de domaine (optionnel)
+        config_bucket: Bucket S3 de configuration
+    
+    Returns:
+        Prompt formaté pour Bedrock
+    """
+    # V1: Feature flag pour activer/désactiver prompts canonicalisés
+    use_canonical = os.environ.get('USE_CANONICAL_PROMPTS', 'false').lower() == 'true'
+    
+    if use_canonical:
+        logger.info("Tentative utilisation prompts canonicalisés")
+        canonical_prompt = _try_canonical_prompt(
+            item_text, canonical_examples, domain_contexts, config_bucket
+        )
+        if canonical_prompt:
+            logger.info("Prompt canonicalisé utilisé avec succès")
+            return canonical_prompt
+        else:
+            logger.warning("Échec prompts canonicalisés, fallback vers prompt hardcodé")
+    
+    # Fallback: Utiliser le prompt hardcodé original
+    logger.info("Utilisation du prompt hardcodé (fallback ou feature flag désactivé)")
+    return _build_normalization_prompt_hardcoded(item_text, canonical_examples, domain_contexts)
+
+
+def _try_canonical_prompt(
+    item_text: str,
+    canonical_examples: Dict[str, List[str]],
+    domain_contexts: List = None,
+    config_bucket: str = None
+) -> str:
+    """
+    V1: Tentative de construction du prompt depuis YAML canonicalisé.
+    
+    Returns:
+        Prompt formaté ou None si échec
+    """
+    try:
+        # Charger le prompt canonicalisé
+        loader = get_prompt_loader(config_bucket)
+        prompt_config = loader.get_prompt('normalization.lai_default')
+        
+        if not prompt_config:
+            logger.warning("Prompt canonicalisé 'normalization.lai_default' non trouvé")
+            return None
+        
+        # Extraire les composants
+        system_instructions = prompt_config.get('system_instructions', '')
+        user_template = prompt_config.get('user_template', '')
+        
+        # Préparer les exemples (limités pour ne pas surcharger)
+        companies_ex = canonical_examples.get('companies', [])[:20]
+        molecules_ex = canonical_examples.get('molecules', [])[:20]
+        technologies_ex = canonical_examples.get('technologies', [])[:15]
+        
+        # Substituer les placeholders
+        user_prompt = user_template.replace('{{item_text}}', item_text)
+        user_prompt = user_prompt.replace('{{companies_examples}}', ', '.join(companies_ex))
+        user_prompt = user_prompt.replace('{{molecules_examples}}', ', '.join(molecules_ex))
+        user_prompt = user_prompt.replace('{{technologies_examples}}', ', '.join(technologies_ex))
+        
+        # V1: Pour l'instant, on combine system + user (Claude Messages API)
+        # TODO Phase 2: Utiliser system_instructions séparément si supporté
+        full_prompt = f"{system_instructions}\n\n{user_prompt}"
+        
+        logger.info("Prompt canonicalisé construit avec succès")
+        return full_prompt
+    
+    except Exception as e:
+        logger.error(f"Erreur lors de la construction du prompt canonicalisé: {e}")
+        return None
+
+
+def _build_normalization_prompt_hardcoded(
     item_text: str,
     canonical_examples: Dict[str, List[str]],
     domain_contexts: List = None
 ) -> str:
     """
-    Construit le prompt pour Bedrock.
+    Prompt hardcodé original (fallback V1).
     
     Args:
         item_text: Texte à analyser
         canonical_examples: Exemples d'entités depuis les scopes
+        domain_contexts: Contextes de domaine (optionnel)
     
     Returns:
         Prompt formaté pour Bedrock
@@ -220,6 +312,18 @@ RESPONSE FORMAT (JSON only):
 Respond with ONLY the JSON, no additional text."""
     
     return prompt
+
+
+# Backward compatibility: Alias vers la nouvelle fonction V1
+def _build_normalization_prompt(
+    item_text: str,
+    canonical_examples: Dict[str, List[str]],
+    domain_contexts: List = None
+) -> str:
+    """
+    Backward compatibility: Délègue vers la nouvelle fonction V1.
+    """
+    return _build_normalization_prompt_v1(item_text, canonical_examples, domain_contexts)
 
 
 def _call_bedrock_with_retry(

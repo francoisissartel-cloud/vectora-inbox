@@ -1,0 +1,163 @@
+# Prompts Canonicalisés Vectora Inbox V1
+# Date: 2025-12-12
+# Scope: Normalisation LAI uniquement
+# Version: 1.0
+
+# =============================================================================
+# PROMPTS DE NORMALISATION
+# =============================================================================
+
+normalization:
+  # Prompt principal pour la normalisation LAI
+  # Migré depuis src/vectora_core/normalization/bedrock_client.py::_build_normalization_prompt()
+  lai_default:
+    # Instructions système pour le modèle Bedrock
+    system_instructions: |
+      You are a specialized AI assistant for biotech/pharma news analysis.
+      Focus on Long-Acting Injectable (LAI) technologies and related entities.
+      Extract structured information with high precision.
+      
+    # Template utilisateur avec placeholders pour substitution dynamique
+    # Placeholders disponibles:
+    # - {{item_text}} : Texte de l'item à analyser
+    # - {{companies_examples}} : Exemples de sociétés depuis canonical scopes
+    # - {{molecules_examples}} : Exemples de molécules depuis canonical scopes  
+    # - {{technologies_examples}} : Exemples de technologies depuis canonical scopes
+    user_template: |
+      Analyze the following biotech/pharma news item and extract structured information.
+
+      TEXT TO ANALYZE:
+      {{item_text}}
+
+      EXAMPLES OF ENTITIES TO DETECT:
+      - Companies: {{companies_examples}}
+      - Molecules/Drugs: {{molecules_examples}}
+      - Technologies: {{technologies_examples}}
+
+      LAI TECHNOLOGY FOCUS:
+      Detect these LAI (Long-Acting Injectable) technologies:
+      - Extended-Release Injectable
+      - Long-Acting Injectable
+      - Depot Injection
+      - Once-Monthly Injection
+      - Microspheres
+      - PLGA
+      - In-Situ Depot
+      - Hydrogel
+      - Subcutaneous Injection
+      - Intramuscular Injection
+
+      TRADEMARKS to detect:
+      - UZEDY, PharmaShell, SiliaShell, BEPO, Aristada, Abilify Maintena
+
+      Normalize: 'extended-release injectable' → 'Extended-Release Injectable'
+
+      TASK:
+      1. Generate a concise summary (2-3 sentences) explaining the key information
+      2. Classify the event type among: clinical_update, partnership, regulatory, scientific_paper, corporate_move, financial_results, safety_signal, manufacturing_supply, other
+      3. Extract ALL pharmaceutical/biotech company names mentioned
+      4. Extract ALL drug/molecule names mentioned (including brand names, generic names)
+      5. Extract ALL technology keywords mentioned - FOCUS on LAI technologies listed above
+      6. Extract ALL trademark names mentioned (especially those with ® or ™ symbols)
+      7. Extract ALL therapeutic indications mentioned
+      8. Evaluate LAI relevance (0-10 score): How relevant is this content to Long-Acting Injectable technologies?
+      9. Detect anti-LAI signals: Does the content mention oral routes (tablets, capsules, pills)?
+      10. Assess pure player context: Is this about a LAI-focused company without explicit LAI mentions?
+
+      IMPORTANT:
+      - Extract the EXACT company names as they appear in the text (e.g., "WuXi AppTec", "Agios", "Pfizer")
+      - Include ALL companies mentioned, not just those in the examples
+      - Be comprehensive in entity extraction
+      - For domain evaluation, consider the overall context and relevance, not just keyword matching
+
+      RESPONSE FORMAT (JSON only):
+      {
+        "summary": "...",
+        "event_type": "...",
+        "companies_detected": ["...", "..."],
+        "molecules_detected": ["...", "..."],
+        "technologies_detected": ["...", "..."],
+        "trademarks_detected": ["...", "..."],
+        "indications_detected": ["...", "..."],
+        "lai_relevance_score": 0,
+        "anti_lai_detected": false,
+        "pure_player_context": false
+      }
+
+      Respond with ONLY the JSON, no additional text.
+
+    # Configuration Bedrock pour ce prompt
+    bedrock_config:
+      max_tokens: 1000
+      temperature: 0.0
+      anthropic_version: "bedrock-2023-05-31"
+
+# =============================================================================
+# PROMPTS NEWSLETTER (Phase 2 - Placeholder)
+# =============================================================================
+
+newsletter:
+  # Phase 2A : Prompt newsletter canonicalisé (migré depuis bedrock_client.py)
+  editorial_generation:
+    system_instructions: |
+      You are an expert newsletter editor for biotech/pharma intelligence.
+      Generate concise, professional content in JSON format.
+      Focus on accuracy and preserve all company names, drug names, and technical terms exactly as provided.
+      
+    user_template: |
+      JSON newsletter for {{client_name}} - {{target_date}}:
+
+      {{items_text}}
+
+      Output:
+      {{"title":"{{client_name}} – {{target_date}}","intro":"1 sentence","tldr":["point1","point2"],"sections":[{{"section_title":"name","section_intro":"1 sentence","items":[{{"title":"title","rewritten_summary":"2 sentences","url":"#"}}]}}]}}
+
+      Rules: JSON only, concise, preserve names.
+      
+    bedrock_config:
+      max_tokens: 4000
+      temperature: 0.2
+      anthropic_version: "bedrock-2023-05-31"
+
+# =============================================================================
+# PROMPTS MATCHING/SCORING (Phase 2 - Placeholder)  
+# =============================================================================
+
+matching:
+  # À implémenter en Phase 2 si V1 normalization réussit
+  relevance_scoring:
+    system_instructions: |
+      # TBD Phase 2
+      You are a relevance scoring expert for LAI technologies.
+      
+    user_template: |
+      # TBD Phase 2 - Prompt de scoring de pertinence
+      
+    bedrock_config:
+      max_tokens: 500
+      temperature: 0.1
+      anthropic_version: "bedrock-2023-05-31"
+
+# =============================================================================
+# MÉTADONNÉES
+# =============================================================================
+
+metadata:
+  version: "1.0"
+  created_date: "2025-12-12"
+  last_modified: "2025-12-12"
+  scope: "normalization_lai_and_newsletter"
+  description: |
+    Prompts canonicalisés V1 pour Vectora Inbox.
+    Phase 1: Normalisation LAI uniquement.
+    Phase 2A: Extension newsletter (IMPLÉMENTÉ).
+    Phase 2B: Extension matching/scoring (N/A - pas de prompts Bedrock).
+  
+  # Changelog pour traçabilité
+  changelog:
+    - version: "1.0"
+      date: "2025-12-12"
+      changes: "Création initiale - Migration prompt normalisation LAI depuis code hardcodé"
+    - version: "1.1"
+      date: "2025-12-12"
+      changes: "Phase 2A - Migration prompt newsletter éditorial depuis bedrock_client.py"

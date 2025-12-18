@@ -1,0 +1,7 @@
+{
+  "client_id": "lai_weekly_v3",
+  "ingestion_mode": "broad",
+  "temporal_mode": "flexible",
+  "period_days": 30,
+  "dry_run": true
+}

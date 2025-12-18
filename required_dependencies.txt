@@ -1,0 +1,26 @@
+# Dépendances requises pour vectora_core normalize_score_v2
+# Basé sur l'analyse du code source
+
+# Core Python packages (déjà dans runtime)
+# json, logging, os, datetime, typing
+
+# Dépendances tierces critiques
+PyYAML==6.0.1          # Pour s3_io.read_yaml_from_s3()
+requests==2.31.0        # Pour source_fetcher HTTP calls
+feedparser==6.0.10      # Pour parsing RSS feeds
+beautifulsoup4==4.12.0  # Pour HTML parsing
+
+# AWS SDK (normalement fourni par runtime, mais version spécifique)
+boto3==1.34.0           # Client AWS S3, Bedrock
+botocore==1.34.0        # Core AWS functionality
+
+# Dépendances optionnelles mais recommandées
+certifi                 # SSL certificates
+charset-normalizer      # Text encoding detection
+idna                    # Internationalized domain names
+urllib3                 # HTTP client library
+
+# Notes d'installation
+# - Utiliser --no-binary PyYAML pour éviter extensions C
+# - Tester imports après installation
+# - Valider taille totale < 50MB

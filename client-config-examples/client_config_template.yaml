@@ -16,6 +16,9 @@ client_profile:
   # Example: "biotech_weekly", "pharma_monthly", "oncology_signals"
   client_id: "client_id_here"
   
+  # Active status: true to enable automatic processing, false to disable
+  active: false
+  
   # Language code (e.g., "en", "fr", "de")
   language: "en"
   

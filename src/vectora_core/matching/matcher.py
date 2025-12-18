@@ -563,3 +563,63 @@ def _determine_company_type(companies_detected: Set[str]) -> str:
         return 'hybrid_company'
     
     return 'other'
+
+def match_item_to_domains(
+    item: Dict[str, Any],
+    watch_domains: List[Dict[str, Any]],
+    canonical_scopes: Dict[str, Any],
+    client_config: Dict[str, Any]
+) -> Dict[str, Any]:
+    """
+    Détermine quels domaines correspondent à un item normalisé.
+    
+    Args:
+        item: Item normalisé
+        watch_domains: Liste des watch_domains du client
+        canonical_scopes: Scopes canonical chargés
+        client_config: Configuration client complète
+    
+    Returns:
+        Dict contenant les résultats de matching pour cet item
+    """
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    # Charger les règles de matching
+    matching_rules = canonical_scopes.get('matching_rules', {
+        'default': {
+            'match_mode': 'any_required',
+            'dimensions': {
+                'entity': {
+                    'requirement': 'required',
+                    'min_matches': 1,
+                    'sources': ['company', 'molecule', 'technology']
+                }
+            }
+        }
+    })
+    
+    # Utiliser la fonction existante pour un seul item
+    items_with_matching = match_items_to_domains([item], watch_domains, canonical_scopes, matching_rules)
+    matched_item = items_with_matching[0]
+    
+    # Extraire les résultats de matching
+    matched_domains = matched_item.get('matched_domains', [])
+    matching_details = matched_item.get('matching_details', {})
+    
+    # Ajouter les résultats Bedrock si disponibles
+    bedrock_matched_domains = matched_item.get('bedrock_matched_domains', [])
+    bedrock_domain_relevance = matched_item.get('bedrock_domain_relevance', {})
+    
+    # Fusionner les résultats déterministes et Bedrock
+    all_matched_domains = list(set(matched_domains + bedrock_matched_domains))
+    
+    logger.info(f"Item matching: {len(matched_domains)} domaines déterministes, {len(bedrock_matched_domains)} domaines Bedrock, {len(all_matched_domains)} total")
+    
+    return {
+        'matched_domains': all_matched_domains,
+        'deterministic_matched_domains': matched_domains,
+        'bedrock_matched_domains': bedrock_matched_domains,
+        'bedrock_domain_relevance': bedrock_domain_relevance,
+        'matching_details': matching_details
+    }

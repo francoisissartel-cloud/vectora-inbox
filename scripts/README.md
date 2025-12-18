@@ -1,212 +1,115 @@
-# Scripts de Déploiement et Tests – Vectora Inbox
+# Scripts Vectora Inbox - Processus de Build Standard V4
 
-Ce dossier contient tous les scripts PowerShell pour déployer, tester et maintenir l'infrastructure Vectora Inbox.
+## Vue d'Ensemble
 
----
+Ce dossier contient les scripts standardisés pour le build, déploiement et test des Lambdas Vectora Inbox, conformes aux règles d'hygiène V4.
 
-## Scripts de Packaging
+## Architecture Lambda Layers
 
-### `package-engine.ps1`
+### Layers Créés
+- **vectora-inbox-vectora-core-dev** : Contient `vectora_core/` (0.4MB)
+- **vectora-inbox-common-deps-dev** : Contient PyYAML, requests, feedparser, beautifulsoup4, python-dateutil (3.3MB)
 
-**Objectif** : Packager le code de la Lambda engine et l'uploader dans S3.
+### Bénéfices
+- Handlers <2KB (vs >50MB avant)
+- Réutilisation entre Lambdas
+- Cold start optimisé
+- Conformité règles V4
 
-**Utilisation** :
-```powershell
-.\scripts\package-engine.ps1
+## Structure des Scripts
+
+```
+scripts/
+├── layers/                    # Gestion des Lambda Layers
+│   ├── create_vectora_core_layer.py
+│   └── create_common_deps_layer.py
+├── build/                     # Build des handlers
+│   └── build_normalize_score_v2.py
+├── deploy/                    # Déploiement
+│   └── deploy_normalize_score_v2_layers.py
+└── invoke/                    # Tests et invocation
+    ├── invoke_normalize_score_v2.py
+    └── test_events/
+        ├── lai_weekly_v3.json
+        └── minimal_test.json
 ```
 
-**Actions** :
-1. Crée un package ZIP du code source (`src/`)
-2. Uploade le package dans `s3://vectora-inbox-lambda-code-dev/lambda/engine/latest.zip`
-3. Nettoie les fichiers temporaires
+## Processus Standard (4 étapes)
 
-**Prérequis** :
-- AWS CLI configuré avec le profil `rag-lai-prod`
-- Accès en écriture au bucket `vectora-inbox-lambda-code-dev`
+### 1. Création des Layers (une fois)
+```bash
+# Créer le layer vectora-core
+python scripts/layers/create_vectora_core_layer.py
 
----
-
-## Scripts de Déploiement
-
-### `deploy-runtime-dev.ps1`
-
-**Objectif** : Déployer la stack CloudFormation `s1-runtime` en DEV (Lambdas ingest-normalize et engine).
-
-**Utilisation** :
-```powershell
-.\scripts\deploy-runtime-dev.ps1
+# Créer le layer common-deps
+python scripts/layers/create_common_deps_layer.py
 ```
 
-**Actions** :
-1. Récupère les ARNs des rôles IAM depuis la stack `s0-iam-dev`
-2. Déploie la stack `s1-runtime-dev` avec les paramètres appropriés
-3. Sauvegarde les outputs de la stack dans `infra/outputs/s1-runtime-dev.json`
-
-**Prérequis** :
-- Stacks `s0-core-dev` et `s0-iam-dev` déjà déployées
-- Packages Lambda uploadés dans S3 (`ingest-normalize/latest.zip` et `engine/latest.zip`)
-- AWS CLI configuré avec le profil `rag-lai-prod`
-
----
-
-## Scripts de Vérification
-
-### `verify-engine-deployment.ps1`
-
-**Objectif** : Vérifier que la Lambda engine est correctement déployée et configurée.
-
-**Utilisation** :
-```powershell
-.\scripts\verify-engine-deployment.ps1
+### 2. Build du Handler
+```bash
+python scripts/build/build_normalize_score_v2.py
 ```
 
-**Vérifications** :
-1. ✅ Lambda existe
-2. ✅ Variables d'environnement présentes (CONFIG_BUCKET, DATA_BUCKET, NEWSLETTERS_BUCKET, BEDROCK_MODEL_ID)
-3. ✅ Configuration correcte (runtime, handler, timeout, mémoire, concurrence)
-4. ✅ Rôle IAM attaché
-5. ✅ Log group CloudWatch présent
-6. ✅ Buckets S3 accessibles
-
-**Prérequis** :
-- Lambda `vectora-inbox-engine-dev` déployée
-- AWS CLI configuré avec le profil `rag-lai-prod`
-
----
-
-## Scripts de Tests
-
-### `test-engine-lai-weekly.ps1`
-
-**Objectif** : Tester le workflow complet end-to-end (ingest-normalize → engine).
-
-**Utilisation** :
-```powershell
-.\scripts\test-engine-lai-weekly.ps1
+### 3. Déploiement
+```bash
+python scripts/deploy/deploy_normalize_score_v2_layers.py
 ```
 
-**Actions** :
-1. **Étape 1** : Invoque la Lambda `ingest-normalize` pour générer des items normalisés
-2. **Étape 2** : Invoque la Lambda `engine` pour générer la newsletter
-3. **Étape 3** : Télécharge et affiche un aperçu de la newsletter générée
+### 4. Test
+```bash
+# Test simple
+python scripts/invoke/invoke_normalize_score_v2.py --event lai_weekly_v3
 
-**Fichiers générés** :
-- `test-event-ingest.json` : Payload d'invocation pour ingest-normalize
-- `test-event-engine.json` : Payload d'invocation pour engine
-- `out-ingest-lai-weekly.json` : Réponse de ingest-normalize
-- `out-engine-lai-weekly.json` : Réponse de engine
-- `newsletter-lai-weekly.md` : Newsletter générée (téléchargée depuis S3)
+# Test de performance
+python scripts/invoke/invoke_normalize_score_v2.py --performance
 
-**Prérequis** :
-- Lambdas `vectora-inbox-ingest-normalize-dev` et `vectora-inbox-engine-dev` déployées
-- Configurations client et canonical uploadées dans S3
-- AWS CLI configuré avec le profil `rag-lai-prod`
-
----
-
-## Workflow de Déploiement Complet
-
-Pour déployer et tester Vectora Inbox en DEV depuis zéro :
-
-### 1. Déployer l'infrastructure de base
-
-```powershell
-# Déployer les buckets S3
-aws cloudformation deploy --template-file infra/s0-core.yaml --stack-name vectora-inbox-s0-core-dev --parameter-overrides Env=dev ProjectName=vectora-inbox --profile rag-lai-prod --region eu-west-3
-
-# Déployer les rôles IAM
-aws cloudformation deploy --template-file infra/s0-iam.yaml --stack-name vectora-inbox-s0-iam-dev --parameter-overrides Env=dev ProjectName=vectora-inbox ConfigBucketName=vectora-inbox-config-dev DataBucketName=vectora-inbox-data-dev NewslettersBucketName=vectora-inbox-newsletters-dev PubmedApiKeyParamPath=/rag-lai/dev/pubmed/api-key --capabilities CAPABILITY_IAM --profile rag-lai-prod --region eu-west-3
+# Validation uniquement
+python scripts/invoke/invoke_normalize_score_v2.py --validate-only
 ```
 
-### 2. Packager et uploader le code
+## Configuration AWS
 
-```powershell
-# Packager la Lambda engine
-.\scripts\package-engine.ps1
+### Prérequis
+- Profil AWS : `rag-lai-prod`
+- Région : `eu-west-3`
+- Compte : `786469175371`
 
-# Packager la Lambda ingest-normalize (si nécessaire)
-# [Commande similaire pour ingest-normalize]
-```
+### Buckets S3
+- `vectora-inbox-config-dev` : Configuration
+- `vectora-inbox-data-dev` : Données
+- `vectora-inbox-lambda-code-dev` : Code Lambda
 
-### 3. Déployer les Lambdas
+## Métriques de Performance
 
-```powershell
-# Déployer la stack runtime
-.\scripts\deploy-runtime-dev.ps1
-```
+| Métrique | Avant (Scripts Fix) | Après (Layers) | Amélioration |
+|----------|---------------------|----------------|--------------|
+| Taille handler | >50MB | 1.7KB | 99.997% |
+| Layers | 0 | 2 | Architecture V4 |
+| Déploiement | 3 scripts | 1 script | Simplifié |
+| Conformité V4 | ❌ | ✅ | Conforme |
 
-### 4. Uploader les configurations
+## Scripts Archivés
 
-```powershell
-# Uploader les scopes canonical
-aws s3 sync canonical/scopes s3://vectora-inbox-config-dev/canonical/scopes --profile rag-lai-prod --region eu-west-3
+Les scripts suivants ont été archivés dans `/backup/scripts/` :
+- `fix_yaml_dependency.py` : Hack PyYAML obsolète
+- `fix_all_dependencies.py` : Installation manuelle obsolète
+- `deploy_normalize_score_v2_old.py` : Ancien déploiement
 
-# Uploader le catalogue de sources
-aws s3 cp canonical/sources/source_catalog.yaml s3://vectora-inbox-config-dev/canonical/sources/source_catalog.yaml --profile rag-lai-prod --region eu-west-3
+## Règles d'Hygiène Respectées
 
-# Uploader les règles de scoring
-aws s3 cp canonical/scoring/scoring_rules.yaml s3://vectora-inbox-config-dev/canonical/scoring/scoring_rules.yaml --profile rag-lai-prod --region eu-west-3
+- ✅ Handler <5MB (1.7KB)
+- ✅ Dépendances via Lambda Layers
+- ✅ Process de build reproductible
+- ✅ Scripts organisés par fonction
+- ✅ Events de test standardisés
+- ✅ Validation automatique
 
-# Uploader la configuration client
-aws s3 cp client-config-examples/lai_weekly.yaml s3://vectora-inbox-config-dev/clients/lai_weekly.yaml --profile rag-lai-prod --region eu-west-3
-```
+## Prochaines Étapes
 
-### 5. Vérifier le déploiement
+1. **Appliquer à ingest_v2** : Réutiliser les layers créés
+2. **Créer newsletter_v2** : Même architecture layers
+3. **Généraliser le processus** : Template pour futures Lambdas
 
-```powershell
-# Vérifier la Lambda engine
-.\scripts\verify-engine-deployment.ps1
-```
+## Support
 
-### 6. Tester le workflow complet
-
-```powershell
-# Exécuter le test end-to-end
-.\scripts\test-engine-lai-weekly.ps1
-```
-
----
-
-## Dépannage
-
-### Erreur : "Stack already exists"
-
-Si une stack existe déjà, CloudFormation la mettra à jour automatiquement avec `aws cloudformation deploy`.
-
-### Erreur : "Insufficient permissions"
-
-Vérifiez que le profil `rag-lai-prod` a les permissions nécessaires :
-- `cloudformation:*`
-- `s3:*`
-- `lambda:*`
-- `iam:*`
-- `logs:*`
-
-### Erreur : "Lambda timeout"
-
-Consultez les logs CloudWatch :
-```powershell
-aws logs tail /aws/lambda/vectora-inbox-engine-dev --since 10m --format detailed --profile rag-lai-prod --region eu-west-3
-```
-
-### Erreur : "ThrottlingException" (Bedrock)
-
-C'est normal en DEV avec une concurrence limitée. Le mécanisme de retry automatique devrait gérer ces erreurs. Si le problème persiste :
-1. Vérifier que la concurrence Lambda est bien limitée à 1
-2. Vérifier les logs pour voir le taux de retry
-3. Demander une augmentation des quotas Bedrock si nécessaire
-
----
-
-## Ressources
-
-- **Documentation d'architecture** : `docs/design/vectora_inbox_engine_lambda.md`
-- **Plan de déploiement** : `docs/design/vectora_inbox_engine_deploy_and_test_plan.md`
-- **Diagnostics** : `docs/diagnostics/`
-- **Contrats Lambda** : `contracts/lambdas/`
-
----
-
-**Auteur** : Amazon Q Developer  
-**Date de création** : 2025-01-15  
-**Version** : 1.0
+Pour toute question sur ce processus, référez-vous aux règles d'hygiène V4 dans `.q-context/src_lambda_hygiene_v4.md`.

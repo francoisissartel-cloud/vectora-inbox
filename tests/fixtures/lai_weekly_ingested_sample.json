@@ -1,0 +1,59 @@
+[
+  {
+    "item_id": "press_corporate__medincell_20250115_001",
+    "source_key": "press_corporate__medincell",
+    "source_type": "rss",
+    "title": "MedinCell Announces Partnership with Teva for BEPO Technology",
+    "content": "MedinCell (Euronext: MEDCL) today announced a strategic partnership with Teva Pharmaceutical to develop long-acting injectable formulations using MedinCell's proprietary BEPO technology platform. The collaboration will focus on developing subcutaneous depot injections for addiction treatment, leveraging BEPO's controlled-release capabilities.",
+    "url": "https://www.medincell.com/news/partnership-teva-bepo/",
+    "published_at": "2025-01-15",
+    "ingested_at": "2025-01-15T10:30:00Z",
+    "metadata": {
+      "author": "MedinCell Press Team",
+      "tags": [
+        "partnership",
+        "BEPO",
+        "Teva"
+      ],
+      "word_count": 85
+    }
+  },
+  {
+    "item_id": "press_sector__fiercebiotech_20250115_002",
+    "source_key": "press_sector__fiercebiotech",
+    "source_type": "rss",
+    "title": "Camurus Reports Positive Phase 3 Results for CAM2038 in Opioid Addiction",
+    "content": "Camurus AB announced positive topline results from its Phase 3 clinical trial evaluating CAM2038, a once-weekly subcutaneous injection of buprenorphine for opioid use disorder treatment. The study met its primary endpoint, demonstrating non-inferiority to daily sublingual buprenorphine. CAM2038 utilizes Camurus' FluidCrystal injection depot technology.",
+    "url": "https://www.fiercebiotech.com/camurus-cam2038-phase3-results",
+    "published_at": "2025-01-14",
+    "ingested_at": "2025-01-15T10:35:00Z",
+    "metadata": {
+      "author": "FierceBiotech Editorial",
+      "tags": [
+        "clinical_trial",
+        "buprenorphine",
+        "addiction"
+      ],
+      "word_count": 72
+    }
+  },
+  {
+    "item_id": "press_corporate__delsitech_20250113_003",
+    "source_key": "press_corporate__delsitech",
+    "source_type": "rss",
+    "title": "DelSiTech Receives FDA Fast Track Designation for Siliaject Platform",
+    "content": "DelSiTech Ltd announced that the U.S. Food and Drug Administration has granted Fast Track designation for its Siliaject drug delivery platform for long-acting injectable applications. The Siliaject technology enables controlled drug release over periods ranging from weeks to months through biodegradable silica-based microspheres.",
+    "url": "https://www.delsitech.com/news/fda-fast-track-siliaject",
+    "published_at": "2025-01-13",
+    "ingested_at": "2025-01-15T10:40:00Z",
+    "metadata": {
+      "author": "DelSiTech Communications",
+      "tags": [
+        "regulatory",
+        "FDA",
+        "Siliaject"
+      ],
+      "word_count": 58
+    }
+  }
+]

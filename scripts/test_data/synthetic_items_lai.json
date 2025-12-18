@@ -1,0 +1,56 @@
+{
+  "client_id": "lai_weekly_v3",
+  "ingestion_date": "2025-12-18T09:55:00Z",
+  "period": {
+    "from_date": "2025-12-11T00:00:00Z",
+    "to_date": "2025-12-18T09:55:00Z"
+  },
+  "items": [
+    {
+      "source_key": "bioworld_rss",
+      "source_type": "rss",
+      "title": "Novartis Advances CAR-T Cell Therapy for Multiple Myeloma",
+      "raw_text": "Novartis announced positive results from its Phase III trial of CAR-T cell therapy targeting BCMA for relapsed/refractory multiple myeloma. The therapy showed significant improvement in progression-free survival compared to standard care. This represents a major advancement in cellular immunotherapy for hematologic malignancies.",
+      "url": "https://example.com/novartis-cart-myeloma",
+      "published_at": "2025-12-17T14:30:00Z"
+    },
+    {
+      "source_key": "fierce_biotech_rss",
+      "source_type": "rss", 
+      "title": "Roche Expands Oncology Pipeline with New ADC Technology",
+      "raw_text": "Roche has acquired a novel antibody-drug conjugate (ADC) platform technology that targets solid tumors. The platform uses proprietary linker chemistry to improve drug delivery and reduce off-target toxicity. Initial studies focus on breast cancer and lung cancer applications.",
+      "url": "https://example.com/roche-adc-technology",
+      "published_at": "2025-12-17T10:15:00Z"
+    },
+    {
+      "source_key": "biocentury_rss",
+      "source_type": "rss",
+      "title": "FDA Approves First Gene Therapy for Duchenne Muscular Dystrophy",
+      "raw_text": "The FDA has granted accelerated approval to Sarepta Therapeutics' gene therapy for Duchenne muscular dystrophy (DMD). The therapy uses adeno-associated virus (AAV) vectors to deliver functional dystrophin genes to muscle cells. This marks a significant milestone in rare disease treatment.",
+      "url": "https://example.com/fda-dmd-gene-therapy",
+      "published_at": "2025-12-16T16:45:00Z"
+    },
+    {
+      "source_key": "nature_biotech_rss",
+      "source_type": "rss",
+      "title": "CRISPR-Cas9 Breakthrough in Treating Sickle Cell Disease",
+      "raw_text": "Researchers report successful treatment of sickle cell disease using CRISPR-Cas9 gene editing technology. The approach involves editing patients' own hematopoietic stem cells to produce functional hemoglobin. Clinical trials show sustained improvement in patients with severe sickle cell disease.",
+      "url": "https://example.com/crispr-sickle-cell",
+      "published_at": "2025-12-16T09:20:00Z"
+    },
+    {
+      "source_key": "endpoints_news_rss",
+      "source_type": "rss",
+      "title": "Gilead Sciences Reports Positive Data for HIV Prevention Drug",
+      "raw_text": "Gilead Sciences announced positive Phase III results for its long-acting HIV prevention drug. The injectable formulation provides protection for up to 6 months with a single dose. The drug targets HIV reverse transcriptase and shows superior efficacy compared to daily oral PrEP.",
+      "url": "https://example.com/gilead-hiv-prevention",
+      "published_at": "2025-12-15T13:10:00Z"
+    }
+  ],
+  "statistics": {
+    "total_sources": 5,
+    "items_fetched": 5,
+    "items_filtered": 0,
+    "execution_time_seconds": 12.5
+  }
+}

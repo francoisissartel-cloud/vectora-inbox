@@ -1,0 +1,233 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Vectora Inbox - Lambda normalize-score-v2 (Stack S1)'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, stage, prod]
+    Description: Environment name
+  
+  ProjectName:
+    Type: String
+    Default: vectora-inbox
+    Description: Project name for resource naming
+  
+  BedrockModelId:
+    Type: String
+    Default: eu.anthropic.claude-sonnet-4-5-20250929-v1:0
+    Description: Bedrock model ID for normalization
+  
+  BedrockRegion:
+    Type: String
+    Default: us-east-1
+    Description: AWS region for Bedrock service
+
+Resources:
+  # ============================================================================
+  # LAMBDA FUNCTION
+  # ============================================================================
+  
+  NormalizeScoreV2Function:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-normalize-score-v2-${Environment}'
+      Description: 'Vectora Inbox - Normalisation et scoring des items via Bedrock'
+      Runtime: python3.11
+      Handler: handler.lambda_handler
+      Code:
+        S3Bucket: !Sub '${ProjectName}-lambda-code-${Environment}'
+        S3Key: normalize-score-v2.zip
+      Timeout: 900  # 15 minutes pour les appels Bedrock
+      MemorySize: 1024
+      Environment:
+        Variables:
+          ENV: !Ref Environment
+          PROJECT_NAME: !Ref ProjectName
+          CONFIG_BUCKET: !Sub '${ProjectName}-config-${Environment}'
+          DATA_BUCKET: !Sub '${ProjectName}-data-${Environment}'
+          BEDROCK_MODEL_ID: !Ref BedrockModelId
+          BEDROCK_REGION: !Ref BedrockRegion
+          LOG_LEVEL: INFO
+      Role: !GetAtt NormalizeScoreV2ExecutionRole.Arn
+      Layers:
+        - !Ref VectoraCoreLayer
+        - !Ref CommonDepsLayer
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Component
+          Value: normalize-score-v2
+
+  # ============================================================================
+  # IAM EXECUTION ROLE
+  # ============================================================================
+  
+  NormalizeScoreV2ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectName}-normalize-score-v2-execution-role-${Environment}'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: S3Access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub 'arn:aws:s3:::${ProjectName}-config-${Environment}'
+                  - !Sub 'arn:aws:s3:::${ProjectName}-config-${Environment}/*'
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub 'arn:aws:s3:::${ProjectName}-data-${Environment}'
+                  - !Sub 'arn:aws:s3:::${ProjectName}-data-${Environment}/*'
+        - PolicyName: BedrockAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - bedrock:InvokeModel
+                Resource:
+                  - !Sub 'arn:aws:bedrock:${BedrockRegion}::foundation-model/anthropic.claude-*'
+                  - !Sub 'arn:aws:bedrock:eu-central-1::foundation-model/anthropic.claude-*'
+                  - !Sub 'arn:aws:bedrock:eu-west-3::foundation-model/anthropic.claude-*'
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  # ============================================================================
+  # LAMBDA LAYERS
+  # ============================================================================
+  
+  VectoraCoreLayer:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      LayerName: !Sub '${ProjectName}-vectora-core-layer-${Environment}'
+      Description: 'Vectora Core V2 - Business logic modules'
+      Content:
+        S3Bucket: !Sub '${ProjectName}-lambda-code-${Environment}'
+        S3Key: vectora-core-layer.zip
+      CompatibleRuntimes:
+        - python3.11
+      CompatibleArchitectures:
+        - x86_64
+
+  CommonDepsLayer:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      LayerName: !Sub '${ProjectName}-common-deps-layer-${Environment}'
+      Description: 'Common dependencies (boto3, PyYAML, etc.)'
+      Content:
+        S3Bucket: !Sub '${ProjectName}-lambda-code-${Environment}'
+        S3Key: common-deps-layer.zip
+      CompatibleRuntimes:
+        - python3.11
+      CompatibleArchitectures:
+        - x86_64
+
+  # ============================================================================
+  # CLOUDWATCH LOG GROUP
+  # ============================================================================
+  
+  NormalizeScoreV2LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${ProjectName}-normalize-score-v2-${Environment}'
+      RetentionInDays: 14
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  # ============================================================================
+  # EVENTBRIDGE RULE (OPTIONNEL - POUR DÉCLENCHEMENT AUTOMATIQUE)
+  # ============================================================================
+  
+  NormalizeScoreV2EventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub '${ProjectName}-normalize-score-v2-trigger-${Environment}'
+      Description: 'Déclenche normalize-score-v2 après ingestion'
+      State: DISABLED  # Désactivé par défaut
+      EventPattern:
+        source:
+          - vectora.inbox
+        detail-type:
+          - Ingestion Completed
+      Targets:
+        - Arn: !GetAtt NormalizeScoreV2Function.Arn
+          Id: NormalizeScoreV2Target
+          InputTransformer:
+            InputPathsMap:
+              client_id: $.detail.client_id
+              ingestion_date: $.detail.ingestion_date
+            InputTemplate: |
+              {
+                "client_id": "<client_id>",
+                "target_date": "<ingestion_date>",
+                "scoring_mode": "balanced"
+              }
+
+  NormalizeScoreV2EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref NormalizeScoreV2Function
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt NormalizeScoreV2EventRule.Arn
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+
+Outputs:
+  NormalizeScoreV2FunctionName:
+    Description: 'Nom de la Lambda normalize-score-v2'
+    Value: !Ref NormalizeScoreV2Function
+    Export:
+      Name: !Sub '${AWS::StackName}-NormalizeScoreV2FunctionName'
+
+  NormalizeScoreV2FunctionArn:
+    Description: 'ARN de la Lambda normalize-score-v2'
+    Value: !GetAtt NormalizeScoreV2Function.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-NormalizeScoreV2FunctionArn'
+
+  NormalizeScoreV2ExecutionRoleArn:
+    Description: 'ARN du rôle d\'exécution'
+    Value: !GetAtt NormalizeScoreV2ExecutionRole.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-NormalizeScoreV2ExecutionRoleArn'
+
+  VectoraCoreLayerArn:
+    Description: 'ARN du layer vectora-core'
+    Value: !Ref VectoraCoreLayer
+    Export:
+      Name: !Sub '${AWS::StackName}-VectoraCoreLayerArn'
+
+  CommonDepsLayerArn:
+    Description: 'ARN du layer common-deps'
+    Value: !Ref CommonDepsLayer
+    Export:
+      Name: !Sub '${AWS::StackName}-CommonDepsLayerArn'

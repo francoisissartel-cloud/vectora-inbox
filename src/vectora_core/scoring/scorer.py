@@ -28,7 +28,11 @@ def score_items(
         Items annotés avec le champ score (float)
     """
     import logging
+    import os
     logger = logging.getLogger(__name__)
+    
+    # Phase A: Feature flag pour utiliser les signaux LLM existants
+    use_llm_relevance = os.environ.get('USE_LLM_RELEVANCE', 'false').lower() == 'true'
     
     # Créer un mapping domain_id → priority
     domain_priorities = {d.get('id'): d.get('priority', 'medium') for d in watch_domains}
@@ -52,7 +56,12 @@ def score_items(
             else:
                 domain_priority = 'low'
             
-            score = compute_score(item, scoring_rules, domain_priority, canonical_scopes)
+            # Phase A: Utiliser compute_score_with_llm_signals si feature flag activé
+            if use_llm_relevance:
+                score = compute_score_with_llm_signals(item, scoring_rules, domain_priority, canonical_scopes)
+                logger.info(f"[LLM_RELEVANCE] Item '{item.get('title', '')[:50]}...' : score = {score:.2f}")
+            else:
+                score = compute_score(item, scoring_rules, domain_priority, canonical_scopes)
         
         item['score'] = score
         logger.debug(f"Item '{item.get('title', '')[:50]}...' : score = {score:.2f}")
@@ -572,6 +581,92 @@ def _compute_recency_bonus(item: Dict[str, Any], event_type: str, scoring_rules:
         return 0
 
 
+def compute_score_with_llm_signals(
+    item: Dict[str, Any], 
+    scoring_rules: Dict[str, Any], 
+    domain_priority: str, 
+    canonical_scopes: Dict[str, Any]
+) -> float:
+    """
+    Phase A: Calcule le score en utilisant les signaux LLM existants.
+    
+    Args:
+        item: Item normalisé et matché
+        scoring_rules: Règles de scoring
+        domain_priority: Priorité du domaine (high/medium/low)
+        canonical_scopes: Scopes canonical
+    
+    Returns:
+        Score numérique (float)
+    """
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    # Commencer par le score de base (déterministe)
+    base_score = compute_score(item, scoring_rules, domain_priority, canonical_scopes)
+    
+    # Phase A: Appliquer les signaux LLM existants
+    llm_bonus = 0
+    
+    # 1. Bonus profondeur des entités (signal LLM indirect)
+    entity_depth = (
+        len(item.get('companies_detected', [])) +
+        len(item.get('molecules_detected', [])) +
+        len(item.get('technologies_detected', [])) +
+        len(item.get('indications_detected', []))
+    )
+    
+    if entity_depth > 0:
+        # Bonus progressif : plus d'entités = plus pertinent
+        entity_bonus = min(entity_depth * 0.5, 3.0)  # Plafonné à +3.0
+        llm_bonus += entity_bonus
+        logger.debug(f"[LLM_RELEVANCE] Entity depth bonus: {entity_bonus} (depth={entity_depth})")
+    
+    # 2. Bonus molécules LAI détectées
+    molecules_detected = item.get('molecules_detected', [])
+    if molecules_detected:
+        # Bonus par molécule détectée
+        molecule_bonus = len(molecules_detected) * scoring_rules.get('other_factors', {}).get('molecule_bonus', 2.0)
+        llm_bonus += molecule_bonus
+        logger.debug(f"[LLM_RELEVANCE] Molecule bonus: {molecule_bonus} (molecules={molecules_detected})")
+    
+    # 3. Bonus technologies LAI détectées
+    technologies_detected = item.get('technologies_detected', [])
+    if technologies_detected:
+        # Bonus par technologie détectée
+        tech_bonus = len(technologies_detected) * scoring_rules.get('other_factors', {}).get('technology_bonus', 2.0)
+        llm_bonus += tech_bonus
+        logger.debug(f"[LLM_RELEVANCE] Technology bonus: {tech_bonus} (technologies={technologies_detected})")
+    
+    # 4. Bonus sociétés LAI pure players (signal LLM indirect)
+    companies_detected = set(item.get('companies_detected', []))
+    if companies_detected:
+        # Vérifier pure players LAI
+        pure_player_scope_key = scoring_rules.get('other_factors', {}).get('pure_player_scope', 'lai_companies_mvp_core')
+        pure_players = set(canonical_scopes.get('companies', {}).get(pure_player_scope_key, []))
+        
+        lai_pure_players = companies_detected & pure_players
+        if lai_pure_players:
+            pure_player_bonus = scoring_rules.get('other_factors', {}).get('pure_player_bonus', 3.0)
+            llm_bonus += pure_player_bonus
+            logger.debug(f"[LLM_RELEVANCE] Pure player bonus: {pure_player_bonus} (companies={lai_pure_players})")
+    
+    # 5. Multiplicateur event_type (classification LLM)
+    event_type = item.get('event_type', 'other')
+    if event_type != 'other':
+        # Bonus si event_type classifié (pas "other")
+        event_classification_bonus = 1.0
+        llm_bonus += event_classification_bonus
+        logger.debug(f"[LLM_RELEVANCE] Event classification bonus: {event_classification_bonus} (type={event_type})")
+    
+    # Score final
+    final_score = base_score + llm_bonus
+    
+    logger.info(f"[LLM_RELEVANCE] Base: {base_score:.2f}, LLM bonus: {llm_bonus:.2f}, Final: {final_score:.2f}")
+    
+    return max(0, round(final_score, 2))
+
+
 def rank_items_by_score(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     Trie les items par score décroissant.
@@ -583,3 +678,121 @@ def rank_items_by_score(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         Items triés par score décroissant
     """
     return sorted(items, key=lambda x: x.get('score', 0), reverse=True)
+
+def score_item(
+    item: Dict[str, Any],
+    client_config: Dict[str, Any],
+    target_date: str,
+    scoring_mode: str = "balanced"
+) -> Dict[str, Any]:
+    """
+    Calcule le score d'un item individuel.
+    
+    Args:
+        item: Item normalisé et matché
+        client_config: Configuration client complète
+        target_date: Date de référence pour le scoring
+        scoring_mode: Mode de scoring (balanced, strict, permissive)
+    
+    Returns:
+        Dict contenant les résultats de scoring pour cet item
+    """
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    # Extraire les règles de scoring depuis la config client
+    scoring_rules = client_config.get('scoring_rules', {
+        'event_type_weights': {
+            'regulatory': 3.0,
+            'partnership': 2.5,
+            'clinical_update': 2.0,
+            'funding': 1.5,
+            'other': 1.0
+        },
+        'domain_priority_weights': {
+            'high': 2.0,
+            'medium': 1.5,
+            'low': 1.0
+        },
+        'other_factors': {
+            'recency_decay_half_life_days': 7,
+            'source_type_weight_corporate': 2.0,
+            'source_type_weight_sector': 1.5,
+            'source_type_weight_generic': 1.0,
+            'signal_depth_bonus': 0.3,
+            'pure_player_bonus': 3.0,
+            'hybrid_company_bonus': 1.0
+        }
+    })
+    
+    watch_domains = client_config.get('watch_domains', [])
+    
+    # Déterminer la priorité du domaine
+    matched_domains = item.get('matched_domains', [])
+    domain_priorities = {d.get('id'): d.get('priority', 'medium') for d in watch_domains}
+    
+    if matched_domains:
+        priorities = [domain_priorities.get(d, 'medium') for d in matched_domains]
+        if 'high' in priorities:
+            domain_priority = 'high'
+        elif 'medium' in priorities:
+            domain_priority = 'medium'
+        else:
+            domain_priority = 'low'
+    else:
+        domain_priority = 'low'
+    
+    # Calculer le score selon le mode
+    if scoring_mode == "strict":
+        # Mode strict : pénalités plus fortes
+        scoring_rules['other_factors']['recency_decay_half_life_days'] = 5
+        scoring_rules['other_factors']['signal_depth_bonus'] = 0.2
+    elif scoring_mode == "permissive":
+        # Mode permissif : bonus plus généreux
+        scoring_rules['other_factors']['recency_decay_half_life_days'] = 10
+        scoring_rules['other_factors']['signal_depth_bonus'] = 0.5
+    
+    # Utiliser la fonction de scoring existante
+    canonical_scopes = {}  # TODO: Charger depuis la config si nécessaire
+    
+    if item.get('domain_relevance'):
+        score = compute_score_with_domain_relevance(item, scoring_rules, canonical_scopes)
+    else:
+        score = compute_score(item, scoring_rules, domain_priority, canonical_scopes)
+    
+    logger.debug(f"Item scored: {item.get('title', '')[:50]}... = {score:.2f}")
+    
+    return {
+        'score': score,
+        'scoring_mode': scoring_mode,
+        'domain_priority': domain_priority,
+        'scoring_details': {
+            'matched_domains': matched_domains,
+            'event_type': item.get('event_type', 'other'),
+            'recency_days': _calculate_recency_days(item.get('date'), target_date)
+        }
+    }
+
+
+def _calculate_recency_days(item_date: str, target_date: str) -> int:
+    """Calcule le nombre de jours entre la date de l'item et la date cible."""
+    from datetime import datetime
+    
+    if not item_date or not target_date:
+        return 999  # Valeur par défaut si dates manquantes
+    
+    try:
+        if 'T' in item_date:
+            item_dt = datetime.fromisoformat(item_date.replace('Z', '+00:00'))
+        else:
+            item_dt = datetime.strptime(item_date, '%Y-%m-%d')
+        
+        if 'T' in target_date:
+            target_dt = datetime.fromisoformat(target_date.replace('Z', '+00:00'))
+        else:
+            target_dt = datetime.strptime(target_date, '%Y-%m-%d')
+        
+        return abs((target_dt - item_dt.replace(tzinfo=None)).days)
+    
+    except Exception:
+        return 999
