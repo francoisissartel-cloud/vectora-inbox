@@ -1,0 +1,6 @@
+{
+  "client_id": "lai_weekly_v3",
+  "force_reprocess": true,
+  "scoring_mode": "balanced",
+  "debug_config": true
+}

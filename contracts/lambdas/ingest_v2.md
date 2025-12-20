@@ -165,19 +165,37 @@ La Lambda **vectora-inbox-ingest** est responsable de l'**ingestion brute** des 
 - **Pas d'appel Bedrock** dans l'ingestion (réservé à la normalisation)
 - **Gestion des bouquets de sources** via canonical
 
-### Du code existant (observé dans /src)
-- **Handler pattern** : `lambda_handler(event, context)` dans `/src/lambdas/ingest_normalize/handler.py`
-- **Fonction orchestratrice** : `run_ingest_normalize_for_client()` dans `vectora_core`
-- **Variables d'environnement** : `CONFIG_BUCKET`, `DATA_BUCKET`, `PUBMED_API_KEY_PARAM`
-- **Structure des events** : `client_id`, `sources`, `period_days`, `from_date`, `to_date`
+### Du code réel (observé dans src_v2)
+- **Handler pattern** : `lambda_handler(event, context)` dans `src_v2/lambdas/ingest/handler.py`
+- **Fonction orchestratrice** : `run_ingest_for_client()` dans `vectora_core.ingest`
+- **Variables d'environnement** : `CONFIG_BUCKET`, `DATA_BUCKET`, `ENV`, `PROJECT_NAME`
+- **Structure des events** : `client_id`, `sources`, `period_days`, `from_date`, `to_date`, `force_refresh`, `dry_run`
 - **Gestion des erreurs** : Try/catch avec retour `statusCode` + `body`
+- **Mode multi-clients** : Support du scan automatique des clients actifs
 
 ### Des données canonical existantes
 - **Source catalog** : 180+ sources corporate LAI + presse sectorielle dans `canonical/sources/source_catalog.yaml`
-- **Bouquets prédéfinis** : `lai_corporate_mvp`, `lai_corporate_all`, `press_biotech_premium`
+- **Bouquets prédéfinis** : `lai_corporate_mvp`, `lai_press_mvp`, `lai_corporate_all`
 - **Profils d'ingestion** : Timeout, retry, rate limiting dans `canonical/ingestion/ingestion_profiles.yaml`
-- **Client configs** : Structure des configs dans `client-config-examples/lai_weekly_v3.yaml`
+- **Client configs** : Structure validée dans `client-config-examples/lai_weekly_v3.yaml`
+
+### Validation E2E récente
+- **Dernière exécution** : 17 décembre 2025 sur lai_weekly_v3
+- **Items ingérés** : 15 items réels LAI (MedinCell, Nanexa, UZEDY®, etc.)
+- **Sources actives** : 8 sources (5 corporate + 3 presse)
+- **Stockage confirmé** : `s3://vectora-inbox-data-dev/ingested/lai_weekly_v3/2025/12/17/items.json`
+
+## 8. Références
+
+### Documentation technique
+- **Architecture moteur** : `docs/design/vectora_inbox_v2_engine_overview.md`
+- **Audit d'hygiène** : `docs/diagnostics/src_v2_hygiene_audit_v2.md`
+- **Validation E2E** : `docs/diagnostics/lai_weekly_v3_real_data_e2e_validation_report.md`
+
+### Règles d'hygiène
+- **Conformité V4** : `src_lambda_hygiene_v4.md` - Architecture 3 Lambdas respectée
+- **Code de référence** : `src_v2/` - Implémentation validée et conforme
 
 ---
 
-**Note** : Ce contrat respecte l'esprit de `src_lambda_hygiene_v3.md` avec une Lambda simple et focalisée sur l'ingestion brute, sans logique métier complexe. La normalisation et le scoring sont délégués aux Lambdas suivantes.
+**Note** : Ce contrat est synchronisé avec l'implémentation réelle de `src_v2/lambdas/ingest/` et validé par les tests E2E sur lai_weekly_v3. La Lambda respecte intégralement `src_lambda_hygiene_v4.md` avec une architecture simple et focalisée sur l'ingestion brute.

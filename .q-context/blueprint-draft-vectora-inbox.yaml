@@ -1,12 +1,15 @@
 # .q-context/blueprint-draft-vectora-inbox.yaml
-# High-level declarative blueprint for the Vectora Inbox MVP.
-# Goal: describe WHAT infra and layout we want, not low-level code.
+# STATUT: HISTORIQUE - Architecture V1 (2 Lambdas)
+# RÉFÉRENCE ACTUELLE: blueprint-v2-current.yaml (Architecture V2 - 3 Lambdas)
+# DATE DE DÉPRÉCIATION: 18 décembre 2025
 #
-# Key architecture principles:
-# - 3 S3 buckets: config, data, newsletters
+# Ce fichier est conservé pour référence historique uniquement.
+# L'architecture réelle utilise maintenant 3 Lambdas V2 validées E2E.
+#
+# ARCHITECTURE HISTORIQUE V1 (non implémentée):
 # - 2 Lambda functions: ingest-normalize, engine
-# - Amazon Bedrock as the "linguistic brain" (entity extraction, event classification, editorial writing)
-# - Bedrock NOT used for: HTTP plumbing, matching (set intersections), scoring (numeric rules)
+# - Amazon Bedrock pour normalisation et éditorial uniquement
+# - Bedrock NOT used for: matching, scoring
 
 project:
   name: "Vectora Inbox"

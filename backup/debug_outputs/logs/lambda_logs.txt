@@ -1,0 +1,185 @@
+INIT_START Runtime Version: python:3.11.v109	Runtime Version ARN: arn:aws:lambda:eu-west-3::runtime:49f733259c7ce7e0deee75ff91c6afe35c7d58b04ed300f32701216263b4590c
+	START RequestId: fbb934dc-a079-4c84-96a8-650ed0ac79f5 Version: $LATEST
+	[INFO]	2025-12-19T15:02:48.165Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Démarrage de vectora-inbox-normalize-score-v2
+	[INFO]	2025-12-19T15:02:48.165Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Event reçu : {"client_id": "lai_weekly_v3", "force_reprocess": false, "scoring_mode": "balanced"}
+	[INFO]	2025-12-19T15:02:48.165Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Variables d'environnement chargées : ENV=dev, CONFIG_BUCKET=vectora-inbox-config-dev, DATA_BUCKET=vectora-inbox-data-dev, BEDROCK_MODEL_ID=anthropic.claude-3-sonnet-20240229-v1:0
+	[INFO]	2025-12-19T15:02:48.165Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Démarrage normalisation/scoring pour client lai_weekly_v3
+	[INFO]	2025-12-19T15:02:48.165Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Chargement des configurations...
+	[INFO]	2025-12-19T15:02:48.165Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Chargement de la configuration client : lai_weekly_v3
+	[INFO]	2025-12-19T15:02:48.178Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Found credentials in environment variables.
+	[INFO]	2025-12-19T15:02:48.494Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Lecture YAML depuis s3://vectora-inbox-config-dev/clients/lai_weekly_v3.yaml
+	[INFO]	2025-12-19T15:02:48.615Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier YAML chargé avec succès : 12927 caractères
+	[INFO]	2025-12-19T15:02:48.617Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Configuration client chargée : LAI Intelligence Weekly v3 (Test Bench)
+	[INFO]	2025-12-19T15:02:48.617Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Chargement des scopes canonical
+	[INFO]	2025-12-19T15:02:48.631Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Lecture YAML depuis s3://vectora-inbox-config-dev/canonical/scopes/company_scopes.yaml
+	[INFO]	2025-12-19T15:02:48.720Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier YAML chargé avec succès : 4996 caractères
+	[INFO]	2025-12-19T15:02:48.722Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Scopes companies chargés : 4 scopes
+	[INFO]	2025-12-19T15:02:48.732Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Lecture YAML depuis s3://vectora-inbox-config-dev/canonical/scopes/molecule_scopes.yaml
+	[INFO]	2025-12-19T15:02:48.806Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier YAML chargé avec succès : 2047 caractères
+	[INFO]	2025-12-19T15:02:48.807Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Scopes molecules chargés : 5 scopes
+	[INFO]	2025-12-19T15:02:48.812Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Lecture YAML depuis s3://vectora-inbox-config-dev/canonical/scopes/technology_scopes.yaml
+	[INFO]	2025-12-19T15:02:48.909Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier YAML chargé avec succès : 4580 caractères
+	[INFO]	2025-12-19T15:02:48.911Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Scopes technologies chargés : 1 scopes
+	[INFO]	2025-12-19T15:02:48.916Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Lecture YAML depuis s3://vectora-inbox-config-dev/canonical/scopes/trademark_scopes.yaml
+	[INFO]	2025-12-19T15:02:48.988Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier YAML chargé avec succès : 1149 caractères
+	[INFO]	2025-12-19T15:02:48.990Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Scopes trademarks chargés : 1 scopes
+	[INFO]	2025-12-19T15:02:48.996Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Lecture YAML depuis s3://vectora-inbox-config-dev/canonical/scopes/exclusion_scopes.yaml
+	[INFO]	2025-12-19T15:02:49.063Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier YAML chargé avec succès : 3987 caractères
+	[INFO]	2025-12-19T15:02:49.064Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Scopes exclusions chargés : 11 scopes
+	[INFO]	2025-12-19T15:02:49.064Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Chargement des prompts canonical
+	[INFO]	2025-12-19T15:02:49.069Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Lecture YAML depuis s3://vectora-inbox-config-dev/canonical/prompts/global_prompts.yaml
+	[INFO]	2025-12-19T15:02:49.186Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier YAML chargé avec succès : 6630 caractères
+	[INFO]	2025-12-19T15:02:49.188Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Prompts canonical chargés
+	[INFO]	2025-12-19T15:02:49.188Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Identification du dernier run d'ingestion...
+	[INFO]	2025-12-19T15:02:49.193Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Listage des objets s3://vectora-inbox-data-dev/ingested/lai_weekly_v3/*
+	[INFO]	2025-12-19T15:02:49.276Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Objets trouvés : 4
+	[INFO]	2025-12-19T15:02:49.278Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichiers items.json trouvés: ['ingested/lai_weekly_v3/2025/12/15/items.json', 'ingested/lai_weekly_v3/2025/12/16/items.json', 'ingested/lai_weekly_v3/2025/12/17/items.json', 'ingested/lai_weekly_v3/2025/12/19/items.json']
+	[INFO]	2025-12-19T15:02:49.283Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Lecture JSON depuis s3://vectora-inbox-data-dev/ingested/lai_weekly_v3/2025/12/15/items.json
+	[INFO]	2025-12-19T15:02:49.335Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier JSON chargé avec succès
+	[INFO]	2025-12-19T15:02:49.343Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Lecture JSON depuis s3://vectora-inbox-data-dev/ingested/lai_weekly_v3/2025/12/16/items.json
+	[INFO]	2025-12-19T15:02:49.399Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier JSON chargé avec succès
+	[INFO]	2025-12-19T15:02:49.405Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Lecture JSON depuis s3://vectora-inbox-data-dev/ingested/lai_weekly_v3/2025/12/17/items.json
+	[INFO]	2025-12-19T15:02:49.450Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier JSON chargé avec succès
+	[INFO]	2025-12-19T15:02:49.456Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Lecture JSON depuis s3://vectora-inbox-data-dev/ingested/lai_weekly_v3/2025/12/19/items.json
+	[INFO]	2025-12-19T15:02:49.523Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier JSON chargé avec succès
+	[INFO]	2025-12-19T15:02:49.525Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Dernier run trouvé: ingested/lai_weekly_v3/2025/12/19 (15 items, date: 2025-12-19)
+	[INFO]	2025-12-19T15:02:49.525Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Dernier run identifié : ingested/lai_weekly_v3/2025/12/19
+	[INFO]	2025-12-19T15:02:49.525Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Chargement des items ingérés...
+	[INFO]	2025-12-19T15:02:49.530Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Lecture JSON depuis s3://vectora-inbox-data-dev/ingested/lai_weekly_v3/2025/12/19/items.json
+	[INFO]	2025-12-19T15:02:49.581Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier JSON chargé avec succès
+	[INFO]	2025-12-19T15:02:49.583Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Validation données réelles OK: 15 items validés
+	[INFO]	2025-12-19T15:02:49.583Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Items réels chargés et validés: 15 depuis ingested/lai_weekly_v3/2025/12/19/items.json
+	[INFO]	2025-12-19T15:02:49.583Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Items chargés : 15
+	[INFO]	2025-12-19T15:02:49.583Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Normalisation des items via Bedrock...
+	[INFO]	2025-12-19T15:02:49.583Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Watch domains configurés: 2
+	[INFO]	2025-12-19T15:02:49.583Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Configuration matching chargée: 0.2
+	[INFO]	2025-12-19T15:02:49.583Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Normalisation V2 de 15 items via Bedrock (workers: 1)
+	[INFO]	2025-12-19T15:02:49.583Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Client Bedrock initialisé : modèle=anthropic.claude-3-sonnet-20240229-v1:0, région=us-east-1
+	[INFO]	2025-12-19T15:02:49.591Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:02:52.059Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:02:52.065Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: Partnership Opportunities in Drug Delivery 2025 Bo...
+	[INFO]	2025-12-19T15:02:52.067Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:02:55.389Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:02:55.391Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 1 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:02:55.391Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 1 domaines matchés
+	[INFO]	2025-12-19T15:02:55.393Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:02:57.732Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:02:57.734Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: BIO International Convention 2025 Boston, June 16-...
+	[INFO]	2025-12-19T15:02:57.736Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:01.352Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:01.354Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Mode fallback activé: 2 domaines récupérés
+	[INFO]	2025-12-19T15:03:01.354Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 2 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:03:01.354Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 2 domaines matchés
+	[INFO]	2025-12-19T15:03:01.357Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:03.895Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:03.897Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: Medincell Publishes its Consolidated Half-Year Fin...
+	[INFO]	2025-12-19T15:03:03.900Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:08.204Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:08.206Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Mode fallback activé: 2 domaines récupérés
+	[INFO]	2025-12-19T15:03:08.206Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 2 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:03:08.206Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 2 domaines matchés
+	[INFO]	2025-12-19T15:03:08.209Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:11.219Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:11.221Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: Medincell’s Partner Teva Pharmaceuticals Announces...
+	[INFO]	2025-12-19T15:03:11.224Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:15.725Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:15.727Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 2 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:03:15.727Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 2 domaines matchés
+	[INFO]	2025-12-19T15:03:15.730Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:18.063Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:18.065Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: Medincell Awarded New Grant to Fight Malaria...
+	[INFO]	2025-12-19T15:03:18.068Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:21.952Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:21.954Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 1 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:03:21.954Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 1 domaines matchés
+	[INFO]	2025-12-19T15:03:21.956Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:24.232Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:24.234Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: Medincell Appoints Dr Grace Kim, Chief Strategy Of...
+	[INFO]	2025-12-19T15:03:24.237Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:28.302Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:28.303Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Mode fallback activé: 2 domaines récupérés
+	[INFO]	2025-12-19T15:03:28.304Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 2 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:03:28.304Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 2 domaines matchés
+	[INFO]	2025-12-19T15:03:28.307Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:32.124Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:32.126Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: Medincell to Join MSCI World Small Cap Index, a Le...
+	[INFO]	2025-12-19T15:03:32.128Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:35.536Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:35.538Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Mode fallback activé: 2 domaines récupérés
+	[INFO]	2025-12-19T15:03:35.538Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 2 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:03:35.538Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 2 domaines matchés
+	[INFO]	2025-12-19T15:03:35.541Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:41.232Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:41.233Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: UZEDY® continues strong growth; Teva setting the s...
+	[INFO]	2025-12-19T15:03:41.236Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:45.980Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:45.982Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 2 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:03:45.982Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 2 domaines matchés
+	[INFO]	2025-12-19T15:03:45.985Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:48.739Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:48.741Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: FDA Approves Expanded Indication for UZEDY® (rispe...
+	[INFO]	2025-12-19T15:03:48.743Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:52.721Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:52.722Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 2 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:03:52.722Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 2 domaines matchés
+	[INFO]	2025-12-19T15:03:52.725Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:55.617Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:55.618Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: Nanexa and Moderna enter into license and option a...
+	[INFO]	2025-12-19T15:03:55.621Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:03:59.896Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:03:59.897Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 1 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:03:59.897Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 1 domaines matchés
+	[INFO]	2025-12-19T15:03:59.897Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Progress: 10/15 items normalisés
+	[INFO]	2025-12-19T15:03:59.900Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:04:02.794Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:04:02.795Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: Nanexa and Moderna enter into license and option a...
+	[INFO]	2025-12-19T15:04:02.798Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:04:07.507Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:04:07.508Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 1 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:04:07.509Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 1 domaines matchés
+	[INFO]	2025-12-19T15:04:07.511Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:04:10.401Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:04:10.402Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: Nanexa publishes interim report for January-Septem...
+	[INFO]	2025-12-19T15:04:10.405Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:04:14.483Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:04:14.485Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 1 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:04:14.485Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 1 domaines matchés
+	[INFO]	2025-12-19T15:04:14.488Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:04:17.309Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:04:17.311Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: Nanexa publishes interim report for January-Septem...
+	[INFO]	2025-12-19T15:04:17.314Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:04:20.995Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:04:20.996Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Mode fallback activé: 2 domaines récupérés
+	[INFO]	2025-12-19T15:04:20.997Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 2 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:04:20.997Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 2 domaines matchés
+	[INFO]	2025-12-19T15:04:20.999Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:04:23.025Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:04:23.027Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: Download attachment...
+	[INFO]	2025-12-19T15:04:23.030Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:04:26.720Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:04:26.722Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 0 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:04:26.722Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 0 domaines matchés
+	[INFO]	2025-12-19T15:04:26.724Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:04:28.662Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:04:28.663Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 pour item: Nanexa publishes interim report for January-June 2...
+	[INFO]	2025-12-19T15:04:28.666Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Appel à Bedrock (tentative 1/4)
+	[INFO]	2025-12-19T15:04:32.124Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Réponse Bedrock reçue avec succès
+	[INFO]	2025-12-19T15:04:32.125Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Mode fallback activé: 2 domaines récupérés
+	[INFO]	2025-12-19T15:04:32.125Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2: 2 domaines matchés sur 2 évalués
+	[INFO]	2025-12-19T15:04:32.125Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching Bedrock V2 réussi: 2 domaines matchés
+	[INFO]	2025-12-19T15:04:32.125Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Normalisation V2 terminée: 15 succès, 0 échecs, 0 throttling, 102.5s
+	[INFO]	2025-12-19T15:04:32.126Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching déterministe aux domaines de veille...
+	[INFO]	2025-12-19T15:04:32.126Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching de 15 items aux domaines de veille
+	[INFO]	2025-12-19T15:04:32.128Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching terminé: 0 matchés, 15 non-matchés
+	[INFO]	2025-12-19T15:04:32.128Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Matching combiné: 0 items matchés (0 via Bedrock)
+	[INFO]	2025-12-19T15:04:32.128Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Calcul des scores de pertinence...
+	[INFO]	2025-12-19T15:04:32.128Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Calcul des scores pour 15 items (mode: balanced)
+	[INFO]	2025-12-19T15:04:32.130Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Scoring terminé: 15 items, scores 0.0-14.9
+	[INFO]	2025-12-19T15:04:32.130Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Écriture des résultats...
+	[INFO]	2025-12-19T15:04:32.136Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Écriture JSON vers s3://vectora-inbox-data-dev/curated/lai_weekly_v3/2025/12/19/items.json
+	[INFO]	2025-12-19T15:04:32.221Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Fichier JSON écrit avec succès : 39647 caractères
+	[INFO]	2025-12-19T15:04:32.223Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Normalisation/scoring terminée : {'client_id': 'lai_weekly_v3', 'status': 'completed', 'last_run_path': 'ingested/lai_weekly_v3/2025/12/19', 'output_path': 'curated/lai_weekly_v3/2025/12/19/items.json', 'processing_time_ms': 104057, 'statistics': {'items_input': 15, 'items_normalized': 15, 'items_matched': 0, 'items_scored': 15, 'normalization_success_rate': 1.0, 'matching_success_rate': 0.0, 'score_distribution': {'min_score': 2.2, 'max_score': 14.9, 'avg_score': 11.225000000000001, 'high_scores_count': 5, 'medium_scores_count': 2, 'low_scores_count': 1}, 'entity_statistics': {'companies': 15, 'molecules': 5, 'technologies': 9, 'trademarks': 5}, 'domain_statistics': {}}, 'configuration': {'bedrock_model': 'anthropic.claude-3-sonnet-20240229-v1:0', 'bedrock_region': 'us-east-1', 'scoring_mode': 'balanced', 'max_workers': 1, 'watch_domains_count': 2, 'bedrock_matching_enabled': True}}
+	[INFO]	2025-12-19T15:04:32.223Z	fbb934dc-a079-4c84-96a8-650ed0ac79f5	Exécution terminée : {'client_id': 'lai_weekly_v3', 'status': 'completed', 'last_run_path': 'ingested/lai_weekly_v3/2025/12/19', 'output_path': 'curated/lai_weekly_v3/2025/12/19/items.json', 'processing_time_ms': 104057, 'statistics': {'items_input': 15, 'items_normalized': 15, 'items_matched': 0, 'items_scored': 15, 'normalization_success_rate': 1.0, 'matching_success_rate': 0.0, 'score_distribution': {'min_score': 2.2, 'max_score': 14.9, 'avg_score': 11.225000000000001, 'high_scores_count': 5, 'medium_scores_count': 2, 'low_scores_count': 1}, 'entity_statistics': {'companies': 15, 'molecules': 5, 'technologies': 9, 'trademarks': 5}, 'domain_statistics': {}}, 'configuration': {'bedrock_model': 'anthropic.claude-3-sonnet-20240229-v1:0', 'bedrock_region': 'us-east-1', 'scoring_mode': 'balanced', 'max_workers': 1, 'watch_domains_count': 2, 'bedrock_matching_enabled': True}}
+	END RequestId: fbb934dc-a079-4c84-96a8-650ed0ac79f5
+	REPORT RequestId: fbb934dc-a079-4c84-96a8-650ed0ac79f5	Duration: 104060.33 ms	Billed Duration: 104879 ms	Memory Size: 1024 MB	Max Memory Used: 90 MB	Init Duration: 817.76 ms	
+

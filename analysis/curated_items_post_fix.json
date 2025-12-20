@@ -1,0 +1,1208 @@
+[
+  {
+    "item_id": "press_corporate__nanexa_20251219_6f822c",
+    "source_key": "press_corporate__nanexa",
+    "source_type": "press_corporate",
+    "title": "Nanexa and Moderna enter into license and option agreement for the development of PharmaShell®-based products",
+    "content": "PRESSRELEASES10 December, 2025Nanexa and Moderna enter into license and option agreement for the development of PharmaShell®-based productsThe agreement covers the development of up to five undisclosed compounds. Nanexa will receive an upfront payment of USD 3 million and is entitled to up to USD 500 million in potential milestone payments as well as a tiered single-digit royalty on product sales.READ MORE6 November, 2025Nanexa publishes interim report for January-September 2025We have progresse",
+    "url": "https://nanexa.com/mfn_news/nanexa-and-moderna-enter-into-license-and-option-agreement-for-the-development-of-pharmashell-based-products/",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:52.661062",
+    "language": "en",
+    "content_hash": "sha256:a6f60bd2b0d446163f5bee10d1c134f77d3228b27e0b3e62cef64f33d4208a2d",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 71
+    },
+    "normalized_at": "2025-12-19T13:51:42.866722Z",
+    "normalized_content": {
+      "summary": "Nanexa and Moderna have entered into a license and option agreement for the development of up to five undisclosed compounds using Nanexa's PharmaShell® technology. Nanexa will receive an upfront payment and is eligible for potential milestone payments and royalties.",
+      "entities": {
+        "companies": [
+          "Nanexa",
+          "Moderna"
+        ],
+        "molecules": [],
+        "technologies": [
+          "PharmaShell®"
+        ],
+        "trademarks": [
+          "PharmaShell®"
+        ],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "partnership",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 8,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": false,
+      "exclusion_reasons": []
+    },
+    "scoring_results": {
+      "base_score": 8,
+      "bonuses": {
+        "pure_player_company": 5.0,
+        "pure_player_details": {
+          "matched_companies": [
+            "Nanexa"
+          ],
+          "count": 1
+        },
+        "trademark_mention": 4.0,
+        "trademark_details": {
+          "matched_trademarks": [
+            "PharmaShell®"
+          ],
+          "count": 1
+        },
+        "partnership_event": 3.0,
+        "high_lai_relevance": 2.5
+      },
+      "penalties": {},
+      "final_score": 14.9,
+      "score_breakdown": {
+        "base_score": 8,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.4,
+        "total_bonus": 14.5,
+        "total_penalty": 0,
+        "raw_score": 14.9,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__nanexa_20251219_6f822c",
+    "source_key": "press_corporate__nanexa",
+    "source_type": "press_corporate",
+    "title": "Nanexa and Moderna enter into license and option agreement for the development of PharmaShell®-based products",
+    "content": "10 December, 2025Nanexa and Moderna enter into license and option agreement for the development of PharmaShell®-based productsThe agreement covers the development of up to five undisclosed compounds. Nanexa will receive an upfront payment of USD 3 million and is entitled to up to USD 500 million in potential milestone payments as well as a tiered single-digit royalty on product sales.READ MORE",
+    "url": "https://nanexa.com/mfn_news/nanexa-and-moderna-enter-into-license-and-option-agreement-for-the-development-of-pharmashell-based-products/",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:52.661062",
+    "language": "en",
+    "content_hash": "sha256:d9b83fe6cb94dcaa8e1245f54fd2e589b6cf48151c4b60378d8012a5e5a20125",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 61
+    },
+    "normalized_at": "2025-12-19T13:51:50.735184Z",
+    "normalized_content": {
+      "summary": "Nanexa and Moderna have entered into a license and option agreement for the development of up to five undisclosed compounds using Nanexa's PharmaShell® technology. Nanexa will receive an upfront payment and is eligible for milestone payments and royalties.",
+      "entities": {
+        "companies": [
+          "Nanexa",
+          "Moderna"
+        ],
+        "molecules": [],
+        "technologies": [
+          "PharmaShell®"
+        ],
+        "trademarks": [
+          "PharmaShell®"
+        ],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "partnership",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 8,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": false,
+      "exclusion_reasons": []
+    },
+    "scoring_results": {
+      "base_score": 8,
+      "bonuses": {
+        "pure_player_company": 5.0,
+        "pure_player_details": {
+          "matched_companies": [
+            "Nanexa"
+          ],
+          "count": 1
+        },
+        "trademark_mention": 4.0,
+        "trademark_details": {
+          "matched_trademarks": [
+            "PharmaShell®"
+          ],
+          "count": 1
+        },
+        "partnership_event": 3.0,
+        "high_lai_relevance": 2.5
+      },
+      "penalties": {},
+      "final_score": 14.9,
+      "score_breakdown": {
+        "base_score": 8,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.4,
+        "total_bonus": 14.5,
+        "total_penalty": 0,
+        "raw_score": 14.9,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20251219_516562",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "Medincell’s Partner Teva Pharmaceuticals Announces the New Drug Application Submission to U.S. FDA for Olanzapine Extended-Release Injectable Suspension (TEV-‘749 / mdc-TJK) for the Once-Monthly Treatment of Schizophrenia in Adults",
+    "content": "Medincell’s Partner Teva Pharmaceuticals Announces the New Drug Application Submission to U.S. FDA for Olanzapine Extended-Release Injectable Suspension (TEV-‘749 / mdc-TJK) for the Once-Monthly Treatment of Schizophrenia in AdultsDecember 9, 2025December 9, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/12/MDC_Olanzapine-NDA-filing_09122025_EN_vf-2.pdf",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:44.161179",
+    "language": "en",
+    "content_hash": "sha256:c2ed94aa0c2dfe5546577b2452e9dc35255e76491c079fb1906d579722fa5fd2",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 33
+    },
+    "normalized_at": "2025-12-19T13:51:04.279873Z",
+    "normalized_content": {
+      "summary": "Teva Pharmaceuticals has submitted a New Drug Application to the U.S. FDA for an olanzapine extended-release injectable suspension (TEV-'749 / mdc-TJK) developed by MedinCell for the once-monthly treatment of schizophrenia in adults.",
+      "entities": {
+        "companies": [
+          "Medincell",
+          "Teva Pharmaceuticals"
+        ],
+        "molecules": [
+          "olanzapine"
+        ],
+        "technologies": [
+          "Extended-Release Injectable",
+          "Once-Monthly Injection"
+        ],
+        "trademarks": [
+          "TEV-'749",
+          "mdc-TJK"
+        ],
+        "indications": [
+          "schizophrenia"
+        ]
+      },
+      "event_classification": {
+        "primary_type": "regulatory",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 10,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": false,
+      "exclusion_reasons": []
+    },
+    "scoring_results": {
+      "base_score": 7,
+      "bonuses": {
+        "pure_player_company": 5.0,
+        "pure_player_details": {
+          "matched_companies": [
+            "Medincell"
+          ],
+          "count": 1
+        },
+        "key_molecule": 2.5,
+        "molecule_details": {
+          "matched_molecules": [
+            "olanzapine"
+          ],
+          "count": 1
+        },
+        "regulatory_event": 2.5,
+        "regulatory_tech_combo": 1.0,
+        "high_lai_relevance": 2.5
+      },
+      "penalties": {},
+      "final_score": 13.8,
+      "score_breakdown": {
+        "base_score": 7,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.35,
+        "total_bonus": 13.5,
+        "total_penalty": 0,
+        "raw_score": 13.85,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20251219_c147c4",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "UZEDY® continues strong growth; Teva setting the stage for US NDA Submission for Olanzapine LAI in Q4 2025",
+    "content": "UZEDY® continues strong growth; Teva setting the stage for US NDA Submission for Olanzapine LAI in Q4 2025November 5, 2025November 5, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/11/PR_MDC_Teva-earnings-Q3_2025_05112025_vf.pdf",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:44.161179",
+    "language": "en",
+    "content_hash": "sha256:7f3a6a00314b234fd43355bd5206916bed56d46d3f812a774fb1cbb61c28ec28",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 22
+    },
+    "normalized_at": "2025-12-19T13:51:29.515956Z",
+    "normalized_content": {
+      "summary": "Teva is preparing for the US NDA submission of its long-acting injectable (LAI) formulation of olanzapine in Q4 2025. UZEDY®, Teva's existing LAI product, continues to show strong growth.",
+      "entities": {
+        "companies": [
+          "Teva"
+        ],
+        "molecules": [
+          "olanzapine",
+          "UZEDY®"
+        ],
+        "technologies": [
+          "Long-Acting Injectable",
+          "Long-Acting Injectables"
+        ],
+        "trademarks": [
+          "UZEDY®"
+        ],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "regulatory",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 10,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": false,
+      "exclusion_reasons": []
+    },
+    "scoring_results": {
+      "base_score": 7,
+      "bonuses": {
+        "trademark_mention": 4.0,
+        "trademark_details": {
+          "matched_trademarks": [
+            "UZEDY®"
+          ],
+          "count": 1
+        },
+        "key_molecule": 2.5,
+        "molecule_details": {
+          "matched_molecules": [
+            "olanzapine"
+          ],
+          "count": 1
+        },
+        "regulatory_event": 2.5,
+        "regulatory_tech_combo": 1.0,
+        "high_lai_relevance": 2.5
+      },
+      "penalties": {},
+      "final_score": 12.8,
+      "score_breakdown": {
+        "base_score": 7,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.35,
+        "total_bonus": 12.5,
+        "total_penalty": 0,
+        "raw_score": 12.85,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20251219_1781cc",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "FDA Approves Expanded Indication for UZEDY® (risperidone) Extended-Release Injectable Suspension as a Treatment for Adults Living with Bipolar I Disorder",
+    "content": "FDA Approves Expanded Indication for UZEDY® (risperidone) Extended-Release Injectable Suspension as a Treatment for Adults Living with Bipolar I DisorderOctober 10, 2025October 10, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/10/MDC_UZEDY-BDI_EN_10102025_vf.pdf",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:44.161179",
+    "language": "en",
+    "content_hash": "sha256:9af83ff908da116aea79f158b3ebdf544ae2c357adfb5de082941c5913f41ffb",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 24
+    },
+    "normalized_at": "2025-12-19T13:51:36.229980Z",
+    "normalized_content": {
+      "summary": "The FDA has approved an expanded indication for UZEDY® (risperidone) Extended-Release Injectable Suspension as a treatment for adults living with Bipolar I Disorder. UZEDY is an extended-release injectable formulation of risperidone.",
+      "entities": {
+        "companies": [],
+        "molecules": [
+          "risperidone"
+        ],
+        "technologies": [
+          "Extended-Release Injectable"
+        ],
+        "trademarks": [
+          "UZEDY®"
+        ],
+        "indications": [
+          "Bipolar I Disorder"
+        ]
+      },
+      "event_classification": {
+        "primary_type": "regulatory",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 10,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": false,
+      "exclusion_reasons": []
+    },
+    "scoring_results": {
+      "base_score": 7,
+      "bonuses": {
+        "trademark_mention": 4.0,
+        "trademark_details": {
+          "matched_trademarks": [
+            "UZEDY®"
+          ],
+          "count": 1
+        },
+        "key_molecule": 2.5,
+        "molecule_details": {
+          "matched_molecules": [
+            "risperidone"
+          ],
+          "count": 1
+        },
+        "regulatory_event": 2.5,
+        "regulatory_tech_combo": 1.0,
+        "high_lai_relevance": 2.5
+      },
+      "penalties": {},
+      "final_score": 12.8,
+      "score_breakdown": {
+        "base_score": 7,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.35,
+        "total_bonus": 12.5,
+        "total_penalty": 0,
+        "raw_score": 12.85,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__nanexa_20251219_ec88d7",
+    "source_key": "press_corporate__nanexa",
+    "source_type": "press_corporate",
+    "title": "Nanexa publishes interim report for January-September 2025",
+    "content": "6 November, 2025Nanexa publishes interim report for January-September 2025We have progressed with the optimization of our GLP-1 formulations, extended an existing commercial partnership, received approval for a PharmaShell patent application in Japan and submitted three new patent applications.READ MORE",
+    "url": "https://nanexa.com/mfn_news/nanexa-publishes-interim-report-for-january-september-2025/",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:52.661062",
+    "language": "en",
+    "content_hash": "sha256:0ae524c2c1742348fd5891a0d63556633a6fe131dc6d0a64705a3620d73771c9",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 39
+    },
+    "normalized_at": "2025-12-19T13:51:57.914057Z",
+    "normalized_content": {
+      "summary": "Nanexa published an interim report for January-September 2025, highlighting progress in optimizing GLP-1 formulations, extending a commercial partnership, receiving a patent approval in Japan, and submitting three new patent applications.",
+      "entities": {
+        "companies": [
+          "Nanexa"
+        ],
+        "molecules": [
+          "GLP-1"
+        ],
+        "technologies": [
+          "PharmaShell"
+        ],
+        "trademarks": [
+          "PharmaShell"
+        ],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "financial_results",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 7,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": false,
+      "exclusion_reasons": []
+    },
+    "scoring_results": {
+      "base_score": 3.0,
+      "bonuses": {
+        "pure_player_company": 5.0,
+        "pure_player_details": {
+          "matched_companies": [
+            "Nanexa"
+          ],
+          "count": 1
+        },
+        "trademark_mention": 4.0,
+        "trademark_details": {
+          "matched_trademarks": [
+            "PharmaShell"
+          ],
+          "count": 1
+        },
+        "medium_lai_relevance": 1.5
+      },
+      "penalties": {
+        "low_relevance_event": -1.0
+      },
+      "final_score": 9.7,
+      "score_breakdown": {
+        "base_score": 3.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.15,
+        "total_bonus": 10.5,
+        "total_penalty": -1.0,
+        "raw_score": 9.65,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20251219_150759",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "Medincell Awarded New Grant to Fight Malaria",
+    "content": "Medincell Awarded New Grant to Fight MalariaNovember 24, 2025November 24, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/11/MDC_Gates-Malaria_PR_24112025_vf.pdf",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:44.161179",
+    "language": "en",
+    "content_hash": "sha256:2077438074167cf84530cd63f435d4d32c7966446ec74b1d2d88da3c63b8e447",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 11
+    },
+    "normalized_at": "2025-12-19T13:51:10.344896Z",
+    "normalized_content": {
+      "summary": "Medincell, a biotech company, has been awarded a new grant to develop long-acting injectable formulations to fight malaria.",
+      "entities": {
+        "companies": [
+          "Medincell"
+        ],
+        "molecules": [],
+        "technologies": [
+          "Long-Acting Injectable"
+        ],
+        "trademarks": [],
+        "indications": [
+          "Malaria"
+        ]
+      },
+      "event_classification": {
+        "primary_type": "financial_results",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 9,
+      "anti_lai_detected": false,
+      "pure_player_context": true,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": false,
+      "exclusion_reasons": []
+    },
+    "scoring_results": {
+      "base_score": 3.0,
+      "bonuses": {
+        "pure_player_company": 5.0,
+        "pure_player_details": {
+          "matched_companies": [
+            "Medincell"
+          ],
+          "count": 1
+        },
+        "pure_player_context": 2.0,
+        "high_lai_relevance": 2.5
+      },
+      "penalties": {
+        "low_relevance_event": -1.0
+      },
+      "final_score": 8.7,
+      "score_breakdown": {
+        "base_score": 3.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.15,
+        "total_bonus": 9.5,
+        "total_penalty": -1.0,
+        "raw_score": 8.65,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20251219_63c5d2",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "Medincell Appoints Dr Grace Kim, Chief Strategy Officer, U.S. Finance, to Advance into Next Stage of US Capital Growth",
+    "content": "Medincell Appoints Dr Grace Kim, Chief Strategy Officer, U.S. Finance, to Advance into Next Stage of US Capital GrowthNovember 11, 2025November 11, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/11/MDC_G_KIM_10112025_EN_vf.pdf",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:44.161179",
+    "language": "en",
+    "content_hash": "sha256:0fd65830bac79a1367fb57ebdb608040c3d60da28c61faceaa909e7a158b29f2",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 23
+    },
+    "normalized_at": "2025-12-19T13:51:16.163123Z",
+    "normalized_content": {
+      "summary": "MedinCell has appointed Dr. Grace Kim as Chief Strategy Officer for U.S. Finance to advance the company's growth in the U.S. capital market.",
+      "entities": {
+        "companies": [
+          "MedinCell"
+        ],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "corporate_move",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 2,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": false,
+      "exclusion_reasons": []
+    },
+    "scoring_results": {
+      "base_score": 5.0,
+      "bonuses": {
+        "pure_player_company": 5.0,
+        "pure_player_details": {
+          "matched_companies": [
+            "MedinCell"
+          ],
+          "count": 1
+        }
+      },
+      "penalties": {
+        "low_lai_score": -3.0
+      },
+      "final_score": 2.2,
+      "score_breakdown": {
+        "base_score": 5.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.25,
+        "total_bonus": 5.0,
+        "total_penalty": -3.0,
+        "raw_score": 2.25,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__delsitech_20251219_e3d7ad",
+    "source_key": "press_corporate__delsitech",
+    "source_type": "press_corporate",
+    "title": "Partnership Opportunities in Drug Delivery 2025 Boston, October 27-28",
+    "content": "Partnership Opportunities in Drug Delivery 2025 Boston, October 27-28Essi Nevo2025-08-15T11:33:54+02:00August 15th, 2025|Read More",
+    "url": "https://www.delsitech.com/partnership-opportunities-in-drug-delivery-2025-boston-october-27-28/",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:40.786372",
+    "language": "en",
+    "content_hash": "sha256:9362998c5af4ef533152f4c2d2f7f2a5a831f17fb5c84d2e9918492eabf312d7",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 13
+    },
+    "normalized_at": "2025-12-19T13:50:44.505594Z",
+    "normalized_content": {
+      "summary": "The text is an announcement for an upcoming conference titled 'Partnership Opportunities in Drug Delivery 2025' to be held in Boston on October 27-28. It does not provide any specific details about the conference.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "other",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 2,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": true,
+      "exclusion_reasons": [
+        "no_lai_entities_low_score"
+      ]
+    },
+    "scoring_results": {
+      "base_score": 2.0,
+      "bonuses": {},
+      "penalties": {
+        "low_lai_score": -3.0,
+        "no_entities_penalty": -2.0,
+        "exclusion_penalty": -3.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "score_breakdown": {
+        "base_score": 2.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.1,
+        "total_bonus": 0,
+        "total_penalty": -9.0,
+        "raw_score": -8.9,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__delsitech_20251219_ad0afc",
+    "source_key": "press_corporate__delsitech",
+    "source_type": "press_corporate",
+    "title": "BIO International Convention 2025 Boston, June 16-19",
+    "content": "BIO International Convention 2025 Boston, June 16-19Aleksi Leino2025-06-12T15:59:56+02:00June 12th, 2025|Read More",
+    "url": "https://www.delsitech.com/bio-international-convention-2025-boston-june-16-19/",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:40.786372",
+    "language": "en",
+    "content_hash": "sha256:57720ff336bac6a3ca5237373c94baaa3eec122461772429e7c57553296abdcf",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 11
+    },
+    "normalized_at": "2025-12-19T13:50:50.682747Z",
+    "normalized_content": {
+      "summary": "The text provides information about the BIO International Convention 2025 to be held in Boston from June 16-19, 2025. It does not contain any specific details about companies, drugs, technologies or indications.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "other",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 0,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": true,
+      "exclusion_reasons": [
+        "lai_score_too_low",
+        "no_lai_entities_low_score"
+      ]
+    },
+    "scoring_results": {
+      "base_score": 2.0,
+      "bonuses": {},
+      "penalties": {
+        "low_lai_score": -3.0,
+        "no_entities_penalty": -2.0,
+        "exclusion_penalty": -3.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "score_breakdown": {
+        "base_score": 2.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.1,
+        "total_bonus": 0,
+        "total_penalty": -9.0,
+        "raw_score": -8.9,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20251219_2b08cd",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "Medincell Publishes its Consolidated Half-Year Financial Results (April 1st , 2025 – September 30, 2025)",
+    "content": "Medincell Publishes its Consolidated Half-Year Financial Results (April 1st , 2025 – September 30, 2025)December 9, 2025December 9, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/12/MDC_HY-Results-EN_09122025-1.pdf",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:44.161179",
+    "language": "en",
+    "content_hash": "sha256:d31f0b2539d43d16674e54130adf76dadd16de4d64da01b46089ef7d05087f56",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 19
+    },
+    "normalized_at": "2025-12-19T13:50:56.562608Z",
+    "normalized_content": {
+      "summary": "MedinCell published its consolidated half-year financial results for the period April 1st, 2025 to September 30, 2025. No specific financial details or other information is provided in the given text.",
+      "entities": {
+        "companies": [
+          "MedinCell"
+        ],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "financial_results",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 0,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": true,
+      "exclusion_reasons": [
+        "lai_score_too_low"
+      ]
+    },
+    "scoring_results": {
+      "base_score": 3.0,
+      "bonuses": {
+        "pure_player_company": 5.0,
+        "pure_player_details": {
+          "matched_companies": [
+            "MedinCell"
+          ],
+          "count": 1
+        }
+      },
+      "penalties": {
+        "low_lai_score": -3.0,
+        "exclusion_penalty": -3.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "score_breakdown": {
+        "base_score": 3.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.15,
+        "total_bonus": 5.0,
+        "total_penalty": -7.0,
+        "raw_score": -1.85,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20251219_846e38",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "Medincell to Join MSCI World Small Cap Index, a Leading Global Benchmark",
+    "content": "Medincell to Join MSCI World Small Cap Index, a Leading Global BenchmarkNovember 10, 2025November 10, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/11/MDC_MSCI-Small-Index_10112025_EN_vf.pdf",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:44.161179",
+    "language": "en",
+    "content_hash": "sha256:56a3453e4ee40153ae56677367b25aa29f62e6fdeeba03e4c9c8d2f2706a1923",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 16
+    },
+    "normalized_at": "2025-12-19T13:51:22.039906Z",
+    "normalized_content": {
+      "summary": "MedinCell, a pharmaceutical company, will be included in the MSCI World Small Cap Index, a leading global benchmark for small-cap companies.",
+      "entities": {
+        "companies": [
+          "MedinCell",
+          "MSCI"
+        ],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "corporate_move",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 0,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": true,
+      "exclusion_reasons": [
+        "lai_score_too_low"
+      ]
+    },
+    "scoring_results": {
+      "base_score": 5.0,
+      "bonuses": {
+        "pure_player_company": 5.0,
+        "pure_player_details": {
+          "matched_companies": [
+            "MedinCell"
+          ],
+          "count": 1
+        }
+      },
+      "penalties": {
+        "low_lai_score": -3.0,
+        "exclusion_penalty": -3.0
+      },
+      "final_score": 0,
+      "score_breakdown": {
+        "base_score": 5.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.25,
+        "total_bonus": 5.0,
+        "total_penalty": -6.0,
+        "raw_score": -0.75,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__nanexa_20251219_ec88d7",
+    "source_key": "press_corporate__nanexa",
+    "source_type": "press_corporate",
+    "title": "Nanexa publishes interim report for January-September 2025",
+    "content": "6 November, 2025Nanexa publishes interim report for January-September 2025Download attachment",
+    "url": "https://nanexa.com/mfn_news/nanexa-publishes-interim-report-for-january-september-2025/",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:52.661062",
+    "language": "en",
+    "content_hash": "sha256:5e92a34fa02feb0c756160060d140bd43be564d228173af1a7475fc55abd2012",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 10
+    },
+    "normalized_at": "2025-12-19T13:52:05.518678Z",
+    "normalized_content": {
+      "summary": "Nanexa published its interim financial report for the period January-September 2025.",
+      "entities": {
+        "companies": [
+          "Nanexa"
+        ],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "financial_results",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 0,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": true,
+      "exclusion_reasons": [
+        "lai_score_too_low"
+      ]
+    },
+    "scoring_results": {
+      "base_score": 3.0,
+      "bonuses": {
+        "pure_player_company": 5.0,
+        "pure_player_details": {
+          "matched_companies": [
+            "Nanexa"
+          ],
+          "count": 1
+        }
+      },
+      "penalties": {
+        "low_lai_score": -3.0,
+        "exclusion_penalty": -3.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "score_breakdown": {
+        "base_score": 3.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.15,
+        "total_bonus": 5.0,
+        "total_penalty": -7.0,
+        "raw_score": -1.85,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__nanexa_20251219_e8d104",
+    "source_key": "press_corporate__nanexa",
+    "source_type": "press_corporate",
+    "title": "Download attachment",
+    "content": "Download attachment",
+    "url": "https://storage.mfn.se/ab91ff14-4c8b-4c40-85a9-996052a19950/nanexa-interim-report-january-september-2025.pdf",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:52.661062",
+    "language": "en",
+    "content_hash": "sha256:3d03c0ba4af110790f2466800ad3cb177d90875ff5aca390550800cb8fb5b287",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 2
+    },
+    "normalized_at": "2025-12-19T13:52:10.630212Z",
+    "normalized_content": {
+      "summary": "The content appears to be an attachment that needs to be downloaded, so there is no textual information to analyze.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "other",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 0,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": true,
+      "exclusion_reasons": [
+        "lai_score_too_low",
+        "no_lai_entities_low_score"
+      ]
+    },
+    "scoring_results": {
+      "base_score": 2.0,
+      "bonuses": {},
+      "penalties": {
+        "low_lai_score": -3.0,
+        "no_entities_penalty": -2.0,
+        "exclusion_penalty": -3.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "score_breakdown": {
+        "base_score": 2.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.1,
+        "total_bonus": 0,
+        "total_penalty": -9.0,
+        "raw_score": -8.9,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__nanexa_20251219_76ad60",
+    "source_key": "press_corporate__nanexa",
+    "source_type": "press_corporate",
+    "title": "Nanexa publishes interim report for January-June 2025",
+    "content": "27 August, 2025Nanexa publishes interim report for January-June 2025Download attachment",
+    "url": "https://nanexa.com/mfn_news/nanexa-publishes-interim-report-for-january-june-2025/",
+    "published_at": "2025-12-19",
+    "ingested_at": "2025-12-19T11:39:52.661062",
+    "language": "en",
+    "content_hash": "sha256:5ebaa7e082a1cf6d1df5f67bacd000c99e99c281c9cc7c0d2499114067d696b3",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 10
+    },
+    "normalized_at": "2025-12-19T13:52:15.949102Z",
+    "normalized_content": {
+      "summary": "Nanexa published its interim financial report for the first half of 2025.",
+      "entities": {
+        "companies": [
+          "Nanexa"
+        ],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "financial_results",
+        "confidence": 0.8
+      },
+      "lai_relevance_score": 0,
+      "anti_lai_detected": false,
+      "pure_player_context": false,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "1.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "exclusion_applied": true,
+      "exclusion_reasons": [
+        "lai_score_too_low"
+      ]
+    },
+    "scoring_results": {
+      "base_score": 3.0,
+      "bonuses": {
+        "pure_player_company": 5.0,
+        "pure_player_details": {
+          "matched_companies": [
+            "Nanexa"
+          ],
+          "count": 1
+        }
+      },
+      "penalties": {
+        "low_lai_score": -3.0,
+        "exclusion_penalty": -3.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "score_breakdown": {
+        "base_score": 3.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.15,
+        "total_bonus": 5.0,
+        "total_penalty": -7.0,
+        "raw_score": -1.85,
+        "scoring_mode": "balanced"
+      }
+    }
+  }
+]

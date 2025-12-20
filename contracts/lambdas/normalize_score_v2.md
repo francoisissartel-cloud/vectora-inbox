@@ -211,24 +211,50 @@ La Lambda **vectora-inbox-normalize-score** est responsable de la **normalisatio
 
 ### Du blueprint (vision cible)
 - **Bedrock comme "cerveau linguistique"** : Extraction d'entités, classification d'événements, résumés
-- **Pas d'appel Bedrock pour** : Matching (intersections d'ensembles), scoring (règles numériques)
+- **Matching hybride** : Bedrock pour évaluation sémantique + règles déterministes
 - **Stockage en layers** : curated/ pour les items normalisés et scorés
-- **Modèle par défaut** : Claude Sonnet 4.5 via profil d'inférence EU
+- **Modèle par défaut** : Claude Sonnet 3 via région us-east-1
 
-### Du code existant (observé dans /src)
-- **Fonction orchestratrice** : `run_ingest_normalize_for_client()` dans `vectora_core` (actuellement combine ingest + normalize)
-- **Modules vectora_core** : `normalization/normalizer.py`, `matching/matcher.py`, `scoring/scorer.py`
-- **Variables d'environnement** : `BEDROCK_MODEL_ID`, `BEDROCK_REGION_NORMALIZATION`
+### Du code réel (observé dans src_v2)
+- **Handler** : `lambda_handler(event, context)` dans `src_v2/lambdas/normalize_score/handler.py`
+- **Fonction orchestratrice** : `run_normalize_score_for_client()` dans `vectora_core.normalization`
+- **Modules vectora_core** : `normalization/normalizer.py`, `normalization/bedrock_matcher.py`, `normalization/scorer.py`
+- **Variables d'environnement** : `BEDROCK_MODEL_ID`, `BEDROCK_REGION`, `MAX_BEDROCK_WORKERS`
 - **Structure des items normalisés** : `normalized_content`, `matching_results`, `scoring_results`
 - **Gestion des domaines** : `watch_domains` avec `technology_scope`, `company_scope`, etc.
+- **Matching config-driven** : Seuils configurables, mode fallback, diagnostic
 
 ### Des données canonical existantes
 - **Scopes LAI** : 180+ entreprises, 90+ molécules, 80+ mots-clés technologiques, 70+ trademarks
 - **Règles de scoring** : Poids par type d'événement, bonus pure players (5.0), bonus trademarks (4.0)
-- **Règles de matching** : `trademark_privileges` avec boost_factor 2.5, `require_entity_signals`
-- **Prompts Bedrock** : Templates pour normalisation dans `canonical/prompts/global_prompts.yaml`
+- **Règles de matching** : Configuration dans `lai_weekly_v3.yaml` avec seuils ajustables
+- **Prompts Bedrock** : Templates pour normalisation et matching dans `canonical/prompts/global_prompts.yaml`
 - **Config client LAI** : `lai_weekly_v3.yaml` avec 2 domaines (tech_lai_ecosystem, regulatory_lai)
+
+### Validation E2E récente
+- **Dernière exécution** : 18 décembre 2025 sur lai_weekly_v3
+- **Items traités** : 15 items réels LAI (100% normalisation, 0% matching déterministe)
+- **Appels Bedrock** : 30 appels (15 normalisation + 15 matching)
+- **Temps d'exécution** : 163 secondes (10.9s par item)
+- **Entités extraites** : 36 entités LAI (companies, molecules, technologies, trademarks)
+- **Stockage confirmé** : `s3://vectora-inbox-data-dev/curated/lai_weekly_v3/2025/12/17/items.json`
+
+## 8. Références
+
+### Documentation technique
+- **Architecture moteur** : `docs/design/vectora_inbox_v2_engine_overview.md`
+- **Audit d'hygiène** : `docs/diagnostics/src_v2_hygiene_audit_v2.md`
+- **Validation E2E** : `docs/diagnostics/lai_weekly_v3_real_data_e2e_validation_report.md`
+- **Matching config-driven** : `docs/diagnostics/matching_v2_config_driven_production_report.md`
+
+### Règles d'hygiène
+- **Conformité V4** : `src_lambda_hygiene_v4.md` - Architecture 3 Lambdas respectée
+- **Code de référence** : `src_v2/` - Implémentation validée et conforme
+
+### Appels Bedrock détaillés
+- **Cartographie complète** : `docs/design/vectora_inbox_v2_bedrock_calls_map_lai_weekly_v3.md`
+- **Prompts canonicalisés** : `canonical/prompts/global_prompts.yaml`
 
 ---
 
-**Note** : Ce contrat sépare clairement la normalisation/scoring de l'ingestion brute et de la génération de newsletter, respectant l'architecture 3 Lambdas de `src_lambda_hygiene_v3.md`. La logique métier complexe reste dans `vectora_core` pour réutilisabilité.
+**Note** : Ce contrat est synchronisé avec l'implémentation réelle de `src_v2/lambdas/normalize_score/` et validé par les tests E2E sur lai_weekly_v3. La Lambda respecte intégralement `src_lambda_hygiene_v4.md` avec une architecture séparée de l'ingestion et de la newsletter.
