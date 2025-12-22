@@ -309,3 +309,12 @@ def safe_get_nested(data: Dict[str, Any], keys: List[str], default: Any = None) 
         else:
             return default
     return current
+
+def get_processing_time() -> str:
+    """
+    Retourne un timestamp de traitement pour les métriques.
+    
+    Returns:
+        Timestamp ISO8601 du moment de traitement
+    """
+    return datetime.now().isoformat() + "Z"

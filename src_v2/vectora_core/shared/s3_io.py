@@ -297,3 +297,128 @@ def object_exists(bucket: str, key: str) -> bool:
         else:
             logger.error(f"Erreur lors de la vérification de s3://{bucket}/{key}: {e}")
             return False
+
+
+def build_s3_key_for_newsletter(client_id: str, date_str: str, file_type: str) -> str:
+    """
+    Construit la clé S3 pour les fichiers newsletter.
+
+    Format : {client_id}/{YYYY}/{MM}/{DD}/newsletter.{ext}
+
+    Args:
+        client_id: Identifiant du client
+        date_str: Date au format YYYY-MM-DD
+        file_type: Type de fichier (md, json, manifest)
+
+    Returns:
+        Clé S3 formatée selon les conventions
+    """
+    year, month, day = date_str.split('-')
+    if file_type == 'manifest':
+        return f"{client_id}/{year}/{month}/{day}/manifest.json"
+    else:
+        return f"{client_id}/{year}/{month}/{day}/newsletter.{file_type}"
+
+
+def load_curated_items_single_date(client_id: str, data_bucket: str, target_date: str) -> List[Dict]:
+    """
+    Charge les items curated pour une date unique (mode latest run).
+    
+    Args:
+        client_id: Identifiant du client
+        data_bucket: Bucket de données
+        target_date: Date cible (YYYY-MM-DD)
+    
+    Returns:
+        Liste des items curated pour cette date uniquement
+    """
+    try:
+        key = build_s3_key_for_curated_items(client_id, target_date)
+        items = read_json_from_s3(data_bucket, key)
+        
+        if isinstance(items, list):
+            logger.info(f"Loaded {len(items)} items from single date {target_date}")
+            return items
+        else:
+            logger.warning(f"Invalid items format for {target_date}")
+            return []
+            
+    except ClientError as e:
+        if e.response['Error']['Code'] == '404':
+            logger.warning(f"No curated items found for {client_id} on {target_date}")
+            return []
+        else:
+            logger.error(f"Error loading curated items for {target_date}: {e}")
+            raise
+
+
+def load_curated_items(client_id: str, data_bucket: str, from_date: str, to_date: str) -> List[Dict]:
+    """
+    Charge les items curated pour une période donnée.
+    
+    Args:
+        client_id: Identifiant du client
+        data_bucket: Bucket de données
+        from_date: Date de début (YYYY-MM-DD)
+        to_date: Date de fin (YYYY-MM-DD)
+    
+    Returns:
+        Liste des items curated trouvés
+    """
+    from datetime import datetime, timedelta
+    
+    all_items = []
+    current_date = datetime.strptime(from_date, '%Y-%m-%d')
+    end_date = datetime.strptime(to_date, '%Y-%m-%d')
+    
+    while current_date <= end_date:
+        date_str = current_date.strftime('%Y-%m-%d')
+        key = build_s3_key_for_curated_items(client_id, date_str)
+        
+        try:
+            items = read_json_from_s3(data_bucket, key)
+            if isinstance(items, list):
+                all_items.extend(items)
+            logger.info(f"Loaded {len(items) if isinstance(items, list) else 0} items from {date_str}")
+        except ClientError as e:
+            if e.response['Error']['Code'] != '404':
+                logger.warning(f"Could not load items for {date_str}: {e}")
+        
+        current_date += timedelta(days=1)
+    
+    logger.info(f"Total curated items loaded: {len(all_items)}")
+    return all_items
+
+
+def save_newsletter(newsletter_data: Dict, client_id: str, target_date: str, newsletters_bucket: str) -> Dict[str, str]:
+    """
+    Sauvegarde la newsletter dans S3.
+    
+    Args:
+        newsletter_data: Données de la newsletter (markdown, json, manifest)
+        client_id: Identifiant du client
+        target_date: Date cible (YYYY-MM-DD)
+        newsletters_bucket: Bucket newsletters
+    
+    Returns:
+        Dict avec les chemins S3 des fichiers sauvegardés
+    """
+    s3_paths = {}
+    
+    # Sauvegarde Markdown
+    md_key = build_s3_key_for_newsletter(client_id, target_date, 'md')
+    write_text_to_s3(newsletters_bucket, md_key, newsletter_data['markdown'], 'text/markdown')
+    s3_paths['markdown'] = f"s3://{newsletters_bucket}/{md_key}"
+    
+    # Sauvegarde JSON
+    json_key = build_s3_key_for_newsletter(client_id, target_date, 'json')
+    write_json_to_s3(newsletters_bucket, json_key, newsletter_data['json'])
+    s3_paths['json'] = f"s3://{newsletters_bucket}/{json_key}"
+    
+    # Sauvegarde Manifest
+    manifest_key = build_s3_key_for_newsletter(client_id, target_date, 'manifest')
+    write_json_to_s3(newsletters_bucket, manifest_key, newsletter_data['manifest'])
+    s3_paths['manifest'] = f"s3://{newsletters_bucket}/{manifest_key}"
+    
+    logger.info(f"Newsletter saved to S3: {len(s3_paths)} files")
+    return s3_paths

@@ -29,7 +29,6 @@ client_profile:
 # ============================================================================
 
 pipeline:
-  newsletter_mode: "latest_run_only"  # Mode cohérent : utilise uniquement le dernier run curated
   default_period_days: 30
   notes: "Fenêtre étendue pour capturer les signaux LAI sur cycle long - Version v4 tech focus"
 
@@ -147,35 +146,6 @@ scoring_config:
 # ============================================================================
 # STRUCTURE DE LA NEWSLETTER
 # ============================================================================
-
-newsletter_selection:
-  # Paramètres de volume
-  max_items_total: 20
-  min_score_threshold: 0  # Score sert uniquement au tri
-  
-  # Événements critiques (toujours conservés)
-  critical_event_types:
-    - "regulatory_approval"
-    - "nda_submission" 
-    - "pivotal_trial_result"
-    - "partnership"
-    - "clinical_update"
-    - "regulatory"
-    - "corporate_move"
-  
-  # Politique de trimming
-  trimming_policy:
-    preserve_critical_events: true
-    min_items_per_section: 1
-    max_section_dominance: 0.6
-    prefer_recent_items: true
-  
-  # Déduplication
-  deduplication:
-    enabled: true
-    similarity_threshold: 0.8
-    prefer_critical_events: true
-    prefer_higher_score: true
 
 newsletter_layout:
   sections:

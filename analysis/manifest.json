@@ -1,0 +1,11 @@
+{
+  "generation_date": "2025-12-22T09:29:35.098639Z",
+  "target_date": "2025-12-22",
+  "status": "completed",
+  "total_items": 5,
+  "files": {
+    "newsletter.md": "Newsletter Markdown content",
+    "newsletter.json": "Newsletter JSON metadata",
+    "manifest.json": "Delivery manifest"
+  }
+}

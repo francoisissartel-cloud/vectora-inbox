@@ -63,9 +63,16 @@ def score_items(
             stats["max_score"] = max(stats["max_score"], final_score)
             
         except Exception as e:
-            logger.error(f"Erreur scoring item {item.get('item_id', 'unknown')}: {str(e)}")
-            # Ajout avec score par défaut
-            item["scoring_results"] = _create_default_scoring_result()
+            item_id = item.get('item_id', 'unknown')
+            logger.error(f"Erreur scoring item {item_id}: {str(e)}")
+            logger.error(f"Données matching_results: {item.get('matching_results', {})}")
+            logger.error(f"Données normalized_content: {item.get('normalized_content', {}).get('lai_relevance_score', 'N/A')}")
+            
+            # Ajout avec score par défaut + diagnostic
+            default_result = _create_default_scoring_result()
+            default_result["error"] = str(e)
+            default_result["error_type"] = type(e).__name__
+            item["scoring_results"] = default_result
             scored_items.append(item)
     
     if stats["min_score"] == float('inf'):
@@ -184,8 +191,16 @@ def _get_domain_relevance_factor(item: Dict[str, Any]) -> float:
     
     for domain_id, relevance in domain_relevance.items():
         score = relevance.get("score", 0)
-        confidence = relevance.get("confidence", 0)
+        confidence_str = relevance.get("confidence", "medium")
         reasons = relevance.get("reasons", [])
+        
+        # CORRECTION: Mapping confidence string → number
+        confidence_mapping = {
+            "high": 0.9,
+            "medium": 0.6,
+            "low": 0.3
+        }
+        confidence = confidence_mapping.get(confidence_str.lower(), 0.5)
         
         relevance_scores.append(score)
         confidence_scores.append(confidence)

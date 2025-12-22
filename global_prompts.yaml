@@ -97,95 +97,64 @@ normalization:
 # =============================================================================
 
 newsletter:
-  # TL;DR Generation - Génération du résumé exécutif
+  # TL;DR Generation pour newsletter LAI
   tldr_generation:
     system_instructions: |
-      You are an expert newsletter editor for biotech/pharma intelligence.
-      Generate concise, executive-level TL;DR summaries for LAI (Long-Acting Injectable) technology newsletters.
-      Focus on key trends, major developments, and strategic implications.
-      
+      Tu es un rédacteur de newsletter spécialisé en veille technologique LAI (Long-Acting Injectables).
+      Génère un TL;DR factuel de 2-3 phrases résumant les signaux clés de la semaine.
+      Style : journalistique, descriptif, orienté "que se passe-t-il cette semaine".
+      INTERDIT : analyse stratégique, recommandations, opinions.
+    
     user_template: |
-      Generate a concise TL;DR (2-3 bullet points) for this week's LAI newsletter based on these items:
-
+      Voici les signaux LAI de la semaine :
       {{items_summary}}
-
-      Focus on:
-      - Major partnerships or deals
-      - Regulatory milestones
-      - Clinical developments
-      - Technology breakthroughs
-
-      Format: Return only the TL;DR text, no additional formatting.
-      Style: Executive, factual, concise.
+      
+      Génère un TL;DR factuel de 2-3 phrases maximum.
       
     bedrock_config:
       max_tokens: 200
       temperature: 0.1
       anthropic_version: "bedrock-2023-05-31"
 
-  # Introduction Generation - Génération de l'introduction
+  # Introduction Generation pour newsletter LAI
   introduction_generation:
     system_instructions: |
-      You are an expert newsletter editor for biotech/pharma intelligence.
-      Generate professional introductions for LAI (Long-Acting Injectable) technology newsletters.
-      Keep it concise, informative, and executive-focused.
-      
+      Tu es un rédacteur de newsletter spécialisé en veille LAI.
+      Génère une introduction de 3-4 phrases présentant l'activité de la semaine.
+      Style : professionnel, factuel, focus sur les événements observés.
+      INTERDIT : prédictions, analyses stratégiques, conseils.
+    
     user_template: |
-      Generate a brief introduction (1-2 sentences) for this week's LAI newsletter.
-
-      Week: {{week_start}} to {{week_end}}
-      Sections covered: {{sections_summary}}
-      Total items: {{total_items}}
-
-      Focus on:
-      - Brief context about the week's coverage
-      - What executives should expect to learn
-
-      Format: Return only the introduction text, no additional formatting.
-      Style: Professional, executive-focused, concise.
+      Newsletter LAI - Semaine du {{week_start}} au {{week_end}}
+      Sections : {{sections_summary}}
+      Signaux traités : {{total_items}}
+      
+      Génère une introduction factuelle de 3-4 phrases.
       
     bedrock_config:
       max_tokens: 300
       temperature: 0.1
       anthropic_version: "bedrock-2023-05-31"
 
-  # Section Summary Generation (optionnel MVP)
-  section_summary:
+  # Phase 2A : Prompt newsletter canonicalisé (migré depuis bedrock_client.py)
+  editorial_generation:
     system_instructions: |
       You are an expert newsletter editor for biotech/pharma intelligence.
-      Generate brief section summaries for LAI newsletter sections.
+      Generate concise, professional content in JSON format.
+      Focus on accuracy and preserve all company names, drug names, and technical terms exactly as provided.
       
     user_template: |
-      Generate a brief summary (1 sentence) for this newsletter section:
+      JSON newsletter for {{client_name}} - {{target_date}}:
 
-      Section: {{section_title}}
-      Items: {{section_items}}
+      {{items_text}}
 
-      Format: Return only the summary text.
-      Style: Descriptive, factual.
+      Output:
+      {{"title":"{{client_name}} – {{target_date}}","intro":"1 sentence","tldr":["point1","point2"],"sections":[{{"section_title":"name","section_intro":"1 sentence","items":[{{"title":"title","rewritten_summary":"2 sentences","url":"#"}}]}}]}}
+
+      Rules: JSON only, concise, preserve names.
       
     bedrock_config:
-      max_tokens: 100
-      temperature: 0.1
-      anthropic_version: "bedrock-2023-05-31"
-
-  # Title Reformulation (optionnel MVP)
-  title_reformulation:
-    system_instructions: |
-      You are an expert newsletter editor for biotech/pharma intelligence.
-      Reformulate news titles to be more engaging while preserving accuracy.
-      
-    user_template: |
-      Reformulate this title to be more engaging:
-
-      Original: {{original_title}}
-      Context: {{item_summary}}
-
-      Format: Return only the reformulated title.
-      Style: Engaging but professional, preserve key information.
-      
-    bedrock_config:
-      max_tokens: 50
+      max_tokens: 4000
       temperature: 0.2
       anthropic_version: "bedrock-2023-05-31"
 

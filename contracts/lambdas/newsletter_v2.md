@@ -8,7 +8,7 @@ La Lambda **vectora-inbox-newsletter** est responsable de l'**assemblage final d
 - Sélection des meilleurs items par section selon les règles de layout
 - Génération de contenu éditorial via Bedrock (introduction, TL;DR, résumés de section)
 - Assemblage de la newsletter finale au format Markdown
-- Stockage de la newsletter dans S3 (`outbox/` layer)
+- Stockage de la newsletter dans S3 (`newsletters/` bucket)
 - Génération de métriques de veille et statistiques
 
 **Ce que cette Lambda NE fait PAS :**
@@ -103,7 +103,7 @@ La Lambda **vectora-inbox-newsletter** est responsable de l'**assemblage final d
 ## 5. Données écrites
 
 ### S3 Newsletter Markdown (principal)
-- **Chemin** : `s3://vectora-inbox-newsletters/{client_id}/{YYYY}/{MM}/{DD}/newsletter.md`
+- **Chemin** : `s3://vectora-inbox-newsletters-dev/{client_id}/{YYYY}/{MM}/{DD}/newsletter.md`
 - **Format** : Markdown structuré
 - **Exemple** :
 ```markdown
@@ -148,7 +148,7 @@ French pharmaceutical company Ipsen has acquired exclusive rights to develop and
 ```
 
 ### S3 Newsletter JSON (métadonnées)
-- **Chemin** : `s3://vectora-inbox-newsletters/{client_id}/{YYYY}/{MM}/{DD}/newsletter.json`
+- **Chemin** : `s3://vectora-inbox-newsletters-dev/{client_id}/{YYYY}/{MM}/{DD}/newsletter.json`
 - **Format** : JSON avec contenu éditorial et métadonnées
 - **Exemple** :
 ```json
@@ -212,7 +212,7 @@ French pharmaceutical company Ipsen has acquired exclusive rights to develop and
 ```
 
 ### S3 Delivery Manifest (tracking)
-- **Chemin** : `s3://vectora-inbox-newsletters/{client_id}/{YYYY}/{MM}/{DD}/manifest.json`
+- **Chemin** : `s3://vectora-inbox-newsletters-dev/{client_id}/{YYYY}/{MM}/{DD}/manifest.json`
 - **Format** : Métadonnées de livraison
 - **Contenu** : Statut de génération, chemins des fichiers, checksums
 
