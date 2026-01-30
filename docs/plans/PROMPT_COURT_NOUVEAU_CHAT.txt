@@ -1,0 +1,37 @@
+# PROMPT COURT - Nouveau Chat
+
+Copier-coller ce texte dans un nouveau chat Amazon Q Developer:
+
+---
+
+Je travaille sur Vectora Inbox (repo: `c:\Users\franc\OneDrive\Bureau\vectora-inbox`, branche: `governance-setup`).
+
+**Tâche**: Exécuter plan de gouvernance pour établir repo local comme source unique de vérité.
+
+**Fichiers à utiliser**:
+- @docs/plans/plan_gouvernance_repo_et_environnements.md (plan complet)
+- @docs/plans/annexes_scripts_gouvernance.md (scripts Python)
+- @docs/plans/SUIVI_EXECUTION_GOUVERNANCE.md (état actuel)
+
+**À faire**: Exécuter phases 0.2 à 6 du plan (6-7h):
+1. Créer structure dossiers (`.build/`, `scripts/`)
+2. Créer fichier `VERSION` avec versions artefacts
+3. Créer scripts build (copier depuis annexes ANNEXES A-D)
+4. Créer scripts deploy (copier depuis annexes)
+5. Mettre à jour `.q-context/vectora-inbox-development-rules.md` (voir ANNEXE E)
+6. Créer documentation workflow
+7. Tester et commit
+
+**Règles**:
+- Exécuter phase par phase avec validation
+- Copier scripts complets depuis annexes (ne pas recréer)
+- Tester après chaque phase
+- Demander confirmation avant actions critiques
+
+**Résultat attendu**: Gouvernance en place, scripts fonctionnels, règles mises à jour, tests OK, commit sur main.
+
+**Commencer par**: Lire `plan_gouvernance_repo_et_environnements.md` puis exécuter PHASE 0.2.
+
+---
+
+Voilà le prompt court. Utiliser le fichier `PROMPT_NOUVEAU_CHAT_GOUVERNANCE.md` pour version détaillée.
