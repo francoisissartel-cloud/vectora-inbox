@@ -81,6 +81,85 @@ vectora-inbox-s1-runtime-dev
 
 ---
 
+## 🚫 RÈGLES GOUVERNANCE (CRITIQUE)
+
+### Source Unique de Vérité
+
+**Principe fondamental**: Repo local = SEULE source de vérité
+
+Toute modification du code, des layers, ou des configurations DOIT:
+1. Être faite dans le repo local
+2. Être commitée dans Git
+3. Passer par les scripts build/deploy
+
+### Interdiction Modification Directe AWS
+
+❌ **INTERDIT**:
+- `aws lambda update-function-code` (manuel)
+- `aws s3 cp fichier.zip s3://...` (manuel)
+- Édition dans console AWS
+- Copie dev→stage sans scripts
+- Création layers sans versioning
+
+✅ **OBLIGATOIRE**:
+- Modifier code dans repo local
+- `python scripts/build/build_all.py`
+- `python scripts/deploy/deploy_env.py --env dev`
+- `python scripts/deploy/promote.py --to stage`
+
+**Exception**: Debugging urgent avec validation post-facto obligatoire.
+
+### Versioning Obligatoire
+
+Chaque artefact a une version explicite dans fichier `VERSION` à la racine.
+
+**Format**: MAJOR.MINOR.PATCH (ex: 1.2.3)
+
+**Règles incrémentation**:
+- MAJOR: Breaking changes
+- MINOR: Nouvelles fonctionnalités
+- PATCH: Corrections bugs
+
+**Exemple**:
+```
+VECTORA_CORE_VERSION=1.2.3
+# Nouvelle fonctionnalité → 1.3.0
+# Correction bug → 1.2.4
+# Breaking change → 2.0.0
+```
+
+### Workflow Standard
+
+**Développement**:
+1. Modifier code dans `src_v2/`
+2. Incrémenter version dans `VERSION`
+3. Build: `python scripts/build/build_all.py`
+4. Deploy dev: `python scripts/deploy/deploy_env.py --env dev`
+5. Test dev: `python scripts/test/test_e2e.py --env dev`
+
+**Promotion**:
+6. Promouvoir: `python scripts/deploy/promote.py --to stage --version X.Y.Z`
+7. Test stage: `python scripts/test/test_e2e.py --env stage`
+
+**Commit**:
+8. `git add .`
+9. `git commit -m "feat: description"`
+10. `git push`
+
+### Scripts de Gouvernance
+
+**Build**:
+- `scripts/build/build_layer_vectora_core.py` - Build layer vectora-core
+- `scripts/build/build_layer_common_deps.py` - Build layer common-deps
+- `scripts/build/build_all.py` - Build tous les artefacts
+
+**Deploy**:
+- `scripts/deploy/deploy_layer.py` - Deploy layer vers env
+- `scripts/deploy/deploy_env.py` - Deploy complet vers env
+- `scripts/deploy/promote.py` - Promouvoir version entre envs
+
+---
+
 ## 🌍 GESTION DES ENVIRONNEMENTS
 
 ### Environnements Disponibles
