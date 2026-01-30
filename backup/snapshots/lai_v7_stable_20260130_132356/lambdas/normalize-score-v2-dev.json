@@ -1,0 +1,65 @@
+{
+    "Configuration": {
+        "FunctionName": "vectora-inbox-normalize-score-v2-dev",
+        "FunctionArn": "arn:aws:lambda:eu-west-3:786469175371:function:vectora-inbox-normalize-score-v2-dev",
+        "Runtime": "python3.11",
+        "Role": "arn:aws:iam::786469175371:role/vectora-inbox-s0-iam-dev-IngestNormalizeRole-aefpODOGz3Lx",
+        "Handler": "handler.lambda_handler",
+        "CodeSize": 1353,
+        "Description": "",
+        "Timeout": 900,
+        "MemorySize": 1024,
+        "LastModified": "2026-01-30T09:20:45.000+0000",
+        "CodeSha256": "eWLHsKBj/uYOPk54AbdkIGUq8i5J0WYaQ0es5iqmO5E=",
+        "Version": "$LATEST",
+        "Environment": {
+            "Variables": {
+                "CONFIG_BUCKET": "vectora-inbox-config-dev",
+                "BEDROCK_REGION": "us-east-1",
+                "DATA_BUCKET": "vectora-inbox-data-dev",
+                "ENV": "dev",
+                "BEDROCK_MODEL_ID": "anthropic.claude-3-sonnet-20240229-v1:0",
+                "LOG_LEVEL": "INFO",
+                "PROJECT_NAME": "vectora-inbox"
+            }
+        },
+        "TracingConfig": {
+            "Mode": "PassThrough"
+        },
+        "RevisionId": "1b4fa2ec-07ed-4a93-91a8-7d162099e5ca",
+        "Layers": [
+            {
+                "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-common-deps-dev:4",
+                "CodeSize": 778249
+            },
+            {
+                "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-vectora-core-approche-b-dev:10",
+                "CodeSize": 260290
+            }
+        ],
+        "State": "Active",
+        "LastUpdateStatus": "Successful",
+        "PackageType": "Zip",
+        "Architectures": [
+            "x86_64"
+        ],
+        "EphemeralStorage": {
+            "Size": 512
+        },
+        "SnapStart": {
+            "ApplyOn": "None",
+            "OptimizationStatus": "Off"
+        },
+        "RuntimeVersionConfig": {
+            "RuntimeVersionArn": "arn:aws:lambda:eu-west-3::runtime:49f733259c7ce7e0deee75ff91c6afe35c7d58b04ed300f32701216263b4590c"
+        },
+        "LoggingConfig": {
+            "LogFormat": "Text",
+            "LogGroup": "/aws/lambda/vectora-inbox-normalize-score-v2-dev"
+        }
+    },
+    "Code": {
+        "RepositoryType": "S3",
+        "Location": "https://awslambda-eu-west-3-tasks.s3.eu-west-3.amazonaws.com/snapshots/786469175371/vectora-inbox-normalize-score-v2-dev-2004cb31-e5a7-4b48-a93f-d0f90cecec3f?versionId=zrOqbM4OJcrZsATpokYOxFnPiT6EJ_Mu&X-Amz-Security-Token=IQoJb3JpZ2luX2VjENL%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCWV1LXdlc3QtMyJGMEQCIDxmLGrjiKYzqFDnHm49P4tYt45hheqADz0IX58xIHN6AiAEfmGT2iNH9etGI0BlW%2Fqq2Mk3QyEfoB%2Bb0Hf0GMUXoCqUAgib%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAQaDDM1OTkwMTI2NzgxMCIMQ1beq1rHI8u9S1n7KugBsLUOAAn71NqjecDVv%2Bk98cq0R3LV8RNisJB%2Bu6HZ2MAb5B2IQKqkcRdX5nMnjtQBOiQ8xfYm5eGJYP4mantvEglNPxZIovvGfWqaU%2FGpWg84B7%2BvG6iZyMZnGpEPBAR7sleg7NVX6ivdbZSZBepUWJygMKXGQqzieXWNTjNUkNxDRbUWgSJH%2FTZnnDG%2FZEqLsYwQTvsD12VZJ7hWjgsjHBkiA1zWY4zRZXC%2BoPWQjt8al8QAoa7iVdH5IH3ALkYUtfOEZ%2BkxCeSepwHVlmTcIovCiD9Zx1G0see7eFX1IxOfpcfIlsRRzTDq8fHLBjqOAX7QQIRgCPxZ3CWfw5Z8WQyz8YQxJiUkjmXoeJA5aFGkoCzA%2Bdnx0fRvlNAmG0KAdFOq6Umg4zNbt3Ya8wCpRvbqWCqtvTdVPSdxebDOMBZQI9rD9ZSJniUBaZFTSRDn%2BbeDIJuVRmf0FRxZMidPfJr5zVsO%2BsgqB%2Blwr%2BUBhZMyOAa4YjgtFTHpewVWUd0%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260130T122428Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Credential=ASIAVHS6JQ5RI5V6RWBY%2F20260130%2Feu-west-3%2Fs3%2Faws4_request&X-Amz-Signature=c3a513c6b8b90930e60a64b17f96370d2b9205e8ae26331812087dae522a7abf"
+    }
+}

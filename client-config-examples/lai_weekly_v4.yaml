@@ -178,41 +178,53 @@ newsletter_selection:
     prefer_higher_score: true
 
 newsletter_layout:
+  distribution_strategy: "specialized_with_fallback"  # Nouveau paramètre
+  
   sections:
-    - id: "top_signals"
-      title: "Top Signals – LAI Ecosystem"
-      source_domains:
-        - "tech_lai_ecosystem"
-      max_items: 5
-      sort_by: "score_desc"
-    
-    - id: "partnerships_deals"
-      title: "Partnerships & Deals"
-      source_domains:
-        - "tech_lai_ecosystem"
-      max_items: 5
-      filter_event_types:
-        - "partnership"
-        - "corporate_move"
-      sort_by: "date_desc"
-    
     - id: "regulatory_updates"
       title: "Regulatory Updates"
       source_domains:
         - "tech_lai_ecosystem"
-      max_items: 5
+      max_items: 6  # Augmenté pour compenser suppression top_signals
       filter_event_types:
         - "regulatory"
       sort_by: "score_desc"
-    
+      priority: 1
+      
+    - id: "partnerships_deals"
+      title: "Partnerships & Deals"
+      source_domains:
+        - "tech_lai_ecosystem"
+      max_items: 4  # Augmenté
+      filter_event_types:
+        - "partnership"
+        - "corporate_move"
+      sort_by: "date_desc"
+      priority: 2
+      
     - id: "clinical_updates"
       title: "Clinical Updates"
       source_domains:
         - "tech_lai_ecosystem"
-      max_items: 8
+      max_items: 5  # Augmenté
       filter_event_types:
         - "clinical_update"
       sort_by: "date_desc"
+      priority: 3
+      
+    # NOUVEAU: Section filet de sécurité
+    - id: "others"
+      title: "Other Signals"
+      source_domains:
+        - "tech_lai_ecosystem"
+      max_items: 8
+      filter_event_types:
+        - "*"  # Accepte tout ce qui n'a pas été distribué
+      sort_by: "score_desc"
+      priority: 999  # Traité en dernier
+      notes: "Filet de sécurité - aucun item perdu"
+    
+    # top_signals SUPPRIMÉ
 
 # ============================================================================
 # CONFIGURATION DE LIVRAISON

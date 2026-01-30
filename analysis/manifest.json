@@ -1,8 +1,8 @@
 {
-  "generation_date": "2025-12-22T09:29:35.098639Z",
-  "target_date": "2025-12-22",
+  "generation_date": "2025-12-23T07:32:23.113770Z",
+  "target_date": "2025-12-23",
   "status": "completed",
-  "total_items": 5,
+  "total_items": 3,
   "files": {
     "newsletter.md": "Newsletter Markdown content",
     "newsletter.json": "Newsletter JSON metadata",

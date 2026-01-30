@@ -15,6 +15,63 @@ from .bedrock_client import BedrockNormalizationClient
 logger = logging.getLogger(__name__)
 
 
+def validate_bedrock_response(bedrock_response: Dict[str, Any], original_content: str) -> Dict[str, Any]:
+    """
+    Validation post-Bedrock pour détecter hallucinations
+    """
+    entities = bedrock_response.get('entities', {})
+    content_lower = original_content.lower()
+    
+    # Validation technologies
+    technologies = entities.get('technologies', [])
+    validated_technologies = []
+    
+    for tech in technologies:
+        if any(keyword.lower() in content_lower 
+              for keyword in get_technology_keywords(tech)):
+            validated_technologies.append(tech)
+        else:
+            logger.warning(f"Possible hallucination: {tech} not found in content")
+    
+    # Validation companies
+    companies = entities.get('companies', [])
+    validated_companies = []
+    
+    for company in companies:
+        # Vérifier si le nom de la société apparaît dans le contenu
+        company_keywords = [company.lower(), company.replace(' ', '').lower()]
+        if any(keyword in content_lower for keyword in company_keywords):
+            validated_companies.append(company)
+        else:
+            logger.warning(f"Possible hallucination: {company} not found in content")
+    
+    # Mettre à jour la réponse avec les entités validées
+    bedrock_response['companies_detected'] = validated_companies
+    bedrock_response['technologies_detected'] = validated_technologies
+    
+    return bedrock_response
+
+
+def get_technology_keywords(tech: str) -> List[str]:
+    """
+    Retourne les mots-clés associés à une technologie pour validation
+    """
+    tech_keywords = {
+        'Extended-Release Injectable': ['extended-release', 'extended release', 'injectable'],
+        'Long-Acting Injectable': ['long-acting', 'long acting', 'injectable', 'lai'],
+        'Depot Injection': ['depot', 'injection'],
+        'Once-Monthly Injection': ['once-monthly', 'monthly', 'injection'],
+        'Microspheres': ['microsphere', 'microspheres'],
+        'PLGA': ['plga', 'poly(lactic-co-glycolic acid)'],
+        'In-Situ Depot': ['in-situ', 'depot'],
+        'Hydrogel': ['hydrogel', 'hydrogels'],
+        'Subcutaneous Injection': ['subcutaneous', 'injection'],
+        'Intramuscular Injection': ['intramuscular', 'injection']
+    }
+    
+    return tech_keywords.get(tech, [tech.lower()])
+
+
 def normalize_items_batch(
     raw_items: List[Dict[str, Any]], 
     canonical_scopes: Dict[str, Any],
@@ -23,11 +80,14 @@ def normalize_items_batch(
     bedrock_region: str,
     max_workers: int = 1,
     watch_domains: List[Dict[str, Any]] = None,
-    matching_config: Dict[str, Any] = None
+    matching_config: Dict[str, Any] = None,
+    s3_io = None,
+    client_config: Dict[str, Any] = None,
+    config_bucket: str = None
 ) -> List[Dict[str, Any]]:
     """
     Normalise une liste d'items via Bedrock avec parallélisation contrôlée.
-    NOUVEAU: Support du matching Bedrock par domaines.
+    NOUVEAU: Support du matching Bedrock par domaines + Approche B.
     
     Args:
         raw_items: Items bruts à normaliser
@@ -36,7 +96,11 @@ def normalize_items_batch(
         bedrock_model: Modèle Bedrock à utiliser
         bedrock_region: Région Bedrock
         max_workers: Nombre maximum de workers parallèles
-        watch_domains: Domaines de veille pour matching Bedrock (NOUVEAU)
+        watch_domains: Domaines de veille pour matching Bedrock
+        matching_config: Configuration matching
+        s3_io: Module s3_io pour Approche B
+        client_config: Configuration client pour Approche B
+        config_bucket: Bucket S3 de configuration
     
     Returns:
         Liste des items normalisés avec matching Bedrock
@@ -65,7 +129,8 @@ def normalize_items_batch(
         # Mode séquentiel pour éviter le throttling
         normalized_items = _normalize_sequential(
             raw_items, examples, bedrock_model, bedrock_region, stats, 
-            canonical_scopes, watch_domains, matching_config, canonical_prompts
+            canonical_scopes, watch_domains, matching_config, canonical_prompts,
+            s3_io, client_config, config_bucket
         )
     else:
         # Mode parallèle contrôlé
@@ -93,14 +158,31 @@ def _normalize_sequential(
     canonical_scopes: Dict[str, Any] = None,
     watch_domains: List[Dict[str, Any]] = None,
     matching_config: Dict[str, Any] = None,
-    canonical_prompts: Dict[str, Any] = None
+    canonical_prompts: Dict[str, Any] = None,
+    s3_io = None,
+    client_config: Dict[str, Any] = None,
+    config_bucket: str = None
 ) -> List[Dict[str, Any]]:
     """Normalisation séquentielle pour éviter le throttling.
-    NOUVEAU: Support du matching Bedrock par domaines.
+    NOUVEAU: Support du matching Bedrock par domaines + Approche B.
     """
     
-    # Initialisation du client Bedrock
-    bedrock_client = BedrockNormalizationClient(bedrock_model, bedrock_region)
+    # VALIDATION: Paramètres requis pour Approche B
+    if not s3_io:
+        raise ValueError("s3_io est requis pour Approche B")
+    if not client_config:
+        raise ValueError("client_config est requis pour Approche B")
+    if not canonical_scopes:
+        raise ValueError("canonical_scopes est requis pour Approche B")
+    if not config_bucket:
+        raise ValueError("config_bucket est requis pour Approche B")
+    
+    logger.info("✅ Paramètres Approche B validés: s3_io, client_config, canonical_scopes, config_bucket")
+    
+    # Initialisation du client Bedrock avec support Approche B
+    bedrock_client = BedrockNormalizationClient(
+        bedrock_model, bedrock_region, s3_io, client_config, canonical_scopes, config_bucket
+    )
     
     normalized_items = []
     
@@ -109,8 +191,14 @@ def _normalize_sequential(
             # Construction du texte à analyser
             item_text = _build_item_text(item)
             
-            # Normalisation via Bedrock
-            normalization_result = bedrock_client.normalize_item(item_text, examples)
+            # Normalisation via Bedrock avec prompts canonical
+            normalization_result = bedrock_client.normalize_item(
+                item_text, examples, canonical_prompts=canonical_prompts,
+                item_source_key=item.get('source_key')
+            )
+            
+            # NOUVEAU: Validation post-processing pour éviter les hallucinations
+            normalization_result = validate_bedrock_response(normalization_result, item_text)
             
             # NOUVEAU: Matching Bedrock systématique (CORRIGÉ)
             from .bedrock_matcher import match_item_to_domains_bedrock
@@ -331,13 +419,26 @@ def _enrich_item_with_normalization(
     bedrock_matching_result: Dict[str, Any] = None
 ) -> Dict[str, Any]:
     """Enrichit un item original avec les résultats de normalisation LAI.
-    NOUVEAU: Support des résultats de matching Bedrock.
+    NOUVEAU: Support des résultats de matching Bedrock + extraction date.
     """
     # Copie de l'item original
     enriched_item = original_item.copy()
     
     # Ajout du timestamp de normalisation
     enriched_item["normalized_at"] = datetime.now().isoformat() + "Z"
+    
+    # Extraction et validation de la date Bedrock
+    extracted_date = normalization_result.get('extracted_date')
+    date_confidence = normalization_result.get('date_confidence', 0.0)
+    
+    if extracted_date:
+        try:
+            datetime.strptime(extracted_date, '%Y-%m-%d')
+            logger.info(f"Date extracted by Bedrock: {extracted_date} (confidence: {date_confidence})")
+        except ValueError:
+            logger.warning(f"Invalid date format from Bedrock: {extracted_date}")
+            extracted_date = None
+            date_confidence = 0.0
     
     # Construction de la section normalized_content avec champs LAI complets
     enriched_item["normalized_content"] = {
@@ -357,6 +458,9 @@ def _enrich_item_with_normalization(
         "lai_relevance_score": normalization_result.get("lai_relevance_score", 0),
         "anti_lai_detected": normalization_result.get("anti_lai_detected", False),
         "pure_player_context": normalization_result.get("pure_player_context", False),
+        # NOUVEAU: Date extraite par Bedrock
+        "extracted_date": extracted_date,
+        "date_confidence": date_confidence,
         # Ajout métadonnées de normalisation
         "normalization_metadata": {
             "bedrock_model": "claude-3-5-sonnet",  # Sera passé dynamiquement

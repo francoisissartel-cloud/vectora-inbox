@@ -1,4 +1,62 @@
-.vscode/
-*.log
+# ========================================
+# FICHIERS ÉPHÉMÈRES (JAMAIS COMMITER)
+# ========================================
+
+# Temporaires de test
+.tmp/
+event_*.json
+payload*.json
+response_*.json
+items_*.json
+ingested_items_*.json
+newsletter_*.json
+logs_*.txt
+bedrock_logs.json
+simple_payload.json
+$null
+
+# Artefacts de build
+.build/
+*.zip
+layer_build/
+layer_fix/
+output/lambda_packages/
+*_arn.txt
+
+# Layers temporaires
+python/
+layer_vectora_core_approche_b/
+
+# Configs temporaires (sauf exemples)
+lai_weekly_v*.yaml
+!client-config-examples/lai_weekly_v*.yaml
+global_prompts.yaml
+!canonical/prompts/global_prompts.yaml
+source_catalog.yaml
+!canonical/sources/source_catalog.yaml
+
+# Scripts one-shot
+execute_*.py
+phase6_*.py
+phase7_*.py
+
+# ========================================
+# DOSSIERS SYSTÈME
+# ========================================
 __pycache__/
-.env
+*.pyc
+.pytest_cache/
+.vscode/
+.idea/
+
+# ========================================
+# DONNÉES SENSIBLES
+# ========================================
+*.env
+.aws/credentials
+secrets/
+
+# ========================================
+# ARCHIVE
+# ========================================
+archive/

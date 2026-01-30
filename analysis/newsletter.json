@@ -1,34 +1,23 @@
 {
-  "newsletter_id": "lai_weekly_v4_2025_12_22",
-  "client_id": "lai_weekly_v4",
-  "generated_at": "2025-12-22T09:29:35.098626Z",
+  "newsletter_id": "lai_weekly_v5_2025_12_23",
+  "client_id": "lai_weekly_v5",
+  "generated_at": "2025-12-23T07:32:23.113756Z",
   "period": {
-    "start_date": "2025-12-22",
-    "end_date": "2025-12-22"
+    "start_date": "2025-12-23",
+    "end_date": "2025-12-23"
   },
   "metrics": {
-    "total_items": 5,
+    "total_items": 3,
     "items_by_section": {
-      "top_signals": 5,
-      "partnerships_deals": 0,
-      "regulatory_updates": 0,
-      "clinical_updates": 0
+      "regulatory_updates": 2,
+      "partnerships_deals": 1,
+      "clinical_updates": 0,
+      "others": 0
     },
     "unique_sources": 2,
     "key_entities": {
-      "companies": [
-        "Teva",
-        "Nanexa",
-        "Medincell",
-        "Teva Pharmaceuticals",
-        "Moderna"
-      ],
-      "technologies": [
-        "Long-Acting Injectable",
-        "Once-Monthly",
-        "Extended-Release Injectable",
-        "PharmaShell®"
-      ],
+      "companies": [],
+      "technologies": [],
       "trademarks": [
         "PharmaShell®",
         "UZEDY®"
@@ -37,94 +26,53 @@
   },
   "sections": [
     {
-      "section_id": "top_signals",
-      "title": "Top Signals – LAI Ecosystem",
+      "section_id": "regulatory_updates",
+      "title": "Regulatory Updates",
       "items": [
         {
-          "item_id": "press_corporate__medincell_20251222_1781cc",
-          "title": "The FDA has approved an expanded indication for UZEDY® (risperidone) Extended-Release Injectable Sus",
-          "score": 11.7,
-          "published_at": "2025-12-22",
-          "source_url": "https://www.medincell.com/wp-content/uploads/2025/10/MDC_UZEDY-BDI_EN_10102025_vf.pdf",
-          "entities": {
-            "companies": [],
-            "technologies": [
-              "Extended-Release Injectable"
-            ],
-            "trademarks": [
-              "UZEDY®"
-            ]
-          }
-        },
-        {
-          "item_id": "press_corporate__medincell_20251222_516562",
+          "item_id": "press_corporate__medincell_20251223_516562",
           "title": "Teva Pharmaceuticals has submitted a New Drug Application to the U.S. FDA for Olanzapine Extended-Re",
-          "score": 11.2,
-          "published_at": "2025-12-22",
+          "score": 10.2,
+          "published_at": "2025-12-23",
           "source_url": "https://www.medincell.com/wp-content/uploads/2025/12/MDC_Olanzapine-NDA-filing_09122025_EN_vf-2.pdf",
           "entities": {
-            "companies": [
-              "Medincell",
-              "Teva Pharmaceuticals"
-            ],
-            "technologies": [
-              "Extended-Release Injectable",
-              "Once-Monthly"
-            ],
+            "companies": [],
+            "technologies": [],
             "trademarks": []
           }
         },
         {
-          "item_id": "press_corporate__nanexa_20251222_6f822c",
-          "title": "Nanexa and Moderna have entered into a license and option agreement for the development of up to fiv",
-          "score": 11.0,
-          "published_at": "2025-12-22",
-          "source_url": "https://nanexa.com/mfn_news/nanexa-and-moderna-enter-into-license-and-option-agreement-for-the-development-of-pharmashell-based-products/",
-          "entities": {
-            "companies": [
-              "Nanexa",
-              "Moderna"
-            ],
-            "technologies": [
-              "PharmaShell®"
-            ],
-            "trademarks": [
-              "PharmaShell®"
-            ]
-          }
-        },
-        {
-          "item_id": "press_corporate__medincell_20251222_c147c4",
-          "title": "Teva's UZEDY® continues strong growth, and the company is preparing for a US NDA submission for its ",
-          "score": 9.0,
-          "published_at": "2025-12-22",
+          "item_id": "press_corporate__medincell_20251223_c147c4",
+          "title": "Teva is preparing to submit a New Drug Application (NDA) to the US FDA for its long-acting injectabl",
+          "score": 10.2,
+          "published_at": "2025-12-23",
           "source_url": "https://www.medincell.com/wp-content/uploads/2025/11/PR_MDC_Teva-earnings-Q3_2025_05112025_vf.pdf",
           "entities": {
-            "companies": [
-              "Teva"
-            ],
-            "technologies": [
-              "Long-Acting Injectable"
-            ],
+            "companies": [],
+            "technologies": [],
             "trademarks": [
               "UZEDY®"
             ]
           }
-        },
+        }
+      ]
+    },
+    {
+      "section_id": "partnerships_deals",
+      "title": "Partnerships & Deals",
+      "items": [
         {
-          "item_id": "press_corporate__medincell_20251222_150759",
-          "title": "Medincell, a biotech company, has been awarded a new grant to develop long-acting injectable formula",
-          "score": 5.8,
-          "published_at": "2025-12-22",
-          "source_url": "https://www.medincell.com/wp-content/uploads/2025/11/MDC_Gates-Malaria_PR_24112025_vf.pdf",
+          "item_id": "press_corporate__nanexa_20251223_6f822c",
+          "title": "Nanexa and Moderna have entered into a license and option agreement for the development of up to fiv",
+          "score": 9.8,
+          "published_at": "2025-12-23",
+          "source_url": "https://nanexa.com/mfn_news/nanexa-and-moderna-enter-into-license-and-option-agreement-for-the-development-of-pharmashell-based-products/",
           "entities": {
-            "companies": [
-              "Medincell"
-            ],
-            "technologies": [
-              "Long-Acting Injectable"
-            ],
-            "trademarks": []
+            "companies": [],
+            "technologies": [],
+            "trademarks": [
+              "PharmaShell®"
+            ]
           }
         }
       ]

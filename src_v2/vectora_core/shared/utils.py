@@ -73,7 +73,7 @@ def compute_date_range(period_days: int, from_date: Optional[str] = None, to_dat
 
 def apply_temporal_filter(items: List[Dict[str, Any]], cutoff_date_str: str, temporal_mode: str = "strict") -> List[Dict[str, Any]]:
     """
-    Filtre les items selon leur date de publication.
+    Filtre les items selon leur date de publication avec logging détaillé.
     
     Args:
         items: Liste d'items avec champ 'published_at'
@@ -88,18 +88,25 @@ def apply_temporal_filter(items: List[Dict[str, Any]], cutoff_date_str: str, tem
     
     cutoff_date = datetime.strptime(cutoff_date_str, '%Y-%m-%d')
     filtered_items = []
-    items_without_date = 0
-    items_kept_without_date = 0
+    
+    stats = {
+        'total': len(items),
+        'kept': 0,
+        'filtered_old': 0,
+        'no_date': 0,
+        'fallback_dates': 0,
+        'invalid_date': 0
+    }
     
     for item in items:
         published_at = item.get('published_at')
         
         if not published_at:
-            items_without_date += 1
+            stats['no_date'] += 1
             if temporal_mode == "flexible":
                 # Mode flexible : conserver les items sans date (probablement récents)
                 filtered_items.append(item)
-                items_kept_without_date += 1
+                stats['kept'] += 1
                 logger.debug(f"Item sans date conservé (mode flexible) : {item.get('title', '')[:50]}...")
             else:
                 logger.debug(f"Item sans date ignoré (mode strict) : {item.get('title', '')[:50]}...")
@@ -109,38 +116,54 @@ def apply_temporal_filter(items: List[Dict[str, Any]], cutoff_date_str: str, tem
             # Parser la date de l'item (format YYYY-MM-DD)
             item_date = datetime.strptime(published_at, '%Y-%m-%d')
             
+            # Détecter les dates fallback (même jour que l'ingestion)
+            ingested_at = item.get('ingested_at', '')
+            if ingested_at and published_at == ingested_at[:10]:
+                stats['fallback_dates'] += 1
+                logger.warning(f"Item avec date fallback ({published_at}): {item.get('title', '')[:50]}...")
+            
             # Conserver si date >= cutoff_date
             if item_date >= cutoff_date:
                 filtered_items.append(item)
+                stats['kept'] += 1
             else:
+                stats['filtered_old'] += 1
+                logger.debug(f"Item trop ancien ({published_at}, cutoff: {cutoff_date_str}): {item.get('title', '')[:50]}...")
+                
                 if temporal_mode == "flexible":
                     # Mode flexible : conserver aussi les items légèrement anciens si récemment récupérés
-                    ingested_at = item.get('ingested_at', '')
                     if ingested_at and _is_recently_ingested(ingested_at, hours=24):
                         filtered_items.append(item)
+                        stats['kept'] += 1
+                        stats['filtered_old'] -= 1
                         logger.debug(f"Item ancien conservé (récemment ingéré) : {item.get('title', '')[:50]}...")
-                    else:
-                        logger.debug(f"Item trop ancien ignoré ({published_at}) : {item.get('title', '')[:50]}...")
-                else:
-                    logger.debug(f"Item trop ancien ignoré ({published_at}) : {item.get('title', '')[:50]}...")
         
         except ValueError as e:
-            items_without_date += 1
+            stats['invalid_date'] += 1
             if temporal_mode == "flexible":
                 # Mode flexible : conserver les items avec dates invalides (probablement récents)
                 filtered_items.append(item)
-                items_kept_without_date += 1
+                stats['kept'] += 1
                 logger.debug(f"Item avec date invalide conservé (mode flexible) : {item.get('title', '')[:50]}... - {e}")
             else:
                 logger.debug(f"Item avec date invalide ignoré (mode strict) : {item.get('title', '')[:50]}... - {e}")
     
-    if items_without_date > 0:
-        if temporal_mode == "flexible":
-            logger.info(f"Items sans date valide : {items_without_date} (conservés: {items_kept_without_date})")
-        else:
-            logger.info(f"Items sans date valide ignorés : {items_without_date}")
+    # Logging détaillé des statistiques
+    logger.info(f"Filtre temporel ({temporal_mode}, cutoff: {cutoff_date_str}): "
+                f"{stats['kept']}/{stats['total']} items conservés")
     
-    logger.info(f"Filtre temporel ({temporal_mode}) : {len(filtered_items)}/{len(items)} items conservés")
+    if stats['filtered_old'] > 0:
+        logger.info(f"  - {stats['filtered_old']} items trop anciens filtrés")
+    
+    if stats['fallback_dates'] > 0:
+        logger.warning(f"  - {stats['fallback_dates']} items avec dates fallback (extraction échouée)")
+    
+    if stats['no_date'] > 0:
+        logger.info(f"  - {stats['no_date']} items sans date")
+    
+    if stats['invalid_date'] > 0:
+        logger.info(f"  - {stats['invalid_date']} items avec date invalide")
+    
     return filtered_items
 
 

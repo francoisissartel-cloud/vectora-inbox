@@ -1,0 +1,14 @@
+{
+    "LayerVersions": [
+        {
+            "LayerVersionArn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-vectora-core-dev:42",
+            "Version": 42,
+            "CreatedDate": "2026-01-29T16:43:40.750+0000",
+            "CompatibleRuntimes": [
+                "python3.11",
+                "python3.12"
+            ]
+        }
+    ],
+    "NextToken": "eyJNYXJrZXIiOiBudWxsLCAiYm90b190cnVuY2F0ZV9hbW91bnQiOiAxfQ=="
+}

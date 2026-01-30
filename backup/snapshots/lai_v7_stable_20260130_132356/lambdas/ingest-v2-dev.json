@@ -1,0 +1,71 @@
+{
+    "Configuration": {
+        "FunctionName": "vectora-inbox-ingest-v2-dev",
+        "FunctionArn": "arn:aws:lambda:eu-west-3:786469175371:function:vectora-inbox-ingest-v2-dev",
+        "Runtime": "python3.12",
+        "Role": "arn:aws:iam::786469175371:role/vectora-inbox-s0-iam-dev-IngestNormalizeRole-aefpODOGz3Lx",
+        "Handler": "handler.lambda_handler",
+        "CodeSize": 116463,
+        "Description": "",
+        "Timeout": 900,
+        "MemorySize": 512,
+        "LastModified": "2026-01-29T09:36:21.000+0000",
+        "CodeSha256": "7kTtmISXivpsZejughKkGBsMSTDi5ahAXR7V7s66ptw=",
+        "Version": "$LATEST",
+        "Environment": {
+            "Variables": {
+                "CONFIG_BUCKET": "vectora-inbox-config-dev",
+                "DATA_BUCKET": "vectora-inbox-data-dev",
+                "ENV": "dev",
+                "LOG_LEVEL": "INFO",
+                "PROJECT_NAME": "vectora-inbox"
+            }
+        },
+        "TracingConfig": {
+            "Mode": "PassThrough"
+        },
+        "RevisionId": "36bf1865-d0d9-4787-a2ba-f1636f613ddf",
+        "Layers": [
+            {
+                "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-common-deps-dev:4",
+                "CodeSize": 778249
+            },
+            {
+                "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-vectora-core-dev:38",
+                "CodeSize": 258751
+            }
+        ],
+        "State": "Active",
+        "LastUpdateStatus": "Successful",
+        "PackageType": "Zip",
+        "Architectures": [
+            "x86_64"
+        ],
+        "EphemeralStorage": {
+            "Size": 512
+        },
+        "SnapStart": {
+            "ApplyOn": "None",
+            "OptimizationStatus": "Off"
+        },
+        "RuntimeVersionConfig": {
+            "RuntimeVersionArn": "arn:aws:lambda:eu-west-3::runtime:994aac32248ecf4d69d9f5e9a3a57aba3ccea19d94170a61d5ecf978927e1b0f"
+        },
+        "LoggingConfig": {
+            "LogFormat": "Text",
+            "LogGroup": "/aws/lambda/vectora-inbox-ingest-v2-dev"
+        }
+    },
+    "Code": {
+        "RepositoryType": "S3",
+        "Location": "https://awslambda-eu-west-3-tasks.s3.eu-west-3.amazonaws.com/snapshots/786469175371/vectora-inbox-ingest-v2-dev-42984d5d-7ded-44ba-bba9-dbe7d666f8ce?versionId=fDqi7XEXjEUKTNLqDbajYnjetEIeMHvy&X-Amz-Security-Token=IQoJb3JpZ2luX2VjENL%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCWV1LXdlc3QtMyJIMEYCIQCWphpOrnZNa6am7K7yEQMT0pcDnEBggWywhx4%2BeyiTwQIhANN7uGf9RJ5aGDpr%2BN91k5B%2F8%2FSndBT%2FchcbsrN8SJFQKpQCCJv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQBBoMMzU5OTAxMjY3ODEwIgzijJmkD5Zc45kfmykq6AF02%2FKGX2pSYGCjRDPtRQPXlwWEAfGW4hWYI9YxrphDLlfdaUudex%2FIak3dVzlksslF2uB695Gu6vpRnEjCN66W3XwwSrGh%2Bd8e%2BUSLL%2B%2B0ERS4ZQepu1psxcIt3rqMb3Lv6PtP0Iw%2BhSAjR1nj6u59KqlchQGWECQMfg50ko%2FBgS3FbBJaDrM%2FxUSGAjROjsC9GNM0wcYS3AGsGJRwn%2FOkYuobuyvrA9mOiH2uMmmtnWaXwarHSlbGEsX8cjyuBf2KDJv0QAnodzsre7c%2B4lnb0XgyR2F%2Fi2r7cSij%2BX41Sm9nmA33hKjaMNDw8csGOowBvkO%2BW6%2FZMa0Qc2Wa%2FvEYCHEY94CIzZzvh5HML8pg2LVzvqvhA7125%2Bv9InGYuOgwC6mwiC7yYARyVVC5EIZbIqU0A%2Bdlr18j8w3C2XCDaKiK4O2zwahSiwOIT2X%2BXJ6XgIf6kD6nQ3Vcwh%2F2EQYCkiiNZXr%2BftSkL2CyHpXDZDJv552q9nmqW7oDQtU%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260130T122422Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Credential=ASIAVHS6JQ5RE5JDLTGT%2F20260130%2Feu-west-3%2Fs3%2Faws4_request&X-Amz-Signature=324a1cf39f7045c88098480ed18061062174de431523168d823377011c3ad420"
+    },
+    "Tags": {
+        "Project": "vectora-inbox",
+        "aws:cloudformation:stack-name": "vectora-inbox-s1-ingest-v2-dev",
+        "aws:cloudformation:stack-id": "arn:aws:cloudformation:eu-west-3:786469175371:stack/vectora-inbox-s1-ingest-v2-dev/85997a70-d9ed-11f0-a291-0af0bc804073",
+        "FunctionType": "ingest-v2",
+        "aws:cloudformation:logical-id": "IngestV2Function",
+        "Env": "dev"
+    }
+}

@@ -31,10 +31,11 @@ src_v2/lambdas/
 - Architecture modulaire avec vectora_core
 - Handlers minimalistes délégant à vectora_core
 
-**❌ NE JAMAIS utiliser `/src` (pollué) :**
+**❌ NE JAMAIS utiliser `archive/_src/` (architecture legacy archivée) :**
 - Contient 180MB+ de dépendances tierces
 - Violations massives des règles d'hygiène
 - Stubs et contournements non conformes
+- **STATUT** : Archivé pour référence historique uniquement
 
 ---
 
@@ -77,6 +78,144 @@ vectora-inbox-s0-core-dev
 vectora-inbox-s0-iam-dev
 vectora-inbox-s1-runtime-dev
 ```
+
+---
+
+## 🌍 GESTION DES ENVIRONNEMENTS
+
+### Environnements Disponibles
+
+**dev**: Développement et expérimentation  
+**stage**: Pré-production et validation  
+**prod**: Production clients réels
+
+### Convention Nommage
+
+**Ressources AWS**: `{nom}-{env}`  
+**Config client**: `client_id` stable + `version` sémantique
+
+### RÈGLE CRITIQUE POUR Q DEVELOPER
+
+**Q Developer DOIT REFUSER tout déploiement AWS si l'environnement cible n'est PAS explicitement spécifié.**
+
+❌ **INTERDIT**:
+```bash
+aws cloudformation deploy --stack-name vectora-inbox-s0-core
+aws s3 mb s3://vectora-inbox-config
+aws lambda create-function --function-name vectora-inbox-ingest-v2
+```
+
+✅ **OBLIGATOIRE**:
+```bash
+aws cloudformation deploy --stack-name vectora-inbox-s0-core-dev --parameter-overrides Env=dev
+aws s3 mb s3://vectora-inbox-config-dev
+aws lambda create-function --function-name vectora-inbox-ingest-v2-dev
+```
+
+**Si environnement non clair, Q Developer DOIT**:
+1. Refuser d'exécuter la commande
+2. Demander à l'utilisateur: "Sur quel environnement souhaitez-vous déployer? (dev/stage/prod)"
+3. Attendre confirmation explicite avant de procéder
+
+**Exemples questions Q Developer**:
+- "Je vois que vous voulez déployer une Lambda. Sur quel environnement? (dev/stage/prod)"
+- "Cette commande CloudFormation ne spécifie pas d'environnement. Confirmez-vous dev, stage ou prod?"
+- "Avant de créer ce bucket S3, précisez l'environnement cible."
+
+### Configuration AWS par Environnement
+
+**Environnement DEV (Actuel)**:
+```
+Lambdas: vectora-inbox-{fonction}-v2-dev
+Buckets: vectora-inbox-{type}-dev
+Stacks: vectora-inbox-{stack}-dev
+```
+
+**Environnement STAGE (À créer)**:
+```
+Lambdas: vectora-inbox-{fonction}-v2-stage
+Buckets: vectora-inbox-{type}-stage
+Stacks: vectora-inbox-{stack}-stage
+```
+
+**Environnement PROD (Futur)**:
+```
+Lambdas: vectora-inbox-{fonction}-v2-prod
+Buckets: vectora-inbox-{type}-prod
+Stacks: vectora-inbox-{stack}-prod
+```
+
+---
+
+## 📂 ORGANISATION FICHIERS ÉPHÉMÈRES (OBLIGATOIRE)
+
+### Règle d'Or : Racine Propre
+
+**✅ TOUJOURS stocker les fichiers temporaires dans `.tmp/` :**
+```
+.tmp/
+├── events/          # Events de test Lambda
+├── responses/       # Réponses Lambda (JSON)
+├── items/           # Items temporaires (ingested, curated)
+├── logs/            # Logs de debug locaux
+└── README.md        # "Safe to delete anytime"
+```
+
+**✅ TOUJOURS stocker les artefacts de build dans `.build/` :**
+```
+.build/
+├── layers/          # ZIPs de layers (vectora-core-*.zip)
+├── packages/        # Packages Lambda
+└── README.md        # "Regenerable artifacts"
+```
+
+**❌ NE JAMAIS laisser à la racine :**
+- Events de test (`event_*.json`, `payload*.json`)
+- Réponses Lambda (`response_*.json`)
+- Items temporaires (`items_*.json`)
+- Logs de debug (`logs_*.txt`)
+- ZIPs de layers (`*.zip`)
+- Scripts one-shot (`execute_*.py`)
+- Configs temporaires (sauf dans `canonical/` ou `client-config-examples/`)
+
+### Convention de Nommage Fichiers Temporaires
+
+**Format obligatoire :**
+```
+.tmp/events/lai_weekly_v7_test_YYYYMMDD.json
+.tmp/responses/normalize_v7_YYYYMMDD_HHMM.json
+.tmp/items/curated_lai_v5_YYYYMMDD.json
+.tmp/logs/debug_bedrock_YYYYMMDD.txt
+```
+
+**Avantages :**
+- ✅ Tri chronologique automatique
+- ✅ Identification rapide de l'origine
+- ✅ Nettoyage facile (> 7 jours)
+
+### Scripts de Nettoyage
+
+**Créer `scripts/maintenance/cleanup_tmp.py` :**
+```python
+# Supprime fichiers .tmp/ > 7 jours
+# Usage: python scripts/maintenance/cleanup_tmp.py
+```
+
+**Créer `scripts/maintenance/cleanup_build.sh` :**
+```bash
+# Supprime tous les artefacts .build/
+# Usage: ./scripts/maintenance/cleanup_build.sh
+```
+
+### Checklist Avant Commit
+
+- [ ] Aucun fichier `event_*.json` à la racine
+- [ ] Aucun fichier `response_*.json` à la racine
+- [ ] Aucun fichier `items_*.json` à la racine
+- [ ] Aucun fichier `logs_*.txt` à la racine
+- [ ] Aucun fichier `*.zip` à la racine
+- [ ] Tous les temporaires dans `.tmp/`
+- [ ] Tous les builds dans `.build/`
 
 ---
 
@@ -205,12 +344,32 @@ from . import s3_io  # Import relatif pour modules shared
 - Structure obligatoire : `python/` à la racine du zip
 - Dépendances standard : PyYAML, requests, feedparser, beautifulsoup4
 
+### Organisation Dossiers Layers
+
+**Structure obligatoire :**
+```
+layer_management/
+├── active/              # Layers actuellement déployées
+│   ├── vectora-core/    # Source vectora_core
+│   └── common-deps/     # Source dépendances
+├── archive/             # Anciennes versions
+└── tools/               # Scripts de build
+    ├── build_vectora_core.sh
+    └── build_common_deps.sh
+```
+
+**❌ NE JAMAIS avoir à la racine :**
+- `layer_build/` → Utiliser `.build/layers/`
+- `layer_fix/` → Utiliser `layer_management/active/`
+- `layer_vectora_core_approche_b/` → Utiliser `layer_management/active/vectora-core/`
+- `python/` → Utiliser `.build/layers/python/`
+
 ### Règles de Construction
 
 ```bash
 # Construction layer common-deps
-mkdir layer_build && cd layer_build
-mkdir python
+mkdir .build/layers/python
+cd .build/layers
 
 # Installation (mode pur Python)
 pip install --target python --no-binary PyYAML \
@@ -220,7 +379,21 @@ pip install --target python --no-binary PyYAML \
   beautifulsoup4==4.14.3
 
 # Création du zip
-zip -r ../vectora-common-deps.zip python/
+zip -r vectora-common-deps.zip python/
+```
+
+**Workflow de build :**
+```bash
+# 1. Build depuis layer_management/active/
+cd layer_management/tools
+./build_vectora_core.sh
+
+# 2. Output dans .build/layers/
+ls .build/layers/vectora-core-v12.zip
+
+# 3. Upload vers S3
+aws s3 cp .build/layers/vectora-core-v12.zip \
+  s3://vectora-inbox-lambda-code-dev/layers/
 ```
 
 **Validation obligatoire :**
@@ -381,6 +554,67 @@ aws cloudformation describe-stacks \
 - **SSM Parameter Store** : Stockage obligatoire pour clés API
 - **Pas de hardcoding** : Aucune clé dans le code
 - **Rotation** : Planifiée pour clés critiques
+
+---
+
+## 📸 SNAPSHOTS ET ROLLBACK
+
+### Obligatoire Avant
+
+- Déploiement Lambda stage/prod
+- Modification canonical
+- Promotion stage → prod
+
+### Commandes
+
+```bash
+# Créer snapshot
+python scripts/maintenance/create_snapshot.py --env dev --name "pre_deploy"
+
+# Rollback
+python scripts/maintenance/rollback_snapshot.py --snapshot "pre_deploy_YYYYMMDD"
+```
+
+### Snapshots Disponibles
+
+Consulter `docs/snapshots/` pour la liste des snapshots disponibles.
+
+---
+
+## 🔧 RÈGLES D'EXÉCUTION SCRIPTS
+
+### Output Scripts de Test
+
+**✅ TOUJOURS rediriger les outputs vers `.tmp/` :**
+```bash
+# Scripts d'invocation
+python scripts/invoke/invoke_normalize_score_v2.py \
+  --client-id lai_weekly_v7 \
+  --output .tmp/responses/normalize_v7_$(date +%Y%m%d_%H%M).json
+
+# Scripts d'analyse
+python scripts/analysis/analyze_items.py \
+  --input .tmp/items/curated_lai_v7.json \
+  --output .tmp/logs/analysis_$(date +%Y%m%d).txt
+```
+
+**❌ NE JAMAIS écrire directement à la racine :**
+```bash
+# ❌ INTERDIT
+python scripts/invoke/invoke_normalize_score_v2.py > response.json
+
+# ✅ CORRECT
+python scripts/invoke/invoke_normalize_score_v2.py > .tmp/responses/response_$(date +%Y%m%d).json
+```
+
+### Scripts One-Shot
+
+**Règle :** Scripts one-shot doivent être dans `scripts/maintenance/` ou supprimés après usage.
+
+**Exemples à déplacer :**
+- `execute_bedrock_only_fix.py` → `scripts/maintenance/` ou supprimer
+- `phase6_detailed_comparison.py` → `scripts/analysis/` ou supprimer
+- `phase7_metrics_analysis.py` → `scripts/analysis/` ou supprimer
 
 ---
 

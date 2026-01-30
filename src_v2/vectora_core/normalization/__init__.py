@@ -100,8 +100,11 @@ def run_normalize_score_for_client(
             bedrock_model,
             env_vars["BEDROCK_REGION"],
             max_workers=max_workers,
-            watch_domains=watch_domains,  # NOUVEAU: Passage des watch_domains
-            matching_config=matching_config  # NOUVEAU: Passage de la config matching
+            watch_domains=watch_domains,
+            matching_config=matching_config,
+            s3_io=s3_io,
+            client_config=client_config,
+            config_bucket=env_vars["CONFIG_BUCKET"]
         )
         
         if not normalized_items:

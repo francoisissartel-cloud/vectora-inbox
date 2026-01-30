@@ -17,6 +17,8 @@ from typing import Dict, Any, Optional
 import boto3
 from botocore.exceptions import ClientError
 
+from ..shared import prompt_resolver
+
 logger = logging.getLogger(__name__)
 
 
@@ -112,37 +114,98 @@ _call_bedrock_with_retry = call_bedrock_with_retry
 class BedrockNormalizationClient:
     """Client Bedrock robuste pour la normalisation des items."""
     
-    def __init__(self, model_id: str, region: str = "us-east-1"):
+    def __init__(self, model_id: str, region: str = "us-east-1", s3_io=None, 
+                 client_config: Optional[Dict] = None, canonical_scopes: Optional[Dict] = None,
+                 config_bucket: str = None):
         """
-        Initialise le client Bedrock avec la même logique que V1.
+        Initialise le client Bedrock avec Approche B OBLIGATOIRE.
         
         Args:
             model_id: Identifiant du modèle Bedrock
             region: Région AWS pour Bedrock
+            s3_io: Module s3_io pour charger prompts depuis S3 (REQUIS)
+            client_config: Configuration client avec bedrock_config (REQUIS)
+            canonical_scopes: Scopes canonical pour résolution références (REQUIS)
+            config_bucket: Bucket S3 de configuration (REQUIS)
+        
+        Raises:
+            ValueError: Si un paramètre requis est manquant
         """
         self.region = region
         self.model_id = model_id
+        self.s3_io = s3_io
+        self.client_config = client_config
+        self.canonical_scopes = canonical_scopes
+        self.config_bucket = config_bucket
+        self.prompt_template = None
         
+        # APPROCHE B OBLIGATOIRE - Validation stricte
+        if not client_config:
+            raise ValueError("client_config est requis pour Approche B")
+        if not s3_io:
+            raise ValueError("s3_io est requis pour Approche B")
+        if not canonical_scopes:
+            raise ValueError("canonical_scopes est requis pour Approche B")
+        if not config_bucket:
+            raise ValueError("config_bucket est requis pour Approche B")
+        
+        # Charger prompt template
+        bedrock_config = client_config.get('bedrock_config', {})
+        normalization_prompt = bedrock_config.get('normalization_prompt')
+        
+        if not normalization_prompt:
+            raise ValueError(
+                "client_config doit contenir 'bedrock_config.normalization_prompt' "
+                "(ex: 'lai' pour charger lai_prompt.yaml)"
+            )
+        
+        self.prompt_template = prompt_resolver.load_prompt_template(
+            'normalization', normalization_prompt, s3_io, config_bucket
+        )
+        
+        if not self.prompt_template:
+            raise ValueError(
+                f"Échec chargement prompt '{normalization_prompt}'. "
+                f"Vérifier que canonical/prompts/normalization/{normalization_prompt}_prompt.yaml "
+                f"existe sur S3."
+            )
+        
+        logger.info(f"✅ Approche B activée: prompt {normalization_prompt} chargé")
         logger.info(f"Client Bedrock initialisé : modèle={self.model_id}, région={region}")
     
     def normalize_item(self, item_text: str, canonical_examples: Dict, 
-                      domain_contexts: Optional[list] = None) -> Dict[str, Any]:
+                      domain_contexts: Optional[list] = None,
+                      canonical_prompts: Dict[str, Any] = None,
+                      item_source_key: str = None) -> Dict[str, Any]:
         """
-        Normalise un item via Bedrock avec retry automatique (UTILISE LA LOGIQUE V1).
+        Normalise un item via Bedrock avec Approche B OBLIGATOIRE.
         
         Args:
             item_text: Texte de l'item à normaliser
-            canonical_examples: Exemples depuis canonical scopes
-            domain_contexts: Contextes de domaines (optionnel)
+            canonical_examples: Exemples depuis canonical scopes (non utilisé en Approche B)
+            domain_contexts: Contextes de domaines (non utilisé en Approche B)
+            canonical_prompts: Prompts canonical (non utilisé en Approche B)
+            item_source_key: Source key pour détection pure player
         
         Returns:
             Résultat de normalisation avec champs LAI
         """
         try:
-            # Construction du prompt avec la logique V1
-            prompt = self._build_normalization_prompt_v1(item_text, canonical_examples, domain_contexts)
+            # APPROCHE B OBLIGATOIRE - Validation
+            if not self.prompt_template or not self.canonical_scopes:
+                error_msg = (
+                    "Approche B non activée. Vérifier que client_config contient "
+                    "'bedrock_config.normalization_prompt' et que s3_io et canonical_scopes "
+                    "sont passés au constructeur."
+                )
+                logger.error(error_msg)
+                raise ValueError(error_msg)
             
-            # Appel Bedrock avec retry (COPIE EXACTE DE V1)
+            # Construire prompt via Approche B
+            prompt = self._build_prompt_approche_b(item_text, item_source_key)
+            logger.info("Utilisation Approche B (prompt pré-construit)")
+            
+            # Appel Bedrock avec retry
             request_body = {
                 "anthropic_version": "bedrock-2023-05-31",
                 "max_tokens": 1000,
@@ -163,97 +226,11 @@ class BedrockNormalizationClient:
             logger.error(f"Erreur finale lors de l'appel à Bedrock: {e}")
             return self._create_fallback_result()
     
-    def _build_normalization_prompt_v1(
-        self,
-        item_text: str,
-        canonical_examples: Dict[str, str],
-        domain_contexts: list = None
-    ) -> str:
-        """
-        COPIE EXACTE DE LA FONCTION V1 qui fonctionne.
-        
-        Args:
-            item_text: Texte à analyser
-            canonical_examples: Exemples d'entités depuis les scopes
-            domain_contexts: Contextes de domaine (optionnel)
-        
-        Returns:
-            Prompt formaté pour Bedrock
-        """
-        # Limiter les exemples pour ne pas surcharger le prompt
-        companies_ex = canonical_examples.get('companies_examples', 'MedinCell, Camurus, DelSiTech')[:500]
-        molecules_ex = canonical_examples.get('molecules_examples', 'buprenorphine, naloxone, olanzapine')[:300]
-        technologies_ex = canonical_examples.get('technologies_examples', 'long-acting injectable, depot injection, microspheres')[:400]
-        
-        # Section LAI spécialisée simplifiée (Correction P0-1)
-        lai_section = "\n\nLAI TECHNOLOGY FOCUS:\n"
-        lai_section += "Detect these LAI (Long-Acting Injectable) technologies:\n"
-        lai_section += "- Extended-Release Injectable\n"
-        lai_section += "- Long-Acting Injectable\n"
-        lai_section += "- Depot Injection\n"
-        lai_section += "- Once-Monthly Injection\n"
-        lai_section += "- Microspheres\n"
-        lai_section += "- PLGA\n"
-        lai_section += "- In-Situ Depot\n"
-        lai_section += "- Hydrogel\n"
-        lai_section += "- Subcutaneous Injection\n"
-        lai_section += "- Intramuscular Injection\n"
-        lai_section += "\nTRADEMARKS to detect:\n"
-        lai_section += "- UZEDY, PharmaShell, SiliaShell, BEPO, Aristada, Abilify Maintena\n"
-        lai_section += "\nNormalize: 'extended-release injectable' → 'Extended-Release Injectable'\n"
-        
-        # Tâches simplifiées avec focus LAI (Correction P0-1)
-        tasks = [
-            "1. Generate a concise summary (2-3 sentences) explaining the key information",
-            "2. Classify the event type among: clinical_update, partnership, regulatory, scientific_paper, corporate_move, financial_results, safety_signal, manufacturing_supply, other",
-            "3. Extract ALL pharmaceutical/biotech company names mentioned",
-            "4. Extract ALL drug/molecule names mentioned (including brand names, generic names)",
-            "5. Extract ALL technology keywords mentioned - FOCUS on LAI technologies listed above",
-            "6. Extract ALL trademark names mentioned (especially those with ® or ™ symbols)",
-            "7. Extract ALL therapeutic indications mentioned",
-            "8. Evaluate LAI relevance (0-10 score): How relevant is this content to Long-Acting Injectable technologies?",
-            "9. Detect anti-LAI signals: Does the content mention oral routes (tablets, capsules, pills)?",
-            "10. Assess pure player context: Is this about a LAI-focused company without explicit LAI mentions?"
-        ]
-        
-        # Format JSON de réponse avec champs LAI (Correction P0-1)
-        json_example = {
-            "summary": "...",
-            "event_type": "...",
-            "companies_detected": ["...", "..."],
-            "molecules_detected": ["...", "..."],
-            "technologies_detected": ["...", "..."],
-            "trademarks_detected": ["...", "..."],
-            "indications_detected": ["...", "..."],
-            "lai_relevance_score": 0,
-            "anti_lai_detected": False,
-            "pure_player_context": False
-        }
-        
-        prompt = f"""Analyze the following biotech/pharma news item and extract structured information.
 
-TEXT TO ANALYZE:
-{item_text}
+    
 
-EXAMPLES OF ENTITIES TO DETECT:
-- Companies: {companies_ex}
-- Molecules/Drugs: {molecules_ex}
-- Technologies: {technologies_ex}{lai_section}
+    
 
-TASK:
-{chr(10).join(tasks)}
-
-IMPORTANT:
-- Extract the EXACT company names as they appear in the text (e.g., "WuXi AppTec", "Agios", "Pfizer")
-- Include ALL companies mentioned, not just those in the examples
-- Be comprehensive in entity extraction
-
-RESPONSE FORMAT (JSON only):
-{json.dumps(json_example, indent=2)}
-
-Respond with ONLY the JSON, no additional text."""
-        
-        return prompt
     
     def _call_bedrock_with_retry_v1(
         self,
@@ -287,6 +264,8 @@ Respond with ONLY the JSON, no additional text."""
             result.setdefault('anti_lai_detected', False)
             result.setdefault('pure_player_context', False)
             result.setdefault('domain_relevance', [])
+            result.setdefault('extracted_date', None)
+            result.setdefault('date_confidence', 0.0)
             
             return result
         
@@ -304,8 +283,65 @@ Respond with ONLY the JSON, no additional text."""
                 'lai_relevance_score': 0,
                 'anti_lai_detected': False,
                 'pure_player_context': False,
-                'domain_relevance': []
+                'domain_relevance': [],
+                'extracted_date': None,
+                'date_confidence': 0.0
             }
+    
+    def _build_prompt_approche_b(self, item_text: str, item_source_key: str = None) -> str:
+        """
+        Construit le prompt via Approche B (prompts pré-construits avec références).
+        
+        Args:
+            item_text: Texte à analyser
+            item_source_key: Source key pour contexte pure player
+        
+        Returns:
+            Prompt final résolu
+        """
+        # Variables à substituer
+        variables = {'item_text': item_text}
+        
+        # Ajouter contexte pure player si détecté (logique inline)
+        if item_source_key:
+            # Mapping inline
+            company_mapping = {
+                'medincell': 'MedinCell',
+                'camurus': 'Camurus',
+                'delsitech': 'DelSiTech',
+                'nanexa': 'Nanexa',
+                'peptron': 'Peptron'
+            }
+            
+            source_lower = item_source_key.lower()
+            company_name = None
+            for key, name in company_mapping.items():
+                if key in source_lower:
+                    company_name = name
+                    break
+            
+            # Pure players LAI
+            pure_players = ['MedinCell', 'Camurus', 'DelSiTech', 'Nanexa', 'Peptron']
+            
+            if company_name and company_name in pure_players:
+                pure_player_context = (
+                    f"\n\nIMPORTANT CONTEXT: This content is from {company_name}, "
+                    f"a LAI pure-player company specializing in long-acting injectable "
+                    f"technologies. Even if LAI technologies are not explicitly mentioned, "
+                    f"consider the LAI context and relevance given the company's "
+                    f"specialization in this field."
+                )
+                variables['pure_player_context'] = pure_player_context
+        
+        # Construire le prompt avec résolution des références
+        prompt = prompt_resolver.build_prompt(
+            self.prompt_template,
+            self.canonical_scopes,
+            variables
+        )
+        
+        logger.info("Prompt construit via Approche B")
+        return prompt
     
     def _create_fallback_result(self) -> Dict[str, Any]:
         """Crée un résultat de fallback en cas d'échec total."""
@@ -319,5 +355,7 @@ Respond with ONLY the JSON, no additional text."""
             "indications_detected": [],
             "lai_relevance_score": 0,
             "anti_lai_detected": False,
-            "pure_player_context": False
+            "pure_player_context": False,
+            "extracted_date": None,
+            "date_confidence": 0.0
         }

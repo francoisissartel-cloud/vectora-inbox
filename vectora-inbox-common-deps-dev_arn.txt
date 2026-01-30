@@ -1,1 +1,0 @@
-arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-common-deps-dev:4

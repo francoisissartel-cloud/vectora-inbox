@@ -68,17 +68,28 @@ def run_newsletter_for_client(client_id, env_vars, target_date=None, force_regen
         selected_items = selection_result['sections']
         selection_metadata = selection_result['metadata']
         
-        # 5. Génération contenu éditorial via Bedrock
+        # 5. Chargement canonical scopes pour Approche B
+        canonical_scopes = config_loader.load_canonical_scopes(env_vars["CONFIG_BUCKET"])
+        
+        # 6. Calcul des dates de période pour newsletter
+        from datetime import datetime, timedelta
+        target_dt = datetime.strptime(target_date, "%Y-%m-%d")
+        week_end_dt = target_dt
+        week_start_dt = target_dt - timedelta(days=6)
+        week_start = week_start_dt.strftime("%b %d, %Y")
+        week_end = week_end_dt.strftime("%b %d, %Y")
+        
+        # 7. Génération contenu éditorial via Bedrock (Approche B)
         editorial_content = bedrock_editor.generate_editorial_content(
-            selected_items, client_config, env_vars
+            selected_items, client_config, env_vars, s3_io, canonical_scopes, week_start, week_end
         )
         
-        # 6. Assemblage newsletter finale
+        # 8. Assemblage newsletter finale
         newsletter_result = assembler.assemble_newsletter(
             selected_items, editorial_content, client_config, target_date
         )
         
-        # 7. Sauvegarde S3
+        # 9. Sauvegarde S3
         s3_paths = s3_io.save_newsletter(
             newsletter_result, client_id, target_date, env_vars["NEWSLETTERS_BUCKET"]
         )

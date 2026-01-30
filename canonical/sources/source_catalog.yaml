@@ -17,6 +17,18 @@ sources:
     default_language: "en"
     tags: ["LAI", "corporate"]
     ingestion_profile: "corporate_pure_player_broad"
+    date_extraction_patterns:
+      - r"Published:\s*(\d{4}-\d{2}-\d{2})"
+      - r"Date:\s*(\w+ \d{1,2}, \d{4})"
+      # NOUVEAUX patterns pour contenu corporate
+      - r"(\w+ \d{1,2}, \d{4})\w*"              # "December 9, 2025December"
+      - r"(\d{1,2} \w+ \d{4})"                  # "10 December, 2025"
+      - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
+      - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
+      # Patterns avec contexte
+      - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
+    content_enrichment: "summary_enhanced"
+    max_content_length: 1000
     notes: "MedinCell (France) - Société LAI leader. Ingestion HTML sur page news."
 
   - source_key: "press_corporate__camurus"
@@ -30,6 +42,16 @@ sources:
     default_language: "en"
     tags: ["LAI", "corporate"]
     ingestion_profile: "corporate_pure_player_broad"
+    date_extraction_patterns:
+      - r"(\d{1,2} \w+ \d{4})"
+      - r"(\w+ \d{1,2}, \d{4})"
+      # NOUVEAUX patterns enrichis
+      - r"(\w+ \d{1,2}, \d{4})\w*"              # "December 9, 2025December"
+      - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
+      - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
+      - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
+    content_enrichment: "summary_enhanced"
+    max_content_length: 1000
     notes: "Camurus (Suède) - Société LAI leader. Ingestion HTML sur page press releases."
 
   - source_key: "press_corporate__delsitech"
@@ -43,6 +65,14 @@ sources:
     default_language: "en"
     tags: ["LAI", "corporate"]
     ingestion_profile: "corporate_pure_player_broad"
+    date_extraction_patterns:
+      - r"(\w+ \d{1,2}, \d{4})\w*"              # "December 9, 2025December"
+      - r"(\d{1,2} \w+ \d{4})"                  # "10 December, 2025"
+      - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
+      - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
+      - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
+    content_enrichment: "summary_enhanced"
+    max_content_length: 1000
     notes: "DelSiTech (Finlande) - Technologie LAI. Ingestion HTML sur page news."
 
   - source_key: "press_corporate__nanexa"
@@ -56,6 +86,14 @@ sources:
     default_language: "en"
     tags: ["LAI", "corporate"]
     ingestion_profile: "corporate_pure_player_broad"
+    date_extraction_patterns:
+      - r"(\w+ \d{1,2}, \d{4})\w*"              # "December 9, 2025December"
+      - r"(\d{1,2} \w+ \d{4})"                  # "10 December, 2025"
+      - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
+      - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
+      - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
+    content_enrichment: "summary_enhanced"
+    max_content_length: 1000
     notes: "Nanexa (Suède) - Technologie LAI. Ingestion HTML sur page press."
 
   - source_key: "press_corporate__peptron"
@@ -69,6 +107,14 @@ sources:
     default_language: "en"
     tags: ["LAI", "corporate"]
     ingestion_profile: "corporate_pure_player_broad"
+    date_extraction_patterns:
+      - r"(\w+ \d{1,2}, \d{4})\w*"              # "December 9, 2025December"
+      - r"(\d{1,2} \w+ \d{4})"                  # "10 December, 2025"
+      - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
+      - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
+      - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
+    content_enrichment: "summary_enhanced"
+    max_content_length: 1000
     notes: "Peptron (Corée du Sud) - Société LAI. Ingestion HTML sur page news."
 
   # ========================================================================
@@ -85,6 +131,8 @@ sources:
     default_language: "en"
     tags: ["pharma-biotech"]
     ingestion_profile: "press_technology_focused"
+    content_enrichment: "full_article"
+    max_content_length: 2000
     notes: "FierceBiotech - Presse biotech. Flux RSS disponible."
 
   - source_key: "press_sector__fiercepharma"

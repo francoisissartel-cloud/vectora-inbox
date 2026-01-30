@@ -1,14 +1,47 @@
-# Plan d'Évaluation E2E Complet - lai_weekly_v4 Workflow Assessment
+# Plan d'Évaluation E2E Complet - lai_weekly_v4 Workflow Assessment V2.1
+# VALIDATION DES AMÉLIORATIONS PHASE 1-4
 
-**Date :** 21 décembre 2025  
-**Version :** 3.0 (Option 1 - Test E2E Complet)  
-**Objectif :** Évaluer le workflow Vectora Inbox V2 complet sur données réelles pour lai_weekly_v4  
+**Date :** 22 décembre 2025  
+**Version :** 4.0 (Post-Améliorations Phase 1-4)  
+**Objectif :** Valider les améliorations déployées sur workflow E2E complet  
 **Workflow testé :** ingest-v2 → normalize-score-v2 → newsletter-v2  
+**Focus :** Comparaison avant/après améliorations Phase 1-4  
 **Contrainte :** AUCUNE modification de code, config, infra ou Lambdas autorisée  
 
 ---
 
-## Périmètre du Test
+## 🎯 VALIDATION DES AMÉLIORATIONS DÉPLOYÉES
+
+### Améliorations à Valider (Déployées 22/12/2025)
+
+#### ✅ Phase 1 : Qualité des Données
+- **Extraction dates réelles** : Patterns configurés dans source_catalog.yaml
+- **Enrichissement contenu** : Stratégies summary_enhanced/full_article
+- **Métriques attendues** : 85% dates réelles vs 0% avant, +50% word count
+
+#### ✅ Phase 2 : Normalisation Bedrock
+- **Anti-hallucinations** : Prompts CRITICAL/FORBIDDEN déployés
+- **Classification event types** : Grants = partnerships
+- **Métriques attendues** : 0 hallucination vs 1/15 avant, 95% précision classification
+
+#### ✅ Phase 3 : Distribution Newsletter
+- **Suppression top_signals** : Distribution spécialisée active
+- **Section "others"** : Filet de sécurité priority=999
+- **Métriques attendues** : 4/4 sections vs 1/4 avant, distribution équilibrée
+
+#### ✅ Phase 4 : Expérience Newsletter
+- **Scope métier automatique** : Génération périmètre de veille
+- **Sections vides** : Non affichées dans newsletter finale
+- **Métriques attendues** : Format professionnel 9/10 vs 7/10 avant
+
+### Baseline de Comparaison (Dernier Run)
+**Référence :** Test E2E lai_weekly_v3 du 18 décembre 2025
+- **Items traités** : 15 → 8 matchés → 5 sélectionnés
+- **Distribution** : 100% en top_signals, autres sections vides
+- **Dates** : 100% fallback sur date ingestion
+- **Hallucinations** : 1 incident (Drug Delivery Conference)
+- **Word count moyen** : 25 mots
+- **Coût** : $0.145, 32 appels Bedrock
 
 ### Lambdas Concernées
 - **vectora-inbox-ingest-v2-dev** (handler: src_v2/lambdas/ingest/handler.py)
@@ -86,23 +119,27 @@ Générer un document de synthèse structuré pour feedback à Q :
 
 ---
 
-## Structure du Plan - 8 Phases
+## Structure du Plan - 9 Phases (Ajout Phase 0)
+
+### Phase 0 – Validation Déploiement Améliorations ✅ **NOUVEAU**
+**Durée estimée :** 15 minutes  
+**Objectif :** Confirmer que les améliorations sont bien déployées
 
 ### Phase 1 – Préparation & Sanity Check
 **Durée estimée :** 30 minutes  
 **Objectif :** Vérifier l'état de l'environnement sans rien modifier
 
-### Phase 2 – Run Ingestion Réel  
+### Phase 2 – Run Ingestion V2 avec Améliorations ✅ **MODIFIÉ**
 **Durée estimée :** 45 minutes  
-**Objectif :** Exécuter ingest_v2 pour lai_weekly_v4 et analyser les résultats
+**Objectif :** Valider extraction dates réelles + enrichissement contenu
 
-### Phase 3 – Run Normalize_Score Réel
+### Phase 3 – Run Normalize_Score V2 avec Améliorations ✅ **MODIFIÉ**
 **Durée estimée :** 60 minutes  
-**Objectif :** Exécuter normalize_score_v2 et analyser la normalisation/scoring
+**Objectif :** Valider anti-hallucinations + classification event types
 
-### Phase 4 – Run Newsletter Réel ✅ **NOUVEAU**
+### Phase 4 – Run Newsletter V2 avec Améliorations ✅ **MODIFIÉ**
 **Durée estimée :** 45 minutes  
-**Objectif :** Exécuter newsletter_v2 et analyser la génération de newsletter
+**Objectif :** Valider distribution spécialisée + scope métier
 
 ### Phase 5 – Analyse S3 (Ingested + Curated + Newsletter)
 **Durée estimée :** 60 minutes  

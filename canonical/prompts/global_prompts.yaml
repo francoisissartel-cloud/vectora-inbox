@@ -26,6 +26,24 @@ normalization:
     user_template: |
       Analyze the following biotech/pharma news item and extract structured information.
 
+      CRITICAL: Only extract entities that are EXPLICITLY mentioned in the text.
+      
+      FORBIDDEN: Do not invent, infer, or hallucinate entities not present.
+      
+      For each entity category:
+      - Companies: Only if company name appears in text
+      - Technologies: Only if technology term is explicitly written
+      - Trademarks: Only if trademark symbol or explicit brand name
+      
+      If text is too short or generic (< 20 words), respond with minimal entities.
+      
+      Example BAD response for "Partnership conference 2025":
+      ❌ technologies: ["Extended-Release Injectable", "Long-Acting Injectable"]
+      
+      Example GOOD response for "Partnership conference 2025":
+      ✅ technologies: []
+      ✅ note: "Generic conference announcement, no specific technologies mentioned"
+
       TEXT TO ANALYZE:
       {{item_text}}
 
@@ -35,22 +53,46 @@ normalization:
       - Technologies: {{technologies_examples}}
 
       LAI TECHNOLOGY FOCUS:
-      Detect these LAI (Long-Acting Injectable) technologies:
+      Detect these LAI (Long-Acting Injectable) technologies ONLY if explicitly mentioned:
       - Extended-Release Injectable
       - Long-Acting Injectable
       - Depot Injection
       - Once-Monthly Injection
+      - Three-Month Injectable      # NOUVEAU
+      - Quarterly Injection         # NOUVEAU
+      - Long-Acting Formulation     # NOUVEAU
+      - Injectable Formulation      # NOUVEAU
       - Microspheres
       - PLGA
       - In-Situ Depot
       - Hydrogel
       - Subcutaneous Injection
       - Intramuscular Injection
+      - Monthly Injectable          # NOUVEAU
+      - Extended Protection         # NOUVEAU pour malaria
 
       TRADEMARKS to detect:
       - UZEDY, PharmaShell, SiliaShell, BEPO, Aristada, Abilify Maintena
 
       Normalize: 'extended-release injectable' → 'Extended-Release Injectable'
+
+      EVENT TYPE CLASSIFICATION RULES:
+      
+      PARTNERSHIP:
+      - Grants and funding (Gates Foundation grant = partnership)
+      - License agreements
+      - Joint ventures
+      - Strategic alliances
+      
+      FINANCIAL_RESULTS:
+      - Quarterly earnings
+      - Revenue reports
+      - Financial guidance
+      
+      REGULATORY:
+      - FDA approvals
+      - NDA submissions
+      - Clinical trial authorizations
 
       TASK:
       1. Generate a concise summary (2-3 sentences) explaining the key information

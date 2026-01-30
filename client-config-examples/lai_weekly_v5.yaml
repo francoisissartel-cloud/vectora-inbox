@@ -1,0 +1,291 @@
+# ============================================================================
+# LAI INTELLIGENCE WEEKLY - CLIENT CONFIG v5 (TECH FOCUS)
+# ============================================================================
+#
+# Configuration client v5 pour "LAI Intelligence Weekly" - Version tech focus
+# Newsletter hebdomadaire centrée sur les technologies LAI (Long-Acting Injectables)
+#
+# OBJECTIF v5 : Copie exacte de v4 pour tests des corrections déployées
+# Base : lai_weekly_v4.yaml avec changement d'ID uniquement
+#
+# ============================================================================
+
+# ============================================================================
+# PROFIL CLIENT
+# ============================================================================
+
+client_profile:
+  name: "LAI Intelligence Weekly v5 (Tech Focus)"
+  client_id: "lai_weekly_v5"
+  active: true
+  language: "en"
+  frequency: "weekly"
+  tone: "executive"
+  voice: "concise"
+  target_audience: "executives"
+
+# ============================================================================
+# CONFIGURATION DU PIPELINE
+# ============================================================================
+
+pipeline:
+  newsletter_mode: "latest_run_only"  # Mode cohérent : utilise uniquement le dernier run curated
+  default_period_days: 30
+  notes: "Fenêtre étendue pour capturer les signaux LAI sur cycle long - Version v5 test corrections"
+
+# ============================================================================
+# CONFIGURATION BEDROCK (APPROCHE B - PROMPTS PRÉ-CONSTRUITS)
+# ============================================================================
+
+bedrock_config:
+  normalization_prompt: "lai"  # Référence à canonical/prompts/normalization/lai_prompt.yaml
+  matching_prompt: "lai"       # Référence à canonical/prompts/matching/lai_prompt.yaml
+
+# ============================================================================
+# DOMAINES DE VEILLE
+# ============================================================================
+
+watch_domains:
+  # ---------------------------------------------------------------------------
+  # DOMAINE UNIQUE : Écosystème LAI complet (technology focus)
+  # ---------------------------------------------------------------------------
+  - id: "tech_lai_ecosystem"
+    type: "technology"
+    priority: "high"
+    
+    # Scopes LAI (références canonical/scopes/)
+    technology_scope: "lai_keywords"
+    company_scope: "lai_companies_global"
+    molecule_scope: "lai_molecules_global"
+    trademark_scope: "lai_trademarks_global"
+    
+    # Profils
+    technology_profile: "technology_complex"
+    matching_profile: "balanced"
+    
+    enabled: true
+    notes: "Domaine unique v5 - focus exclusif sur l'écosystème technologique LAI"
+
+# ============================================================================
+# CONFIGURATION DES SOURCES
+# ============================================================================
+
+source_config:
+  source_bouquets_enabled:
+    - "lai_corporate_mvp"
+    - "lai_press_mvp"
+  
+  sources_extra_enabled: []
+  bouquet_ingestion_overrides: {}
+
+# ============================================================================
+# CONFIGURATION DU MATCHING V2
+# ============================================================================
+
+matching_config:
+  min_domain_score: 0.25
+  min_confidence_level: "low"
+  
+  domain_type_thresholds:
+    technology: 0.30
+    
+  enable_fallback_mode: true
+  fallback_min_score: 0.15
+  fallback_max_domains: 1
+  fallback_company_scopes:
+    - "lai_companies_global"
+    
+  max_domains_per_item: 1
+  require_high_confidence_for_multiple: false
+  
+  enable_diagnostic_mode: true
+  store_rejection_reasons: true
+  
+  default_matching_mode: "balanced"
+  
+  domain_type_overrides:
+    technology:
+      require_entity_signals: true
+      min_technology_signals: 2
+  
+  trademark_privileges:
+    enabled: true
+    auto_match_threshold: 0.8
+    boost_factor: 2.5
+    ingestion_priority: true
+    matching_priority: true
+
+# ============================================================================
+# CONFIGURATION DU SCORING
+# ============================================================================
+
+scoring_config:
+  event_type_weight_overrides:
+    partnership: 8
+    clinical_update: 6
+    regulatory: 7
+    scientific_publication: 4
+  
+  client_specific_bonuses:
+    pure_player_companies:
+      scope: "lai_companies_mvp_core"
+      bonus: 5.0
+      description: "Pure players LAI - signal très fort"
+    
+    trademark_mentions:
+      scope: "lai_trademarks_global"
+      bonus: 4.0
+      description: "Mentions de marques LAI - signal privilégié"
+    
+    key_molecules:
+      scope: "lai_molecules_global"
+      bonus: 2.5
+      description: "Molécules LAI d'intérêt"
+    
+    hybrid_companies:
+      scope: "lai_companies_hybrid"
+      bonus: 1.5
+      description: "Big pharma avec activité LAI"
+  
+  selection_overrides:
+    min_score: 12
+    min_items_per_section: 1
+    max_items_total: 15
+
+# ============================================================================
+# STRUCTURE DE LA NEWSLETTER
+# ============================================================================
+
+newsletter_selection:
+  # Paramètres de volume
+  max_items_total: 20
+  min_score_threshold: 0  # Score sert uniquement au tri
+  
+  # Événements critiques (toujours conservés)
+  critical_event_types:
+    - "regulatory_approval"
+    - "nda_submission" 
+    - "pivotal_trial_result"
+    - "partnership"
+    - "clinical_update"
+    - "regulatory"
+    - "corporate_move"
+  
+  # Politique de trimming
+  trimming_policy:
+    preserve_critical_events: true
+    min_items_per_section: 1
+    max_section_dominance: 0.6
+    prefer_recent_items: true
+  
+  # Déduplication
+  deduplication:
+    enabled: true
+    similarity_threshold: 0.8
+    prefer_critical_events: true
+    prefer_higher_score: true
+
+newsletter_layout:
+  distribution_strategy: "specialized_with_fallback"  # Nouveau paramètre
+  
+  sections:
+    - id: "regulatory_updates"
+      title: "Regulatory Updates"
+      source_domains:
+        - "tech_lai_ecosystem"
+      max_items: 6  # Augmenté pour compenser suppression top_signals
+      filter_event_types:
+        - "regulatory"
+      sort_by: "score_desc"
+      priority: 1
+      
+    - id: "partnerships_deals"
+      title: "Partnerships & Deals"
+      source_domains:
+        - "tech_lai_ecosystem"
+      max_items: 4  # Augmenté
+      filter_event_types:
+        - "partnership"
+        - "corporate_move"
+      sort_by: "date_desc"
+      priority: 2
+      
+    - id: "clinical_updates"
+      title: "Clinical Updates"
+      source_domains:
+        - "tech_lai_ecosystem"
+      max_items: 5  # Augmenté
+      filter_event_types:
+        - "clinical_update"
+      sort_by: "date_desc"
+      priority: 3
+      
+    # NOUVEAU: Section filet de sécurité
+    - id: "others"
+      title: "Other Signals"
+      source_domains:
+        - "tech_lai_ecosystem"
+      max_items: 8
+      filter_event_types:
+        - "*"  # Accepte tout ce qui n'a pas été distribué
+      sort_by: "score_desc"
+      priority: 999  # Traité en dernier
+      notes: "Filet de sécurité - aucun item perdu"
+    
+    # top_signals SUPPRIMÉ
+
+# ============================================================================
+# CONFIGURATION DE LIVRAISON
+# ============================================================================
+
+newsletter_delivery:
+  format: "markdown"
+  include_tldr: true
+  include_intro: true
+  include_metrics: true
+  delivery_method: "s3"
+  notification_email: "lai-weekly-v5@vectora.com"
+  
+  metrics_config:
+    include_source_breakdown: true
+    include_domain_breakdown: true
+    include_trend_analysis: false
+
+# ============================================================================
+# MÉTADONNÉES
+# ============================================================================
+
+metadata:
+  template_version: "5.0.0"
+  created_date: "2025-12-22"
+  last_modified: "2025-12-22"
+  created_by: "LAI Weekly v5 Test Corrections Creation"
+  
+  min_runtime_version: "2.0.0"
+  canonical_version: "1.0.0"
+  
+  vertical: "LAI"
+  target_market: "Long-Acting Injectables"
+  coverage_scope: "Global"
+  
+  creation_notes: |
+    Création lai_weekly_v5.yaml à partir de lai_weekly_v4.yaml :
+    
+    OBJECTIF v5 :
+    🎯 Copie exacte de v4 pour tester les corrections déployées
+    🎯 Validation des améliorations Phase 1-3 sur nouveau client
+    🎯 Test E2E complet avec monitoring Phase 5
+    
+    MODIFICATIONS v4 → v5 :
+    ✅ client_id: "lai_weekly_v4" → "lai_weekly_v5"
+    ✅ client_profile.name: "v4 (Tech Focus)" → "v5 (Tech Focus)"
+    ✅ notification_email: "lai-weekly-v5@vectora.com"
+    ✅ template_version: "4.0.0" → "5.0.0"
+    ✅ created_date: "2025-12-22"
+    ✅ created_by: "LAI Weekly v5 Test Corrections Creation"
+    
+    PRÊT POUR TEST E2E AVEC CORRECTIONS DÉPLOYÉES
+
+# ============================================================================
+# FIN DE CONFIGURATION
+# ============================================================================

@@ -8,6 +8,114 @@ import json
 
 logger = logging.getLogger(__name__)
 
+def generate_newsletter_scope(client_config: Dict[str, Any], items_metadata: Dict[str, Any]) -> str:
+    """
+    Génération automatique du scope métier
+    """
+    sources_summary = analyze_sources_used(items_metadata)
+    temporal_window = get_temporal_window(client_config)
+    
+    scope_text = f"""
+## Périmètre de cette newsletter
+
+**Sources surveillées :**
+- Veille corporate LAI : {sources_summary['corporate_count']} sociétés
+- Presse sectorielle biotech : {sources_summary['press_count']} sources
+- Période analysée : {temporal_window['days']} jours ({temporal_window['from']} - {temporal_window['to']})
+
+**Domaines de veille :**
+{format_watch_domains(client_config['watch_domains'])}
+"""
+    return scope_text
+
+
+def analyze_sources_used(items_metadata: Dict[str, Any]) -> Dict[str, int]:
+    """
+    Analyse les sources utilisées dans la newsletter
+    """
+    corporate_count = 0
+    press_count = 0
+    
+    # Compter les types de sources depuis les métadonnées
+    for source_key in items_metadata.get('sources_used', []):
+        if 'corporate' in source_key:
+            corporate_count += 1
+        elif 'press' in source_key:
+            press_count += 1
+    
+    return {
+        'corporate_count': corporate_count,
+        'press_count': press_count
+    }
+
+
+def get_temporal_window(client_config: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Calcule la fenêtre temporelle de la newsletter
+    """
+    from datetime import datetime, timedelta
+    
+    days = client_config.get('pipeline', {}).get('default_period_days', 30)
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=days)
+    
+    return {
+        'days': days,
+        'from': start_date.strftime('%Y-%m-%d'),
+        'to': end_date.strftime('%Y-%m-%d')
+    }
+
+
+def format_watch_domains(watch_domains: List[Dict[str, Any]]) -> str:
+    """
+    Formate les domaines de veille pour affichage
+    """
+    if not watch_domains:
+        return "- Aucun domaine configuré"
+    
+    formatted = []
+    for domain in watch_domains:
+        domain_id = domain.get('id', 'unknown')
+        domain_type = domain.get('type', 'unknown')
+        formatted.append(f"- {domain_id} ({domain_type})")
+    
+    return '\n'.join(formatted)
+
+
+def render_newsletter_sections(distributed_items: Dict[str, Any], newsletter_config: Dict[str, Any]) -> List[str]:
+    """
+    Rendu uniquement des sections avec contenu
+    """
+    rendered_sections = []
+    
+    for section_config in newsletter_config.get('sections', []):
+        section_id = section_config.get('id')
+        section_data = distributed_items.get(section_id, {})
+        items = section_data.get('items', [])
+        
+        if items:  # Seulement si items présents
+            section_content = render_section(section_config, items)
+            rendered_sections.append(section_content)
+        else:
+            logger.info(f"Section {section_id} vide - non incluse dans newsletter")
+    
+    return rendered_sections
+
+
+def render_section(section_config: Dict[str, Any], items: List[Dict[str, Any]]) -> str:
+    """
+    Rendu d'une section individuelle
+    """
+    title = section_config.get('title', 'Untitled Section')
+    section_content = f"## {title}\n\n"
+    
+    for item in items:
+        item_markdown = _format_item_markdown(item)
+        section_content += item_markdown + "\n---\n\n"
+    
+    return section_content
+
+
 def assemble_newsletter(selected_items, editorial_content, client_config, target_date):
     """
     Assemble la newsletter finale aux formats Markdown et JSON
@@ -23,8 +131,8 @@ def assemble_newsletter(selected_items, editorial_content, client_config, target
     """
     logger.info("Assembling newsletter formats")
     
-    # Génération du contenu Markdown
-    markdown_content = _generate_markdown(selected_items, editorial_content, client_config, target_date)
+    # Génération du contenu Markdown avec scope métier
+    markdown_content = _generate_markdown_with_scope(selected_items, editorial_content, client_config, target_date)
     
     # Génération des métadonnées JSON
     json_metadata = _generate_json_metadata(selected_items, editorial_content, client_config, target_date)
@@ -38,7 +146,91 @@ def assemble_newsletter(selected_items, editorial_content, client_config, target
         "manifest": manifest
     }
 
-def _generate_markdown(selected_items, editorial_content, client_config, target_date):
+def _generate_markdown_with_scope(selected_items, editorial_content, client_config, target_date):
+    """Génère le contenu Markdown de la newsletter avec scope métier"""
+    
+    # Header
+    week_start = target_date  # Simplification pour MVP
+    total_items = sum(len(section['items']) for section in selected_items.values())
+    sections_count = len([s for s in selected_items.values() if s['items']])
+    
+    markdown = f"""# LAI Weekly Newsletter - Week of {week_start}
+
+**Generated:** {datetime.now().strftime('%B %d, %Y')} | **Items:** {total_items} signals | **Coverage:** {sections_count} sections
+
+## 🎯 TL;DR
+{editorial_content.get('tldr', 'TL;DR content will be generated here.')}
+
+## 📰 Introduction
+{editorial_content.get('introduction', 'Introduction content will be generated here.')}
+
+---
+
+"""
+    
+    # Sections (uniquement celles avec contenu)
+    section_icons = {
+        'regulatory_updates': '📋',
+        'partnerships_deals': '🤝',
+        'clinical_updates': '🧬',
+        'others': '📈'
+    }
+    
+    for section_id, section_data in selected_items.items():
+        if not section_data['items']:
+            continue  # Ignorer les sections vides
+            
+        icon = section_icons.get(section_id, '📈')
+        title = section_data['title']
+        items_count = len(section_data['items'])
+        
+        # Déterminer le tri pour l'affichage
+        sort_info = _get_sort_info(section_id, client_config)
+        
+        markdown += f"""## {icon} {title}
+*{items_count} items • {sort_info}*
+
+"""
+        
+        # Items de la section
+        for item in section_data['items']:
+            item_markdown = _format_item_markdown(item)
+            markdown += item_markdown + "\n---\n\n"
+    
+    # Scope métier automatique
+    items_metadata = _extract_items_metadata(selected_items)
+    scope_content = generate_newsletter_scope(client_config, items_metadata)
+    markdown += scope_content + "\n\n"
+    
+    # Footer avec métriques
+    metrics = _calculate_metrics(selected_items)
+    markdown += f"""## 📈 Newsletter Metrics
+- **Total Signals:** {metrics['total_items']} items processed
+- **Sources:** {metrics['unique_sources']} unique sources
+- **Key Players:** {', '.join(metrics['key_companies'][:5])}
+- **Technologies:** {', '.join(metrics['key_technologies'][:3])}
+- **Generated:** {datetime.now().isoformat()}Z
+"""
+    
+    return markdown
+
+
+def _extract_items_metadata(selected_items: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Extrait les métadonnées des items pour le scope
+    """
+    all_items = []
+    sources_used = set()
+    
+    for section_data in selected_items.values():
+        for item in section_data.get('items', []):
+            all_items.append(item)
+            sources_used.add(item.get('source_key', ''))
+    
+    return {
+        'total_items': len(all_items),
+        'sources_used': list(sources_used)
+    }
     """Génère le contenu Markdown de la newsletter"""
     
     # Header
@@ -101,18 +293,52 @@ def _generate_markdown(selected_items, editorial_content, client_config, target_
     
     return markdown
 
+def format_item_title(item, max_length=120):  # Augmenté de 80 à 120
+    """Formate titre item pour newsletter avec troncature intelligente"""
+    original_title = item.get('title', '')
+    
+    # Si titre court, garder tel quel
+    if len(original_title) <= max_length:
+        return original_title
+    
+    # Utiliser summary Bedrock si plus court et pertinent
+    summary = item.get('normalized_content', {}).get('summary', '')
+    if summary and len(summary) <= max_length and len(summary) > 20:
+        return summary
+    
+    # Troncature intelligente (phrases complètes)
+    sentences = original_title.split('.')
+    truncated = sentences[0]
+    
+    for sentence in sentences[1:]:
+        if len(truncated + '.' + sentence) <= max_length - 3:  # -3 pour "..."
+            truncated += '.' + sentence
+        else:
+            break
+    
+    # Ajouter "..." si tronqué
+    if len(truncated) < len(original_title):
+        truncated += "..."
+    
+    return truncated
+
+
 def _format_item_markdown(item):
     """Formate un item individuel en Markdown"""
     normalized = item.get('normalized_content', {})
     entities = normalized.get('entities', {})
+    scoring = item.get('scoring_results', {})
     
-    title = normalized.get('summary', 'Untitled')[:100]
+    # Utiliser la fonction de formatage améliorée pour le titre
+    title = format_item_title(item, max_length=120)
     
-    # ROLLBACK: Utiliser UNIQUEMENT final_score (pas de score effectif)
-    score = item.get('scoring_results', {}).get('final_score', 0)
+    # Utiliser final_score
+    score = scoring.get('final_score', 0)
     
     source_key = item.get('source_key', 'Unknown Source')
-    published_date = item.get('published_at', '')[:10]
+    
+    # NOUVEAU: Utiliser effective_date (date Bedrock) si disponible, sinon published_at
+    effective_date = scoring.get('effective_date') or item.get('published_at', '')[:10]
     url = item.get('url', '#')
     
     # Extraction des entités clés
@@ -121,10 +347,10 @@ def _format_item_markdown(item):
     
     # Formatage de la date
     try:
-        date_obj = datetime.strptime(published_date, '%Y-%m-%d')
+        date_obj = datetime.strptime(effective_date, '%Y-%m-%d')
         formatted_date = date_obj.strftime('%b %d, %Y')
     except:
-        formatted_date = published_date
+        formatted_date = effective_date
     
     markdown = f"""### {_get_item_icon(item)} {title}
 **Source:** {source_key} • **Score:** {score:.1f} • **Date:** {formatted_date}
@@ -225,15 +451,19 @@ def _format_item_json(item):
     """Formate un item pour le JSON"""
     normalized = item.get('normalized_content', {})
     entities = normalized.get('entities', {})
+    scoring = item.get('scoring_results', {})
     
-    # ROLLBACK: Utiliser UNIQUEMENT final_score (pas de score effectif)
-    score = item.get('scoring_results', {}).get('final_score', 0)
+    # Utiliser final_score
+    score = scoring.get('final_score', 0)
+    
+    # NOUVEAU: Utiliser effective_date (date Bedrock) si disponible
+    effective_date = scoring.get('effective_date') or item.get('published_at', '')
     
     return {
         "item_id": item.get('item_id', ''),
         "title": normalized.get('summary', '')[:100],
         "score": score,
-        "published_at": item.get('published_at', ''),
+        "published_at": effective_date,  # Utiliser effective_date
         "source_url": item.get('url', ''),
         "entities": {
             "companies": entities.get('companies', []),

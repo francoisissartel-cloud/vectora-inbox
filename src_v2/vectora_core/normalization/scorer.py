@@ -95,21 +95,34 @@ def _calculate_item_score(
 ) -> Dict[str, Any]:
     """Calcule le score d'un item individuel."""
     
+    # 0. Déterminer la date effective (Bedrock ou fallback)
+    normalized = item.get("normalized_content", {})
+    extracted_date = normalized.get("extracted_date")
+    date_confidence = normalized.get("date_confidence", 0.0)
+    
+    # Prioriser date Bedrock si confiance > 0.7
+    if extracted_date and date_confidence > 0.7:
+        effective_date = extracted_date
+        logger.debug(f"Using Bedrock date: {effective_date} (confidence: {date_confidence})")
+    else:
+        effective_date = item.get('published_at')
+        logger.debug(f"Using fallback date: {effective_date}")
+    
     # 1. Score de base selon le type d'événement
-    event_type = item.get("normalized_content", {}).get("event_classification", {}).get("primary_type", "other")
+    event_type = normalized.get("event_classification", {}).get("primary_type", "other")
     base_score = _get_event_type_score(event_type, scoring_config)
     
     # 2. Facteur de pertinence des domaines
     domain_relevance_factor = _get_domain_relevance_factor(item)
     
-    # 3. Facteur de recency
-    recency_factor = _get_recency_factor(item, reference_date)
+    # 3. Facteur de recency (utilise effective_date)
+    recency_factor = _get_recency_factor_with_date(effective_date, reference_date)
     
     # 4. Calcul des bonus
     bonuses = _calculate_bonuses(item, scoring_config, canonical_scopes)
     
-    # 5. Calcul des pénalités
-    penalties = _calculate_penalties(item, scoring_config, reference_date)
+    # 5. Calcul des pénalités (utilise effective_date)
+    penalties = _calculate_penalties_with_date(item, scoring_config, reference_date, effective_date)
     
     # 6. Score final avec logique sophistiquée
     weighted_base = base_score * domain_relevance_factor * recency_factor
@@ -140,6 +153,7 @@ def _calculate_item_score(
         "bonuses": bonuses,
         "penalties": penalties,
         "final_score": round(final_score, 1),
+        "effective_date": effective_date,  # NOUVEAU: Date utilisée pour scoring
         "score_breakdown": {
             "base_score": base_score,
             "domain_relevance_factor": round(domain_relevance_factor, 3),
@@ -229,19 +243,18 @@ def _get_domain_relevance_factor(item: Dict[str, Any]) -> float:
     return min(1.0, final_factor)  # Plafonnement à 1.0
 
 
-def _get_recency_factor(item: Dict[str, Any], reference_date: datetime) -> float:
-    """Calcule le facteur de recency avec dégradation progressive sophistiquée."""
+def _get_recency_factor_with_date(effective_date: str, reference_date: datetime) -> float:
+    """Calcule le facteur de recency avec date effective (Bedrock ou fallback)."""
     
-    published_at = item.get("published_at")
-    if not published_at:
+    if not effective_date:
         return 0.7  # Pénalité plus forte si pas de date
     
     try:
         # Parsing de la date de publication
-        if "T" in published_at:
-            pub_date = datetime.fromisoformat(published_at.replace("Z", ""))
+        if "T" in effective_date:
+            pub_date = datetime.fromisoformat(effective_date.replace("Z", ""))
         else:
-            pub_date = datetime.strptime(published_at, "%Y-%m-%d")
+            pub_date = datetime.strptime(effective_date, "%Y-%m-%d")
         
         # Calcul de l'âge en jours
         age_days = (reference_date - pub_date).days
@@ -269,8 +282,15 @@ def _get_recency_factor(item: Dict[str, Any], reference_date: datetime) -> float
             return 0.5   # Obsolète (6+ mois)
             
     except Exception as e:
-        logger.warning(f"Erreur parsing date {published_at}: {str(e)}")
+        logger.warning(f"Erreur parsing date {effective_date}: {str(e)}")
         return 0.6  # Pénalité pour date invalide
+
+
+def _get_recency_factor(item: Dict[str, Any], reference_date: datetime) -> float:
+    """Calcule le facteur de recency avec dégradation progressive sophistiquée."""
+    
+    published_at = item.get("published_at")
+    return _get_recency_factor_with_date(published_at, reference_date)
 
 
 def _calculate_bonuses(
@@ -464,12 +484,13 @@ def _calculate_event_type_bonuses(event_type: str, normalized_content: Dict[str,
     return bonuses
 
 
-def _calculate_penalties(
+def _calculate_penalties_with_date(
     item: Dict[str, Any],
     scoring_config: Dict[str, Any],
-    reference_date: datetime
+    reference_date: datetime,
+    effective_date: str
 ) -> Dict[str, float]:
-    """Calcule les pénalités sophistiquées."""
+    """Calcule les pénalités sophistiquées avec date effective."""
     
     penalties = {}
     normalized_content = item.get("normalized_content", {})
@@ -485,14 +506,13 @@ def _calculate_penalties(
     elif lai_score <= 4:
         penalties["medium_lai_score"] = -1.5
     
-    # Pénalité âge avec dégradation progressive
-    published_at = item.get("published_at")
-    if published_at:
+    # Pénalité âge avec dégradation progressive (utilise effective_date)
+    if effective_date:
         try:
-            if "T" in published_at:
-                pub_date = datetime.fromisoformat(published_at.replace("Z", ""))
+            if "T" in effective_date:
+                pub_date = datetime.fromisoformat(effective_date.replace("Z", ""))
             else:
-                pub_date = datetime.strptime(published_at, "%Y-%m-%d")
+                pub_date = datetime.strptime(effective_date, "%Y-%m-%d")
             
             age_days = (reference_date - pub_date).days
             
@@ -534,6 +554,16 @@ def _calculate_penalties(
         penalties["low_relevance_event"] = -1.0
     
     return penalties
+
+
+def _calculate_penalties(
+    item: Dict[str, Any],
+    scoring_config: Dict[str, Any],
+    reference_date: datetime
+) -> Dict[str, float]:
+    """Calcule les pénalités sophistiquées."""
+    published_at = item.get("published_at")
+    return _calculate_penalties_with_date(item, scoring_config, reference_date, published_at)
 
 
 def _create_default_scoring_result() -> Dict[str, Any]:

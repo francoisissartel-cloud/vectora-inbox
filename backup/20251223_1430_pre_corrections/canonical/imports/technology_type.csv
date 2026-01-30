@@ -1,0 +1,3 @@
+id,label,definition,synonyms
+tech_dds,Drug Delivery System,"Formulation/device-like systems that provide sustained or controlled drug release from an injection site (e.g., depots, microspheres, liposomes, hydrogels, liquid crystals, nanosuspensions).","DDS;depot;controlled release system"
+tech_hle,Half-Life Extension Strategy,"Molecular strategies that extend the drug's systemic half-life without relying on a depot (e.g., PEGylation, PASylation, Fc/albumin fusions, lipidation, XTEN, glyco-engineering).","HLE;half-life extension;half life extension"

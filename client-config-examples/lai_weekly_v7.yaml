@@ -1,0 +1,296 @@
+# ============================================================================
+# LAI INTELLIGENCE WEEKLY - CLIENT CONFIG v7 (TEST EXTRACTION DATES)
+# ============================================================================
+#
+# Configuration client v7 pour "LAI Intelligence Weekly" - Test extraction dates Bedrock
+# Newsletter hebdomadaire centrée sur les technologies LAI (Long-Acting Injectables)
+#
+# OBJECTIF v7 : Valider extraction dates réelles via Bedrock (Plan Correctif v4)
+# Base : lai_weekly_v6.yaml avec focus test dates
+#
+# ============================================================================
+
+# ============================================================================
+# PROFIL CLIENT
+# ============================================================================
+
+client_profile:
+  name: "LAI Intelligence Weekly v7 (Test Extraction Dates)"
+  client_id: "lai_weekly_v7"
+  active: true
+  language: "en"
+  frequency: "weekly"
+  tone: "executive"
+  voice: "concise"
+  target_audience: "executives"
+
+# ============================================================================
+# CONFIGURATION DU PIPELINE
+# ============================================================================
+
+pipeline:
+  newsletter_mode: "latest_run_only"
+  default_period_days: 30
+  notes: "Version v7 - Test extraction dates Bedrock (Plan Correctif v4)"
+
+# ============================================================================
+# CONFIGURATION BEDROCK (APPROCHE B - PROMPTS PRÉ-CONSTRUITS)
+# ============================================================================
+
+bedrock_config:
+  normalization_prompt: "lai_normalization"
+  matching_prompt: "lai_matching"
+  editorial_prompt: "lai_editorial"
+
+# ============================================================================
+# DOMAINES DE VEILLE
+# ============================================================================
+
+watch_domains:
+  - id: "tech_lai_ecosystem"
+    type: "technology"
+    priority: "high"
+    
+    technology_scope: "lai_keywords"
+    company_scope: "lai_companies_global"
+    molecule_scope: "lai_molecules_global"
+    trademark_scope: "lai_trademarks_global"
+    
+    technology_profile: "technology_complex"
+    matching_profile: "balanced"
+    
+    enabled: true
+    notes: "Domaine unique v7 - focus extraction dates"
+
+# ============================================================================
+# CONFIGURATION DES SOURCES
+# ============================================================================
+
+source_config:
+  source_bouquets_enabled:
+    - "lai_corporate_mvp"
+    - "lai_press_mvp"
+  
+  sources_extra_enabled: []
+  bouquet_ingestion_overrides: {}
+  
+  content_filters:
+    min_word_count: 50
+    exclude_patterns:
+      - "Download attachment"
+      - "View attachment"
+      - "Read more"
+
+# ============================================================================
+# CONFIGURATION DU MATCHING V2
+# ============================================================================
+
+matching_config:
+  min_domain_score: 0.25
+  min_confidence_level: "low"
+  
+  domain_type_thresholds:
+    technology: 0.30
+    
+  enable_fallback_mode: true
+  fallback_min_score: 0.15
+  fallback_max_domains: 1
+  fallback_company_scopes:
+    - "lai_companies_global"
+    
+  max_domains_per_item: 1
+  require_high_confidence_for_multiple: false
+  
+  enable_diagnostic_mode: true
+  store_rejection_reasons: true
+  
+  default_matching_mode: "balanced"
+  
+  domain_type_overrides:
+    technology:
+      require_entity_signals: true
+      min_technology_signals: 2
+  
+  trademark_privileges:
+    enabled: true
+    auto_match_threshold: 0.8
+    boost_factor: 2.5
+    ingestion_priority: true
+    matching_priority: true
+
+# ============================================================================
+# CONFIGURATION DU SCORING
+# ============================================================================
+
+scoring_config:
+  event_type_weight_overrides:
+    partnership: 8
+    clinical_update: 6
+    regulatory: 7
+    scientific_publication: 4
+  
+  client_specific_bonuses:
+    pure_player_companies:
+      scope: "lai_companies_mvp_core"
+      bonus: 5.0
+      description: "Pure players LAI - signal très fort"
+    
+    trademark_mentions:
+      scope: "lai_trademarks_global"
+      bonus: 4.0
+      description: "Mentions de marques LAI - signal privilégié"
+    
+    key_molecules:
+      scope: "lai_molecules_global"
+      bonus: 2.5
+      description: "Molécules LAI d'intérêt"
+    
+    hybrid_companies:
+      scope: "lai_companies_hybrid"
+      bonus: 1.5
+      description: "Big pharma avec activité LAI"
+  
+  selection_overrides:
+    min_score: 12
+    min_items_per_section: 1
+    max_items_total: 15
+
+# ============================================================================
+# STRUCTURE DE LA NEWSLETTER
+# ============================================================================
+
+newsletter_selection:
+  max_items_total: 20
+  min_score_threshold: 0
+  
+  critical_event_types:
+    - "regulatory_approval"
+    - "nda_submission" 
+    - "pivotal_trial_result"
+    - "partnership"
+    - "clinical_update"
+    - "regulatory"
+    - "corporate_move"
+  
+  trimming_policy:
+    preserve_critical_events: true
+    min_items_per_section: 1
+    max_section_dominance: 0.6
+    prefer_recent_items: true
+  
+  deduplication:
+    enabled: true
+    similarity_threshold: 0.75
+    prefer_critical_events: true
+    prefer_higher_score: true
+    company_based_dedup: true
+
+newsletter_layout:
+  distribution_strategy: "specialized_with_fallback"
+  
+  sections:
+    - id: "regulatory_updates"
+      title: "Regulatory Updates"
+      source_domains:
+        - "tech_lai_ecosystem"
+      max_items: 6
+      filter_event_types:
+        - "regulatory"
+      sort_by: "score_desc"
+      priority: 1
+      
+    - id: "partnerships_deals"
+      title: "Partnerships & Deals"
+      source_domains:
+        - "tech_lai_ecosystem"
+      max_items: 4
+      filter_event_types:
+        - "partnership"
+        - "corporate_move"
+      sort_by: "date_desc"
+      priority: 2
+      
+    - id: "clinical_updates"
+      title: "Clinical Updates"
+      source_domains:
+        - "tech_lai_ecosystem"
+      max_items: 5
+      filter_event_types:
+        - "clinical_update"
+      sort_by: "date_desc"
+      priority: 3
+      
+    - id: "others"
+      title: "Other Signals"
+      source_domains:
+        - "tech_lai_ecosystem"
+      max_items: 8
+      filter_event_types:
+        - "*"
+      sort_by: "score_desc"
+      priority: 999
+      notes: "Filet de sécurité - aucun item perdu"
+
+# ============================================================================
+# CONFIGURATION DE LIVRAISON
+# ============================================================================
+
+newsletter_delivery:
+  format: "markdown"
+  include_tldr: true
+  include_intro: true
+  include_metrics: true
+  delivery_method: "s3"
+  notification_email: "lai-weekly-v7@vectora.com"
+  
+  metrics_config:
+    include_source_breakdown: true
+    include_domain_breakdown: true
+    include_trend_analysis: false
+
+# ============================================================================
+# MÉTADONNÉES
+# ============================================================================
+
+metadata:
+  template_version: "7.0.0"
+  created_date: "2026-01-29"
+  last_modified: "2026-01-29"
+  created_by: "LAI Weekly v7 Test Extraction Dates Creation"
+  
+  min_runtime_version: "2.0.0"
+  canonical_version: "1.0.0"
+  
+  vertical: "LAI"
+  target_market: "Long-Acting Injectables"
+  coverage_scope: "Global"
+  
+  creation_notes: |
+    Création lai_weekly_v7.yaml à partir de lai_weekly_v6.yaml :
+    
+    OBJECTIF v7 :
+    🎯 Valider extraction dates réelles via Bedrock (Plan Correctif v4)
+    🎯 Tester layer v5 avec parsing dates corrigé
+    🎯 Vérifier dates dans normalized_content, scoring et newsletter
+    🎯 Objectif: >95% de vraies dates extraites
+    
+    MODIFICATIONS v6 → v7 :
+    ✅ client_id: "lai_weekly_v6" → "lai_weekly_v7"
+    ✅ client_profile.name: "v6 (Fresh Run Test)" → "v7 (Test Extraction Dates)"
+    ✅ notification_email: "lai-weekly-v7@vectora.com"
+    ✅ template_version: "6.0.0" → "7.0.0"
+    ✅ created_date: "2026-01-29"
+    ✅ pipeline.notes: Focus test extraction dates Bedrock
+    
+    CORRECTIFS APPLIQUÉS (Plan Correctif v4):
+    ✅ Prompt normalisation enrichi (lai_prompt.yaml)
+    ✅ Parser dates dans normalizer.py
+    ✅ Scoring avec effective_date (scorer.py)
+    ✅ Newsletter avec dates réelles (assembler.py)
+    ✅ Parsing Bedrock corrigé (bedrock_client.py) - Layer v5
+    
+    PRÊT POUR TEST E2E EXTRACTION DATES
+
+# ============================================================================
+# FIN DE CONFIGURATION
+# ============================================================================

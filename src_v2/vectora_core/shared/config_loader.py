@@ -158,7 +158,8 @@ def resolve_sources_for_client(
                 logger.warning(f"Source '{source_key}' a ingestion_mode='none', ignorée")
                 disabled_count += 1
             else:
-                enabled_sources.append(source_meta)
+                # Copier TOUS les champs du catalog (incluant date_extraction_patterns)
+                enabled_sources.append(source_meta.copy())
         else:
             logger.warning(f"Source '{source_key}' introuvable dans le catalogue")
     
@@ -367,7 +368,7 @@ def load_canonical_scopes(config_bucket: str) -> Dict[str, Any]:
 
 def load_canonical_prompts(config_bucket: str) -> Dict[str, Any]:
     """
-    Charge les prompts canonical depuis S3.
+    Charge les prompts canonical avec validation depuis S3.
     
     Args:
         config_bucket: Nom du bucket de configuration S3
@@ -379,7 +380,18 @@ def load_canonical_prompts(config_bucket: str) -> Dict[str, Any]:
     
     try:
         prompts = s3_io.read_yaml_from_s3(config_bucket, "canonical/prompts/global_prompts.yaml")
-        logger.info("Prompts canonical chargés")
+        
+        # Validation présence prompts anti-hallucinations
+        if 'normalization' in prompts and 'lai_default' in prompts['normalization']:
+            user_template = prompts['normalization']['lai_default'].get('user_template', '')
+            if 'CRITICAL' in user_template and 'FORBIDDEN' in user_template:
+                logger.info("✅ Anti-hallucination prompts loaded successfully")
+            else:
+                logger.warning("⚠️ Anti-hallucination keywords not found in prompts")
+        else:
+            logger.warning("⚠️ Normalization prompts structure incomplete")
+        
+        logger.info("Prompts canonical chargés avec succès")
         return prompts
     except Exception as e:
         logger.error(f"Impossible de charger les prompts canonical: {str(e)}")

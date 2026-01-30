@@ -1,0 +1,64 @@
+{
+    "Configuration": {
+        "FunctionName": "vectora-inbox-newsletter-v2-dev",
+        "FunctionArn": "arn:aws:lambda:eu-west-3:786469175371:function:vectora-inbox-newsletter-v2-dev",
+        "Runtime": "python3.11",
+        "Role": "arn:aws:iam::786469175371:role/vectora-inbox-s0-iam-dev-EngineRole-x4yGG8dAutT9",
+        "Handler": "handler.lambda_handler",
+        "CodeSize": 65160,
+        "Description": "",
+        "Timeout": 900,
+        "MemorySize": 1024,
+        "LastModified": "2026-01-30T09:21:40.000+0000",
+        "CodeSha256": "QqOMSCSpsZ2hBbm/XOYD7P3+7eWtmn2zbBHmnbdnIwE=",
+        "Version": "$LATEST",
+        "Environment": {
+            "Variables": {
+                "CACHE_BUST": "v11",
+                "CONFIG_BUCKET": "vectora-inbox-config-dev",
+                "BEDROCK_REGION": "us-east-1",
+                "NEWSLETTERS_BUCKET": "vectora-inbox-newsletters-dev",
+                "DATA_BUCKET": "vectora-inbox-data-dev",
+                "BEDROCK_MODEL_ID": "anthropic.claude-3-sonnet-20240229-v1:0"
+            }
+        },
+        "TracingConfig": {
+            "Mode": "PassThrough"
+        },
+        "RevisionId": "dc06f209-b613-4cbf-aefb-a5f80f590ac2",
+        "Layers": [
+            {
+                "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-common-deps-dev:4",
+                "CodeSize": 778249
+            },
+            {
+                "Arn": "arn:aws:lambda:eu-west-3:786469175371:layer:vectora-inbox-vectora-core-approche-b-dev:10",
+                "CodeSize": 260290
+            }
+        ],
+        "State": "Active",
+        "LastUpdateStatus": "Successful",
+        "PackageType": "Zip",
+        "Architectures": [
+            "x86_64"
+        ],
+        "EphemeralStorage": {
+            "Size": 512
+        },
+        "SnapStart": {
+            "ApplyOn": "None",
+            "OptimizationStatus": "Off"
+        },
+        "RuntimeVersionConfig": {
+            "RuntimeVersionArn": "arn:aws:lambda:eu-west-3::runtime:49f733259c7ce7e0deee75ff91c6afe35c7d58b04ed300f32701216263b4590c"
+        },
+        "LoggingConfig": {
+            "LogFormat": "Text",
+            "LogGroup": "/aws/lambda/vectora-inbox-newsletter-v2-dev"
+        }
+    },
+    "Code": {
+        "RepositoryType": "S3",
+        "Location": "https://awslambda-eu-west-3-tasks.s3.eu-west-3.amazonaws.com/snapshots/786469175371/vectora-inbox-newsletter-v2-dev-d043101b-1b53-4131-a32f-e244481422ff?versionId=4izP2sNu3xQYoX9Ch1L3LqgQmRma1eYh&X-Amz-Security-Token=IQoJb3JpZ2luX2VjENL%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCWV1LXdlc3QtMyJGMEQCIHiIxqaQC9AXYT4tIZDPbOZn5CjRPTGjpxY%2F6MzD5LHTAiB1GlwjKvU4Nfogc1%2FzgMRw8e5ZZ3oOUJRvIpQ72c7ZkiqUAgib%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAQaDDM1OTkwMTI2NzgxMCIMWqnyGjs%2FmngG0IDOKugBkI2fK2spUn9FLlSLOwu6AyS27OjABC0uoSfBnsWlcyOFRKcWUsRA93TpLgsJxUSh3g5XKdIF4126zM6qcFnbWqlPQMemHDjf1dzP12fu28P2avRDgXlLsJPiFi%2Fqi1KRwFfp%2F8bulJPt3BruWytLMzf9gcwsAEeBLh6MwPfE0iIG%2BMIHsrdO1WP8AcRDMwz7UUqm3ECOLAOMAOJFz5%2BWgVqEe2mX01T%2BqNgguMNVaX6CmVI80GlaTLubM44%2BVwaxdZFAXleGFwCGw2t41Rd54%2BCmKwSvtjjTT01T5wGkCbFcP2p5aTiTZTDz8fHLBjqOAR4lKFI0rOYxMJvlYqk18FiVtuRxdLuE7e4tQjoCy3nS4QhpAp%2FE3Vhy1Bs6FGL80BUNNJ8bbv7YQAsKbgaDxOY1q5tLwbRO%2Bl9sWY9AZgFO23JpxoB1VQFIrO%2Fs2aCtCYt%2F5KikksOdaz9YJYe682VBptvcp%2F%2FVMmD0DCbcJpKBf2bhlyHiqtKtJgekVSA%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260130T122435Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Credential=ASIAVHS6JQ5RM5ERAQ23%2F20260130%2Feu-west-3%2Fs3%2Faws4_request&X-Amz-Signature=317fd71fe8d8240d270cb80ecf57a8a3677bb9c9754de43a553fb31860c9cb78"
+    }
+}
