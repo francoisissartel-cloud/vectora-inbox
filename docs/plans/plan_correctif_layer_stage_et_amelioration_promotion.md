@@ -1,9 +1,27 @@
 # Plan Correctif - Layer Stage Legacy & Amélioration Processus Promotion
 
-**Date**: 2026-01-30  
+**Date**: 2026-01-30 (Mis à jour avec gouvernance)  
 **Priorité**: CRITIQUE  
 **Objectif**: Corriger layer stage legacy + Établir processus promotion fiable  
-**Durée totale estimée**: 4 heures
+**Durée totale estimée**: 3 heures (réduit grâce aux scripts gouvernance)
+
+---
+
+## ⚠️ IMPORTANT: GOUVERNANCE EN PLACE
+
+**Ce plan a été mis à jour pour utiliser les scripts de gouvernance.**
+
+**Scripts disponibles**:
+- `scripts/build/build_layer_vectora_core.py` - Build layer vectora-core
+- `scripts/build/build_layer_common_deps.py` - Build layer common-deps
+- `scripts/build/build_all.py` - Build tous les artefacts
+- `scripts/deploy/deploy_layer.py` - Deploy layer vers env
+- `scripts/deploy/deploy_env.py` - Deploy complet vers env
+- `scripts/deploy/promote.py` - Promouvoir version entre envs
+
+**Fichier VERSION**: Versioning centralisé à la racine
+
+**Principe**: Repo local = Source unique de vérité
 
 ---
 
@@ -243,98 +261,103 @@ aws lambda get-function --function-name vectora-inbox-newsletter-v2-stage \
 
 ---
 
-### PHASE 2: Correctifs (1h30)
+### PHASE 2: Correctifs (1h)
 
 **Objectif**: Aligner stage sur repo local (source de vérité)
 
-#### 2.1 Reconstruire Layer vectora-core
+#### 2.1 Reconstruire Layer vectora-core (AVEC GOUVERNANCE)
 
-**Commandes**:
+**✅ Utiliser scripts de gouvernance**:
+
 ```bash
 cd c:\Users\franc\OneDrive\Bureau\vectora-inbox
 
-# Vérifier script build existe
-ls scripts\build\build_layer_vectora_core.py
+# 1. Vérifier version actuelle
+type VERSION
+# VECTORA_CORE_VERSION=1.2.3
 
-# Si absent, créer script build minimal
-# Sinon, exécuter build
+# 2. Build layer depuis repo local (source de vérité)
 python scripts\build\build_layer_vectora_core.py
 
-# Vérifier output
-ls .build\layers\vectora-core-*.zip
+# 3. Vérifier output
+dir .build\layers\vectora-core-*.zip
+# Devrait afficher: vectora-core-1.2.3.zip (~260 KB)
 ```
 
-**Si script build n'existe pas**:
-```bash
-# Build manuel
-cd src_v2
-mkdir .tmp_layer
-cp -r vectora_core .tmp_layer/python/
-cd .tmp_layer
-zip -r ../vectora-core-v12.zip python/
-cd ..
-mv vectora-core-v12.zip ../.build/layers/
-```
-
-**Upload vers S3**:
-```bash
-aws s3 cp .build/layers/vectora-core-v12.zip \
-  s3://vectora-inbox-lambda-code-stage/layers/vectora-core-v12.zip \
-  --profile rag-lai-prod --region eu-west-3
-```
-
-**Publier layer stage v2**:
-```bash
-aws lambda publish-layer-version \
-  --layer-name vectora-inbox-vectora-core-stage \
-  --content S3Bucket=vectora-inbox-lambda-code-stage,S3Key=layers/vectora-core-v12.zip \
-  --compatible-runtimes python3.11 python3.12 \
-  --description "v12 - Aligné repo local avec extraction dates Bedrock" \
-  --profile rag-lai-prod --region eu-west-3
-```
-
-**Validation**:
-- [ ] Layer v12 créé depuis repo local
+**Validation build**:
+- [ ] Layer vectora-core-1.2.3.zip créé
 - [ ] Taille cohérente (~260 KB)
-- [ ] Description explicite
+- [ ] Contient src_v2/vectora_core/ complet
 
-#### 2.2 Mettre à Jour Lambdas Stage
+#### 2.2 Déployer Layer en Stage (AVEC GOUVERNANCE)
 
-**Récupérer ARN nouveau layer**:
+**✅ Utiliser script deploy_layer.py**:
+
 ```bash
-VECTORA_CORE_V2=$(aws lambda list-layer-versions \
+# Deploy layer vers stage
+python scripts\deploy\deploy_layer.py \
+  --layer-file .build\layers\vectora-core-1.2.3.zip \
+  --env stage \
+  --layer-name vectora-inbox-vectora-core
+
+# Le script va:
+# 1. Upload vers s3://vectora-inbox-lambda-code-stage/layers/
+# 2. Publier layer vectora-inbox-vectora-core-stage
+# 3. Retourner ARN du nouveau layer
+```
+
+**Validation deploy**:
+- [ ] Layer publié en stage
+- [ ] ARN récupéré
+- [ ] Description: "Built from repo - version 1.2.3"
+
+#### 2.3 Mettre à Jour Lambdas Stage
+
+**Récupérer ARNs layers**:
+```bash
+# Vectora-core (nouveau)
+VECTORA_CORE=$(aws lambda list-layer-versions \
   --layer-name vectora-inbox-vectora-core-stage \
   --max-items 1 --query 'LayerVersions[0].LayerVersionArn' \
   --output text --profile rag-lai-prod --region eu-west-3)
 
+# Common-deps (existant)
 COMMON_DEPS=$(aws lambda list-layer-versions \
   --layer-name vectora-inbox-common-deps-stage \
   --max-items 1 --query 'LayerVersions[0].LayerVersionArn' \
   --output text --profile rag-lai-prod --region eu-west-3)
+
+echo "Vectora-core: $VECTORA_CORE"
+echo "Common-deps: $COMMON_DEPS"
 ```
 
-**Mettre à jour normalize-score-v2-stage**:
+**Mettre à jour Lambdas**:
 ```bash
+# Normalize-score-v2
 aws lambda update-function-configuration \
   --function-name vectora-inbox-normalize-score-v2-stage \
-  --layers $VECTORA_CORE_V2 $COMMON_DEPS \
+  --layers "$VECTORA_CORE" "$COMMON_DEPS" \
   --profile rag-lai-prod --region eu-west-3
-```
 
-**Mettre à jour newsletter-v2-stage**:
-```bash
+# Newsletter-v2
 aws lambda update-function-configuration \
   --function-name vectora-inbox-newsletter-v2-stage \
-  --layers $VECTORA_CORE_V2 $COMMON_DEPS \
+  --layers "$VECTORA_CORE" "$COMMON_DEPS" \
+  --profile rag-lai-prod --region eu-west-3
+
+# Ingest-v2 (si nécessaire)
+aws lambda update-function-configuration \
+  --function-name vectora-inbox-ingest-v2-stage \
+  --layers "$VECTORA_CORE" "$COMMON_DEPS" \
   --profile rag-lai-prod --region eu-west-3
 ```
 
 **Validation**:
 - [ ] Lambdas mises à jour
-- [ ] Layers v2 attachés
+- [ ] Nouveau layer attaché
 - [ ] Aucune erreur configuration
 
-#### 2.3 Standardiser Variables ENV (Optionnel)
+#### 2.4 Standardiser Variables ENV (Optionnel)
 
 **Ajouter PROJECT_NAME à stage**:
 ```bash
@@ -357,112 +380,45 @@ aws lambda update-function-configuration \
 
 ---
 
-### PHASE 3: Tests Locaux (30 min)
+### PHASE 3: Tests Validation (30 min)
 
-**Objectif**: Valider corrections avant déploiement complet
+**Objectif**: Valider corrections
 
-#### 3.1 Test Extraction Dates
+#### 3.1 Test Extraction Dates Stage
 
-**Event**: `.tmp/event_test_dates.json`
-```json
-{
-  "client_id": "lai_weekly_v7"
-}
+**✅ Utiliser script invoke existant**:
+
+```bash
+# Tester normalize-score-v2 en stage
+python scripts\invoke\invoke_normalize_score_v2.py \
+  --client-id lai_weekly_v7 \
+  --env stage
+
+# Le script va:
+# 1. Invoquer Lambda stage
+# 2. Afficher résultats
+# 3. Sauvegarder response dans .tmp/
 ```
 
-**Commande**:
+**Vérifier extracted_date présent**:
 ```bash
-aws lambda invoke --function-name vectora-inbox-normalize-score-v2-stage \
-  --cli-binary-format raw-in-base64-out \
-  --payload file://.tmp/event_test_dates.json \
-  --region eu-west-3 --profile rag-lai-prod \
-  .tmp/response_test_dates.json
-```
-
-**Validation**:
-```bash
-# Télécharger items curated
+# Télécharger items curated stage
 aws s3 cp s3://vectora-inbox-data-stage/curated/lai_weekly_v7/2026/01/30/items.json \
-  .tmp/items_test.json --profile rag-lai-prod --region eu-west-3
+  .tmp/items_stage_corrected.json --profile rag-lai-prod --region eu-west-3
 
-# Vérifier extracted_date présent
-powershell -Command "$items = Get-Content .tmp\items_test.json | ConvertFrom-Json; ($items | Where-Object { $_.normalized_content.extracted_date -ne $null }).Count"
+# Compter items avec extracted_date
+powershell -Command "$items = Get-Content .tmp\items_stage_corrected.json | ConvertFrom-Json; $withDates = ($items | Where-Object { $_.normalized_content.extracted_date -ne `$null }).Count; $total = $items.Count; Write-Host `"Items avec dates: $withDates / $total (`$([math]::Round($withDates/$total*100, 2))%)`""
 ```
 
 **Critères succès**:
 - [ ] Champ `extracted_date` présent
 - [ ] >90% items avec date extraite
 - [ ] Format dates correct (YYYY-MM-DD)
+- [ ] Pas de régression autres champs
 
-#### 3.2 Test Newsletter
+#### 3.2 Comparaison Dev vs Stage
 
-**Commande**:
-```bash
-aws lambda invoke --function-name vectora-inbox-newsletter-v2-stage \
-  --cli-binary-format raw-in-base64-out \
-  --payload file://.tmp/event_test_dates.json \
-  --region eu-west-3 --profile rag-lai-prod \
-  .tmp/response_newsletter_test.json
-```
-
-**Validation**:
-```bash
-# Télécharger newsletter
-aws s3 cp s3://vectora-inbox-newsletters-stage/lai_weekly_v7/2026/01/30/newsletter.md \
-  .tmp/newsletter_test.md --profile rag-lai-prod --region eu-west-3
-
-# Vérifier dates réelles affichées
-type .tmp\newsletter_test.md | findstr "Date:"
-```
-
-**Critères succès**:
-- [ ] Newsletter générée
-- [ ] Dates réelles affichées (pas published_at)
-- [ ] Items sélectionnés > 0
-
----
-
-### PHASE 4: Déploiement AWS (30 min)
-
-**Objectif**: Valider environnement stage complet
-
-#### 4.1 Test E2E Complet Stage
-
-**Commandes**:
-```bash
-# Nettoyer données stage précédentes
-aws s3 rm s3://vectora-inbox-data-stage/curated/lai_weekly_v7/2026/01/30/ \
-  --recursive --profile rag-lai-prod --region eu-west-3
-
-aws s3 rm s3://vectora-inbox-newsletters-stage/lai_weekly_v7/2026/01/30/ \
-  --recursive --profile rag-lai-prod --region eu-west-3
-
-# Relancer pipeline complet
-# 1. Ingest
-aws lambda invoke --function-name vectora-inbox-ingest-v2-stage \
-  --payload '{"client_id":"lai_weekly_v7","force_refresh":true}' \
-  .tmp/e2e_ingest.json
-
-# 2. Normalize-score
-aws lambda invoke --function-name vectora-inbox-normalize-score-v2-stage \
-  --payload '{"client_id":"lai_weekly_v7"}' \
-  .tmp/e2e_normalize.json
-
-# 3. Newsletter
-aws lambda invoke --function-name vectora-inbox-newsletter-v2-stage \
-  --payload '{"client_id":"lai_weekly_v7"}' \
-  .tmp/e2e_newsletter.json
-```
-
-**Validation**:
-- [ ] Pipeline complet sans erreur
-- [ ] Extraction dates fonctionnelle
-- [ ] Newsletter avec items sélectionnés
-- [ ] Métriques cohérentes
-
-#### 4.2 Comparaison Dev vs Stage
-
-**Télécharger données dev**:
+**Télécharger données dev pour comparaison**:
 ```bash
 aws s3 cp s3://vectora-inbox-data-dev/curated/lai_weekly_v7/2026/01/30/items.json \
   .tmp/items_dev.json --profile rag-lai-prod --region eu-west-3
@@ -470,57 +426,94 @@ aws s3 cp s3://vectora-inbox-data-dev/curated/lai_weekly_v7/2026/01/30/items.jso
 
 **Comparer métriques**:
 ```powershell
-# Items avec dates extraites
+# Script comparaison
 $dev = Get-Content .tmp\items_dev.json | ConvertFrom-Json
-$stage = Get-Content .tmp\items_test.json | ConvertFrom-Json
+$stage = Get-Content .tmp\items_stage_corrected.json | ConvertFrom-Json
 
 $dev_dates = ($dev | Where-Object { $_.normalized_content.extracted_date -ne $null }).Count
 $stage_dates = ($stage | Where-Object { $_.normalized_content.extracted_date -ne $null }).Count
 
-Write-Host "Dev: $dev_dates dates extraites"
-Write-Host "Stage: $stage_dates dates extraites"
+$dev_total = $dev.Count
+$stage_total = $stage.Count
+
+Write-Host "=== Comparaison Dev vs Stage ==="
+Write-Host "Dev: $dev_dates/$dev_total dates extraites ($([math]::Round($dev_dates/$dev_total*100, 2))%)"
+Write-Host "Stage: $stage_dates/$stage_total dates extraites ($([math]::Round($stage_dates/$stage_total*100, 2))%)"
+Write-Host "Différence: $([math]::Abs($dev_dates - $stage_dates)) items"
 ```
 
 **Critères succès**:
 - [ ] Taux extraction dates similaire (±5%)
-- [ ] Scores cohérents
-- [ ] Matching similaire
+- [ ] Nombre items similaire (±10%)
+- [ ] Pas de régression fonctionnelle
 
 ---
 
-### PHASE 5: Retour User (30 min)
+### PHASE 4: Documentation (30 min)
 
-**Objectif**: Documenter corrections et leçons apprises
+**Objectif**: Documenter corrections et commit
 
-#### 5.1 Rapport Corrections
+#### 4.1 Créer Rapport Corrections
 
 **Fichier**: `.tmp/rapport_corrections_stage.md`
 
 **Contenu**:
-- Problèmes corrigés
-- Métriques avant/après
-- Tests validation
-- Statut final
+```markdown
+# Rapport Corrections Layer Stage
 
-#### 5.2 Mise à Jour Documentation
+**Date**: 2026-01-30
+**Problème**: Layer stage legacy sans extraction dates
+**Solution**: Rebuild depuis repo local avec scripts gouvernance
 
-**Fichier**: `docs/operations/promotion_dev_to_stage.md`
+## Corrections Appliquées
 
-**Sections**:
-- Processus promotion validé
-- Checklist pré-promotion
-- Checklist post-promotion
-- Troubleshooting
+1. Build vectora-core-1.2.3.zip depuis src_v2/ (source vérité)
+2. Deploy layer en stage avec script deploy_layer.py
+3. Mise à jour Lambdas stage (normalize, newsletter, ingest)
 
-#### 5.3 Leçons Apprises
+## Métriques Avant/Après
 
-**Fichier**: `docs/post-mortem/2026-01-30_layer_stage_legacy.md`
+**Avant**:
+- extracted_date: 0% items
+- Layer: vectora-core-stage:1 (legacy v42.zip)
 
-**Contenu**:
-- Chronologie incident
-- Cause racine
-- Corrections appliquées
-- Actions préventives
+**Après**:
+- extracted_date: >90% items
+- Layer: vectora-core-stage:2 (repo local v1.2.3)
+
+## Tests Validation
+
+- ✅ Extraction dates fonctionnelle
+- ✅ Dev/Stage alignés (±5%)
+- ✅ Pas de régression
+
+## Statut Final
+
+✅ Stage aligné sur repo local
+✅ Extraction dates opérationnelle
+✅ Gouvernance appliquée
+```
+
+#### 4.2 Commit Corrections
+
+```bash
+# Commit plan mis à jour
+git add docs/plans/plan_correctif_layer_stage_et_amelioration_promotion.md
+git add .tmp/rapport_corrections_stage.md
+git commit -m "fix: correction layer stage legacy avec scripts gouvernance
+
+- Layer vectora-core-stage:2 build depuis repo local
+- Extraction dates fonctionnelle en stage
+- Dev/Stage alignés
+- Utilisation scripts gouvernance"
+
+git push
+```
+
+**Validation**:
+- [ ] Rapport créé
+- [ ] Corrections commitées
+- [ ] Documentation à jour
 
 ---
 
