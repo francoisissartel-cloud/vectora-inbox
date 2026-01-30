@@ -1,0 +1,51 @@
+# Prompt - Exécution Plan Correctif Layer Stage
+
+**À copier-coller dans un nouveau chat Amazon Q Developer**
+
+---
+
+Je travaille sur Vectora Inbox (repo: `c:\Users\franc\OneDrive\Bureau\vectora-inbox`, branche: `main`).
+
+**Problème**: Le layer stage a été créé depuis un fichier legacy (`vectora-core-v42.zip`) au lieu du code récent. L'extraction de dates est absente en stage (présente en dev).
+
+**Tâche**: Exécuter le plan correctif pour corriger le layer stage.
+
+**Fichiers à utiliser**:
+- @docs/plans/plan_correctif_layer_stage_et_amelioration_promotion.md (plan complet mis à jour avec gouvernance)
+- @VERSION (versioning centralisé)
+- Scripts gouvernance disponibles dans `scripts/build/` et `scripts/deploy/`
+
+**À faire**: Exécuter phases 1 à 4 du plan (~3h):
+
+1. **Phase 1**: Diagnostics (30 min)
+   - Vérifier layers common-deps dev/stage
+   - Vérifier code Lambda handlers
+   - Créer rapport divergences
+
+2. **Phase 2**: Correctifs (1h)
+   - Builder vectora-core depuis repo local avec `scripts/build/build_layer_vectora_core.py`
+   - Déployer en stage avec `scripts/deploy/deploy_layer.py`
+   - Mettre à jour Lambdas stage (normalize, newsletter, ingest)
+
+3. **Phase 3**: Tests (30 min)
+   - Tester normalize-score-v2 stage avec lai_weekly_v7
+   - Vérifier extracted_date présent (>90% items)
+   - Comparer métriques dev/stage (±5%)
+
+4. **Phase 4**: Documentation (30 min)
+   - Créer rapport corrections
+   - Commit corrections
+
+**Règles**:
+- Utiliser les scripts de gouvernance (ne pas recréer)
+- Repo local = source unique de vérité
+- Tester après chaque phase
+- Demander confirmation avant actions critiques AWS
+
+**Résultat attendu**: Layer stage corrigé, extraction dates fonctionnelle, dev/stage alignés, corrections commitées.
+
+**Commencer par**: Lire le plan correctif puis exécuter PHASE 1.
+
+---
+
+**Note**: La gouvernance est en place, les scripts build/deploy sont prêts à utiliser.
