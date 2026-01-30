@@ -43,6 +43,29 @@ pip install -r src_v2/requirements.txt
 python scripts/maintenance/validate_repo_hygiene.py
 ```
 
+### Workflow Standard (Gouvernance en Place)
+
+**Principe**: Repo local = Source unique de vérité
+
+```bash
+# 1. Build artefacts
+python scripts/build/build_all.py
+
+# 2. Deploy vers dev
+python scripts/deploy/deploy_env.py --env dev
+
+# 3. Tester
+python scripts/invoke/invoke_normalize_score_v2.py --client-id lai_weekly_v7
+
+# 4. Promouvoir vers stage
+python scripts/deploy/promote.py --to stage --version X.Y.Z
+```
+
+**Guides**:
+- 💬 Comment prompter Q: `COMMENT_PROMPTER_Q.md`
+- 🛡️ Règles gouvernance: `GOUVERNANCE.md`
+- 📚 Workflow détaillé: `docs/workflows/developpement_standard.md`
+
 ### Tests Locaux
 ```bash
 # Test ingest-v2
