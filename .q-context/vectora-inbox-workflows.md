@@ -22,7 +22,7 @@ Repo Local → Build → Deploy Dev → Test → Promote Stage → Test → Comm
 
 **Contexte**: Ajouter une nouvelle fonctionnalité dans vectora_core
 
-```powershell
+```bash
 # 1. Développer dans repo local
 cd src_v2/vectora_core/normalization
 # Modifier le code...
@@ -59,7 +59,7 @@ git push
 
 **Contexte**: Bug critique en production, correction rapide nécessaire
 
-```powershell
+```bash
 # 1. Corriger dans repo local
 cd src_v2/vectora_core/shared
 # Corriger le bug...
@@ -94,7 +94,7 @@ git push
 
 **Contexte**: Modifier scopes, prompts ou sources
 
-```powershell
+```bash
 # 1. Modifier dans repo local
 cd canonical/scopes
 # Modifier tech_lai_ecosystem.yaml...
@@ -132,7 +132,7 @@ git push
 
 **Contexte**: Créer configuration pour nouveau client
 
-```powershell
+```bash
 # 1. Créer config depuis template
 cd client-config-examples
 cp client_template_v2.yaml pharma_weekly_v1.yaml
@@ -172,7 +172,7 @@ git push
 
 **Contexte**: Reconstruire layer pour nouvelle version dépendances
 
-```powershell
+```bash
 # 1. Mettre à jour requirements si nécessaire
 cd src_v2
 # Éditer requirements.txt...
@@ -285,7 +285,6 @@ Avant chaque commit, vérifier:
 - [ ] Tous les temporaires dans `.tmp/`
 - [ ] Documentation mise à jour si nécessaire
 - [ ] Message commit descriptif
-- [ ] Test E2E documenté si modification majeure (utiliser template `docs/templates/TEMPLATE_TEST_E2E_STANDARD.md`)
 
 ---
 
@@ -349,8 +348,8 @@ Avant chaque commit, vérifier:
 
 **Documentation**:
 - Règles développement: `.q-context/vectora-inbox-development-rules.md`
-- Plan gouvernance: `docs/plans/plan_gouvernance_repo_et_environnements.md`
-- Scripts annexes: `docs/plans/annexes_scripts_gouvernance.md`
+- Gouvernance: `.q-context/vectora-inbox-governance.md`
+- Architecture: `.q-context/vectora-inbox-architecture-overview.md`
 
 ---
 

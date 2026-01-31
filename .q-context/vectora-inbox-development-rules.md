@@ -715,6 +715,35 @@ tests/
     └── real_ingested_items_17dec.json
 ```
 
+### Template de Test E2E Standard
+
+**✅ TOUJOURS utiliser le template standardisé pour tests E2E :**
+
+**Template** : `docs/templates/TEMPLATE_TEST_E2E_STANDARD.md`  
+**Guide** : `docs/templates/GUIDE_UTILISATION_TEMPLATE_E2E.md`
+
+**Avantages** :
+- Comparabilité temporelle (v7 vs v8 vs v9)
+- Métriques standardisées avec colonne "vs Baseline"
+- Format cohérent pour Q Developer
+- Traçabilité des améliorations
+
+**Quand utiliser** :
+- Test après modification (prompt, scope, seuil)
+- Validation baseline nouvelle version
+- Monitoring hebdomadaire/mensuel
+- Décision GO/NO-GO production
+
+**Prompt recommandé pour Q** :
+```
+Exécute un test E2E complet de lai_weekly_v8 en utilisant le template 
+docs/templates/TEMPLATE_TEST_E2E_STANDARD.md
+
+Baseline : docs/reports/rapport_e2e_complet_lai_weekly_v6_20260127.md
+
+Remplis toutes les sections avec métriques quantitatives et comparaison vs baseline.
+```
+
 ### Client de Référence E2E
 
 **Client :** `lai_weekly_v3`

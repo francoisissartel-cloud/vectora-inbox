@@ -166,7 +166,7 @@ class BedrockNormalizationClient:
         if not self.prompt_template:
             raise ValueError(
                 f"Échec chargement prompt '{normalization_prompt}'. "
-                f"Vérifier que canonical/prompts/normalization/{normalization_prompt}_prompt.yaml "
+                f"Vérifier que canonical/prompts/normalization/{normalization_prompt}.yaml "
                 f"existe sur S3."
             )
         
