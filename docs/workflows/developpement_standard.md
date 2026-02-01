@@ -289,6 +289,36 @@ Avant chaque commit, vérifier:
 
 ---
 
+## 📦 Guide Incrémentation VERSION
+
+### Tableau de Décision
+
+| Type Modification | Exemple | Incrémentation | Résultat |
+|-------------------|---------|----------------|----------|
+| Ajout fonction | extract_dates() | MINOR | 1.2.3 → 1.3.0 |
+| Ajout paramètre | new_param=True | MINOR | 1.2.3 → 1.3.0 |
+| Correction bug | fix typo | PATCH | 1.2.3 → 1.2.4 |
+| Correction crash | fix null pointer | PATCH | 1.2.3 → 1.2.4 |
+| Rename fonction | extract() → get() | MAJOR | 1.2.3 → 2.0.0 |
+| Suppression fonction | remove old_func() | MAJOR | 1.2.3 → 2.0.0 |
+| Mise à jour dépendance | PyYAML 6.0 → 6.1 | PATCH | 1.0.5 → 1.0.6 |
+| Ajout dépendance | + requests | MINOR | 1.0.5 → 1.1.0 |
+
+### Format Sémantique
+
+```
+MAJOR.MINOR.PATCH
+  1  .  2  .  3
+
+MAJOR : Breaking change (incompatible)
+MINOR : Nouvelle fonctionnalité (compatible)
+PATCH : Correction bug (compatible)
+```
+
+**Guide complet** : `docs/guides/comprendre_versioning.md`
+
+---
+
 ## 🔄 Workflow Complet Résumé
 
 ```

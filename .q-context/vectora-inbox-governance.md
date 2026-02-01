@@ -14,6 +14,36 @@ Toute modification passe par: Build → Deploy Dev → Test → Promote Stage �
 
 ---
 
+## 📦 Versioning
+
+**Fichier VERSION** : Un seul fichier à la racine contenant versions actuelles
+
+```ini
+VECTORA_CORE_VERSION=1.2.3
+COMMON_DEPS_VERSION=1.0.5
+CANONICAL_VERSION=1.1
+```
+
+**Format** : MAJOR.MINOR.PATCH
+- MAJOR : Breaking change (1.2.3 → 2.0.0)
+- MINOR : Nouvelle fonction (1.2.3 → 1.3.0)
+- PATCH : Correction bug (1.2.3 → 1.2.4)
+
+**Workflow** :
+1. Modifier code
+2. Incrémenter VERSION
+3. Build (génère .zip avec numéro de version)
+4. Deploy (AWS utilise version du .zip)
+
+**Important** :
+- ❌ Pas de dossiers v1.2.3/, v1.2.4/
+- ✅ Un seul VERSION avec version actuelle
+- ✅ Historique dans Git commits
+
+**Guide complet** : `docs/guides/comprendre_versioning.md`
+
+---
+
 ## 🚀 Commandes Essentielles
 
 ### Build
