@@ -48,7 +48,44 @@
 - Copier le template approprié
 - Remplir TOUS les champs [TITRE], [DATE], etc.
 - Adapter les phases selon le contexte
+- **TOUJOURS inclure phases Git/Versioning/Tests** (voir section 2.1)
 - Estimer les durées réalistes
+
+### 2.1. Phases Git/Versioning/Tests OBLIGATOIRES
+
+**CHAQUE plan de développement DOIT inclure ces phases**:
+
+**Phase N-2: Versioning**
+- Analyser type de changement (MAJOR/MINOR/PATCH)
+- Incrémenter VERSION
+- Documenter la raison
+- Durée: 2 min
+
+**Phase N-1: Commit Git**
+- Préparer message commit (Conventional Commits)
+- Lister fichiers modifiés
+- Donner commandes git exactes
+- Durée: 3 min
+
+**Phase N: Tests & Validation**
+- Build artefacts
+- Deploy dev
+- Tests E2E
+- Validation résultats
+- Durée: 10-15 min
+
+**Phase N+1: Tag & Promotion (si succès)**
+- Créer tag Git
+- Promouvoir vers stage
+- Tests stage
+- Durée: 5-10 min
+
+**Phase N+2: Rollback (si échec)**
+- Détecter problème
+- Proposer rollback
+- Exécuter rollback
+- Valider restauration
+- Durée: 2-5 min
 
 ### 3. Emplacement des Plans et Rapports
 
@@ -174,8 +211,13 @@ docs/reports/deployments/report_deploy_v124_stage_20260130.md
 1. Créer plan dans docs/plans/
 2. Présenter plan à l'utilisateur
 3. Attendre validation
-4. Exécuter phase par phase avec checkpoints
-5. Finaliser et documenter
+4. Exécuter phases de développement
+5. Phase Versioning (OBLIGATOIRE)
+6. Phase Commit Git (OBLIGATOIRE)
+7. Phase Tests & Validation (OBLIGATOIRE)
+8. Phase Tag & Promotion (si succès)
+9. Phase Rollback (si échec)
+10. Finaliser et documenter
 ```
 
 ### Pattern "Plan Complexe" (> 1h)
@@ -186,8 +228,13 @@ docs/reports/deployments/report_deploy_v124_stage_20260130.md
 3. Demander validation du plan complet
 4. Exécuter Phase 0 (cadrage)
 5. Checkpoint et validation
-6. Continuer phase par phase
-7. Documentation finale
+6. Continuer phases de développement
+7. Phase Versioning (OBLIGATOIRE)
+8. Phase Commit Git (OBLIGATOIRE)
+9. Phase Tests & Validation (OBLIGATOIRE)
+10. Phase Tag & Promotion (si succès)
+11. Phase Rollback (si échec)
+12. Documentation finale
 ```
 
 ### Pattern "Diagnostic"

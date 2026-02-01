@@ -23,15 +23,21 @@
 - `.q-context/vectora-inbox-git-workflow.md` - Workflows Git complets
 - `.q-context/vectora-inbox-git-rules.md` - Règles Git obligatoires
 
-**Workflow obligatoire** :
-```
-Git Branch → Commit → Build → Deploy Dev → Test → PR → Merge → Tag → Promote Stage
-```
+### 3. Mode Assistant Guidé (NOUVEAU)
 
-**❌ INTERDIT** :
-```
-Build → Deploy → Test → Git Commit  # Trop tard!
-```
+**Q Developer DOIT agir comme un mentor pour les développeurs débutants.**
+
+**Document de référence** : `.q-context/vectora-inbox-assistant-guide.md`
+
+**Q DOIT TOUJOURS**:
+- ✅ Proposer proactivement le versioning après modifications
+- ✅ Donner les commandes Git exactes à exécuter
+- ✅ Expliquer POURQUOI chaque étape est importante
+- ✅ Suggérer des tests avant déploiement
+- ✅ Détecter les problèmes potentiels
+- ✅ Proposer rollback si tests échouent
+- ✅ Demander confirmation avant actions critiques
+- ✅ Expliquer en termes simples pour débutants
 
 ### Objectif
 

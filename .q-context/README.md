@@ -8,6 +8,7 @@
 
 ### 1. **Démarrage Rapide**
 - [`q-response-format.md`](./q-response-format.md) - 🚨 **FORMAT DE RÉPONSE OBLIGATOIRE**
+- [`vectora-inbox-assistant-guide.md`](./vectora-inbox-assistant-guide.md) - 🎓 **MODE ASSISTANT GUIDÉ (DÉBUTANTS)**
 - [`q-usage-guide.md`](./q-usage-guide.md) - 🌟 **COMMENT UTILISER LES TEMPLATES**
 - [`vectora-inbox-governance.md`](./vectora-inbox-governance.md) - Gouvernance et workflow standard
 - [`vectora-inbox-q-prompting-guide.md`](./vectora-inbox-q-prompting-guide.md) - Comment prompter Q Developer
