@@ -1,0 +1,18 @@
+{
+  "layer_name": "vectora-inbox-vectora-core-dev",
+  "version": "1.2.3",
+  "git_sha": "TO_BE_UPDATED",
+  "git_tag": "v1.2.3",
+  "git_branch": "develop",
+  "build_date": "2026-01-31T00:00:00Z",
+  "build_user": "system",
+  "aws_arn_dev": "TO_BE_UPDATED_AFTER_DEPLOY",
+  "aws_arn_stage": null,
+  "size_mb": 0,
+  "dependencies": {
+    "source": "src_v2/vectora_core/"
+  },
+  "source_path": "src_v2/vectora_core/",
+  "compatible_runtimes": ["python3.11", "python3.12"],
+  "notes": "Layer contenant le code métier vectora_core (ingest, normalization, newsletter, shared)"
+}

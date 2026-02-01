@@ -16,16 +16,17 @@ simple_payload.json
 $null
 
 # Artefacts de build
-.build/
+.build/workspace/
+.build/layers/*.zip
+.build/layers/manifest.json
 *.zip
-layer_build/
-layer_fix/
 output/lambda_packages/
-*_arn.txt
 
-# Layers temporaires
-python/
-layer_vectora_core_approche_b/
+# Layer ARNs (sauvegardés dans layer_management/)
+*_layer_arn.txt
+vectora_core_layer_arn.txt
+vectora-inbox-common-deps-dev_arn.txt
+vectora-inbox-vectora-core-approche-b-dev_arn.txt
 
 # Configs temporaires (sauf exemples)
 lai_weekly_v*.yaml

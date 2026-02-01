@@ -1,0 +1,21 @@
+{
+  "layer_name": "vectora-inbox-common-deps-dev",
+  "version": "1.0.5",
+  "git_sha": "TO_BE_UPDATED",
+  "git_tag": null,
+  "git_branch": "develop",
+  "build_date": "2026-01-31T00:00:00Z",
+  "build_user": "system",
+  "aws_arn_dev": "TO_BE_UPDATED_AFTER_DEPLOY",
+  "aws_arn_stage": null,
+  "size_mb": 0,
+  "dependencies": {
+    "PyYAML": "6.0.1",
+    "requests": "2.31.0",
+    "feedparser": "6.0.10",
+    "beautifulsoup4": "4.14.3"
+  },
+  "source_path": "src_v2/requirements.txt",
+  "compatible_runtimes": ["python3.11", "python3.12"],
+  "notes": "Layer contenant les dépendances tierces communes (PyYAML, requests, feedparser, beautifulsoup4)"
+}
