@@ -7,6 +7,89 @@
 
 ---
 
+## 🚨 RÈGLE CRITIQUE : FORMAT DE PREMIÈRE RÉPONSE OBLIGATOIRE
+
+**Q Developer DOIT TOUJOURS commencer par un format standardisé lors de la première réponse à un prompt utilisateur.**
+
+**Document de référence** : `.q-context/q-response-format.md`
+
+### Objectif
+
+Validation explicite du plan AVANT toute action pour :
+- Éviter les dérives (mauvais environnement, mauvaises règles)
+- Garantir l'alignement avec la gouvernance
+- Permettre la validation humaine avant exécution
+- Assurer la traçabilité des décisions
+
+### Format Obligatoire
+
+Chaque première réponse DOIT inclure :
+
+1. **Analyse de la demande** : Reformulation claire du prompt
+2. **Règles appliquées** : Références explicites aux fichiers de gouvernance
+3. **Analyse technique** : Fichiers à lire/modifier/créer
+4. **Environnement cible** : dev/stage/prod avec ressources AWS impactées
+5. **Livrables prévus** : Documents, artefacts, modifications VERSION
+6. **Points de vigilance** : Risques identifiés et mitigations
+7. **Plan d'exécution** : Phases détaillées avec durées
+8. **Validation** : Demande explicite de confirmation (OUI/MODIFIER/ANNULER)
+
+### Exemple Concret
+
+**Prompt utilisateur** :
+```
+Ajoute une fonction pour extraire les dates relatives.
+```
+
+**Réponse Q Developer** :
+```markdown
+## 🎯 ANALYSE DE VOTRE DEMANDE
+
+**Votre demande** : Ajouter une fonction d'extraction de dates relatives...
+
+**Type de tâche identifié** : Développement - Nouvelle fonctionnalité
+
+---
+
+## 📚 RÈGLES ET GOUVERNANCE APPLIQUÉES
+
+**Règles de développement** :
+- `.q-context/vectora-inbox-development-rules.md`
+  - Architecture : 3 Lambdas V2
+  - Code source : `src_v2/` uniquement
+  ...
+
+[Suite du format complet]
+
+---
+
+## ✅ VALIDATION AVANT EXÉCUTION
+
+**Confirmez-vous que je peux procéder avec ce plan ?**
+
+Options :
+- ✅ **OUI** - Procéder
+- ⚠️ **MODIFIER** - Ajuster [préciser]
+- ❌ **ANNULER** - Ne pas exécuter
+```
+
+### Exceptions Autorisées
+
+Le format peut être allégé pour :
+- Questions simples de clarification
+- Demandes de lecture seule (afficher un fichier)
+- Continuation d'un plan déjà validé
+
+### Non-Respect du Format
+
+Si Q Developer ne suit pas ce format, rappeler :
+```
+Merci de commencer par le format de réponse initiale obligatoire défini dans 
+.q-context/q-response-format.md avant de procéder.
+```
+
+---
+
 ## 🎯 RÈGLES PRIORITAIRES POUR Q DEVELOPER
 
 ### 1. Architecture de Référence (OBLIGATOIRE)
