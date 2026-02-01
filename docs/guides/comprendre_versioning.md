@@ -86,12 +86,20 @@ git log VERSION
 ### Situation Initiale
 
 ```
-Repo Local
+Repo Local (branche develop)
 ├── src_v2/vectora_core/utils.py  (fonctions A, B)
 └── VERSION                        (VECTORA_CORE_VERSION=1.2.3)
 ```
 
-### Vous Modifiez le Code
+### 1. Créer Branche Feature
+
+```bash
+git checkout develop
+git pull origin develop
+git checkout -b feature/extraction-dates
+```
+
+### 2. Vous Modifiez le Code
 
 ```python
 # Ajout fonction C dans utils.py
@@ -99,14 +107,26 @@ def extract_dates():
     pass
 ```
 
-### Vous Incrémentez VERSION
+### 3. Vous Incrémentez VERSION
 
 ```ini
 # Éditer VERSION
-VECTORA_CORE_VERSION=1.2.4  ← Changé de 1.2.3 à 1.2.4
+VECTORA_CORE_VERSION=1.3.0  ← Changé de 1.2.3 à 1.3.0 (MINOR)
 ```
 
-### Vous Buildez
+### 4. Vous Committez (AVANT build!)
+
+```bash
+git add src_v2/ VERSION
+git commit -m "feat(vectora-core): add extract_dates function
+
+- Add extract_dates() in shared/utils.py
+- Increment VECTORA_CORE_VERSION to 1.3.0
+
+Refs: #123"
+```
+
+### 5. Vous Buildez
 
 ```powershell
 python scripts/build/build_all.py
@@ -114,10 +134,10 @@ python scripts/build/build_all.py
 
 **Résultat** :
 ```
-.build/layers/vectora-core-1.2.4.zip  ← Contient code A, B, C
+.build/layers/vectora-core-1.3.0.zip  ← Contient code A, B, C
 ```
 
-### Vous Déployez
+### 6. Vous Déployez Dev
 
 ```powershell
 python scripts/deploy/deploy_env.py --env dev
@@ -125,7 +145,30 @@ python scripts/deploy/deploy_env.py --env dev
 
 **Résultat** :
 ```
-AWS Dev utilise maintenant version 1.2.4 (code A, B, C)
+AWS Dev utilise maintenant version 1.3.0 (code A, B, C)
+```
+
+### 7. Vous Testez
+
+```powershell
+python scripts/invoke/invoke_normalize_score_v2.py --client-id lai_weekly_v7
+```
+
+### 8. Vous Pushez et Créez PR
+
+```bash
+git push origin feature/extraction-dates
+# Créer Pull Request sur GitHub: feature/extraction-dates → develop
+```
+
+### 9. Après Merge, Tag et Promote
+
+```bash
+git checkout develop
+git pull origin develop
+git tag v1.3.0 -m "Release 1.3.0: Add extract_dates"
+git push origin develop --tags
+python scripts/deploy/promote.py --to stage --version 1.3.0 --git-sha $(git rev-parse HEAD)
 ```
 
 ---
@@ -154,21 +197,40 @@ PATCH : Correction bug (1.2.3 → 1.2.4)
 ## ✅ Règles Simples
 
 1. **Un seul fichier VERSION** à la racine
-2. **Incrémenter AVANT build**
-3. **Pas de dossiers de versions** (v1.2.3/, v1.2.4/)
-4. **Historique dans Git**, pas dans le repo
-5. **Format MAJOR.MINOR.PATCH**
+2. **Créer branche feature** avant modification
+3. **Commit AVANT build** (pas après!)
+4. **Incrémenter VERSION** dans le commit
+5. **Tag Git** après validation dev
+6. **Pas de dossiers de versions** (v1.2.3/, v1.2.4/)
+7. **Historique dans Git**, pas dans le repo
+8. **Format MAJOR.MINOR.PATCH**
+9. **Pull Request** obligatoire pour merge
+10. **Synchroniser VERSION ↔ Git tags**
 
 ---
 
 ## 🎯 Résumé Ultra-Simple
 
 ```
-1. Modifier code
-2. Éditer VERSION (incrémenter numéro)
-3. Build (génère .zip avec numéro)
-4. Deploy (AWS utilise .zip avec numéro)
-5. Commit Git (sauvegarde VERSION)
+1. Créer branche feature
+2. Modifier code
+3. Éditer VERSION (incrémenter numéro)
+4. Commit Git (AVANT build!)
+5. Build (génère .zip avec numéro)
+6. Deploy dev (AWS utilise .zip avec numéro)
+7. Test dev
+8. Push et PR
+9. Merge dans develop
+10. Tag Git (v1.X.Y)
+11. Promote stage
 ```
 
 **C'est tout !** 🎉
+
+---
+
+## 📚 Documentation Complète Git
+
+**Workflows détaillés** : `.q-context/vectora-inbox-git-workflow.md`  
+**Règles Git** : `.q-context/vectora-inbox-git-rules.md`  
+**Convention commits** : Conventional Commits (feat/fix/docs/refactor)

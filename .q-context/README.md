@@ -4,7 +4,7 @@
 
 ---
 
-## 🎯 Documents Essentiels (Ordre de Lecture)
+## 📚 Documents Essentiels (Ordre de Lecture)
 
 ### 1. **Démarrage Rapide**
 - [`q-response-format.md`](./q-response-format.md) - 🚨 **FORMAT DE RÉPONSE OBLIGATOIRE**
@@ -12,7 +12,11 @@
 - [`vectora-inbox-governance.md`](./vectora-inbox-governance.md) - Gouvernance et workflow standard
 - [`vectora-inbox-q-prompting-guide.md`](./vectora-inbox-q-prompting-guide.md) - Comment prompter Q Developer
 
-### 2. **Développement**
+### 2. **Git et Versioning** (🔥 NOUVEAU)
+- [`vectora-inbox-git-workflow.md`](./vectora-inbox-git-workflow.md) - 🌟 **WORKFLOWS GIT COMPLETS**
+- [`vectora-inbox-git-rules.md`](./vectora-inbox-git-rules.md) - 🚨 **RÈGLES GIT OBLIGATOIRES**
+
+### 3. **Développement**
 - [`vectora-inbox-development-rules.md`](./vectora-inbox-development-rules.md) - Règles complètes de développement
 - [`vectora-inbox-workflows.md`](./vectora-inbox-workflows.md) - Workflows détaillés par scénario
 - [`q-planning-rules.md`](./q-planning-rules.md) - Règles de planification pour Q
@@ -73,12 +77,19 @@ Souhaitez-vous commencer par la Phase 0 (Cadrage) ?
 ## 🚀 Commandes Rapides
 
 ```bash
-# Build et deploy dev
+# Workflow Git + Build + Deploy
+git checkout -b feature/my-feature
+# Modifier code + VERSION
+git commit -m "feat: description"
 python scripts/build/build_all.py
 python scripts/deploy/deploy_env.py --env dev
 
-# Promouvoir vers stage
-python scripts/deploy/promote.py --to stage --version X.Y.Z
+# Promouvoir vers stage avec Git SHA
+git tag v1.X.Y -m "Release 1.X.Y"
+python scripts/deploy/promote.py --to stage --version X.Y.Z --git-sha $(git rev-parse HEAD)
+
+# Rollback si problème
+python scripts/deploy/rollback.py --env stage --to-version 1.2.3 --git-tag v1.2.3
 
 # Tests
 python scripts/invoke/invoke_normalize_score_v2.py --client-id lai_weekly_v7
@@ -100,10 +111,10 @@ python scripts/invoke/invoke_normalize_score_v2.py --client-id lai_weekly_v7 --e
 ## 🎯 Workflow Standard Résumé
 
 ```
-Prompt Simple → Q Crée Plan → Exécution Phase par Phase → Validation → Rapport → Commit
+Git Branch → Commit → Build → Deploy Dev → Test → PR → Merge → Tag → Promote Stage
 ```
 
-**Principe**: Q Developer gère automatiquement la complexité
+**Principe**: Git AVANT build, pas après déploiement
 
 ---
 

@@ -100,14 +100,19 @@ python scripts/invoke/invoke_normalize_score_v2.py --client-id lai_weekly_v7 --e
 
 ## ✅ Workflow Standard
 
-1. Modifier code dans `src_v2/`
-2. Incrémenter version dans `VERSION`
-3. `python scripts/build/build_all.py`
-4. `python scripts/deploy/deploy_env.py --env dev`
-5. Tester en dev
-6. `python scripts/deploy/promote.py --to stage --version X.Y.Z`
-7. Tester en stage
-8. `git commit` et `git push`
+1. **Créer branche** depuis develop
+2. Modifier code dans `src_v2/`
+3. Incrémenter version dans `VERSION`
+4. **Commit** (AVANT build!)
+5. `python scripts/build/build_all.py`
+6. `python scripts/deploy/deploy_env.py --env dev`
+7. Tester en dev
+8. **Push et Pull Request**
+9. **Merge** dans develop
+10. **Tag** version: `git tag v1.X.Y`
+11. `python scripts/deploy/promote.py --to stage --version X.Y.Z --git-sha <sha>`
+12. Tester en stage
+13. **PR develop → main** (pour production)
 
 ---
 

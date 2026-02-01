@@ -1,0 +1,29 @@
+# Code Owners - Vectora Inbox
+
+# Default owner
+* @francoisissartel-cloud
+
+# Q Context and Documentation
+/.q-context/ @francoisissartel-cloud
+/docs/ @francoisissartel-cloud
+
+# Source Code
+/src_v2/vectora_core/ @francoisissartel-cloud
+/src_v2/lambdas/ @francoisissartel-cloud
+
+# Infrastructure
+/infra/ @francoisissartel-cloud
+/scripts/deploy/ @francoisissartel-cloud
+/scripts/maintenance/ @francoisissartel-cloud
+
+# Configuration
+/canonical/ @francoisissartel-cloud
+/client-config-examples/ @francoisissartel-cloud
+
+# Critical Files
+/VERSION @francoisissartel-cloud
+/.github/ @francoisissartel-cloud
+/.gitignore @francoisissartel-cloud
+
+# Tests
+/tests/ @francoisissartel-cloud

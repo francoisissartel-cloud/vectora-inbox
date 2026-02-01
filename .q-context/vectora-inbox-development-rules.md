@@ -7,11 +7,31 @@
 
 ---
 
-## 🚨 RÈGLE CRITIQUE : FORMAT DE PREMIÈRE RÉPONSE OBLIGATOIRE
+## 🚨 RÈGLES CRITIQUES
+
+### 1. Format de Première Réponse Obligatoire
 
 **Q Developer DOIT TOUJOURS commencer par un format standardisé lors de la première réponse à un prompt utilisateur.**
 
 **Document de référence** : `.q-context/q-response-format.md`
+
+### 2. Git Integration Obligatoire
+
+**Q Developer DOIT TOUJOURS intégrer Git AVANT le build, pas après le déploiement.**
+
+**Documents de référence** :
+- `.q-context/vectora-inbox-git-workflow.md` - Workflows Git complets
+- `.q-context/vectora-inbox-git-rules.md` - Règles Git obligatoires
+
+**Workflow obligatoire** :
+```
+Git Branch → Commit → Build → Deploy Dev → Test → PR → Merge → Tag → Promote Stage
+```
+
+**❌ INTERDIT** :
+```
+Build → Deploy → Test → Git Commit  # Trop tard!
+```
 
 ### Objectif
 
@@ -92,7 +112,47 @@ Merci de commencer par le format de réponse initiale obligatoire défini dans
 
 ## 🎯 RÈGLES PRIORITAIRES POUR Q DEVELOPER
 
-### 1. Architecture de Référence (OBLIGATOIRE)
+### 1. Git Integration (CRITIQUE)
+
+**✅ TOUJOURS créer branche avant modification :**
+```bash
+git checkout develop
+git checkout -b feature/my-feature
+# Modifier code...
+git commit -m "feat: description"
+# PUIS build et deploy
+```
+
+**✅ TOUJOURS commit AVANT build :**
+```bash
+git add src_v2/ VERSION
+git commit -m "feat(vectora-core): add feature"
+python scripts/build/build_all.py  # Après commit
+```
+
+**✅ TOUJOURS synchroniser VERSION avec Git tags :**
+```bash
+# Après validation en dev
+git tag v1.3.0 -m "Release 1.3.0"
+git push origin develop --tags
+python scripts/deploy/promote.py --to stage --version 1.3.0 --git-sha $(git rev-parse HEAD)
+```
+
+**❌ NE JAMAIS commit direct sur main/develop :**
+```bash
+# ❌ INTERDIT
+git checkout develop
+git commit -m "add feature"
+git push origin develop
+
+# ✅ OBLIGATOIRE
+git checkout -b feature/my-feature
+git commit -m "feat: add feature"
+git push origin feature/my-feature
+# Créer PR
+```
+
+### 2. Architecture de Référence (OBLIGATOIRE)
 
 **✅ TOUJOURS utiliser l'architecture 3 Lambdas V2 :**
 ```

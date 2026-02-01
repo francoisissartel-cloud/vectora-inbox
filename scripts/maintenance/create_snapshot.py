@@ -1,298 +1,176 @@
 #!/usr/bin/env python3
 """
-Script de création de snapshot complet de l'environnement Vectora Inbox.
-
-Usage:
-    python scripts/maintenance/create_snapshot.py --env dev --name "lai_v7_stable"
-    python scripts/maintenance/create_snapshot.py --env dev --name "pre_migration_v8" --client lai_weekly
+Créer snapshot de l'environnement actuel
+Usage: python scripts/maintenance/create_snapshot.py --env dev --name "pre_deploy_v124"
 """
-
 import argparse
+import boto3
 import json
-import os
-import subprocess
 from datetime import datetime
 from pathlib import Path
 
-
-def run_aws_command(command: list[str]) -> dict:
-    """Exécute une commande AWS CLI et retourne le résultat JSON."""
+def get_lambda_config(lambda_client, function_name):
+    """Récupérer configuration complète Lambda"""
     try:
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        if result.stdout:
-            return json.loads(result.stdout)
-        return {}
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Erreur commande AWS: {e}")
-        print(f"   stderr: {e.stderr}")
-        return {}
-    except json.JSONDecodeError:
-        return {"raw_output": result.stdout}
+        response = lambda_client.get_function_configuration(FunctionName=function_name)
+        
+        return {
+            'function_name': function_name,
+            'function_arn': response['FunctionArn'],
+            'runtime': response['Runtime'],
+            'handler': response['Handler'],
+            'memory_size': response['MemorySize'],
+            'timeout': response['Timeout'],
+            'layers': [
+                {
+                    'arn': layer['Arn'],
+                    'code_size': layer.get('CodeSize', 0)
+                }
+                for layer in response.get('Layers', [])
+            ],
+            'environment': response.get('Environment', {}).get('Variables', {}),
+            'last_modified': response['LastModified']
+        }
+    except Exception as e:
+        return {'error': str(e)}
 
+def get_s3_config_files(s3_client, bucket, prefix='canonical/'):
+    """Lister fichiers de configuration S3"""
+    files = []
+    
+    try:
+        paginator = s3_client.get_paginator('list_objects_v2')
+        for page in paginator.paginate(Bucket=bucket, Prefix=prefix):
+            for obj in page.get('Contents', []):
+                files.append({
+                    'key': obj['Key'],
+                    'size': obj['Size'],
+                    'last_modified': obj['LastModified'].isoformat()
+                })
+    except Exception as e:
+        files.append({'error': str(e)})
+    
+    return files
 
-def create_snapshot(env: str, snapshot_name: str, client_id: str = None):
-    """Crée un snapshot complet de l'environnement."""
+def create_snapshot(env, name=None):
+    """Créer snapshot complet de l'environnement"""
     
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    snapshot_dir = Path(f"backup/snapshots/{snapshot_name}_{timestamp}")
-    snapshot_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    snapshot_name = name or f"snapshot_{env}_{timestamp}"
     
-    print(f"📸 Création snapshot: {snapshot_name}")
-    print(f"   Environnement: {env}")
-    print(f"   Dossier: {snapshot_dir}")
-    print()
+    print(f"📸 Creating snapshot: {snapshot_name}")
+    print(f"   Environment: {env}")
     
-    # Métadonnées snapshot
-    metadata = {
-        "snapshot_name": snapshot_name,
-        "environment": env,
-        "timestamp": timestamp,
-        "created_at": datetime.now().isoformat(),
-        "client_id": client_id,
-        "components": {}
+    session = boto3.Session(profile_name='rag-lai-prod', region_name='eu-west-3')
+    lambda_client = session.client('lambda')
+    s3_client = session.client('s3')
+    
+    snapshot = {
+        'metadata': {
+            'name': snapshot_name,
+            'env': env,
+            'timestamp': datetime.now().isoformat(),
+            'created_by': 'create_snapshot.py'
+        },
+        'lambdas': {},
+        's3_config': {},
+        's3_data': {}
     }
     
-    # 1. Sauvegarder configurations Lambda
-    print("1️⃣ Sauvegarde configurations Lambda...")
+    # 1. Snapshot Lambdas
+    print(f"\n📦 Snapshotting Lambda functions...")
     lambda_functions = [
-        f"vectora-inbox-ingest-v2-{env}",
-        f"vectora-inbox-normalize-score-v2-{env}",
-        f"vectora-inbox-newsletter-v2-{env}"
+        f'vectora-inbox-ingest-v2-{env}',
+        f'vectora-inbox-normalize-score-v2-{env}',
+        f'vectora-inbox-newsletter-v2-{env}'
     ]
     
-    lambda_configs = {}
-    for func_name in lambda_functions:
-        print(f"   - {func_name}")
-        config = run_aws_command([
-            "aws", "lambda", "get-function",
-            "--function-name", func_name,
-            "--profile", "rag-lai-prod",
-            "--region", "eu-west-3",
-            "--query", "Configuration"
-        ])
-        if config:
-            lambda_configs[func_name] = config
-            
-            # Sauvegarder dans fichier individuel
-            with open(snapshot_dir / f"lambda_{func_name}.json", "w") as f:
-                json.dump(config, f, indent=2)
+    for function_name in lambda_functions:
+        config = get_lambda_config(lambda_client, function_name)
+        snapshot['lambdas'][function_name] = config
+        
+        if 'error' in config:
+            print(f"   ⚠️ {function_name}: {config['error']}")
+        else:
+            print(f"   ✅ {function_name}")
+            print(f"      Layers: {len(config['layers'])}")
+            print(f"      Memory: {config['memory_size']}MB")
+            print(f"      Timeout: {config['timeout']}s")
     
-    metadata["components"]["lambdas"] = lambda_configs
-    print(f"   ✅ {len(lambda_configs)} Lambdas sauvegardées\n")
+    # 2. Snapshot S3 Config
+    print(f"\n📄 Snapshotting S3 config bucket...")
+    config_bucket = f'vectora-inbox-config-{env}'
     
-    # 2. Sauvegarder versions Lambda Layers
-    print("2️⃣ Sauvegarde Lambda Layers...")
-    layer_names = [
-        f"vectora-inbox-vectora-core-{env}",
-        f"vectora-inbox-common-deps-{env}",
-        f"vectora-inbox-vectora-core-approche-b-{env}"
-    ]
+    snapshot['s3_config']['bucket'] = config_bucket
+    snapshot['s3_config']['canonical'] = get_s3_config_files(s3_client, config_bucket, 'canonical/')
+    snapshot['s3_config']['clients'] = get_s3_config_files(s3_client, config_bucket, 'clients/')
     
-    layer_versions = {}
-    for layer_name in layer_names:
-        print(f"   - {layer_name}")
-        versions = run_aws_command([
-            "aws", "lambda", "list-layer-versions",
-            "--layer-name", layer_name,
-            "--profile", "rag-lai-prod",
-            "--region", "eu-west-3",
-            "--max-items", "1"
-        ])
-        if versions and "LayerVersions" in versions:
-            layer_versions[layer_name] = versions["LayerVersions"][0]
-            
-            # Sauvegarder dans fichier individuel
-            with open(snapshot_dir / f"layer_{layer_name}.json", "w") as f:
-                json.dump(versions["LayerVersions"][0], f, indent=2)
+    print(f"   ✅ Canonical files: {len(snapshot['s3_config']['canonical'])}")
+    print(f"   ✅ Client configs: {len(snapshot['s3_config']['clients'])}")
     
-    metadata["components"]["layers"] = layer_versions
-    print(f"   ✅ {len(layer_versions)} Layers sauvegardés\n")
+    # 3. Snapshot S3 Data (metadata uniquement)
+    print(f"\n💾 Snapshotting S3 data bucket (metadata)...")
+    data_bucket = f'vectora-inbox-data-{env}'
     
-    # 3. Sauvegarder configurations client S3
-    print("3️⃣ Sauvegarde configurations client S3...")
-    config_bucket = f"vectora-inbox-config-{env}"
+    snapshot['s3_data']['bucket'] = data_bucket
+    snapshot['s3_data']['ingested'] = get_s3_config_files(s3_client, data_bucket, 'ingested/')[:10]  # Limiter à 10
+    snapshot['s3_data']['curated'] = get_s3_config_files(s3_client, data_bucket, 'curated/')[:10]
     
-    if client_id:
-        # Sauvegarder client spécifique
-        client_configs = [f"clients/{client_id}.yaml"]
+    print(f"   ✅ Data bucket metadata captured")
+    
+    # 4. Sauvegarder snapshot
+    snapshot_dir = Path('docs/snapshots')
+    snapshot_dir.mkdir(parents=True, exist_ok=True)
+    
+    snapshot_file = snapshot_dir / f"{snapshot_name}.json"
+    with open(snapshot_file, 'w') as f:
+        json.dump(snapshot, f, indent=2)
+    
+    print(f"\n✅ SNAPSHOT CREATED")
+    print(f"   File: {snapshot_file}")
+    print(f"   Size: {snapshot_file.stat().st_size / 1024:.1f} KB")
+    
+    # 5. Créer index des snapshots
+    update_snapshot_index(snapshot_dir, snapshot_name, env)
+    
+    return snapshot_file
+
+def update_snapshot_index(snapshot_dir, snapshot_name, env):
+    """Mettre à jour l'index des snapshots"""
+    index_file = snapshot_dir / 'INDEX.md'
+    
+    # Lire index existant
+    if index_file.exists():
+        with open(index_file) as f:
+            content = f.read()
     else:
-        # Lister tous les clients
-        result = run_aws_command([
-            "aws", "s3", "ls",
-            f"s3://{config_bucket}/clients/",
-            "--profile", "rag-lai-prod",
-            "--region", "eu-west-3"
-        ])
-        client_configs = []  # À parser depuis result
+        content = "# Snapshots Index\n\n"
+        content += "Liste des snapshots disponibles pour rollback.\n\n"
+        content += "## Snapshots\n\n"
+        content += "| Date | Nom | Environnement | Fichier |\n"
+        content += "|------|-----|---------------|----------|\n"
     
-    # Télécharger configurations client
-    client_dir = snapshot_dir / "clients"
-    client_dir.mkdir(exist_ok=True)
+    # Ajouter nouvelle entrée
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
+    new_entry = f"| {timestamp} | {snapshot_name} | {env} | `{snapshot_name}.json` |\n"
     
-    for client_config in client_configs:
-        print(f"   - {client_config}")
-        subprocess.run([
-            "aws", "s3", "cp",
-            f"s3://{config_bucket}/{client_config}",
-            str(client_dir / Path(client_config).name),
-            "--profile", "rag-lai-prod",
-            "--region", "eu-west-3"
-        ], check=False)
+    content += new_entry
     
-    print(f"   ✅ Configurations client sauvegardées\n")
+    with open(index_file, 'w') as f:
+        f.write(content)
     
-    # 4. Sauvegarder canonical (scopes, prompts, sources)
-    print("4️⃣ Sauvegarde canonical S3...")
-    canonical_dir = snapshot_dir / "canonical"
-    canonical_dir.mkdir(exist_ok=True)
-    
-    subprocess.run([
-        "aws", "s3", "sync",
-        f"s3://{config_bucket}/canonical/",
-        str(canonical_dir),
-        "--profile", "rag-lai-prod",
-        "--region", "eu-west-3"
-    ], check=False)
-    
-    print(f"   ✅ Canonical sauvegardé\n")
-    
-    # 5. Sauvegarder dernières données curated (si client spécifié)
-    if client_id:
-        print("5️⃣ Sauvegarde dernières données curated...")
-        data_bucket = f"vectora-inbox-data-{env}"
-        
-        # Trouver dernière exécution
-        result = subprocess.run([
-            "aws", "s3", "ls",
-            f"s3://{data_bucket}/curated/{client_id}/",
-            "--recursive",
-            "--profile", "rag-lai-prod",
-            "--region", "eu-west-3"
-        ], capture_output=True, text=True, check=False)
-        
-        if result.stdout:
-            # Parser dernière ligne (plus récent)
-            lines = [l for l in result.stdout.strip().split("\n") if l]
-            if lines:
-                last_line = lines[-1]
-                s3_path = last_line.split()[-1]
-                
-                print(f"   - {s3_path}")
-                subprocess.run([
-                    "aws", "s3", "cp",
-                    f"s3://{data_bucket}/{s3_path}",
-                    str(snapshot_dir / "curated_items.json"),
-                    "--profile", "rag-lai-prod",
-                    "--region", "eu-west-3"
-                ], check=False)
-        
-        print(f"   ✅ Données curated sauvegardées\n")
-    
-    # 6. Sauvegarder stacks CloudFormation
-    print("6️⃣ Sauvegarde stacks CloudFormation...")
-    stack_names = [
-        f"vectora-inbox-s0-core-{env}",
-        f"vectora-inbox-s0-iam-{env}",
-        f"vectora-inbox-s1-runtime-{env}"
-    ]
-    
-    stacks_dir = snapshot_dir / "stacks"
-    stacks_dir.mkdir(exist_ok=True)
-    
-    for stack_name in stack_names:
-        print(f"   - {stack_name}")
-        stack_info = run_aws_command([
-            "aws", "cloudformation", "describe-stacks",
-            "--stack-name", stack_name,
-            "--profile", "rag-lai-prod",
-            "--region", "eu-west-3"
-        ])
-        
-        if stack_info and "Stacks" in stack_info:
-            with open(stacks_dir / f"{stack_name}.json", "w") as f:
-                json.dump(stack_info["Stacks"][0], f, indent=2)
-    
-    print(f"   ✅ Stacks CloudFormation sauvegardées\n")
-    
-    # 7. Sauvegarder métadonnées snapshot
-    print("7️⃣ Sauvegarde métadonnées snapshot...")
-    with open(snapshot_dir / "snapshot_metadata.json", "w") as f:
-        json.dump(metadata, f, indent=2)
-    
-    # Créer README snapshot
-    readme_content = f"""# Snapshot Vectora Inbox: {snapshot_name}
+    print(f"   📋 Index updated: {index_file}")
 
-**Date**: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}  
-**Environnement**: {env}  
-**Client**: {client_id or "Tous"}
-
-## Contenu du Snapshot
-
-- ✅ Configurations Lambda (3 fonctions)
-- ✅ Versions Lambda Layers
-- ✅ Configurations client S3
-- ✅ Canonical (scopes, prompts, sources)
-- ✅ Données curated (dernière exécution)
-- ✅ Stacks CloudFormation
-
-## Restauration
-
-Pour restaurer ce snapshot:
-
-```bash
-python scripts/maintenance/rollback_snapshot.py --snapshot {snapshot_name}_{timestamp}
-```
-
-## Métadonnées
-
-Voir `snapshot_metadata.json` pour détails complets.
-"""
-    
-    with open(snapshot_dir / "README.md", "w") as f:
-        f.write(readme_content)
-    
-    print(f"   ✅ Métadonnées sauvegardées\n")
-    
-    # Résumé final
-    print("=" * 60)
-    print(f"✅ SNAPSHOT CRÉÉ AVEC SUCCÈS")
-    print(f"   Nom: {snapshot_name}_{timestamp}")
-    print(f"   Dossier: {snapshot_dir}")
-    print(f"   Taille: {sum(f.stat().st_size for f in snapshot_dir.rglob('*') if f.is_file()) / 1024:.1f} KB")
-    print("=" * 60)
-    
-    return snapshot_dir
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Créer un snapshot complet de l'environnement Vectora Inbox"
-    )
-    parser.add_argument(
-        "--env",
-        required=True,
-        choices=["dev", "stage", "prod"],
-        help="Environnement à sauvegarder"
-    )
-    parser.add_argument(
-        "--name",
-        required=True,
-        help="Nom du snapshot (ex: lai_v7_stable, pre_migration_v8)"
-    )
-    parser.add_argument(
-        "--client",
-        help="ID client spécifique à sauvegarder (optionnel)"
-    )
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Create environment snapshot')
+    parser.add_argument('--env', required=True, choices=['dev', 'stage', 'prod'],
+                       help='Environment to snapshot')
+    parser.add_argument('--name', help='Snapshot name (optional)')
     
     args = parser.parse_args()
     
-    create_snapshot(args.env, args.name, args.client)
-
-
-if __name__ == "__main__":
-    main()
+    try:
+        create_snapshot(args.env, args.name)
+    except Exception as e:
+        print(f"\n❌ Error: {e}")
+        exit(1)
