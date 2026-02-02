@@ -27,9 +27,9 @@
 
 **Q Developer DOIT TOUJOURS vérifier TOUS les composants lors d'un déploiement AWS.**
 
-**Document de référence** : `.q-context/vectora-inbox-deployment-checklist.md`
-
 **RÈGLE D'OR**: Un déploiement AWS = Code + Data + Validation
+
+**Checklist complète**: Voir section "CHECKLIST DÉPLOIEMENT AWS COMPLET" dans development-rules.md
 
 **Q DOIT TOUJOURS**:
 - ✅ Identifier TOUS les fichiers modifiés (code + canonical + configs)
@@ -316,25 +316,100 @@ VECTORA_CORE_VERSION=1.2.3
 5. Incrémenter version dans `VERSION`
 6. Build: `python scripts/build/build_all.py`
 7. Deploy dev: `python scripts/deploy/deploy_env.py --env dev`
+8. **Upload canonical si modifié**: `aws s3 sync canonical/ s3://vectora-inbox-config-dev/canonical/ --profile rag-lai-prod`
 
 **Phase 3: Test AWS Dev (VALIDATION)**:
-8. Promouvoir contexte: `python tests/aws/test_e2e_runner.py --promote "Validation E2E"`
-9. Exécuter test AWS: `python tests/aws/test_e2e_runner.py --run`
-10. Vérifier succès: `python tests/aws/test_e2e_runner.py --status`
+9. Promouvoir contexte: `python tests/aws/test_e2e_runner.py --promote "Validation E2E"`
+10. Exécuter test AWS: `python tests/aws/test_e2e_runner.py --run`
+11. Vérifier succès: `python tests/aws/test_e2e_runner.py --status`
 
 **Phase 4: Promotion Stage (SI AWS DEV OK)**:
-11. Promouvoir: `python scripts/deploy/promote.py --to stage --version X.Y.Z`
-12. Test stage: `python tests/aws/test_e2e_runner.py --run` (avec client stage)
+12. Promouvoir: `python scripts/deploy/promote.py --to stage --version X.Y.Z`
+13. Test stage: `python tests/aws/test_e2e_runner.py --run` (avec client stage)
 
 **Phase 5: Commit**:
-13. `git add .`
-14. `git commit -m "feat: description"`
-15. `git push`
+14. `git add .`
+15. `git commit -m "feat: description"`
+16. `git push`
 
 **🛡️ PROTECTIONS AUTOMATIQUES**:
 - ❌ Impossible de promouvoir vers AWS sans succès local
 - ❌ Impossible de promouvoir vers stage sans succès dev
 - ✅ Traçabilité complète via registry.json
+
+---
+
+## 🚀 CHECKLIST DÉPLOIEMENT AWS COMPLET (CRITIQUE)
+
+### RÈGLE D'OR
+
+**Un déploiement AWS = Code + Data + Validation**
+
+### Composants Obligatoires
+
+**1. Code Lambda (Layers)**:
+- [ ] Build layers: `python scripts/build/build_all.py`
+- [ ] Deploy layers: `python scripts/deploy/deploy_env.py --env dev`
+- [ ] Vérifier update Lambdas (automatique via deploy_env.py)
+
+**2. Fichiers Canonical S3** (SOUVENT OUBLIÉ!):
+- [ ] Identifier fichiers canonical modifiés: `git status canonical/`
+- [ ] Upload vers S3: `aws s3 sync canonical/ s3://vectora-inbox-config-{env}/canonical/ --profile rag-lai-prod`
+- [ ] Vérifier présence: `aws s3 ls s3://vectora-inbox-config-{env}/canonical/prompts/ --recursive --profile rag-lai-prod`
+
+**3. Client Configs**:
+- [ ] Vérifier configs modifiés: `git status client-config-examples/`
+- [ ] Upload si nécessaire (généralement auto-généré par runners)
+
+**4. Validation Post-Déploiement**:
+- [ ] Test E2E AWS: `python scripts/invoke/invoke_e2e_workflow.py --client-id lai_weekly_vX --env dev`
+- [ ] Vérifier logs Lambda (pas d'erreurs FileNotFound)
+- [ ] Confirmer résultats attendus
+
+### Matrice Décision Rapide
+
+| Changement | Build | Deploy Layer | Upload Canonical | Test E2E |
+|------------|-------|--------------|------------------|----------|
+| Code Python | ✅ | ✅ | ❌ | ✅ |
+| Canonical prompts | ❌ | ❌ | ✅ | ✅ |
+| Canonical domains | ❌ | ❌ | ✅ | ✅ |
+| Code + Canonical | ✅ | ✅ | ✅ | ✅ |
+
+### Détection Problèmes Canonical
+
+**Symptômes**:
+- Lambda logs: `FileNotFoundError: canonical/prompts/domain_scoring/...`
+- Lambda logs: `No such key: canonical/domains/...`
+- Tests locaux OK, tests AWS KO
+
+**Diagnostic**:
+```bash
+# Vérifier fichiers locaux
+ls canonical/prompts/domain_scoring/
+
+# Vérifier S3
+aws s3 ls s3://vectora-inbox-config-dev/canonical/prompts/domain_scoring/ --profile rag-lai-prod
+
+# Upload si manquant
+aws s3 sync canonical/ s3://vectora-inbox-config-dev/canonical/ --profile rag-lai-prod
+```
+
+### Règles Q Developer
+
+**AVANT de dire "Déploiement complété"**:
+1. Ai-je créé/modifié des fichiers dans canonical/?
+2. Ces fichiers existent-ils sur S3?
+3. Le test E2E AWS passe-t-il?
+
+**JAMAIS assumer**:
+❌ "Le code est déployé donc c'est bon"
+❌ "Les fichiers canonical sont déjà sur S3"
+❌ "Ça marche en local donc ça marchera sur AWS"
+
+**TOUJOURS vérifier**:
+✅ "J'ai vérifié que TOUS les fichiers nécessaires sont sur S3"
+✅ "J'ai lancé un test E2E AWS pour confirmer"
+✅ "J'ai consulté les logs Lambda pour vérifier"
 
 ### Scripts de Gouvernance
 

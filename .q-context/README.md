@@ -23,7 +23,6 @@
 
 ### 3. **Développement**
 - [`vectora-inbox-development-rules.md`](./vectora-inbox-development-rules.md) - 🔥 **RÈGLES COMPLÈTES (Tests E2E + Client Config + Déploiement AWS)**
-- [`vectora-inbox-deployment-checklist.md`](./vectora-inbox-deployment-checklist.md) - 🚨 **CHECKLIST DÉPLOIEMENT AWS COMPLET**
 - [`vectora-inbox-coding-standards.md`](./vectora-inbox-coding-standards.md) - 🚨 **STANDARDS DE CODAGE (Encodage, ASCII)**
 - [`vectora-inbox-workflows.md`](./vectora-inbox-workflows.md) - Workflows détaillés par scénario
 - [`vectora-inbox-test-e2e-system.md`](./vectora-inbox-test-e2e-system.md) - 🔥 **SYSTÈME TESTS E2E (Contextes, Protection AWS)**
