@@ -323,7 +323,7 @@ def load_canonical_scopes(config_bucket: str) -> Dict[str, Any]:
         config_bucket: Nom du bucket de configuration S3
     
     Returns:
-        Dict contenant tous les scopes par catégorie
+        Dict contenant tous les scopes par catégorie (scopes aplatis + domains)
     """
     logger.info("Chargement des scopes canonical")
     
@@ -362,37 +362,90 @@ def load_canonical_scopes(config_bucket: str) -> Dict[str, Any]:
         except Exception as e:
             logger.warning(f"Impossible de charger {file_path}: {str(e)}")
     
-    logger.info(f"Total scopes chargés : {len(all_scopes)}")
-    return all_scopes
+    # Chargement des domain definitions (NOUVEAU)
+    domains = {}
+    domain_files = {
+        "lai_domain_definition": "canonical/domains/lai_domain_definition.yaml"
+    }
+    
+    for domain_name, file_path in domain_files.items():
+        try:
+            domain_data = s3_io.read_yaml_from_s3(config_bucket, file_path)
+            domains[domain_name] = domain_data
+            logger.info(f"Domain definition chargée : {domain_name}")
+        except Exception as e:
+            logger.warning(f"Impossible de charger {file_path}: {str(e)}")
+    
+    # Structure finale: scopes aplatis + domains
+    result = all_scopes.copy()
+    if domains:
+        result['domains'] = domains
+        logger.info(f"Domains ajoutés : {len(domains)} domain(s)")
+    
+    logger.info(f"Total scopes chargés : {len(all_scopes)} scopes + {len(domains)} domain(s)")
+    return result
 
 
 def load_canonical_prompts(config_bucket: str) -> Dict[str, Any]:
     """
-    Charge les prompts canonical avec validation depuis S3.
+    Charge les prompts canonical depuis S3 (architecture v2.0).
+    
+    Structure attendue:
+    - normalization/generic_normalization.yaml
+    - domain_scoring/lai_domain_scoring.yaml
+    - matching/lai_matching.yaml
+    - editorial/lai_editorial.yaml
     
     Args:
         config_bucket: Nom du bucket de configuration S3
     
     Returns:
-        Dict contenant les prompts canonical
+        Dict contenant les prompts canonical par catégorie
     """
     logger.info("Chargement des prompts canonical")
     
-    try:
-        prompts = s3_io.read_yaml_from_s3(config_bucket, "canonical/prompts/global_prompts.yaml")
+    all_prompts = {}
+    
+    # Chargement des différents types de prompts
+    prompt_files = {
+        "normalization": {
+            "generic_normalization": "canonical/prompts/normalization/generic_normalization.yaml"
+        },
+        "domain_scoring": {
+            "lai_domain_scoring": "canonical/prompts/domain_scoring/lai_domain_scoring.yaml"
+        },
+        "matching": {
+            "lai_matching": "canonical/prompts/matching/lai_matching.yaml"
+        },
+        "editorial": {
+            "lai_editorial": "canonical/prompts/editorial/lai_editorial.yaml"
+        }
+    }
+    
+    for category, prompts_dict in prompt_files.items():
+        category_prompts = {}
+        for prompt_name, file_path in prompts_dict.items():
+            try:
+                prompt_data = s3_io.read_yaml_from_s3(config_bucket, file_path)
+                category_prompts[prompt_name] = prompt_data
+                logger.info(f"Prompt chargé : {category}/{prompt_name}")
+            except Exception as e:
+                logger.warning(f"Impossible de charger {file_path}: {str(e)}")
         
-        # Validation présence prompts anti-hallucinations
-        if 'normalization' in prompts and 'lai_default' in prompts['normalization']:
-            user_template = prompts['normalization']['lai_default'].get('user_template', '')
-            if 'CRITICAL' in user_template and 'FORBIDDEN' in user_template:
-                logger.info("✅ Anti-hallucination prompts loaded successfully")
-            else:
-                logger.warning("⚠️ Anti-hallucination keywords not found in prompts")
-        else:
-            logger.warning("⚠️ Normalization prompts structure incomplete")
-        
-        logger.info("Prompts canonical chargés avec succès")
-        return prompts
-    except Exception as e:
-        logger.error(f"Impossible de charger les prompts canonical: {str(e)}")
-        return {}
+        if category_prompts:
+            all_prompts[category] = category_prompts
+            logger.info(f"Catégorie {category} : {len(category_prompts)} prompt(s) chargé(s)")
+    
+    # Validation structure
+    if 'normalization' in all_prompts and 'generic_normalization' in all_prompts['normalization']:
+        logger.info("✅ Generic normalization prompt loaded")
+    else:
+        logger.warning("⚠️ Generic normalization prompt missing")
+    
+    if 'domain_scoring' in all_prompts and 'lai_domain_scoring' in all_prompts['domain_scoring']:
+        logger.info("✅ LAI domain scoring prompt loaded")
+    else:
+        logger.warning("⚠️ LAI domain scoring prompt missing")
+    
+    logger.info(f"Prompts canonical chargés : {len(all_prompts)} catégorie(s)")
+    return all_prompts
