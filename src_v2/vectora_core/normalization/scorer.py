@@ -95,20 +95,11 @@ def _calculate_item_score(
 ) -> Dict[str, Any]:
     """Calcule le score d'un item individuel."""
     
-    # 0. Déterminer la date effective (Bedrock ou fallback)
-    normalized = item.get("normalized_content", {})
-    extracted_date = normalized.get("extracted_date")
-    date_confidence = normalized.get("date_confidence", 0.0)
-    
-    # Prioriser date Bedrock si confiance > 0.7
-    if extracted_date and date_confidence > 0.7:
-        effective_date = extracted_date
-        logger.debug(f"Using Bedrock date: {effective_date} (confidence: {date_confidence})")
-    else:
-        effective_date = item.get('published_at')
-        logger.debug(f"Using fallback date: {effective_date}")
+    # 0. Utiliser effective_date calculé en amont
+    effective_date = item.get('effective_date')
     
     # 1. Score de base selon le type d'événement
+    normalized = item.get("normalized_content", {})
     event_type = normalized.get("event_classification", {}).get("primary_type", "other")
     base_score = _get_event_type_score(event_type, scoring_config)
     

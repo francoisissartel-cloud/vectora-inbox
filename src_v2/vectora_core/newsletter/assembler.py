@@ -337,8 +337,8 @@ def _format_item_markdown(item):
     
     source_key = item.get('source_key', 'Unknown Source')
     
-    # NOUVEAU: Utiliser effective_date (date Bedrock) si disponible, sinon published_at
-    effective_date = scoring.get('effective_date') or item.get('published_at', '')[:10]
+    # Utiliser effective_date directement
+    effective_date = item.get('effective_date', '')[:10] if item.get('effective_date') else ''
     url = item.get('url', '#')
     
     # Extraction des entités clés
@@ -456,8 +456,8 @@ def _format_item_json(item):
     # Utiliser final_score
     score = scoring.get('final_score', 0)
     
-    # NOUVEAU: Utiliser effective_date (date Bedrock) si disponible
-    effective_date = scoring.get('effective_date') or item.get('published_at', '')
+    # Utiliser effective_date directement
+    effective_date = item.get('effective_date', '')
     
     return {
         "item_id": item.get('item_id', ''),

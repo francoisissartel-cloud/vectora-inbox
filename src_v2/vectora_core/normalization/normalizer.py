@@ -440,6 +440,26 @@ def _enrich_item_with_normalization(
             extracted_date = None
             date_confidence = 0.0
     
+    # Calcul de effective_date (date unique pour tout le pipeline)
+    published_at = original_item.get('published_at', '')
+    
+    # Logique de sélection: prioriser Bedrock si confiance > 0.7
+    if extracted_date and date_confidence > 0.7:
+        effective_date = extracted_date
+        date_source = 'bedrock'
+    else:
+        effective_date = published_at[:10] if published_at else None
+        date_source = 'published_at'
+    
+    # Ajouter au niveau racine
+    enriched_item['effective_date'] = effective_date
+    enriched_item['date_metadata'] = {
+        'source': date_source,
+        'bedrock_date': extracted_date,
+        'bedrock_confidence': date_confidence,
+        'published_at': published_at
+    }
+    
     # Construction de la section normalized_content avec champs LAI complets
     enriched_item["normalized_content"] = {
         "summary": normalization_result.get("summary", ""),
