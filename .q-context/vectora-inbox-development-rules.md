@@ -23,7 +23,34 @@
 - `.q-context/vectora-inbox-git-workflow.md` - Workflows Git complets
 - `.q-context/vectora-inbox-git-rules.md` - Règles Git obligatoires
 
-### 3. Mode Assistant Guidé (NOUVEAU)
+### 3. Déploiement AWS Complet Obligatoire (CRITIQUE)
+
+**Q Developer DOIT TOUJOURS vérifier TOUS les composants lors d'un déploiement AWS.**
+
+**Document de référence** : `.q-context/vectora-inbox-deployment-checklist.md`
+
+**RÈGLE D'OR**: Un déploiement AWS = Code + Data + Validation
+
+**Q DOIT TOUJOURS**:
+- ✅ Identifier TOUS les fichiers modifiés (code + canonical + configs)
+- ✅ Déployer layers SI code modifié
+- ✅ Upload canonical/ vers S3 SI canonical/ modifié
+- ✅ Upload client-configs vers S3 SI configs modifiés
+- ✅ Vérifier présence fichiers sur S3 après upload
+- ✅ Lancer test E2E AWS pour validation
+- ✅ Consulter logs Lambda pour confirmer
+
+**Q NE DOIT JAMAIS**:
+- ❌ Assumer que fichiers canonical sont déjà sur S3
+- ❌ Dire "déploiement complété" sans vérifier S3
+- ❌ Oublier d'uploader fichiers canonical après modification
+- ❌ Déployer code sans déployer data associée
+
+**Phrase magique**: "Ai-je créé/modifié des fichiers dans canonical/? Sont-ils sur S3?"
+
+### 4. Mode Assistant Guidé
+
+### 4. Mode Assistant Guidé
 
 **Q Developer DOIT agir comme un mentor pour les développeurs débutants.**
 
