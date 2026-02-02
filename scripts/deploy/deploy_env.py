@@ -6,6 +6,8 @@ Usage: python scripts/deploy/deploy_env.py --env dev [--dry-run]
 import argparse
 import subprocess
 import sys
+import json
+import boto3
 from pathlib import Path
 
 def get_version(artifact):
@@ -15,6 +17,45 @@ def get_version(artifact):
             if line.startswith(f'{artifact}_VERSION='):
                 return line.split('=')[1].strip()
     raise ValueError(f"{artifact}_VERSION not found in VERSION file")
+
+def get_latest_layer_version(layer_name, env):
+    """Récupère la dernière version d'un layer"""
+    session = boto3.Session(profile_name='rag-lai-prod', region_name='eu-west-3')
+    lambda_client = session.client('lambda')
+    
+    try:
+        response = lambda_client.list_layer_versions(
+            LayerName=f'{layer_name}-{env}',
+            MaxItems=1
+        )
+        if response['LayerVersions']:
+            return response['LayerVersions'][0]['LayerVersionArn']
+    except Exception as e:
+        print(f"[WARNING] Could not get layer version for {layer_name}: {e}")
+    return None
+
+def update_lambda_layers(lambda_name, layer_arns, dry_run=False):
+    """Met à jour les layers d'une Lambda"""
+    print(f"   Updating {lambda_name}...")
+    
+    if dry_run:
+        print(f"      [DRY-RUN] Would update with {len(layer_arns)} layers")
+        return
+    
+    session = boto3.Session(profile_name='rag-lai-prod', region_name='eu-west-3')
+    lambda_client = session.client('lambda')
+    
+    try:
+        lambda_client.update_function_configuration(
+            FunctionName=lambda_name,
+            Layers=layer_arns
+        )
+        print(f"      [OK] Layers updated")
+    except lambda_client.exceptions.ResourceNotFoundException:
+        print(f"      [SKIP] Lambda not found")
+    except Exception as e:
+        print(f"      [ERROR] Failed: {e}")
+        raise
 
 def deploy_env(env, dry_run=False):
     """Deploy vers environnement"""
@@ -70,6 +111,36 @@ def deploy_env(env, dry_run=False):
         cmd.append('--dry-run')
     
     subprocess.run(cmd, check=True)
+    
+    # Update Lambda layers
+    print(f"\n{'='*60}")
+    print("Updating Lambda layers...")
+    print('='*60)
+    
+    if not dry_run:
+        # Récupérer ARNs des layers publiés
+        vectora_core_arn = get_latest_layer_version('vectora-inbox-vectora-core', env)
+        common_deps_arn = get_latest_layer_version('vectora-inbox-common-deps', env)
+        
+        if vectora_core_arn and common_deps_arn:
+            layer_arns = [vectora_core_arn, common_deps_arn]
+            print(f"   Layer ARNs:")
+            print(f"      vectora-core: {vectora_core_arn}")
+            print(f"      common-deps: {common_deps_arn}")
+            
+            # Mettre à jour les 3 Lambdas
+            lambdas = [
+                f'vectora-inbox-ingest-v2-{env}',
+                f'vectora-inbox-normalize-score-v2-{env}',
+                f'vectora-inbox-newsletter-v2-{env}'
+            ]
+            
+            for lambda_name in lambdas:
+                update_lambda_layers(lambda_name, layer_arns, dry_run)
+        else:
+            print("   [WARNING] Could not retrieve layer ARNs - skipping Lambda updates")
+    else:
+        print("   [DRY-RUN] Would update 3 Lambdas with new layers")
     
     print(f"\n{'='*60}")
     print(f"[SUCCESS] Deployment to {env} completed successfully!")

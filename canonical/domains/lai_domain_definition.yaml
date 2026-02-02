@@ -1,0 +1,199 @@
+# LAI Domain Definition - Unified
+# Single source of truth for Long-Acting Injectables domain
+# Replaces 8 fragmented files with 1 coherent definition
+
+domain_id: lai
+domain_name: "Long-Acting Injectables"
+version: "2.0"
+created_date: "2026-01-31"
+
+# Conceptual definition for Bedrock understanding
+definition: |
+  Long-Acting Injectables (LAI) are pharmaceutical formulations designed to 
+  provide sustained drug release over extended periods (weeks to months) 
+  after a single injection, improving patient adherence and therapeutic outcomes.
+  
+  Key characteristics:
+  - Extended release: weeks to months duration
+  - Injectable route: SC, IM, intravitreal, intratumoral
+  - Controlled release technologies: microspheres, depots, hydrogels, PEGylation
+  - Dosing intervals: weekly, monthly, quarterly, semi-annual
+
+# STRONG SIGNALS - Sufficient alone for high-confidence matching
+strong_signals:
+  
+  core_technologies:
+    # Explicit LAI terminology (highest precision)
+    - "long-acting injectable"
+    - "long acting injectable"
+    - "extended-release injectable"
+    - "depot injection"
+    - "sustained-release injectable"
+    - "controlled-release injection"
+  
+  pure_player_companies:
+    # Companies 100% focused on LAI (reference to existing scope)
+    scope_ref: lai_companies_mvp_core
+    examples:
+      - MedinCell
+      - Camurus
+      - DelSiTech
+      - Nanexa
+      - Peptron
+  
+  trademarks:
+    # Commercial LAI products (reference to existing scope)
+    scope_ref: lai_trademarks_global
+    examples:
+      - "UZEDY®"
+      - "Brixadi"
+      - "Aristada"
+      - "Sublocade"
+      - "Cabenuva"
+
+# MEDIUM SIGNALS - Require combination (2+) for matching
+medium_signals:
+  
+  technology_families:
+    # Specific DDS technologies commonly used in LAI
+    - "microspheres"
+    - "PLGA microspheres"
+    - "in-situ depot"
+    - "in-situ forming depot"
+    - "hydrogel"
+    - "thermo-responsive hydrogel"
+    - "PEGylation"
+    - "site-specific PEGylation"
+    - "Fc fusion"
+    - "albumin fusion"
+    - "liquid crystalline depot"
+  
+  dosing_intervals:
+    # Typical LAI dosing patterns
+    - "once-monthly"
+    - "once every 3 months"
+    - "once every 6 months"
+    - "q4w"
+    - "q8w"
+    - "q12w"
+    - "quarterly injection"
+    - "6-month injection"
+  
+  hybrid_companies:
+    # Big pharma with LAI activity (reference to existing scope)
+    scope_ref: lai_companies_hybrid
+    examples:
+      - "Johnson & Johnson"
+      - "AbbVie"
+      - "Teva"
+      - "Novo Nordisk"
+      - "Eli Lilly"
+
+# WEAK SIGNALS - Context only, require 3+ for matching
+weak_signals:
+  
+  routes:
+    # Administration routes (not LAI-specific but contextual)
+    - "subcutaneous"
+    - "intramuscular"
+    - "intravitreal"
+    - "intratumoral"
+  
+  molecules:
+    # LAI molecules (reference to existing scope)
+    scope_ref: lai_molecules_global
+    examples:
+      - "aripiprazole"
+      - "paliperidone"
+      - "cabotegravir"
+      - "semaglutide"
+
+# EXCLUSIONS - Anti-LAI signals (reject if present)
+exclusions:
+  - "oral tablet"
+  - "oral capsule"
+  - "oral administration"
+  - "transdermal patch"
+  - "nasal spray"
+  - "sublingual"
+  - "inhalation"
+
+# MATCHING RULES - Explicit logic for Bedrock
+matching_rules:
+  - id: rule_1
+    condition: "1+ strong signal detected"
+    action: "match with high confidence"
+    
+  - id: rule_2
+    condition: "2+ medium signals detected"
+    action: "match with medium confidence"
+    
+  - id: rule_3
+    condition: "3+ weak signals detected AND 0 exclusions"
+    action: "match with low confidence"
+    
+  - id: rule_4
+    condition: "1+ exclusion detected"
+    action: "reject (not LAI)"
+
+# SCORING CRITERIA - Integrated scoring logic
+scoring:
+  
+  event_type_base_scores:
+    # Base score by event type (0-100 scale)
+    partnership: 60
+    regulatory: 70
+    clinical_update: 50
+    corporate_move: 40
+    financial_results: 30
+    other: 20
+  
+  entity_boosts:
+    # Boost for key entities detected
+    pure_player_company: 25
+    trademark_mention: 20
+    key_molecule: 15
+    hybrid_company: 10
+    technology_family: 10
+  
+  recency_boosts:
+    # Boost/penalty based on item age
+    - age_range: "0-7 days"
+      boost: 10
+    - age_range: "8-30 days"
+      boost: 5
+    - age_range: "31-90 days"
+      boost: 0
+    - age_range: "91+ days"
+      penalty: -10
+  
+  confidence_penalties:
+    # Penalty for low confidence signals
+    low_confidence: -10
+    no_relevant_entities: -20
+
+# METADATA
+metadata:
+  replaces_files:
+    - "canonical/scopes/technology_scopes.yaml (lai_keywords)"
+    - "canonical/scopes/company_scopes.yaml (lai_companies_*)"
+    - "canonical/scopes/molecule_scopes.yaml (lai_molecules_*)"
+    - "canonical/scopes/trademark_scopes.yaml (lai_trademarks_*)"
+    - "canonical/imports/LAI_RATIONALE.md"
+    - "canonical/prompts/normalization/lai_normalization.yaml (partial)"
+    - "canonical/prompts/matching/lai_matching.yaml"
+    - "canonical/scoring/scoring_rules.yaml (LAI section)"
+  
+  element_count:
+    strong_signals: 16
+    medium_signals: 19
+    weak_signals: 4
+    exclusions: 7
+    total: 46
+  
+  reduction_vs_previous: "65% (130 → 46 elements)"
+  
+  notes: |
+    This unified definition replaces 8 fragmented files with a single coherent source.
+    Scope references (scope_ref) point to existing scopes for backward compatibility.
+    Bedrock will receive this entire definition in prompts for matching and scoring.

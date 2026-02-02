@@ -74,8 +74,8 @@ def _build_item_context(normalized_item: Dict[str, Any]) -> Dict[str, Any]:
         "title": normalized_item.get("title", ""),
         "summary": normalized_content.get("summary", ""),
         "entities": normalized_content.get("entities", {}),
-        "event_type": normalized_content.get("event_classification", {}).get("primary_type", "other"),
-        "lai_relevance_score": normalized_content.get("lai_relevance_score", 0)
+        "event_type": normalized_content.get("event_classification", {}).get("primary_type", "other")
+        # REMOVED: "lai_relevance_score" (deprecated - now using domain_scoring)
     }
 
 

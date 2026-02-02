@@ -177,20 +177,66 @@
 
 ## 🔒 RÈGLES D'APPLICATION
 
-### Quand Utiliser ce Format
+### 🚨 RÈGLE CRITIQUE: Détection Automatique de Besoin de Plan
 
-**✅ TOUJOURS utiliser pour** :
-- Première réponse à un nouveau prompt utilisateur
-- Début d'une nouvelle session de chat
-- Demande impliquant des modifications de code
-- Demande impliquant des déploiements AWS
-- Demande impliquant des modifications de configuration
-- Demande de création de documentation
+**Q Developer DOIT AUTOMATIQUEMENT détecter si un plan structuré est nécessaire AVANT d'utiliser ce format.**
 
-**⚠️ Peut être allégé pour** :
+**Critères de détection** :
+
+**✅ Plan structuré OBLIGATOIRE si** :
+- Modification de **2+ fichiers**
+- Déploiement AWS (dev/stage/prod)
+- Changement d'architecture
+- Nouvelle fonctionnalité
+- Correction de bug
+- Refactoring de code
+- Modification de configuration critique
+
+**Si plan nécessaire, Q DOIT** :
+1. **STOP** - Ne PAS utiliser ce format de réponse initiale
+2. **CRÉER** un plan structuré dans `docs/plans/` selon `.q-context/q-planning-rules.md`
+3. **UTILISER** le template approprié (`.q-context/templates/plan-*.md`)
+4. **INCLURE** les phases Git/Versioning/Tests obligatoires
+5. **DEMANDER** validation du plan avant exécution
+
+**Exemple de détection** :
+```
+Prompt: "Corriger les problèmes: Unifier matching et Cohérence dates"
+
+❌ MAUVAIS: Utiliser format réponse initiale directement
+✅ BON: Détecter que c'est un refactoring (4+ fichiers) → Créer plan structuré
+```
+
+**Message Q si plan nécessaire** :
+```
+Je détecte que votre demande nécessite un plan structuré car elle implique:
+- Modification de [N] fichiers
+- [Autre critère détecté]
+
+Je vais créer un plan de développement dans docs/plans/ selon les règles
+de planification (.q-context/q-planning-rules.md).
+
+Souhaitez-vous que je procède ?
+```
+
+---
+
+### Quand Utiliser ce Format (Réponse Initiale Simple)
+
+**✅ UTILISER ce format pour** :
 - Questions simples de clarification
 - Demandes de lecture seule (afficher un fichier)
-- Continuation d'un plan déjà validé
+- Analyse/diagnostic sans modification
+- Demandes d'information
+- Validation de configuration
+
+**❌ NE PAS utiliser ce format si** :
+- Plan structuré nécessaire (voir critères ci-dessus)
+- Modification de code requise
+- Déploiement AWS requis
+
+**⚠️ En cas de doute** :
+- Demander à l'utilisateur: "Souhaitez-vous un plan structuré ou une réponse directe ?"
 
 ### Adaptation du Format
 

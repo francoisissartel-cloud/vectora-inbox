@@ -118,13 +118,13 @@ class BedrockNormalizationClient:
                  client_config: Optional[Dict] = None, canonical_scopes: Optional[Dict] = None,
                  config_bucket: str = None):
         """
-        Initialise le client Bedrock avec Approche B OBLIGATOIRE.
+        Initialise le client Bedrock pour normalisation générique.
         
         Args:
             model_id: Identifiant du modèle Bedrock
             region: Région AWS pour Bedrock
             s3_io: Module s3_io pour charger prompts depuis S3 (REQUIS)
-            client_config: Configuration client avec bedrock_config (REQUIS)
+            client_config: Configuration client (REQUIS)
             canonical_scopes: Scopes canonical pour résolution références (REQUIS)
             config_bucket: Bucket S3 de configuration (REQUIS)
         
@@ -149,15 +149,9 @@ class BedrockNormalizationClient:
         if not config_bucket:
             raise ValueError("config_bucket est requis pour Approche B")
         
-        # Charger prompt template
+        # Charger prompt template depuis config client
         bedrock_config = client_config.get('bedrock_config', {})
-        normalization_prompt = bedrock_config.get('normalization_prompt')
-        
-        if not normalization_prompt:
-            raise ValueError(
-                "client_config doit contenir 'bedrock_config.normalization_prompt' "
-                "(ex: 'lai' pour charger lai_prompt.yaml)"
-            )
+        normalization_prompt = bedrock_config.get('normalization_prompt', 'generic_normalization')  # CHANGED: default to generic
         
         self.prompt_template = prompt_resolver.load_prompt_template(
             'normalization', normalization_prompt, s3_io, config_bucket
@@ -170,7 +164,7 @@ class BedrockNormalizationClient:
                 f"existe sur S3."
             )
         
-        logger.info(f"✅ Approche B activée: prompt {normalization_prompt} chargé")
+        logger.info(f"✅ Prompt chargé: {normalization_prompt}")
         logger.info(f"Client Bedrock initialisé : modèle={self.model_id}, région={region}")
     
     def normalize_item(self, item_text: str, canonical_examples: Dict, 
@@ -252,7 +246,7 @@ class BedrockNormalizationClient:
             if not isinstance(result, dict):
                 raise ValueError("La réponse n'est pas un dictionnaire")
             
-            # S'assurer que les champs obligatoires existent (avec champs LAI)
+            # S'assurer que les champs obligatoires existent (générique)
             result.setdefault('summary', '')
             result.setdefault('event_type', 'other')
             result.setdefault('companies_detected', [])
@@ -260,10 +254,6 @@ class BedrockNormalizationClient:
             result.setdefault('technologies_detected', [])
             result.setdefault('trademarks_detected', [])
             result.setdefault('indications_detected', [])
-            result.setdefault('lai_relevance_score', 0)
-            result.setdefault('anti_lai_detected', False)
-            result.setdefault('pure_player_context', False)
-            result.setdefault('domain_relevance', [])
             result.setdefault('extracted_date', None)
             result.setdefault('date_confidence', 0.0)
             
@@ -271,7 +261,7 @@ class BedrockNormalizationClient:
         
         except json.JSONDecodeError:
             logger.warning("Réponse Bedrock non-JSON, tentative d'extraction manuelle")
-            # Fallback : retourner une structure vide avec champs LAI
+            # Fallback : retourner une structure vide générique
             return {
                 'summary': response_text[:200] if response_text else '',
                 'event_type': 'other',
@@ -280,58 +270,23 @@ class BedrockNormalizationClient:
                 'technologies_detected': [],
                 'trademarks_detected': [],
                 'indications_detected': [],
-                'lai_relevance_score': 0,
-                'anti_lai_detected': False,
-                'pure_player_context': False,
-                'domain_relevance': [],
                 'extracted_date': None,
                 'date_confidence': 0.0
             }
     
     def _build_prompt_approche_b(self, item_text: str, item_source_key: str = None) -> str:
         """
-        Construit le prompt via Approche B (prompts pré-construits avec références).
+        Construit le prompt générique (pas de contexte LAI spécifique).
         
         Args:
             item_text: Texte à analyser
-            item_source_key: Source key pour contexte pure player
+            item_source_key: Non utilisé (normalisation générique)
         
         Returns:
             Prompt final résolu
         """
-        # Variables à substituer
+        # Variables à substituer (générique)
         variables = {'item_text': item_text}
-        
-        # Ajouter contexte pure player si détecté (logique inline)
-        if item_source_key:
-            # Mapping inline
-            company_mapping = {
-                'medincell': 'MedinCell',
-                'camurus': 'Camurus',
-                'delsitech': 'DelSiTech',
-                'nanexa': 'Nanexa',
-                'peptron': 'Peptron'
-            }
-            
-            source_lower = item_source_key.lower()
-            company_name = None
-            for key, name in company_mapping.items():
-                if key in source_lower:
-                    company_name = name
-                    break
-            
-            # Pure players LAI
-            pure_players = ['MedinCell', 'Camurus', 'DelSiTech', 'Nanexa', 'Peptron']
-            
-            if company_name and company_name in pure_players:
-                pure_player_context = (
-                    f"\n\nIMPORTANT CONTEXT: This content is from {company_name}, "
-                    f"a LAI pure-player company specializing in long-acting injectable "
-                    f"technologies. Even if LAI technologies are not explicitly mentioned, "
-                    f"consider the LAI context and relevance given the company's "
-                    f"specialization in this field."
-                )
-                variables['pure_player_context'] = pure_player_context
         
         # Construire le prompt avec résolution des références
         prompt = prompt_resolver.build_prompt(
@@ -340,7 +295,7 @@ class BedrockNormalizationClient:
             variables
         )
         
-        logger.info("Prompt construit via Approche B")
+        logger.info("Prompt générique construit")
         return prompt
     
     def _create_fallback_result(self) -> Dict[str, Any]:
@@ -353,9 +308,55 @@ class BedrockNormalizationClient:
             "technologies_detected": [],
             "trademarks_detected": [],
             "indications_detected": [],
-            "lai_relevance_score": 0,
-            "anti_lai_detected": False,
-            "pure_player_context": False,
             "extracted_date": None,
             "date_confidence": 0.0
         }
+    
+    def invoke_with_prompt(
+        self,
+        prompt_template: Dict[str, Any],
+        context: Dict[str, Any],
+        domain_definition: Dict[str, Any] = None
+    ) -> str:
+        """
+        Invoque Bedrock avec un prompt template et contexte.
+        Utilisé pour domain scoring (2ème appel Bedrock).
+        
+        Args:
+            prompt_template: Template de prompt (lai_domain_scoring.yaml)
+            context: Variables de contexte (item_title, item_summary, etc.)
+            domain_definition: Définition du domaine (lai_domain_definition.yaml)
+        
+        Returns:
+            Réponse texte de Bedrock
+        """
+        # Construction du prompt avec résolution des références
+        user_template = prompt_template.get('user_template', '')
+        
+        # Substitution des variables de contexte
+        prompt = user_template
+        for key, value in context.items():
+            placeholder = '{{' + key + '}}'
+            prompt = prompt.replace(placeholder, str(value))
+        
+        # Substitution de la référence domain_definition
+        if domain_definition and '{{ref:lai_domain_definition}}' in prompt:
+            import yaml
+            domain_yaml = yaml.dump(domain_definition, default_flow_style=False, allow_unicode=True)
+            prompt = prompt.replace('{{ref:lai_domain_definition}}', domain_yaml)
+        
+        # Appel Bedrock
+        request_body = {
+            "anthropic_version": "bedrock-2023-05-31",
+            "max_tokens": prompt_template.get('bedrock_config', {}).get('max_tokens', 1500),
+            "messages": [
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            "temperature": prompt_template.get('bedrock_config', {}).get('temperature', 0.0)
+        }
+        
+        response_text = call_bedrock_with_retry(self.model_id, request_body)
+        return response_text

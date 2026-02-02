@@ -277,23 +277,37 @@ VECTORA_CORE_VERSION=1.2.3
 # Breaking change → 2.0.0
 ```
 
-### Workflow Standard
+### Workflow Standard (AVEC SYSTÈME DE CONTEXTES)
 
-**Développement**:
-1. Modifier code dans `src_v2/`
-2. Incrémenter version dans `VERSION`
-3. Build: `python scripts/build/build_all.py`
-4. Deploy dev: `python scripts/deploy/deploy_env.py --env dev`
-5. Test dev: `python scripts/test/test_e2e.py --env dev`
+**Phase 1: Test Local (OBLIGATOIRE)**:
+1. Créer contexte: `python tests/local/test_e2e_runner.py --new-context "Description test"`
+2. Exécuter test local: `python tests/local/test_e2e_runner.py --run`
+3. Vérifier succès: `python tests/local/test_e2e_runner.py --status`
 
-**Promotion**:
-6. Promouvoir: `python scripts/deploy/promote.py --to stage --version X.Y.Z`
-7. Test stage: `python scripts/test/test_e2e.py --env stage`
+**Phase 2: Build et Deploy Dev (SI LOCAL OK)**:
+4. Modifier code dans `src_v2/`
+5. Incrémenter version dans `VERSION`
+6. Build: `python scripts/build/build_all.py`
+7. Deploy dev: `python scripts/deploy/deploy_env.py --env dev`
 
-**Commit**:
-8. `git add .`
-9. `git commit -m "feat: description"`
-10. `git push`
+**Phase 3: Test AWS Dev (VALIDATION)**:
+8. Promouvoir contexte: `python tests/aws/test_e2e_runner.py --promote "Validation E2E"`
+9. Exécuter test AWS: `python tests/aws/test_e2e_runner.py --run`
+10. Vérifier succès: `python tests/aws/test_e2e_runner.py --status`
+
+**Phase 4: Promotion Stage (SI AWS DEV OK)**:
+11. Promouvoir: `python scripts/deploy/promote.py --to stage --version X.Y.Z`
+12. Test stage: `python tests/aws/test_e2e_runner.py --run` (avec client stage)
+
+**Phase 5: Commit**:
+13. `git add .`
+14. `git commit -m "feat: description"`
+15. `git push`
+
+**🛡️ PROTECTIONS AUTOMATIQUES**:
+- ❌ Impossible de promouvoir vers AWS sans succès local
+- ❌ Impossible de promouvoir vers stage sans succès dev
+- ✅ Traçabilité complète via registry.json
 
 ### Scripts de Gouvernance
 
@@ -304,8 +318,15 @@ VECTORA_CORE_VERSION=1.2.3
 
 **Deploy**:
 - `scripts/deploy/deploy_layer.py` - Deploy layer vers env
-- `scripts/deploy/deploy_env.py` - Deploy complet vers env
+- `scripts/deploy/deploy_env.py` - Deploy complet vers env (layers + mise à jour Lambdas automatique)
 - `scripts/deploy/promote.py` - Promouvoir version entre envs
+
+**Comportement deploy_env.py** (depuis février 2026):
+1. Publie vectora-core layer
+2. Publie common-deps layer
+3. Récupère ARNs des layers publiés
+4. Met à jour automatiquement les 3 Lambdas avec nouveaux layers
+5. Gestion erreurs: Lambda manquante = warning (continue)
 
 ---
 
@@ -846,6 +867,137 @@ python scripts/invoke/invoke_normalize_score_v2.py > .tmp/responses/response_$(d
 
 ---
 
+## 🧪 RÈGLES DE TESTS E2E (SYSTÈME DE CONTEXTES)
+
+### Système de Contextes Obligatoire
+
+**Q Developer DOIT TOUJOURS utiliser le système de contextes pour les tests E2E.**
+
+**Document de référence**: `.q-context/vectora-inbox-test-e2e-system.md`
+
+### Système Client Config Automatisé
+
+**Principe**: 1 contexte test = 1 client_config dédié = 1 dossier S3 isolé
+
+**Mapping**:
+
+| Contexte | Environnement | Client ID | Dossier S3 |
+|----------|---------------|-----------|------------|
+| test_context_001 | local | lai_weekly_test_001 | N/A (local) |
+| test_context_001 | aws | lai_weekly_v1 | s3://.../lai_weekly_v1/ ✅ |
+| test_context_002 | local | lai_weekly_test_002 | N/A (local) |
+| test_context_002 | aws | lai_weekly_v2 | s3://.../lai_weekly_v2/ ✅ |
+
+**Génération automatique**:
+```bash
+# Local: génère lai_weekly_test_001 + config
+python tests/local/test_e2e_runner.py --new-context "Test X"
+
+# AWS: génère lai_weekly_v1 + config + upload S3
+python tests/aws/test_e2e_runner.py --promote "Validation"
+```
+
+**Isolation S3 garantie**: Chaque vX = nouveau dossier S3 = workflow E2E complet
+
+### Workflow Test E2E Standard
+
+**Étape 1: Test Local (OBLIGATOIRE)**
+```bash
+# Créer nouveau contexte
+python tests/local/test_e2e_runner.py --new-context "Test domain scoring fix"
+
+# Exécuter test local
+python tests/local/test_e2e_runner.py --run
+
+# Vérifier succès
+python tests/local/test_e2e_runner.py --status
+```
+
+**Étape 2: Déploiement AWS Dev (SI LOCAL OK)**
+```bash
+python scripts/build/build_all.py
+python scripts/deploy/deploy_env.py --env dev
+```
+
+**Étape 3: Test AWS Dev (VALIDATION)**
+```bash
+# Promouvoir contexte (vérifie automatiquement succès local)
+python tests/aws/test_e2e_runner.py --promote "Validation E2E"
+
+# Exécuter test AWS
+python tests/aws/test_e2e_runner.py --run
+```
+
+**Étape 4: Promotion Stage (SI AWS DEV OK)**
+```bash
+python scripts/deploy/promote.py --to stage --version X.Y.Z
+```
+
+### Invocation Workflow E2E
+
+**Script standardisé**: `scripts/invoke/invoke_e2e_workflow.py`
+
+**Usage direct**:
+```bash
+python scripts/invoke/invoke_e2e_workflow.py --client-id lai_weekly_v1 --env dev
+```
+
+**Workflow exécuté**:
+1. 📥 Ingest: `vectora-inbox-ingest-v2-{env}`
+2. 🤖 Normalize: `vectora-inbox-normalize-score-v2-{env}`
+3. 📰 Newsletter: `vectora-inbox-newsletter-v2-{env}`
+
+**Intégration runner AWS**: Le runner AWS (`tests/aws/test_e2e_runner.py --run`) utilise automatiquement ce script pour exécuter le workflow E2E complet.
+
+**Règles Q Developer**:
+- ✅ Utiliser `invoke_e2e_workflow.py` pour tests E2E AWS
+- ✅ Invoquer workflow complet (pas seulement normalize)
+- ✅ Vérifier succès de chaque étape
+- ❌ Ne jamais invoquer Lambdas individuellement pour test E2E
+- ❌ Ne jamais bypasser une étape du workflow
+
+### Protections Automatiques
+
+**🛡️ BLOCAGE AWS sans succès local**:
+- ❌ Impossible de promouvoir vers AWS sans test local réussi
+- ❌ Impossible de promouvoir vers stage sans test AWS dev réussi
+- ✅ Messages clairs avec actions requises
+
+### Règles Critiques
+
+1. **Jamais Réutiliser Contexte**: Créer nouveau contexte après chaque modification
+2. **Jamais AWS Sans Local**: Test local obligatoire avant déploiement AWS
+3. **Jamais Stage Sans Dev**: Test AWS dev obligatoire avant promotion stage
+4. **Toujours Documenter Purpose**: Description claire du test
+5. **Client Config Auto**: Génération automatique via runners (pas de création manuelle)
+6. **Isolation S3**: Chaque test AWS = nouveau client_id vX = nouveau dossier S3
+
+### Règles Client Config
+
+**Q DOIT**:
+- Générer client_config automatiquement via runners
+- Utiliser naming: `lai_weekly_test_XXX` (local), `lai_weekly_vX` (AWS)
+- Uploader config vers S3 avant test AWS
+- Vérifier isolation S3 (nouveau dossier)
+
+**Q NE DOIT JAMAIS**:
+- Créer `lai_weekly_vX` manuellement
+- Réutiliser client_id d'un test précédent
+- Bypasser ingestion si données S3 existent
+
+**Structure repo**:
+```
+client-config-examples/
+├── production/          # Configs prod
+├── test/
+│   ├── local/          # lai_weekly_test_XXX
+│   └── aws/            # lai_weekly_vX
+├── templates/          # Template réutilisable
+└── archive/            # Anciens configs
+```
+
+---
+
 ## 🧪 RÈGLES DE TESTS
 
 ### Structure des Tests
@@ -1072,8 +1224,58 @@ python scripts/invoke/invoke_newsletter_v2.py --client-id lai_weekly_v3
 5. **Préserver le pilotage par configuration**
 6. **Suivre les conventions AWS établies**
 7. **Valider avec le client de référence lai_weekly_v3**
+8. **Maintenir le blueprint à jour** (NOUVEAU)
 
 **Résultat attendu :** Code conforme, maintenable et évolutif basé sur l'architecture V2 stabilisée, documentée et validée E2E.
+
+---
+
+## 📋 MAINTENANCE DU BLUEPRINT (CRITIQUE)
+
+**Q Developer DOIT proposer la mise à jour du blueprint pour tout changement majeur.**
+
+### Changements Majeurs Nécessitant Mise à Jour Blueprint
+
+**Architecture** :
+- ✅ Ajout/suppression/modification de Lambda
+- ✅ Changement de structure S3 (buckets, paths)
+- ✅ Modification des rôles IAM
+
+**Bedrock** :
+- ✅ Changement de modèle Bedrock
+- ✅ Changement de région Bedrock
+- ✅ Nouveau système de prompts
+
+**Configuration** :
+- ✅ Nouvelles variables d'environnement critiques
+- ✅ Changement de client de référence
+- ✅ Modification du système de versioning
+
+### Workflow Q Developer
+
+**Quand Q Developer fait un changement majeur** :
+
+1. **Modifier le code** (src_v2/, infra/, etc.)
+2. **Proposer automatiquement** : "Je vais aussi mettre à jour le blueprint pour refléter ce changement"
+3. **Mettre à jour** `docs/architecture/blueprint-v2-ACTUAL-2026.yaml`
+4. **Mettre à jour** la date `last_updated` dans le blueprint
+5. **Ajouter** une entrée dans `metadata.changes`
+6. **Commit ENSEMBLE** : code + blueprint dans le même commit
+
+### Exemple de Prompt Q Developer
+
+```
+J'ai modifié [description].
+
+Je vais aussi mettre à jour le blueprint docs/architecture/blueprint-v2-ACTUAL-2026.yaml
+pour refléter ce changement dans la section [architecture/bedrock/etc.].
+
+Voulez-vous que je procède ?
+```
+
+### Fichier de Référence
+
+**Guide complet** : `docs/architecture/BLUEPRINT_MAINTENANCE.md`
 
 ---
 

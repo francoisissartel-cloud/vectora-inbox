@@ -6,24 +6,31 @@
 
 ## 📚 Documents Essentiels (Ordre de Lecture)
 
+### 0. **Contexte Business** (🔥 LIRE EN PREMIER)
+- [`../docs/business/CONTEXTE_BUSINESS_VECTORA.md`](../docs/business/CONTEXTE_BUSINESS_VECTORA.md) - 🎯 **VISION, EXPERTISE MÉTIER, RAISON D'ÊTRE**
+
 ### 1. **Démarrage Rapide**
 - [`q-response-format.md`](./q-response-format.md) - 🚨 **FORMAT DE RÉPONSE OBLIGATOIRE**
 - [`vectora-inbox-assistant-guide.md`](./vectora-inbox-assistant-guide.md) - 🎓 **MODE ASSISTANT GUIDÉ (DÉBUTANTS)**
 - [`q-usage-guide.md`](./q-usage-guide.md) - 🌟 **COMMENT UTILISER LES TEMPLATES**
 - [`vectora-inbox-governance.md`](./vectora-inbox-governance.md) - Gouvernance et workflow standard
 - [`vectora-inbox-q-prompting-guide.md`](./vectora-inbox-q-prompting-guide.md) - Comment prompter Q Developer
+- [`../docs/architecture/blueprint-v2-ACTUAL-2026.yaml`](../docs/architecture/blueprint-v2-ACTUAL-2026.yaml) - 📐 **BLUEPRINT SYSTÈME COMPLET** (référence)
 
 ### 2. **Git et Versioning** (🔥 NOUVEAU)
 - [`vectora-inbox-git-workflow.md`](./vectora-inbox-git-workflow.md) - 🌟 **WORKFLOWS GIT COMPLETS**
 - [`vectora-inbox-git-rules.md`](./vectora-inbox-git-rules.md) - 🚨 **RÈGLES GIT OBLIGATOIRES**
 
 ### 3. **Développement**
-- [`vectora-inbox-development-rules.md`](./vectora-inbox-development-rules.md) - Règles complètes de développement
+- [`vectora-inbox-development-rules.md`](./vectora-inbox-development-rules.md) - 🔥 **RÈGLES COMPLÈTES (Tests E2E + Client Config)**
+- [`vectora-inbox-coding-standards.md`](./vectora-inbox-coding-standards.md) - 🚨 **STANDARDS DE CODAGE (Encodage, ASCII)**
 - [`vectora-inbox-workflows.md`](./vectora-inbox-workflows.md) - Workflows détaillés par scénario
+- [`vectora-inbox-test-e2e-system.md`](./vectora-inbox-test-e2e-system.md) - 🔥 **SYSTÈME TESTS E2E (Contextes, Protection AWS)**
 - [`q-planning-rules.md`](./q-planning-rules.md) - Règles de planification pour Q
 
 ### 3. **Architecture Technique**
 - [`vectora-inbox-architecture-overview.md`](./vectora-inbox-architecture-overview.md) - 📐 **ARCHITECTURE DE RÉFÉRENCE**
+- [`../docs/architecture/blueprint-v2-ACTUAL-2026.yaml`](../docs/architecture/blueprint-v2-ACTUAL-2026.yaml) - 📋 **BLUEPRINT DÉTAILLÉ** (architecture 3 Lambdas, prompts canoniques, guide d'ajustement)
 
 ### 4. **Templates et Outils**
 - [`templates/`](./templates/) - Templates de plans standardisés

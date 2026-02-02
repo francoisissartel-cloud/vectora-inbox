@@ -1,0 +1,1368 @@
+# Blueprint Vectora Inbox V2 - État Actuel (2026-01-31)
+# Reflète l'état RÉEL du système déployé et du code actuel
+#
+# DIFFÉRENCES MAJEURES avec blueprint-v2-current.yaml (obsolète):
+# - Architecture: 3 Lambdas V2 (ingest, normalize-score, newsletter)
+# - Modèle Bedrock: Claude Sonnet 4.5 EU inference profile, pas Sonnet 3
+# - Client référence: lai_weekly_v7, pas lai_weekly_v3
+# - Système de prompts: Prompts canoniques avec références dynamiques (Approche B)
+# - Versioning: Système sémantique avec fichier VERSION
+# - Runtime: Python 3.12, pas 3.11
+
+project:
+  name: "Vectora Inbox V2"
+  description: "Moteur d'intelligence sectorielle automatisée - Architecture 3 Lambdas V2"
+  aws_profile: "rag-lai-prod"
+  aws_account_id: "786469175371"
+  region: "eu-west-3"
+  envs:
+    - "dev"
+    - "stage"  # En cours de création
+  status: "✅ Architecture 3 Lambdas V2 opérationnelle"
+
+# =============================================================================
+# VERSIONING (NOUVEAU)
+# =============================================================================
+
+versioning:
+  system: "Semantic Versioning (MAJOR.MINOR.PATCH)"
+  file: "VERSION"
+  current_versions:
+    vectora_core: "1.2.3"
+    common_deps: "1.0.5"
+    ingest: "1.5.0"
+    normalize: "2.1.0"
+    newsletter: "1.8.0"
+    canonical: "1.1"
+  workflow: "Repo local → Build → Deploy Dev → Test → Promote Stage → Commit"
+  documentation: ".q-context/vectora-inbox-governance.md"
+
+# =============================================================================
+# BEDROCK CONFIGURATION (MIS À JOUR)
+# =============================================================================
+
+bedrock:
+  model: "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"  # Claude Sonnet 4.5
+  model_type: "EU Inference Profile (Cross-Region)"
+  regions_covered:
+    - "eu-north-1"
+    - "eu-west-3"
+    - "eu-south-1"
+    - "eu-south-2"
+    - "eu-west-1"
+    - "eu-central-1"
+  usage: "Extraction entités, classification événements, matching sémantique, génération éditoriale"
+  prompt_system: "Prompts canoniques avec références dynamiques (Approche B)"
+  prompt_location: "canonical/prompts/{type}/{vertical}.yaml"
+  performance:
+    avg_time_per_call: "~5s"
+    success_rate: ">95%"
+    retry_strategy: "Exponential backoff avec jitter"
+  notes:
+    - "Migration de Sonnet 3 (us-east-1) vers Sonnet 4.5 EU inference profile"
+    - "Prompts externalisés dans canonical/ avec références dynamiques aux scopes"
+    - "Bedrock utilisé pour: normalisation, matching, génération éditoriale"
+    - "Bedrock NON utilisé pour: HTTP, RSS parsing, scoring déterministe"
+
+# =============================================================================
+# SYSTÈME DE PROMPTS CANONIQUES (NOUVEAU)
+# =============================================================================
+
+prompt_system:
+  approach: "Approche B - Configuration > Code"
+  description: "Prompts pré-construits avec références dynamiques aux scopes canonical"
+  
+  architecture:
+    storage: "S3 canonical/prompts/{type}/{vertical}.yaml"
+    resolution: "Runtime via prompt_resolver.py"
+    references: "{{ref:scope_name}} résolu vers canonical scopes"
+    variables: "{{variable}} substitué avec valeurs runtime"
+  
+  prompt_types:
+    normalization:
+      path: "canonical/prompts/normalization/{vertical}.yaml"
+      example: "lai_normalization.yaml"
+      references_used:
+        - "{{ref:lai_keywords.core_phrases}}"
+        - "{{ref:lai_keywords.technology_terms_high_precision}}"
+        - "{{ref:lai_companies_global}}"
+        - "{{ref:lai_molecules_global}}"
+        - "{{ref:lai_trademarks_global}}"
+        - "{{ref:lai_keywords.negative_terms}}"
+      variables_used:
+        - "{{item_text}}"
+        - "{{pure_player_context}}"
+    
+    matching:
+      path: "canonical/prompts/matching/{vertical}.yaml"
+      example: "lai_matching.yaml"
+      references_used:
+        - "{{ref:domain_scopes}}"
+      variables_used:
+        - "{{item_summary}}"
+        - "{{item_entities}}"
+    
+    editorial:
+      path: "canonical/prompts/editorial/{vertical}.yaml"
+      example: "lai_editorial.yaml"
+      variables_used:
+        - "{{section_items}}"
+        - "{{section_title}}"
+  
+  resolution_flow:
+    - "1. Client config spécifie prompt: bedrock_config.normalization_prompt = 'lai'"
+    - "2. Chargement template: canonical/prompts/normalization/lai_normalization.yaml"
+    - "3. Résolution références: {{ref:lai_keywords}} → scopes canonical"
+    - "4. Substitution variables: {{item_text}} → texte réel"
+    - "5. Prompt final envoyé à Bedrock"
+  
+  benefits:
+    - "Prompts versionnés avec canonical (pas hardcodés)"
+    - "Réutilisation scopes entre prompts"
+    - "Modification prompts sans redéploiement code"
+    - "Traçabilité via Git (canonical/)"
+    - "Testabilité prompts indépendamment du code"
+
+# =============================================================================
+# ARCHITECTURE 3 LAMBDAS V2 (OPÉRATIONNELLE)
+# =============================================================================
+
+architecture:
+  type: "3 Lambdas V2 (Architecture modulaire)"
+  status: "✅ Opérationnelle en dev"
+  description: "Séparation claire des responsabilités : Ingest → Normalize-Score → Newsletter"
+  
+  lambdas:
+    # Lambda 1: Ingestion
+    - id: "ingest_v2"
+      name: "vectora-inbox-ingest-v2-dev"
+      handler: "src_v2/lambdas/ingest/handler.py::lambda_handler"
+      orchestration_function: "vectora_core.ingest.run_ingest_for_client"
+      runtime: "python3.12"
+      timeout: 300
+      memory: 512
+      needs_bedrock: false
+      
+      responsibilities:
+        - "Ingestion brute depuis sources externes (RSS, APIs, scraping)"
+        - "Parsing en items structurés"
+        - "Stockage dans S3 ingested/{client_id}/{YYYY}/{MM}/{DD}/items.json"
+      
+      input_event:
+        required:
+          - "client_id (str): Identifiant du client"
+        optional:
+          - "sources (list[str]): Liste des source_key à traiter"
+          - "period_days (int): Nombre de jours à remonter"
+          - "from_date (str): Date de début ISO8601"
+          - "to_date (str): Date de fin ISO8601"
+          - "force_refresh (bool): Force la re-ingestion"
+          - "dry_run (bool): Mode simulation"
+          - "temporal_mode (str): strict|balanced|permissive"
+          - "ingestion_mode (str): balanced|aggressive|conservative"
+      
+      output:
+        - "statusCode (int): 200 si succès"
+        - "body.items_final (int): Nombre d'items ingérés"
+        - "body.sources_processed (int): Nombre de sources traitées"
+        - "body.s3_path (str): Chemin S3 des items ingérés"
+      
+      environment_variables:
+        ENV: "dev"
+        PROJECT_NAME: "vectora-inbox"
+        CONFIG_BUCKET: "vectora-inbox-config-dev"
+        DATA_BUCKET: "vectora-inbox-data-dev"
+        LOG_LEVEL: "INFO"
+      
+      iam_permissions:
+        - "s3:GetObject on vectora-inbox-config-dev/*"
+        - "s3:PutObject on vectora-inbox-data-dev/ingested/*"
+        - "s3:PutObject on vectora-inbox-data-dev/raw/*"
+    
+    # Lambda 2: Normalisation et Scoring
+    - id: "normalize_score_v2"
+      name: "vectora-inbox-normalize-score-v2-dev"
+      handler: "src_v2/lambdas/normalize_score/handler.py::lambda_handler"
+      orchestration_function: "vectora_core.normalization.run_normalize_score_for_client"
+      runtime: "python3.12"
+      timeout: 900
+      memory: 1024
+      needs_bedrock: true
+      
+      responsibilities:
+        - "Normalisation Bedrock (extraction entités, classification événements)"
+        - "Matching sémantique Bedrock aux domaines de veille"
+        - "Scoring déterministe basé sur règles métier"
+        - "Stockage dans S3 curated/{client_id}/{YYYY}/{MM}/{DD}/items.json"
+      
+      input_event:
+        required:
+          - "client_id (str): Identifiant du client"
+        optional:
+          - "period_days (int): Nombre de jours à analyser"
+          - "from_date (str): Date de début ISO8601"
+          - "to_date (str): Date de fin ISO8601"
+          - "target_date (str): Date de référence pour le scoring"
+          - "force_reprocess (bool): Force le retraitement"
+          - "bedrock_model_override (str): Surcharge modèle Bedrock"
+          - "scoring_mode (str): balanced|aggressive|conservative"
+      
+      output:
+        - "statusCode (int): 200 si succès"
+        - "body.items_processed (int): Nombre d'items traités"
+        - "body.items_matched (int): Nombre d'items matchés"
+        - "body.bedrock_calls (int): Nombre d'appels Bedrock"
+        - "body.s3_path (str): Chemin S3 des items curés"
+      
+      environment_variables:
+        ENV: "dev"
+        PROJECT_NAME: "vectora-inbox"
+        CONFIG_BUCKET: "vectora-inbox-config-dev"
+        DATA_BUCKET: "vectora-inbox-data-dev"
+        BEDROCK_MODEL_ID: "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+        BEDROCK_REGION: "us-east-1"
+        LOG_LEVEL: "INFO"
+      
+      iam_permissions:
+        - "s3:GetObject on vectora-inbox-config-dev/*"
+        - "s3:GetObject on vectora-inbox-data-dev/ingested/*"
+        - "s3:PutObject on vectora-inbox-data-dev/curated/*"
+        - "bedrock:InvokeModel"
+      
+      bedrock_usage:
+        - "Normalisation: 1 appel par item (extraction entités)"
+        - "Matching: 1 appel par item (matching sémantique domaines)"
+        - "Prompts: Chargés depuis canonical/prompts/{type}/{vertical}.yaml"
+        - "Références: Résolues vers canonical scopes"
+    
+    # Lambda 3: Génération Newsletter
+    - id: "newsletter_v2"
+      name: "vectora-inbox-newsletter-v2-dev"
+      handler: "src_v2/lambdas/newsletter/handler.py::lambda_handler"
+      orchestration_function: "vectora_core.newsletter.run_newsletter_for_client"
+      runtime: "python3.12"
+      timeout: 600
+      memory: 512
+      needs_bedrock: true
+      
+      responsibilities:
+        - "Lecture items curés depuis S3"
+        - "Génération éditoriale Bedrock par section"
+        - "Assemblage newsletter finale (Markdown/HTML)"
+        - "Stockage dans S3 newsletters/{client_id}/{YYYY}/{MM}/{DD}/newsletter.md"
+      
+      input_event:
+        required:
+          - "client_id (str): Identifiant du client"
+        optional:
+          - "target_date (str): Date de référence"
+          - "force_regenerate (bool): Force la régénération"
+      
+      output:
+        - "statusCode (int): 200 si succès"
+        - "body.items_selected (int): Nombre d'items dans la newsletter"
+        - "body.sections_generated (int): Nombre de sections"
+        - "body.s3_path (str): Chemin S3 de la newsletter"
+      
+      environment_variables:
+        ENV: "dev"
+        CONFIG_BUCKET: "vectora-inbox-config-dev"
+        DATA_BUCKET: "vectora-inbox-data-dev"
+        NEWSLETTERS_BUCKET: "vectora-inbox-newsletters-dev"
+        BEDROCK_MODEL_ID: "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+        BEDROCK_REGION: "us-east-1"
+        LOG_LEVEL: "INFO"
+      
+      iam_permissions:
+        - "s3:GetObject on vectora-inbox-config-dev/*"
+        - "s3:GetObject on vectora-inbox-data-dev/curated/*"
+        - "s3:PutObject on vectora-inbox-newsletters-dev/*"
+        - "bedrock:InvokeModel"
+      
+      bedrock_usage:
+        - "Génération éditoriale: 1 appel par section"
+        - "Prompts: Chargés depuis canonical/prompts/editorial/{vertical}.yaml"
+  
+  execution_flow:
+    - "1. Ingest Lambda: Sources → Items bruts → S3 ingested/"
+    - "2. Normalize-Score Lambda: S3 ingested/ → Bedrock normalisation → Bedrock matching → Scoring → S3 curated/"
+    - "3. Newsletter Lambda: S3 curated/ → Bedrock génération → Newsletter finale → S3 newsletters/"
+  
+  orchestration:
+    manual: "Invocation manuelle via scripts/invoke/*.py"
+    scheduled: "EventBridge (à configurer)"
+    chained: "Step Functions (futur)"
+
+# =============================================================================
+# NAMING CONVENTIONS
+# =============================================================================
+
+naming:
+  resource_prefix: "vectora-inbox"
+  stack_prefix: "vectora-inbox"
+  env_suffix: "-{env}"  # -dev, -stage, -prod
+  
+  stacks:
+    - "s0-core"      # Buckets S3
+    - "s0-iam"       # Rôles IAM
+    - "s1-runtime"   # Lambdas
+  
+  buckets:
+    config: "vectora-inbox-config-{env}"
+    data: "vectora-inbox-data-{env}"
+    newsletters: "vectora-inbox-newsletters-{env}"
+    lambda_code: "vectora-inbox-lambda-code-{env}"
+
+# =============================================================================
+# REPO LAYOUT
+# =============================================================================
+
+repo_layout:
+  root: "vectora-inbox/"
+  
+  code:
+    src_v2: "Code de référence - 3 handlers séparés (ingest, normalize_score, newsletter)"
+    vectora_core: "Modules métier réutilisables"
+    lambdas: "Handlers minimalistes délégant à vectora_core"
+  
+  code:
+    src_v2: "Code de référence - 3 handlers séparés (ingest, normalize_score, newsletter)"
+    vectora_core: "Modules métier réutilisables"
+    lambdas: "Handlers minimalistes délégant à vectora_core"
+  
+  configuration:
+    canonical: "Scopes métier + prompts canoniques - pilotent le comportement"
+    client_config_examples: "Configurations client (lai_weekly_v7.yaml validé)"
+    VERSION: "Versions sémantiques de tous les artefacts"
+  
+  infrastructure:
+    infra: "Templates CloudFormation (s0-core, s0-iam, s1-runtime)"
+    scripts: "Scripts build/deploy/test standardisés"
+  
+  documentation:
+    q_context: "Documentation Q Developer (gouvernance, workflows, règles)"
+    docs: "Documentation technique et guides"
+    contracts: "Contrats métier synchronisés avec code"
+
+# =============================================================================
+# INFRASTRUCTURE S3
+# =============================================================================
+
+s3_buckets:
+  config_bucket:
+    name: "vectora-inbox-config-dev"
+    purpose: "Configurations client + canonical (scopes, prompts)"
+    structure:
+      - "clients/{client_id}.yaml"
+      - "canonical/scopes/*.yaml"
+      - "canonical/prompts/{type}/{vertical}.yaml"
+      - "canonical/sources/source_catalog.yaml"
+      - "canonical/ingestion/ingestion_profiles.yaml"
+  
+  data_bucket:
+    name: "vectora-inbox-data-dev"
+    purpose: "Données de traitement avec structure V2"
+    structure:
+      ingested: "ingested/{client_id}/{YYYY}/{MM}/{DD}/items.json"
+      curated: "curated/{client_id}/{YYYY}/{MM}/{DD}/items.json"
+      raw: "raw/{client_id}/{source_key}/{YYYY}/{MM}/{DD}/raw.json (optionnel)"
+  
+  newsletters_bucket:
+    name: "vectora-inbox-newsletters-dev"
+    purpose: "Newsletters finales générées"
+    structure:
+      - "{client_id}/{YYYY}/{MM}/{DD}/newsletter.md"
+      - "{client_id}/{YYYY}/{MM}/{DD}/newsletter.html"
+
+# =============================================================================
+# CONFIGURATION PILOTÉE
+# =============================================================================
+
+configuration_driven:
+  principle: "Configuration > Code - Comportement piloté par YAML"
+  
+  client_config:
+    location: "s3://vectora-inbox-config-{env}/clients/{client_id}.yaml"
+    example: "lai_weekly_v7.yaml"
+    controls:
+      - "Sources d'ingestion (bouquets + sources individuelles)"
+      - "Domaines de veille (watch_domains avec scopes)"
+      - "Seuils de matching (min_domain_score, fallback_mode)"
+      - "Règles de scoring (bonuses, pénalités)"
+      - "Structure newsletter (sections, max_items)"
+      - "Prompts Bedrock (normalization_prompt, matching_prompt, editorial_prompt)"
+  
+  canonical_scopes:
+    location: "s3://vectora-inbox-config-{env}/canonical/scopes/"
+    types:
+      - "company_scopes.yaml (lai_companies_global, lai_companies_mvp_core, etc.)"
+      - "molecule_scopes.yaml (lai_molecules_global)"
+      - "technology_scopes.yaml (lai_keywords avec core_phrases, technology_terms, etc.)"
+      - "trademark_scopes.yaml (lai_trademarks_global)"
+      - "exclusion_scopes.yaml (lai_keywords.negative_terms)"
+    features:
+      - "Scopes complexes aplatis automatiquement (ex: lai_keywords)"
+      - "Références croisées entre scopes"
+      - "Versionnés avec canonical_version dans VERSION"
+  
+  canonical_prompts:
+    location: "s3://vectora-inbox-config-{env}/canonical/prompts/"
+    structure:
+      - "normalization/{vertical}.yaml (lai_normalization.yaml)"
+      - "matching/{vertical}.yaml (lai_matching.yaml)"
+      - "editorial/{vertical}.yaml (lai_editorial.yaml)"
+    features:
+      - "Références dynamiques: {{ref:scope_name}}"
+      - "Variables runtime: {{item_text}}, {{pure_player_context}}"
+      - "Résolution via prompt_resolver.py"
+      - "Modification sans redéploiement code"
+
+# =============================================================================
+# CLIENT DE RÉFÉRENCE
+# =============================================================================
+
+client_reference:
+  client_id: "lai_weekly_v7"
+  config_file: "client-config-examples/lai_weekly_v7.yaml"
+  template_version: "7.0.0"
+  created_date: "2026-01-29"
+  
+  focus:
+    - "Test extraction dates réelles via Bedrock"
+    - "Validation prompts canoniques avec références dynamiques"
+    - "Domaine unique: tech_lai_ecosystem"
+  
+  bedrock_config:
+    normalization_prompt: "lai"  # Charge lai_normalization.yaml
+    matching_prompt: "lai"        # Charge lai_matching.yaml
+    editorial_prompt: "lai"       # Charge lai_editorial.yaml
+  
+  validation_status: "✅ Opérationnel - Tests E2E passés"
+
+# =============================================================================
+# WORKFLOW STANDARD
+# =============================================================================
+
+workflow:
+  development:
+    - "1. Créer branche feature depuis develop"
+    - "2. Modifier code dans src_v2/"
+    - "3. Incrémenter version dans VERSION"
+    - "4. Commit Git (AVANT build!)"
+    - "5. Build: python scripts/build/build_all.py"
+    - "6. Deploy dev: python scripts/deploy/deploy_env.py --env dev"
+    - "7. Test dev: python scripts/invoke/invoke_normalize_score_v2.py --client-id lai_weekly_v7"
+    - "8. Push et Pull Request"
+  
+  promotion:
+    - "9. Merge dans develop"
+    - "10. Tag Git: git tag v1.X.Y"
+    - "11. Promote stage: python scripts/deploy/promote.py --to stage --version X.Y.Z --git-sha <sha>"
+    - "12. Test stage"
+    - "13. PR develop → main (pour production)"
+  
+  documentation: ".q-context/vectora-inbox-workflows.md"
+
+# =============================================================================
+# SCRIPTS STANDARDISÉS
+# =============================================================================
+
+scripts:
+  build:
+    - "scripts/build/build_layer_vectora_core.py"
+    - "scripts/build/build_layer_common_deps.py"
+    - "scripts/build/build_all.py"
+  
+  deploy:
+    - "scripts/deploy/deploy_layer.py"
+    - "scripts/deploy/deploy_env.py"
+    - "scripts/deploy/promote.py"
+    - "scripts/deploy/rollback.py"
+  
+  test:
+    - "scripts/invoke/invoke_ingest_v2.py"
+    - "scripts/invoke/invoke_normalize_score_v2.py"
+    - "scripts/invoke/invoke_newsletter_v2.py"
+  
+  maintenance:
+    - "scripts/maintenance/cleanup_tmp.py"
+    - "scripts/maintenance/validate_client_config.py"
+
+# =============================================================================
+# GOUVERNANCE
+# =============================================================================
+
+governance:
+  principle: "Repo local = Source unique de vérité"
+  
+  rules:
+    - "❌ INTERDIT: Modifications directes AWS (console, CLI manuel)"
+    - "✅ OBLIGATOIRE: Passer par scripts build/deploy"
+    - "✅ OBLIGATOIRE: Incrémenter VERSION avant build"
+    - "✅ OBLIGATOIRE: Tester en dev avant stage"
+    - "✅ OBLIGATOIRE: Git commit AVANT build"
+    - "✅ OBLIGATOIRE: Pull Request pour merge develop/main"
+  
+  documentation:
+    - ".q-context/vectora-inbox-governance.md"
+    - ".q-context/vectora-inbox-git-workflow.md"
+    - ".q-context/vectora-inbox-git-rules.md"
+
+# =============================================================================
+# MÉTADONNÉES
+# =============================================================================
+
+metadata:
+  blueprint_version: "2.0-ACTUAL"
+  created_date: "2026-01-31"
+  last_updated: "2026-01-31"
+  status: "✅ Reflète l'état RÉEL du système"
+  
+  architecture_confirmed:
+    - "✅ 3 Lambdas V2 opérationnelles (ingest, normalize-score, newsletter)"
+    - "✅ Code src_v2/ avec 3 handlers séparés"
+    - "✅ Système de prompts canoniques avec références dynamiques"
+    - "✅ Bedrock Claude Sonnet 4.5 EU inference profile"
+    - "✅ Client référence lai_weekly_v7"
+  
+  differences_vs_obsolete_blueprint:
+    - "Bedrock: Claude Sonnet 4.5 EU (pas Sonnet 3 us-east-1)"
+    - "Client référence: lai_weekly_v7 (pas lai_weekly_v3)"
+    - "Prompts: Système canonique avec références dynamiques (nouveau)"
+    - "Versioning: Fichier VERSION avec 6 versions (nouveau)"
+    - "Runtime: Python 3.12 (pas 3.11)"
+  
+  changelog:
+    - version: "2.0-ACTUAL"
+      date: "2026-01-31"
+      changes:
+        - "Création blueprint complet reflétant état réel du système"
+        - "Documentation architecture 3 Lambdas V2 opérationnelle"
+        - "Documentation système de prompts canoniques avec références dynamiques"
+        - "Ajout guide d'ajustement complet pour admins (5 étapes + 4 scénarios)"
+        - "Documentation Bedrock Claude Sonnet 4.5 EU inference profile"
+      author: "Architecture review avec Q Developer"
+  
+  maintenance:
+    guide: "docs/architecture/BLUEPRINT_MAINTENANCE.md"
+    rules: ".q-context/vectora-inbox-development-rules.md (section Maintenance du Blueprint)"
+    audit_script: "scripts/maintenance/audit_blueprint.py (TODO)"
+    update_policy: "Mise à jour OBLIGATOIRE pour changements majeurs (dans même commit que code)"
+  
+  documentation_references:
+    - ".q-context/README.md (index centralisé)"
+    - ".q-context/vectora-inbox-development-rules.md"
+    - ".q-context/vectora-inbox-architecture-overview.md"
+    - "docs/guides/comprendre_versioning.md"
+    - "docs/architecture/BLUEPRINT_MAINTENANCE.md"uration:
+    canonical: "Scopes métier + prompts canoniques - pilotent le comportement"
+    client_config_examples: "Configurations client (lai_weekly_v7.yaml validé)"
+    VERSION: "Versions sémantiques de tous les artefacts"
+  
+  infrastructure:
+    infra: "Templates CloudFormation (s0-core, s0-iam, s1-runtime)"
+    scripts: "Scripts build/deploy/test standardisés"
+  
+  documentation:
+    q_context: "Documentation Q Developer (gouvernance, workflows, règles)"
+    docs: "Documentation technique et guides"
+    contracts: "Contrats métier synchronisés avec code"
+
+# =============================================================================
+# INFRASTRUCTURE S3
+# =============================================================================
+
+s3_buckets:
+  config_bucket:
+    name: "vectora-inbox-config-dev"
+    purpose: "Configurations client + canonical (scopes, prompts)"
+    structure:
+      - "clients/{client_id}.yaml"
+      - "canonical/scopes/*.yaml"
+      - "canonical/prompts/{type}/{vertical}.yaml"
+      - "canonical/sources/source_catalog.yaml"
+      - "canonical/ingestion/ingestion_profiles.yaml"
+  
+  data_bucket:
+    name: "vectora-inbox-data-dev"
+    purpose: "Données de traitement avec structure V2"
+    structure:
+      ingested: "ingested/{client_id}/{YYYY}/{MM}/{DD}/items.json"
+      curated: "curated/{client_id}/{YYYY}/{MM}/{DD}/items.json"
+      raw: "raw/{client_id}/{source_key}/{YYYY}/{MM}/{DD}/raw.json (optionnel)"
+  
+  newsletters_bucket:
+    name: "vectora-inbox-newsletters-dev"
+    purpose: "Newsletters finales générées"
+    structure:
+      - "{client_id}/{YYYY}/{MM}/{DD}/newsletter.md"
+      - "{client_id}/{YYYY}/{MM}/{DD}/newsletter.html"
+
+# =============================================================================
+# CONFIGURATION PILOTÉE
+# =============================================================================
+
+configuration_driven:
+  principle: "Configuration > Code - Comportement piloté par YAML"
+  
+  client_config:
+    location: "s3://vectora-inbox-config-{env}/clients/{client_id}.yaml"
+    example: "lai_weekly_v7.yaml"
+    controls:
+      - "Sources d'ingestion (bouquets + sources individuelles)"
+      - "Domaines de veille (watch_domains avec scopes)"
+      - "Seuils de matching (min_domain_score, fallback_mode)"
+      - "Règles de scoring (bonuses, pénalités)"
+      - "Structure newsletter (sections, max_items)"
+      - "Prompts Bedrock (normalization_prompt, matching_prompt, editorial_prompt)"
+  
+  canonical_scopes:
+    location: "s3://vectora-inbox-config-{env}/canonical/scopes/"
+    types:
+      - "company_scopes.yaml (lai_companies_global, lai_companies_mvp_core, etc.)"
+      - "molecule_scopes.yaml (lai_molecules_global)"
+      - "technology_scopes.yaml (lai_keywords avec core_phrases, technology_terms, etc.)"
+      - "trademark_scopes.yaml (lai_trademarks_global)"
+      - "exclusion_scopes.yaml (lai_keywords.negative_terms)"
+    features:
+      - "Scopes complexes aplatis automatiquement (ex: lai_keywords)"
+      - "Références croisées entre scopes"
+      - "Versionnés avec canonical_version dans VERSION"
+  
+  canonical_prompts:
+    location: "s3://vectora-inbox-config-{env}/canonical/prompts/"
+    structure:
+      - "normalization/{vertical}.yaml (lai_normalization.yaml)"
+      - "matching/{vertical}.yaml (lai_matching.yaml)"
+      - "editorial/{vertical}.yaml (lai_editorial.yaml)"
+    features:
+      - "Références dynamiques: {{ref:scope_name}}"
+      - "Variables runtime: {{item_text}}, {{pure_player_context}}"
+      - "Résolution via prompt_resolver.py"
+      - "Modification sans redéploiement code"
+
+# =============================================================================
+# CLIENT DE RÉFÉRENCE
+# =============================================================================
+
+client_reference:
+  client_id: "lai_weekly_v7"
+  config_file: "client-config-examples/lai_weekly_v7.yaml"
+  template_version: "7.0.0"
+  created_date: "2026-01-29"
+  
+  focus:
+    - "Test extraction dates réelles via Bedrock"
+    - "Validation prompts canoniques avec références dynamiques"
+    - "Domaine unique: tech_lai_ecosystem"
+  
+  bedrock_config:
+    normalization_prompt: "lai"  # Charge lai_normalization.yaml
+    matching_prompt: "lai"        # Charge lai_matching.yaml
+    editorial_prompt: "lai"       # Charge lai_editorial.yaml
+  
+  validation_status: "✅ Opérationnel - Tests E2E passés"
+
+# =============================================================================
+# WORKFLOW STANDARD
+# =============================================================================
+
+workflow:
+  development:
+    - "1. Créer branche feature depuis develop"
+    - "2. Modifier code dans src_v2/"
+    - "3. Incrémenter version dans VERSION"
+    - "4. Commit Git (AVANT build!)"
+    - "5. Build: python scripts/build/build_all.py"
+    - "6. Deploy dev: python scripts/deploy/deploy_env.py --env dev"
+    - "7. Test dev: python scripts/invoke/invoke_normalize_score_v2.py --client-id lai_weekly_v7"
+    - "8. Push et Pull Request"
+  
+  promotion:
+    - "9. Merge dans develop"
+    - "10. Tag Git: git tag v1.X.Y"
+    - "11. Promote stage: python scripts/deploy/promote.py --to stage --version X.Y.Z --git-sha <sha>"
+    - "12. Test stage"
+    - "13. PR develop → main (pour production)"
+  
+  documentation: ".q-context/vectora-inbox-workflows.md"
+
+# =============================================================================
+# SCRIPTS STANDARDISÉS
+# =============================================================================
+
+scripts:
+  build:
+    - "scripts/build/build_layer_vectora_core.py"
+    - "scripts/build/build_layer_common_deps.py"
+    - "scripts/build/build_all.py"
+  
+  deploy:
+    - "scripts/deploy/deploy_layer.py"
+    - "scripts/deploy/deploy_env.py"
+    - "scripts/deploy/promote.py"
+    - "scripts/deploy/rollback.py"
+  
+  test:
+    - "scripts/invoke/invoke_ingest_v2.py"
+    - "scripts/invoke/invoke_normalize_score_v2.py"
+    - "scripts/invoke/invoke_newsletter_v2.py"
+  
+  maintenance:
+    - "scripts/maintenance/cleanup_tmp.py"
+    - "scripts/maintenance/validate_client_config.py"
+
+# =============================================================================
+# GOUVERNANCE
+# =============================================================================
+
+governance:
+  principle: "Repo local = Source unique de vérité"
+  
+  rules:
+    - "❌ INTERDIT: Modifications directes AWS (console, CLI manuel)"
+    - "✅ OBLIGATOIRE: Passer par scripts build/deploy"
+    - "✅ OBLIGATOIRE: Incrémenter VERSION avant build"
+    - "✅ OBLIGATOIRE: Tester en dev avant stage"
+    - "✅ OBLIGATOIRE: Git commit AVANT build"
+    - "✅ OBLIGATOIRE: Pull Request pour merge develop/main"
+  
+  documentation:
+    - ".q-context/vectora-inbox-governance.md"
+    - ".q-context/vectora-inbox-git-workflow.md"
+    - ".q-context/vectora-inbox-git-rules.md"
+
+# =============================================================================
+# MÉTADONNÉES
+# =============================================================================
+
+metadata:
+  blueprint_version: "2.0-ACTUAL"
+  created_date: "2026-01-31"
+  last_updated: "2026-01-31"
+  status: "✅ Reflète l'état RÉEL du système"
+  
+  differences_vs_obsolete_blueprint:
+    - "Architecture: 2 Lambdas déployées (pas 3 Lambdas V2)"
+    - "Bedrock: Claude Sonnet 4.5 EU (pas Sonnet 3 us-east-1)"
+    - "Client référence: lai_weekly_v7 (pas lai_weekly_v3)"
+    - "Prompts: Système canonique avec références dynamiques (nouveau)"
+    - "Versioning: Fichier VERSION avec 6 versions (nouveau)"
+    - "Runtime: Python 3.12 (pas 3.11)"
+  
+  next_steps:
+    - "Migrer infra CloudFormation vers 3 Lambdas V2"
+    - "Créer environnement stage"
+    - "Finaliser Lambda newsletter-v2"
+    - "Tests E2E complets sur architecture 3 Lambdas"
+  
+  documentation_references:
+    - ".q-context/README.md (index centralisé)"
+    - ".q-context/vectora-inbox-development-rules.md"
+    - ".q-context/vectora-inbox-architecture-overview.md"
+    - "docs/guides/comprendre_versioning.md"
+
+
+# =============================================================================
+# GUIDE D'AJUSTEMENT DU MOTEUR (POUR ADMINS)
+# =============================================================================
+
+tuning_guide:
+  philosophy: |
+    Le nerf de la guerre de Vectora Inbox est la PERTINENCE de la newsletter générée.
+    
+    Objectifs clés:
+    - ✅ Nombre idéal de news pertinentes (ni trop, ni trop peu)
+    - ✅ Éviter le bruit (faux positifs)
+    - ✅ Ne pas manquer de news importantes (faux négatifs)
+    - ✅ Gérer multiples sources et watch domains
+    
+    Le moteur est ENTIÈREMENT ajustable via les fichiers canonical et client config,
+    SANS redéploiement de code.
+
+  # ===========================================================================
+  # ÉTAPE 1: INGESTION - Contrôler QUOI ingérer
+  # ===========================================================================
+  
+  step_1_ingestion:
+    objective: "Contrôler QUELLES sources sont ingérées et COMMENT"
+    
+    levers:
+      # Levier 1.1: Sélection des sources
+      source_selection:
+        file: "canonical/sources/source_catalog.yaml"
+        what_to_adjust: "Liste des sources disponibles et leurs métadonnées"
+        
+        actions:
+          add_source: |
+            Ajouter une nouvelle source dans source_catalog.yaml:
+            
+            sources:
+              - source_key: "new_company_blog"
+                name: "New Company Blog"
+                url: "https://newcompany.com/blog/feed"
+                ingestion_mode: "rss"
+                enabled: true
+                priority: "medium"
+                date_extraction_patterns:
+                  - pattern: "pubDate"
+                    format: "rfc822"
+          
+          disable_source: |
+            Désactiver une source bruyante:
+            
+            - source_key: "noisy_source"
+              enabled: false  # ← Passer à false
+          
+          adjust_priority: |
+            Prioriser une source importante:
+            
+            - source_key: "critical_source"
+              priority: "high"  # low|medium|high
+              ingestion_mode: "aggressive"  # conservative|balanced|aggressive
+        
+        impact:
+          - "Plus de sources = Plus de contenu brut ingéré"
+          - "Sources disabled = Réduction du bruit à la source"
+          - "Priority high = Traitement prioritaire en cas de limite"
+      
+      # Levier 1.2: Bouquets de sources
+      source_bouquets:
+        file: "client-config-examples/{client_id}.yaml"
+        what_to_adjust: "Quels bouquets de sources activer pour un client"
+        
+        actions:
+          enable_bouquet: |
+            Activer un bouquet de sources dans client config:
+            
+            source_config:
+              source_bouquets_enabled:
+                - "lai_corporate_mvp"
+                - "lai_press_mvp"
+                - "lai_scientific"  # ← Ajouter nouveau bouquet
+          
+          add_individual_source: |
+            Ajouter une source individuelle (hors bouquet):
+            
+            source_config:
+              sources_extra_enabled:
+                - "specific_company_blog"
+                - "niche_publication"
+        
+        impact:
+          - "Plus de bouquets = Plus de diversité de sources"
+          - "Sources extra = Ajout ciblé sans modifier les bouquets"
+      
+      # Levier 1.3: Filtres de contenu
+      content_filters:
+        file: "client-config-examples/{client_id}.yaml"
+        what_to_adjust: "Filtres appliqués au contenu ingéré"
+        
+        actions:
+          adjust_min_words: |
+            Filtrer les contenus trop courts:
+            
+            source_config:
+              content_filters:
+                min_word_count: 100  # ← Augmenter pour réduire bruit
+                exclude_patterns:
+                  - "Download attachment"
+                  - "Unsubscribe"
+        
+        impact:
+          - "min_word_count élevé = Moins de snippets inutiles"
+          - "exclude_patterns = Filtrage de patterns récurrents non pertinents"
+
+  # ===========================================================================
+  # ÉTAPE 2: NORMALISATION - Extraire les entités pertinentes
+  # ===========================================================================
+  
+  step_2_normalization:
+    objective: "Contrôler QUELLES entités sont extraites et COMMENT"
+    
+    levers:
+      # Levier 2.1: Scopes d'entités
+      entity_scopes:
+        files:
+          - "canonical/scopes/company_scopes.yaml"
+          - "canonical/scopes/molecule_scopes.yaml"
+          - "canonical/scopes/technology_scopes.yaml"
+          - "canonical/scopes/trademark_scopes.yaml"
+        
+        what_to_adjust: "Listes d'entités à détecter (companies, molecules, technologies, trademarks)"
+        
+        actions:
+          add_company: |
+            Ajouter une nouvelle entreprise à surveiller:
+            
+            lai_companies_global:
+              - "Existing Company 1"
+              - "Existing Company 2"
+              - "New Biotech Startup"  # ← Ajouter ici
+          
+          add_technology_term: |
+            Ajouter un nouveau terme technologique:
+            
+            lai_keywords:
+              core_phrases:
+                - "Long-Acting Injectable"
+                - "Extended-Release Injectable"
+                - "Quarterly Injection"  # ← Ajouter nouveau terme
+              
+              technology_terms_high_precision:
+                - "PLGA Microspheres"
+                - "In-Situ Depot"
+                - "Hydrogel Matrix"  # ← Ajouter nouveau terme
+          
+          add_exclusion: |
+            Exclure des termes générant du bruit:
+            
+            lai_keywords:
+              negative_terms:
+                - "oral tablet"
+                - "capsule"
+                - "topical cream"  # ← Ajouter terme à exclure
+        
+        impact:
+          - "Plus d'entités = Meilleure détection mais risque de bruit"
+          - "Termes high_precision = Détection ciblée, moins de faux positifs"
+          - "Negative_terms = Filtrage anti-bruit"
+      
+      # Levier 2.2: Prompts de normalisation
+      normalization_prompts:
+        file: "canonical/prompts/normalization/{vertical}.yaml"
+        what_to_adjust: "Instructions données à Bedrock pour extraction"
+        
+        actions:
+          adjust_instructions: |
+            Modifier les instructions de normalisation:
+            
+            user_template: |
+              CRITICAL: Only extract entities that are EXPLICITLY mentioned.
+              FORBIDDEN: Do not invent or infer entities.
+              
+              # ← Ajouter instructions spécifiques:
+              PRIORITY ENTITIES:
+              - Focus on partnerships and regulatory events
+              - Prioritize pure-player LAI companies
+              
+              ANTI-HALLUCINATION:
+              - If text is generic (< 50 words), return minimal entities
+              - Require explicit mention of technology terms
+          
+          adjust_references: |
+            Modifier les références aux scopes:
+            
+            LAI TECHNOLOGY FOCUS:
+            {{ref:lai_keywords.core_phrases}}  # ← Référence dynamique
+            
+            High-precision terms:
+            {{ref:lai_keywords.technology_terms_high_precision}}
+            
+            EXCLUDE if present:
+            {{ref:lai_keywords.negative_terms}}
+        
+        impact:
+          - "Instructions plus strictes = Moins de faux positifs"
+          - "Références dynamiques = Cohérence avec scopes canonical"
+          - "Anti-hallucination = Réduction du bruit Bedrock"
+
+  # ===========================================================================
+  # ÉTAPE 3: MATCHING - Décider QUELS items sont pertinents
+  # ===========================================================================
+  
+  step_3_matching:
+    objective: "Contrôler QUELS items matchent les domaines de veille"
+    
+    levers:
+      # Levier 3.1: Domaines de veille
+      watch_domains:
+        file: "client-config-examples/{client_id}.yaml"
+        what_to_adjust: "Quels domaines de veille activer et leurs seuils"
+        
+        actions:
+          add_domain: |
+            Ajouter un nouveau domaine de veille:
+            
+            watch_domains:
+              - id: "tech_lai_ecosystem"
+                type: "technology"
+                priority: "high"
+                technology_scope: "lai_keywords"
+                company_scope: "lai_companies_global"
+                enabled: true
+              
+              - id: "regulatory_lai"  # ← Nouveau domaine
+                type: "regulatory"
+                priority: "high"
+                company_scope: "lai_companies_global"
+                enabled: true
+          
+          adjust_thresholds: |
+            Ajuster les seuils de matching:
+            
+            matching_config:
+              min_domain_score: 0.25  # ← Baisser = Plus d'items matchés
+              min_confidence_level: "low"  # low|medium|high
+              
+              domain_type_thresholds:
+                technology: 0.30  # ← Seuil spécifique par type
+                regulatory: 0.20
+        
+        impact:
+          - "Plus de domaines = Plus de diversité de matching"
+          - "Seuils bas = Plus d'items matchés (risque de bruit)"
+          - "Seuils hauts = Moins d'items mais plus pertinents"
+      
+      # Levier 3.2: Mode fallback
+      fallback_mode:
+        file: "client-config-examples/{client_id}.yaml"
+        what_to_adjust: "Comportement si aucun domaine ne matche"
+        
+        actions:
+          enable_fallback: |
+            Activer le mode fallback pour ne rien perdre:
+            
+            matching_config:
+              enable_fallback_mode: true  # ← Activer
+              fallback_min_score: 0.15  # Seuil plus bas
+              fallback_max_domains: 1
+              fallback_company_scopes:
+                - "lai_companies_global"  # Matcher sur companies seules
+        
+        impact:
+          - "Fallback enabled = Moins de faux négatifs (ne rien manquer)"
+          - "Fallback disabled = Plus strict, risque de manquer des items"
+      
+      # Levier 3.3: Privilèges trademarks
+      trademark_privileges:
+        file: "client-config-examples/{client_id}.yaml"
+        what_to_adjust: "Boost automatique pour mentions de marques"
+        
+        actions:
+          adjust_trademark_boost: |
+            Ajuster le boost des trademarks:
+            
+            matching_config:
+              trademark_privileges:
+                enabled: true
+                auto_match_threshold: 0.8  # ← Seuil auto-match
+                boost_factor: 2.5  # ← Multiplicateur de score
+                matching_priority: true
+        
+        impact:
+          - "Boost élevé = Trademarks toujours matchées (pertinence garantie)"
+          - "Auto_match = Bypass des seuils normaux pour trademarks"
+
+  # ===========================================================================
+  # ÉTAPE 4: SCORING - Prioriser les items matchés
+  # ===========================================================================
+  
+  step_4_scoring:
+    objective: "Contrôler COMMENT les items sont scorés et priorisés"
+    
+    levers:
+      # Levier 4.1: Poids des types d'événements
+      event_type_weights:
+        file: "client-config-examples/{client_id}.yaml"
+        what_to_adjust: "Poids relatifs des types d'événements"
+        
+        actions:
+          adjust_weights: |
+            Prioriser certains types d'événements:
+            
+            scoring_config:
+              event_type_weight_overrides:
+                partnership: 8  # ← Augmenter pour prioriser
+                clinical_update: 6
+                regulatory: 7
+                scientific_publication: 4  # ← Baisser si trop de bruit
+        
+        impact:
+          - "Poids élevé = Type d'événement priorisé dans newsletter"
+          - "Poids bas = Type d'événement relégué en fin de newsletter"
+      
+      # Levier 4.2: Bonus client-spécifiques
+      client_bonuses:
+        file: "client-config-examples/{client_id}.yaml"
+        what_to_adjust: "Bonus appliqués selon entités détectées"
+        
+        actions:
+          add_bonus: |
+            Ajouter un bonus pour entités spécifiques:
+            
+            scoring_config:
+              client_specific_bonuses:
+                pure_player_companies:
+                  scope: "lai_companies_mvp_core"
+                  bonus: 5.0  # ← Bonus élevé pour pure players
+                
+                trademark_mentions:
+                  scope: "lai_trademarks_global"
+                  bonus: 4.0  # ← Bonus pour marques
+                
+                key_molecules:
+                  scope: "lai_molecules_global"
+                  bonus: 2.5
+                
+                strategic_partners:  # ← Nouveau bonus
+                  scope: "strategic_partners_list"
+                  bonus: 3.0
+        
+        impact:
+          - "Bonus élevés = Entités spécifiques toujours en haut de newsletter"
+          - "Bonus multiples = Cumul possible (ex: pure player + trademark)"
+      
+      # Levier 4.3: Seuils de sélection
+      selection_thresholds:
+        file: "client-config-examples/{client_id}.yaml"
+        what_to_adjust: "Seuils pour inclusion dans newsletter"
+        
+        actions:
+          adjust_min_score: |
+            Ajuster le score minimum pour inclusion:
+            
+            scoring_config:
+              selection_overrides:
+                min_score: 12  # ← Augmenter = Moins d'items mais plus pertinents
+                min_items_per_section: 1
+                max_items_total: 15  # ← Limiter le nombre total
+        
+        impact:
+          - "min_score élevé = Newsletter plus courte, très ciblée"
+          - "min_score bas = Newsletter plus longue, risque de bruit"
+
+  # ===========================================================================
+  # ÉTAPE 5: SÉLECTION NEWSLETTER - Composer la newsletter finale
+  # ===========================================================================
+  
+  step_5_newsletter_selection:
+    objective: "Contrôler COMMENT les items sont organisés dans la newsletter"
+    
+    levers:
+      # Levier 5.1: Structure des sections
+      newsletter_sections:
+        file: "client-config-examples/{client_id}.yaml"
+        what_to_adjust: "Sections de la newsletter et leurs règles"
+        
+        actions:
+          add_section: |
+            Ajouter une nouvelle section:
+            
+            newsletter_layout:
+              sections:
+                - id: "regulatory_updates"
+                  title: "Regulatory Updates"
+                  source_domains: ["tech_lai_ecosystem"]
+                  max_items: 6
+                  filter_event_types: ["regulatory"]
+                  sort_by: "score_desc"
+                  priority: 1
+                
+                - id: "breakthrough_innovations"  # ← Nouvelle section
+                  title: "Breakthrough Innovations"
+                  source_domains: ["tech_lai_ecosystem"]
+                  max_items: 3
+                  filter_event_types: ["clinical_update", "scientific_publication"]
+                  min_score_override: 15  # Seuil plus élevé
+                  sort_by: "score_desc"
+                  priority: 2
+          
+          adjust_max_items: |
+            Ajuster le nombre d'items par section:
+            
+            - id: "partnerships_deals"
+              max_items: 4  # ← Augmenter si trop peu d'items
+              min_items: 1  # ← Garantir au moins 1 item
+        
+        impact:
+          - "Plus de sections = Meilleure organisation thématique"
+          - "max_items élevé = Sections plus fournies"
+          - "min_score_override = Sections premium (seuil plus élevé)"
+      
+      # Levier 5.2: Stratégie de distribution
+      distribution_strategy:
+        file: "client-config-examples/{client_id}.yaml"
+        what_to_adjust: "Comment distribuer les items entre sections"
+        
+        actions:
+          adjust_strategy: |
+            Choisir la stratégie de distribution:
+            
+            newsletter_selection:
+              distribution_strategy: "specialized_with_fallback"
+              # Options:
+              # - "specialized": Items uniquement dans sections spécialisées
+              # - "specialized_with_fallback": + section "Others" pour le reste
+              # - "balanced": Distribution équilibrée entre sections
+              
+              max_items_total: 20  # ← Limite globale
+              min_score_threshold: 0  # ← Seuil global minimum
+        
+        impact:
+          - "specialized = Newsletter très structurée, risque de perdre items"
+          - "specialized_with_fallback = Aucun item perdu (section Others)"
+          - "balanced = Distribution équilibrée, moins de structure"
+      
+      # Levier 5.3: Déduplication
+      deduplication:
+        file: "client-config-examples/{client_id}.yaml"
+        what_to_adjust: "Règles de déduplication des items similaires"
+        
+        actions:
+          adjust_dedup: |
+            Ajuster la déduplication:
+            
+            newsletter_selection:
+              deduplication:
+                enabled: true
+                similarity_threshold: 0.75  # ← Baisser = Plus strict
+                prefer_critical_events: true
+                prefer_higher_score: true
+                company_based_dedup: true  # Dédupliquer par company
+        
+        impact:
+          - "Threshold bas = Déduplication agressive (moins d'items)"
+          - "Threshold haut = Déduplication permissive (plus d'items)"
+          - "company_based = Éviter doublons même entreprise"
+
+  # ===========================================================================
+  # SCÉNARIOS D'AJUSTEMENT COURANTS
+  # ===========================================================================
+  
+  common_scenarios:
+    # Scénario 1: Trop de bruit (faux positifs)
+    too_much_noise:
+      problem: "Newsletter contient trop d'items non pertinents"
+      
+      solutions:
+        - action: "Augmenter min_domain_score"
+          file: "client config → matching_config.min_domain_score"
+          change: "0.25 → 0.35"
+        
+        - action: "Augmenter min_score pour sélection"
+          file: "client config → scoring_config.selection_overrides.min_score"
+          change: "12 → 15"
+        
+        - action: "Ajouter negative_terms dans scopes"
+          file: "canonical/scopes/technology_scopes.yaml → lai_keywords.negative_terms"
+          change: "Ajouter termes générant du bruit"
+        
+        - action: "Renforcer instructions anti-hallucination"
+          file: "canonical/prompts/normalization/lai_normalization.yaml"
+          change: "Ajouter contraintes plus strictes"
+    
+    # Scénario 2: Manque d'items (faux négatifs)
+    missing_items:
+      problem: "Newsletter trop courte, items importants manquants"
+      
+      solutions:
+        - action: "Baisser min_domain_score"
+          file: "client config → matching_config.min_domain_score"
+          change: "0.35 → 0.20"
+        
+        - action: "Activer fallback_mode"
+          file: "client config → matching_config.enable_fallback_mode"
+          change: "false → true"
+        
+        - action: "Ajouter sources supplémentaires"
+          file: "client config → source_config.source_bouquets_enabled"
+          change: "Ajouter bouquets ou sources extra"
+        
+        - action: "Élargir scopes d'entités"
+          file: "canonical/scopes/*.yaml"
+          change: "Ajouter companies, molecules, technologies"
+    
+    # Scénario 3: Mauvaise priorisation
+    wrong_prioritization:
+      problem: "Items importants noyés dans le bruit"
+      
+      solutions:
+        - action: "Augmenter poids event_type"
+          file: "client config → scoring_config.event_type_weight_overrides"
+          change: "partnership: 8 → 10"
+        
+        - action: "Ajouter bonus client-spécifiques"
+          file: "client config → scoring_config.client_specific_bonuses"
+          change: "Ajouter bonus pour entités stratégiques"
+        
+        - action: "Activer trademark_privileges"
+          file: "client config → matching_config.trademark_privileges"
+          change: "boost_factor: 2.5 → 3.5"
+    
+    # Scénario 4: Sections déséquilibrées
+    unbalanced_sections:
+      problem: "Une section domine, autres sections vides"
+      
+      solutions:
+        - action: "Ajuster max_items par section"
+          file: "client config → newsletter_layout.sections[].max_items"
+          change: "Section dominante: 10 → 5"
+        
+        - action: "Ajouter min_items par section"
+          file: "client config → newsletter_layout.sections[].min_items"
+          change: "Sections vides: ajouter min_items: 1"
+        
+        - action: "Ajuster distribution_strategy"
+          file: "client config → newsletter_selection.distribution_strategy"
+          change: "specialized → balanced"
+
+  # ===========================================================================
+  # WORKFLOW D'AJUSTEMENT RECOMMANDÉ
+  # ===========================================================================
+  
+  recommended_workflow:
+    step_1: "Analyser la newsletter actuelle"
+    step_2: "Identifier le problème (bruit, manque, priorisation, structure)"
+    step_3: "Choisir le(s) levier(s) approprié(s)"
+    step_4: "Modifier les fichiers canonical ou client config"
+    step_5: "Sync vers S3 (pas de redéploiement code!)"
+    step_6: "Tester avec invoke script"
+    step_7: "Analyser les résultats"
+    step_8: "Itérer si nécessaire"
+    
+    commands:
+      sync_canonical: |
+        # Sync canonical vers S3
+        aws s3 sync canonical/ s3://vectora-inbox-config-dev/canonical/ \
+          --profile rag-lai-prod --region eu-west-3
+      
+      sync_client_config: |
+        # Sync client config vers S3
+        aws s3 cp client-config-examples/lai_weekly_v7.yaml \
+          s3://vectora-inbox-config-dev/clients/lai_weekly_v7.yaml \
+          --profile rag-lai-prod --region eu-west-3
+      
+      test: |
+        # Tester le workflow complet
+        python scripts/invoke/invoke_ingest_v2.py --client-id lai_weekly_v7
+        python scripts/invoke/invoke_normalize_score_v2.py --client-id lai_weekly_v7
+        python scripts/invoke/invoke_newsletter_v2.py --client-id lai_weekly_v7
+    
+    iteration_cycle: "Modifier → Sync → Test → Analyser → Répéter"
+    
+    no_code_deployment: "✅ AUCUN redéploiement de code nécessaire pour ajustements"
+
+  # ===========================================================================
+  # MÉTRIQUES DE PERTINENCE À SURVEILLER
+  # ===========================================================================
+  
+  key_metrics:
+    ingestion:
+      - "items_final: Nombre d'items ingérés"
+      - "sources_processed: Nombre de sources traitées"
+      - "Objectif: Couverture complète sans doublons"
+    
+    matching:
+      - "items_matched / items_processed: Taux de matching"
+      - "Objectif: 60-80% (ni trop bas = manque, ni trop haut = bruit)"
+    
+    scoring:
+      - "Distribution des scores (min, max, moyenne)"
+      - "Objectif: Bonne séparation entre pertinent et non pertinent"
+    
+    newsletter:
+      - "items_selected: Nombre d'items dans newsletter"
+      - "Objectif: 10-20 items (ni trop peu, ni trop)"
+      - "Distribution par section: Équilibrée"
+      - "Feedback utilisateur: Pertinence subjective"

@@ -112,10 +112,8 @@ class NewsletterSelector:
         if final_score > 0:
             return final_score
         
-        lai_relevance_score = item.get('normalized_content', {}).get('lai_relevance_score', 0)
-        if lai_relevance_score > 0:
-            return lai_relevance_score * 2
-        
+        # REMOVED: Fallback to lai_relevance_score (deprecated)
+        # Now only use final_score from scoring_results
         return 0
     
     def _distribute_to_sections(self, items):

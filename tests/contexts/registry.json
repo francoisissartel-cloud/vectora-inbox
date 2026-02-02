@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-02-02",
+  "contexts": {
+    "local": {
+      "current": "test_context_001",
+      "history": []
+    },
+    "aws": {
+      "current": null,
+      "history": []
+    }
+  },
+  "rules": {
+    "local_test_required": true,
+    "aws_deploy_blocked_without_local_success": true,
+    "auto_increment_context": true
+  }
+}

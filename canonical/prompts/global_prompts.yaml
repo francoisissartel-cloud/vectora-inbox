@@ -1,138 +1,16 @@
-# Prompts Canonicalisés Vectora Inbox V1
-# Date: 2025-12-12
-# Scope: Normalisation LAI uniquement
-# Version: 1.0
+# Prompts Canonicalisés Vectora Inbox V2
+# Date: 2026-02-02
+# Scope: Generic normalization + Domain scoring
+# Version: 2.0
 
 # =============================================================================
 # PROMPTS DE NORMALISATION
 # =============================================================================
 
 normalization:
-  # Prompt principal pour la normalisation LAI
-  # Migré depuis src/vectora_core/normalization/bedrock_client.py::_build_normalization_prompt()
-  lai_default:
-    # Instructions système pour le modèle Bedrock
-    system_instructions: |
-      You are a specialized AI assistant for biotech/pharma news analysis.
-      Focus on Long-Acting Injectable (LAI) technologies and related entities.
-      Extract structured information with high precision.
-      
-    # Template utilisateur avec placeholders pour substitution dynamique
-    # Placeholders disponibles:
-    # - {{item_text}} : Texte de l'item à analyser
-    # - {{companies_examples}} : Exemples de sociétés depuis canonical scopes
-    # - {{molecules_examples}} : Exemples de molécules depuis canonical scopes  
-    # - {{technologies_examples}} : Exemples de technologies depuis canonical scopes
-    user_template: |
-      Analyze the following biotech/pharma news item and extract structured information.
-
-      CRITICAL: Only extract entities that are EXPLICITLY mentioned in the text.
-      
-      FORBIDDEN: Do not invent, infer, or hallucinate entities not present.
-      
-      For each entity category:
-      - Companies: Only if company name appears in text
-      - Technologies: Only if technology term is explicitly written
-      - Trademarks: Only if trademark symbol or explicit brand name
-      
-      If text is too short or generic (< 20 words), respond with minimal entities.
-      
-      Example BAD response for "Partnership conference 2025":
-      ❌ technologies: ["Extended-Release Injectable", "Long-Acting Injectable"]
-      
-      Example GOOD response for "Partnership conference 2025":
-      ✅ technologies: []
-      ✅ note: "Generic conference announcement, no specific technologies mentioned"
-
-      TEXT TO ANALYZE:
-      {{item_text}}
-
-      EXAMPLES OF ENTITIES TO DETECT:
-      - Companies: {{companies_examples}}
-      - Molecules/Drugs: {{molecules_examples}}
-      - Technologies: {{technologies_examples}}
-
-      LAI TECHNOLOGY FOCUS:
-      Detect these LAI (Long-Acting Injectable) technologies ONLY if explicitly mentioned:
-      - Extended-Release Injectable
-      - Long-Acting Injectable
-      - Depot Injection
-      - Once-Monthly Injection
-      - Three-Month Injectable      # NOUVEAU
-      - Quarterly Injection         # NOUVEAU
-      - Long-Acting Formulation     # NOUVEAU
-      - Injectable Formulation      # NOUVEAU
-      - Microspheres
-      - PLGA
-      - In-Situ Depot
-      - Hydrogel
-      - Subcutaneous Injection
-      - Intramuscular Injection
-      - Monthly Injectable          # NOUVEAU
-      - Extended Protection         # NOUVEAU pour malaria
-
-      TRADEMARKS to detect:
-      - UZEDY, PharmaShell, SiliaShell, BEPO, Aristada, Abilify Maintena
-
-      Normalize: 'extended-release injectable' → 'Extended-Release Injectable'
-
-      EVENT TYPE CLASSIFICATION RULES:
-      
-      PARTNERSHIP:
-      - Grants and funding (Gates Foundation grant = partnership)
-      - License agreements
-      - Joint ventures
-      - Strategic alliances
-      
-      FINANCIAL_RESULTS:
-      - Quarterly earnings
-      - Revenue reports
-      - Financial guidance
-      
-      REGULATORY:
-      - FDA approvals
-      - NDA submissions
-      - Clinical trial authorizations
-
-      TASK:
-      1. Generate a concise summary (2-3 sentences) explaining the key information
-      2. Classify the event type among: clinical_update, partnership, regulatory, scientific_paper, corporate_move, financial_results, safety_signal, manufacturing_supply, other
-      3. Extract ALL pharmaceutical/biotech company names mentioned
-      4. Extract ALL drug/molecule names mentioned (including brand names, generic names)
-      5. Extract ALL technology keywords mentioned - FOCUS on LAI technologies listed above
-      6. Extract ALL trademark names mentioned (especially those with ® or ™ symbols)
-      7. Extract ALL therapeutic indications mentioned
-      8. Evaluate LAI relevance (0-10 score): How relevant is this content to Long-Acting Injectable technologies?
-      9. Detect anti-LAI signals: Does the content mention oral routes (tablets, capsules, pills)?
-      10. Assess pure player context: Is this about a LAI-focused company without explicit LAI mentions?
-
-      IMPORTANT:
-      - Extract the EXACT company names as they appear in the text (e.g., "WuXi AppTec", "Agios", "Pfizer")
-      - Include ALL companies mentioned, not just those in the examples
-      - Be comprehensive in entity extraction
-      - For domain evaluation, consider the overall context and relevance, not just keyword matching
-
-      RESPONSE FORMAT (JSON only):
-      {
-        "summary": "...",
-        "event_type": "...",
-        "companies_detected": ["...", "..."],
-        "molecules_detected": ["...", "..."],
-        "technologies_detected": ["...", "..."],
-        "trademarks_detected": ["...", "..."],
-        "indications_detected": ["...", "..."],
-        "lai_relevance_score": 0,
-        "anti_lai_detected": false,
-        "pure_player_context": false
-      }
-
-      Respond with ONLY the JSON, no additional text.
-
-    # Configuration Bedrock pour ce prompt
-    bedrock_config:
-      max_tokens: 1000
-      temperature: 0.0
-      anthropic_version: "bedrock-2023-05-31"
+  # DEPRECATED: lai_default prompt removed - use generic_normalization.yaml instead
+  # Reason: Migrated to vertical-agnostic architecture (v2.0)
+  # Date: 2026-02-02
 
 # =============================================================================
 # PROMPTS NEWSLETTER (Phase 2 - Placeholder)
@@ -327,12 +205,15 @@ metadata:
   
   # Changelog pour traçabilité
   changelog:
-    - version: "1.0"
-      date: "2025-12-12"
-      changes: "Création initiale - Migration prompt normalisation LAI depuis code hardcodé"
-    - version: "1.1"
-      date: "2025-12-12"
-      changes: "Phase 2A - Migration prompt newsletter éditorial depuis bedrock_client.py"
+    - version: "2.0"
+      date: "2026-02-02"
+      changes: "Architecture v2.0 - Removed lai_default prompt (deprecated), migrated to generic_normalization.yaml"
     - version: "1.2"
       date: "2025-12-16"
       changes: "Ajout prompt matching_watch_domains_v2 pour matching Bedrock par domaines"
+    - version: "1.1"
+      date: "2025-12-12"
+      changes: "Phase 2A - Migration prompt newsletter éditorial depuis bedrock_client.py"
+    - version: "1.0"
+      date: "2025-12-12"
+      changes: "Création initiale - Migration prompt normalisation LAI depuis code hardcodé"

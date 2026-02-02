@@ -66,7 +66,7 @@ def score_items(
             item_id = item.get('item_id', 'unknown')
             logger.error(f"Erreur scoring item {item_id}: {str(e)}")
             logger.error(f"Données matching_results: {item.get('matching_results', {})}")
-            logger.error(f"Données normalized_content: {item.get('normalized_content', {}).get('lai_relevance_score', 'N/A')}")
+            logger.error(f"Données normalized_content keys: {list(item.get('normalized_content', {}).keys())}")
             
             # Ajout avec score par défaut + diagnostic
             default_result = _create_default_scoring_result()
@@ -395,12 +395,12 @@ def _calculate_bonuses(
     if normalized_content.get("pure_player_context", False):
         bonuses["pure_player_context"] = 2.0
     
-    # Bonus score LAI élevé
-    lai_score = normalized_content.get("lai_relevance_score", 0)
-    if lai_score >= 8:
-        bonuses["high_lai_relevance"] = 2.5
-    elif lai_score >= 6:
-        bonuses["medium_lai_relevance"] = 1.5
+    # REMOVED: Bonus score LAI élevé (deprecated - now using domain_scoring)
+    # lai_score = normalized_content.get("lai_relevance_score", 0)
+    # if lai_score >= 8:
+    #     bonuses["high_lai_relevance"] = 2.5
+    # elif lai_score >= 6:
+    #     bonuses["medium_lai_relevance"] = 1.5
     
     return bonuses
 
@@ -490,12 +490,12 @@ def _calculate_penalties_with_date(
     if normalized_content.get("anti_lai_detected", False):
         penalties["anti_lai_penalty"] = -5.0
     
-    # Pénalité score LAI très faible
-    lai_score = normalized_content.get("lai_relevance_score", 0)
-    if lai_score <= 2:
-        penalties["low_lai_score"] = -3.0
-    elif lai_score <= 4:
-        penalties["medium_lai_score"] = -1.5
+    # REMOVED: Pénalité score LAI très faible (deprecated - now using domain_scoring)
+    # lai_score = normalized_content.get("lai_relevance_score", 0)
+    # if lai_score <= 2:
+    #     penalties["low_lai_score"] = -3.0
+    # elif lai_score <= 4:
+    #     penalties["medium_lai_score"] = -1.5
     
     # Pénalité âge avec dégradation progressive (utilise effective_date)
     if effective_date:

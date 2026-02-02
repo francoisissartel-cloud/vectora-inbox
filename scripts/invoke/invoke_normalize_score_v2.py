@@ -42,6 +42,12 @@ def get_test_event(event_name):
         "lai_weekly_v7": {
             "client_id": "lai_weekly_v7"
         },
+        "lai_weekly_v8": {
+            "client_id": "lai_weekly_v8"
+        },
+        "lai_weekly_v9": {
+            "client_id": "lai_weekly_v9"
+        },
         "minimal": {
             "client_id": "lai_weekly_v3",
             "period_days": 1
@@ -64,6 +70,7 @@ def invoke_lambda(event_data, timeout=900):
     """Invoque la Lambda avec l'event donné."""
     log(f"Invocation de {LAMBDA_NAME}...")
     log(f"Event: {json.dumps(event_data, indent=2)}")
+    log(f"Timeout CLI: {timeout}s")
     
     # Créer fichier d'event temporaire
     event_file = "temp_event.json"
@@ -71,9 +78,9 @@ def invoke_lambda(event_data, timeout=900):
         json.dump(event_data, f)
     
     try:
-        # Invoquer avec format CLI correct
+        # Invoquer avec format CLI correct et timeout augmenté
         response_file = "temp_response.json"
-        command = f"lambda invoke --function-name {LAMBDA_NAME} --cli-binary-format raw-in-base64-out --payload file://{event_file} {response_file}"
+        command = f"lambda invoke --function-name {LAMBDA_NAME} --cli-binary-format raw-in-base64-out --cli-read-timeout {timeout} --payload file://{event_file} {response_file}"
         
         import time
         start_time = time.time()
@@ -169,7 +176,7 @@ def measure_cold_start():
 def main():
     parser = argparse.ArgumentParser(description="Invocation standardisée normalize_score_v2")
     parser.add_argument("--event", default="lai_weekly_v3", 
-                       choices=["lai_weekly_v3", "lai_weekly_v7", "minimal", "full"],
+                       choices=["lai_weekly_v3", "lai_weekly_v7", "lai_weekly_v8", "lai_weekly_v9", "minimal", "full"],
                        help="Event de test à utiliser")
     parser.add_argument("--performance", action="store_true",
                        help="Mesurer les performances (cold/warm start)")

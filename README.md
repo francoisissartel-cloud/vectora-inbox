@@ -2,6 +2,17 @@
 
 Système intelligent de veille et génération de newsletters pour le secteur pharmaceutique.
 
+## 🎯 Contexte Business
+
+**Vectora Inbox = Moteur de newsletters ultra-spécialisées sur des marchés de niche biotech/pharma**
+
+- **Première newsletter**: Long-Acting Injectables (LAI) - 200+ entreprises, aucune newsletter dédiée existante
+- **Avantage compétitif**: Expertise métier rare (11 ans pharma) + Capacité technique (Q Developer)
+- **Modèle**: Newsletter générique LAI (B2C) + Newsletters sur-mesure (B2B)
+- **Vision**: Extension à d'autres niches (siRNA, cell therapy, gene therapy)
+
+📖 **Lire**: [Contexte Business Complet](docs/business/CONTEXTE_BUSINESS_VECTORA.md)
+
 ## 🚀 Démarrage Rapide
 
 **📚 Toute la documentation est centralisée dans [`.q-context/README.md`](.q-context/README.md)**
@@ -50,6 +61,8 @@ ingest-v2 → normalize-score-v2 → newsletter-v2
 **Documents clés**:
 - [Gouvernance](.q-context/vectora-inbox-governance.md) - Workflow et règles
 - [Architecture](.q-context/vectora-inbox-architecture-overview.md) - Vue technique complète
+- [Blueprint](docs/architecture/blueprint-v2-ACTUAL-2026.yaml) - 📋 **Système complet + Guide d'ajustement**
+- [Maintenance Blueprint](docs/architecture/BLUEPRINT_MAINTENANCE.md) - 🔧 **Comment maintenir le blueprint à jour**
 - [Workflows](.q-context/vectora-inbox-workflows.md) - Scénarios détaillés
 - [Guide Q Developer](.q-context/vectora-inbox-q-prompting-guide.md) - Comment prompter Q
 

@@ -54,6 +54,7 @@ python scripts/build/build_all.py
 ### Deploy Dev
 ```bash
 python scripts/deploy/deploy_env.py --env dev
+# Publie layers + met à jour Lambdas automatiquement
 ```
 
 ### Promote Stage

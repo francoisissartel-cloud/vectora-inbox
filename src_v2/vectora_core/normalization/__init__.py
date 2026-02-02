@@ -90,8 +90,14 @@ def run_normalize_score_for_client(
         # NOUVEAU: Récupération des watch_domains et matching_config pour le matching Bedrock
         watch_domains = client_config.get('watch_domains', [])
         matching_config = client_config.get('matching_config', {})
+        
+        # NOUVEAU Phase 8: Récupération du flag enable_domain_scoring
+        bedrock_config = client_config.get('bedrock_config', {})
+        enable_domain_scoring = bedrock_config.get('enable_domain_scoring', False)
+        
         logger.info(f"Watch domains configurés: {len(watch_domains)}")
         logger.info(f"Configuration matching chargée: {matching_config.get('min_domain_score', 'défaut')}")
+        logger.info(f"Domain scoring activé: {enable_domain_scoring}")
         
         normalized_items = normalizer.normalize_items_batch(
             raw_items, 
@@ -104,7 +110,8 @@ def run_normalize_score_for_client(
             matching_config=matching_config,
             s3_io=s3_io,
             client_config=client_config,
-            config_bucket=env_vars["CONFIG_BUCKET"]
+            config_bucket=env_vars["CONFIG_BUCKET"],
+            enable_domain_scoring=enable_domain_scoring
         )
         
         if not normalized_items:

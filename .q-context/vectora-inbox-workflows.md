@@ -33,7 +33,7 @@ cd src_v2/vectora_core/normalization
 # 3. Build artefacts
 python scripts/build/build_all.py
 
-# 4. Deploy vers dev
+# 4. Deploy vers dev (publie layers + met à jour Lambdas automatiquement)
 python scripts/deploy/deploy_env.py --env dev
 
 # 5. Tester en dev
@@ -52,6 +52,8 @@ git push
 ```
 
 **Durée estimée**: 30-60 minutes
+
+**Note**: Depuis février 2026, `deploy_env.py` met automatiquement à jour les layers des 3 Lambdas (ingest-v2, normalize-score-v2, newsletter-v2) après publication. Plus besoin de commande manuelle `aws lambda update-function-configuration`.
 
 ---
 

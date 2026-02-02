@@ -83,11 +83,12 @@ def normalize_items_batch(
     matching_config: Dict[str, Any] = None,
     s3_io = None,
     client_config: Dict[str, Any] = None,
-    config_bucket: str = None
+    config_bucket: str = None,
+    enable_domain_scoring: bool = False
 ) -> List[Dict[str, Any]]:
     """
     Normalise une liste d'items via Bedrock avec parallélisation contrôlée.
-    NOUVEAU: Support du matching Bedrock par domaines + Approche B.
+    NOUVEAU: Support du matching Bedrock par domaines + Approche B + Domain Scoring.
     
     Args:
         raw_items: Items bruts à normaliser
@@ -101,6 +102,7 @@ def normalize_items_batch(
         s3_io: Module s3_io pour Approche B
         client_config: Configuration client pour Approche B
         config_bucket: Bucket S3 de configuration
+        enable_domain_scoring: Active le 2ème appel Bedrock pour domain scoring
     
     Returns:
         Liste des items normalisés avec matching Bedrock
@@ -130,7 +132,7 @@ def normalize_items_batch(
         normalized_items = _normalize_sequential(
             raw_items, examples, bedrock_model, bedrock_region, stats, 
             canonical_scopes, watch_domains, matching_config, canonical_prompts,
-            s3_io, client_config, config_bucket
+            s3_io, client_config, config_bucket, enable_domain_scoring
         )
     else:
         # Mode parallèle contrôlé
@@ -161,10 +163,11 @@ def _normalize_sequential(
     canonical_prompts: Dict[str, Any] = None,
     s3_io = None,
     client_config: Dict[str, Any] = None,
-    config_bucket: str = None
+    config_bucket: str = None,
+    enable_domain_scoring: bool = False
 ) -> List[Dict[str, Any]]:
     """Normalisation séquentielle pour éviter le throttling.
-    NOUVEAU: Support du matching Bedrock par domaines + Approche B.
+    NOUVEAU: Support du matching Bedrock par domaines + Approche B + Domain Scoring.
     """
     
     # VALIDATION: Paramètres requis pour Approche B
@@ -212,8 +215,34 @@ def _normalize_sequential(
                 canonical_prompts or {}, bedrock_model
             )
             
-            # Enrichissement de l'item avec les résultats (normalisation + matching)
-            normalized_item = _enrich_item_with_normalization(item, normalization_result, bedrock_matching_result)
+            # NOUVEAU: Domain scoring (2ème appel Bedrock) - CONDITIONNEL
+            domain_scoring_result = None
+            if enable_domain_scoring:
+                logger.info("Domain scoring activé - exécution du 2ème appel Bedrock")
+                try:
+                    from .bedrock_domain_scorer import score_item_for_domain
+                    
+                    # Charger domain definition
+                    domain_definition = canonical_scopes.get('domains', {}).get('lai_domain_definition', {})
+                    if domain_definition:
+                        domain_scoring_prompt = canonical_prompts.get('domain_scoring', {}).get('lai_domain_scoring', {})
+                        if domain_scoring_prompt:
+                            domain_scoring_result = score_item_for_domain(
+                                temp_item, domain_definition, canonical_scopes,
+                                bedrock_client, domain_scoring_prompt
+                            )
+                            logger.info(f"Domain scoring: is_relevant={domain_scoring_result.get('is_relevant')}, score={domain_scoring_result.get('score')}")
+                        else:
+                            logger.warning("Prompt domain_scoring/lai_domain_scoring non trouvé")
+                    else:
+                        logger.warning("Domain definition lai_domain_definition non trouvée")
+                except Exception as e:
+                    logger.error(f"Erreur domain scoring: {str(e)}")
+            else:
+                logger.debug("Domain scoring désactivé (enable_domain_scoring=False)")
+            
+            # Enrichissement de l'item avec les résultats (normalisation + matching + domain scoring)
+            normalized_item = _enrich_item_with_normalization(item, normalization_result, bedrock_matching_result, domain_scoring_result)
             normalized_items.append(normalized_item)
             stats["success"] += 1
             
@@ -416,10 +445,11 @@ def _build_item_text(item: Dict[str, Any]) -> str:
 def _enrich_item_with_normalization(
     original_item: Dict[str, Any], 
     normalization_result: Dict[str, Any],
-    bedrock_matching_result: Dict[str, Any] = None
+    bedrock_matching_result: Dict[str, Any] = None,
+    domain_scoring_result: Dict[str, Any] = None
 ) -> Dict[str, Any]:
     """Enrichit un item original avec les résultats de normalisation LAI.
-    NOUVEAU: Support des résultats de matching Bedrock + extraction date.
+    NOUVEAU: Support des résultats de matching Bedrock + extraction date + domain scoring.
     """
     # Copie de l'item original
     enriched_item = original_item.copy()
@@ -460,7 +490,7 @@ def _enrich_item_with_normalization(
         'published_at': published_at
     }
     
-    # Construction de la section normalized_content avec champs LAI complets
+    # Construction de la section normalized_content (générique)
     enriched_item["normalized_content"] = {
         "summary": normalization_result.get("summary", ""),
         "entities": {
@@ -474,18 +504,14 @@ def _enrich_item_with_normalization(
             "primary_type": normalization_result.get("event_type", "other"),
             "confidence": 0.8  # Valeur par défaut
         },
-        # Champs LAI spécialisés restaurés
-        "lai_relevance_score": normalization_result.get("lai_relevance_score", 0),
-        "anti_lai_detected": normalization_result.get("anti_lai_detected", False),
-        "pure_player_context": normalization_result.get("pure_player_context", False),
-        # NOUVEAU: Date extraite par Bedrock
+        # Date extraite par Bedrock
         "extracted_date": extracted_date,
         "date_confidence": date_confidence,
-        # Ajout métadonnées de normalisation
+        # Métadonnées de normalisation
         "normalization_metadata": {
-            "bedrock_model": "claude-3-5-sonnet",  # Sera passé dynamiquement
-            "canonical_version": "1.0",
-            "processing_time_ms": 0  # Sera calculé si nécessaire
+            "bedrock_model": "claude-3-5-sonnet",
+            "canonical_version": "2.0",
+            "processing_time_ms": 0
         }
     }
     
@@ -502,6 +528,20 @@ def _enrich_item_with_normalization(
             "domain_relevance": {},
             "bedrock_matching_used": False
         }
+    
+    # NOUVEAU: Ajout des résultats de domain scoring (2ème appel Bedrock)
+    if domain_scoring_result:
+        enriched_item["domain_scoring"] = {
+            "is_relevant": domain_scoring_result.get('is_relevant', False),
+            "score": domain_scoring_result.get('score', 0),
+            "confidence": domain_scoring_result.get('confidence', 'low'),
+            "signals_detected": domain_scoring_result.get('signals_detected', {}),
+            "score_breakdown": domain_scoring_result.get('score_breakdown'),
+            "reasoning": domain_scoring_result.get('reasoning', '')
+        }
+        enriched_item["has_domain_scoring"] = True
+    else:
+        enriched_item["has_domain_scoring"] = False
     
     return enriched_item
 
@@ -524,14 +564,10 @@ def _create_fallback_normalized_item(original_item: Dict[str, Any]) -> Dict[str,
             "primary_type": "other",
             "confidence": 0.0
         },
-        # Champs LAI avec valeurs par défaut
-        "lai_relevance_score": 0,
-        "anti_lai_detected": False,
-        "pure_player_context": False,
         # Métadonnées indiquant l'échec
         "normalization_metadata": {
             "bedrock_model": "fallback",
-            "canonical_version": "1.0",
+            "canonical_version": "2.0",
             "processing_time_ms": 0,
             "fallback_reason": "bedrock_failure"
         }

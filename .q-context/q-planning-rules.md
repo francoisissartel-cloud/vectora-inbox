@@ -22,6 +22,32 @@
 
 ## 📋 Règles Obligatoires pour Q Developer
 
+### 0. Section Conformité Q-Context (NOUVEAU - CRITIQUE)
+
+**Q DOIT TOUJOURS inclure une section "CONFORMITÉ Q-CONTEXT" dans chaque plan.**
+
+**Référence**: `.q-context/q-conformity-check.md`
+
+**Format obligatoire** (juste avant "VALIDATION AVANT EXÉCUTION"):
+```markdown
+## ✅ CONFORMITÉ Q-CONTEXT
+
+**Ce plan respecte les règles de gouvernance Vectora Inbox** :
+
+✅ **Architecture** : 3 Lambdas V2
+✅ **Git Workflow** : Branche → Commit → Build → Deploy
+✅ **Planification** : Phases structurées avec Git/Versioning/Tests
+✅ **Versioning** : Incrémentation VERSION avant build
+✅ **Environnement** : Cible explicite (dev/stage/prod)
+✅ **Scripts** : Utilisation scripts standardisés uniquement
+✅ **Hygiène** : Temporaires dans `.tmp/`, builds dans `.build/`
+✅ **Tests** : Validation dev avant promotion stage
+
+**Vous pouvez suivre ce plan en toute sécurité - il ne risque pas d'abîmer le projet.**
+```
+
+**Objectif**: Rassurer l'utilisateur que le plan respecte toutes les règles.
+
 ### 1. Déclenchement Automatique de Plan
 
 **Q DOIT créer un plan quand l'utilisateur demande**:
