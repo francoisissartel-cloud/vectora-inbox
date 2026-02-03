@@ -31,6 +31,8 @@ user_template: |
   1. SUMMARY (2-3 sentences)
      - Concise factual summary of the news
      - Focus on key facts: who, what, when
+     - IMPORTANT: If LAI-related terms detected (dosing intervals, technologies),
+       include them explicitly in summary
 
   2. PUBLICATION DATE (CRITICAL - REQUIRED)
      - Look for dates like "27 January 2026", "January 28, 2026", "09 January 2026"
@@ -54,9 +56,14 @@ user_template: |
      - Technologies: ALL technology keywords (e.g., "microspheres", "PEGylation")
      - Trademarks: ALL commercial product names (e.g., "UZEDY®", "Ozempic")
      - Indications: ALL therapeutic indications/diseases mentioned
+     - Dosing Intervals: ALL dosing frequency terms EXPLICITLY mentioned
+       Examples: "once-weekly", "once-monthly", "once every 3 months", 
+                 "q4w", "q8w", "q12w", "quarterly", "semi-annual"
+       CRITICAL: Only extract if EXPLICITLY stated in text (title or body)
 
   RESPONSE FORMAT (JSON only, no additional text):
   {
+    "title": "...",
     "summary": "...",
     "extracted_date": "2026-01-27",
     "date_confidence": 0.95,
@@ -65,7 +72,8 @@ user_template: |
     "molecules_detected": ["Molecule X"],
     "technologies_detected": ["Technology Y"],
     "trademarks_detected": ["Trademark Z"],
-    "indications_detected": ["Indication W"]
+    "indications_detected": ["Indication W"],
+    "dosing_intervals_detected": ["once-weekly"]
   }
 
   CRITICAL: Fields "extracted_date" and "date_confidence" are REQUIRED.

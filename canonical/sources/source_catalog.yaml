@@ -27,8 +27,8 @@ sources:
       - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
       # Patterns avec contexte
       - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
-    content_enrichment: "summary_enhanced"
-    max_content_length: 1000
+    content_enrichment: "full_article"
+    max_content_length: 2000
     notes: "MedinCell (France) - Société LAI leader. Ingestion HTML sur page news."
 
   - source_key: "press_corporate__camurus"
@@ -50,8 +50,8 @@ sources:
       - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
       - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
       - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
-    content_enrichment: "summary_enhanced"
-    max_content_length: 1000
+    content_enrichment: "full_article"
+    max_content_length: 2000
     notes: "Camurus (Suède) - Société LAI leader. Ingestion HTML sur page press releases."
 
   - source_key: "press_corporate__delsitech"
@@ -71,8 +71,8 @@ sources:
       - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
       - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
       - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
-    content_enrichment: "summary_enhanced"
-    max_content_length: 1000
+    content_enrichment: "full_article"
+    max_content_length: 2000
     notes: "DelSiTech (Finlande) - Technologie LAI. Ingestion HTML sur page news."
 
   - source_key: "press_corporate__nanexa"
@@ -92,8 +92,8 @@ sources:
       - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
       - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
       - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
-    content_enrichment: "summary_enhanced"
-    max_content_length: 1000
+    content_enrichment: "full_article"
+    max_content_length: 2000
     notes: "Nanexa (Suède) - Technologie LAI. Ingestion HTML sur page press."
 
   - source_key: "press_corporate__peptron"
@@ -113,8 +113,8 @@ sources:
       - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
       - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
       - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
-    content_enrichment: "summary_enhanced"
-    max_content_length: 1000
+    content_enrichment: "full_article"
+    max_content_length: 2000
     notes: "Peptron (Corée du Sud) - Société LAI. Ingestion HTML sur page news."
 
   # ========================================================================

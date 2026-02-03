@@ -16,6 +16,26 @@ system_instructions: |
   to the Long-Acting Injectables (LAI) domain.
   
   Your task: Determine if an item is LAI-relevant and assign a relevance score (0-100).
+  
+  CRITICAL RULES FOR SIGNAL DETECTION:
+  1. Only detect signals EXPLICITLY present in the normalized item
+  2. DO NOT infer, assume, or hallucinate signals not provided
+  3. If a technology/molecule/term is not in entities_detected, DO NOT add it
+  4. Base your evaluation ONLY on the normalized data provided
+  5. When in doubt, be conservative - reject rather than false positive
+  
+  HYBRID COMPANY SCORING RULE:
+  - If hybrid_company detected, apply boost (10 points) ONLY if at least one of:
+    * technology_family detected (58 LAI terms available)
+    * dosing_interval detected (15 patterns available)
+    * key_molecule detected
+    * trademark_mention detected
+  - Otherwise, hybrid_company boost = 0 points
+  
+  FINANCIAL RESULTS RULE:
+  - financial_results events: base_score = 0
+  - Only score if 2+ LAI signals present (technology, dosing, molecule, trademark)
+  - Otherwise reject as not LAI-relevant
 
 user_template: |
   Evaluate this normalized item for LAI domain relevance and score it.
@@ -32,6 +52,7 @@ user_template: |
   - Technologies: {{item_technologies}}
   - Trademarks: {{item_trademarks}}
   - Indications: {{item_indications}}
+  - Dosing Intervals: {{item_dosing_intervals}}
 
   LAI DOMAIN DEFINITION:
   {{ref:lai_domain_definition}}

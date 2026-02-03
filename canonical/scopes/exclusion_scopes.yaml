@@ -121,6 +121,20 @@ financial_reporting_terms:
   - "revenue"
   - "guidance"
   - "financial performance"
+  # Termes boursiers
+  - "MSCI"
+  - "MSCI World"
+  - "MSCI Small Cap"
+  - "stock index"
+  - "market index"
+  - "benchmark index"
+  - "financial calendar"
+  - "interim report"
+  - "half-year results"
+  - "consolidated results"
+  - "market cap"
+  - "share price"
+  - "trading volume"
 
 # Nouvelles exclusions anti-LAI (Phase 1)
 anti_lai_routes:
