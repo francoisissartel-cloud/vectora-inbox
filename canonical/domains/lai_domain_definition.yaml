@@ -284,11 +284,11 @@ metadata:
     - "canonical/scoring/scoring_rules.yaml (LAI section)"
   
   element_count:
-    strong_signals: 13 (core_technologies)
-    medium_signals: 73 (technology_families: 58, dosing_intervals: 15)
+    strong_signals: 13
+    medium_signals: 73
     weak_signals: 4
-    exclusions: 7
-    total: 97
+    exclusions: 12
+    total: 102
   
   enrichment_source: "technology_scopes.yaml (lai_keywords)"
   coverage: "Comprehensive LAI technology terms from validated scope"
