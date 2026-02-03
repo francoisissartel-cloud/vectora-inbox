@@ -245,6 +245,10 @@ class BedrockNormalizationClient:
             # Tenter de parser directement comme JSON
             result = json.loads(response_text)
             
+            # DEBUG: Logger la réponse brute
+            logger.info(f"DEBUG Bedrock response keys: {list(result.keys())}")
+            logger.info(f"DEBUG companies_detected: {result.get('companies_detected', 'KEY_NOT_FOUND')}")
+            
             # Valider la structure
             if not isinstance(result, dict):
                 raise ValueError("La réponse n'est pas un dictionnaire")
