@@ -67,7 +67,7 @@ def resolve_references(template: str, canonical_scopes: Dict[str, Any]) -> str:
 
 
 def _resolve_scope_path(path: str, scopes: Dict[str, Any]) -> Any:
-    """Résout un chemin de scope (ex: lai_keywords.core_phrases)."""
+    """Résout un chemin de scope (ex: company_scopes.lai_companies_global)."""
     parts = path.split('.')
     
     # Cas 1: Scope direct (ex: lai_companies_global)
@@ -80,7 +80,20 @@ def _resolve_scope_path(path: str, scopes: Dict[str, Any]) -> Any:
         logger.warning(f"Scope direct non trouvé: {scope_name}")
         return f"[SCOPE_NOT_FOUND: {path}]"
     
-    # Cas 2: Scope imbriqué (ex: lai_keywords.core_phrases)
+    # Cas 2: Path avec catégorie (ex: company_scopes.lai_companies_global)
+    # Format: category_name.scope_name
+    if len(parts) == 2:
+        category_name, scope_name = parts
+        # Chercher la catégorie
+        if category_name in scopes:
+            category = scopes[category_name]
+            if isinstance(category, dict) and scope_name in category:
+                logger.info(f"Scope résolu: {path}")
+                return category[scope_name]
+        logger.warning(f"Scope path non trouvé: {path} (catégorie={category_name}, scope={scope_name})")
+        return f"[SCOPE_NOT_FOUND: {path}]"
+    
+    # Cas 3: Path imbriqué profond (ex: lai_keywords.core_phrases.terms)
     value = scopes
     for part in parts:
         if isinstance(value, dict) and part in value:
