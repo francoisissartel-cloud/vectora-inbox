@@ -24,12 +24,20 @@ strong_signals:
   
   core_technologies:
     # Explicit LAI terminology (highest precision)
+    # Source: technology_scopes.yaml > lai_keywords.core_phrases
     - "long-acting injectable"
     - "long acting injectable"
+    - "long-acting formulation"
     - "extended-release injectable"
+    - "extended-release injection"
     - "depot injection"
+    - "long-acting depot"
     - "sustained-release injectable"
+    - "sustained release injectable"
     - "controlled-release injection"
+    - "injectable controlled release"
+    - "long-acting"
+    - "long acting"
   
   pure_player_companies:
     # Companies 100% focused on LAI (reference to existing scope)
@@ -56,28 +64,92 @@ medium_signals:
   
   technology_families:
     # Specific DDS technologies commonly used in LAI
+    # Source: technology_scopes.yaml > lai_keywords.technology_terms_high_precision
+    
+    # DDS families (Drug Delivery Systems)
+    - "drug delivery system"
+    - "controlled release"
+    - "sustained release"
+    - "extended release"
+    - "modified release"
+    - "depot injection"
+    - "extended-release injectable"
+    - "long-acting injectable"
+    
+    # Microsphere technologies
     - "microspheres"
+    - "polymeric microspheres"
     - "PLGA microspheres"
+    - "PLA microspheres"
+    
+    # Depot technologies
     - "in-situ depot"
     - "in-situ forming depot"
+    - "liquid crystalline depot"
+    - "liquid crystal depot"
+    - "depot-forming prodrug"
+    - "depot prodrug"
+    - "long-acting prodrug"
+    
+    # Hydrogel technologies
     - "hydrogel"
     - "thermo-responsive hydrogel"
+    - "RTGel"
+    
+    # Proprietary technologies
+    - "Atrigel"
+    - "FluidCrystal"
+    - "SmartDepot"
+    - "DepoFoam"
+    - "BioSeizer"
+    - "Medisorb"
+    - "CriPec"
+    - "DiffuSphere"
+    - "PharmaShell"
+    - "SiliaShell"
+    - "BEPO"
+    
+    # Liposome technologies
+    - "multivesicular liposomes"
+    - "long-acting emulsion"
+    
+    # Half-Life Extension (HLE) strategies
     - "PEGylation"
     - "site-specific PEGylation"
+    - "PASylation"
     - "Fc fusion"
+    - "Fc-fusion"
+    - "IgG Fc fusion"
+    - "albumin binding"
     - "albumin fusion"
-    - "liquid crystalline depot"
+    - "albumin-binding"
+    - "lipidation"
+    - "fatty acid conjugation"
+    - "polypeptide extension"
+    - "glyco-engineering"
+    - "glycan engineering"
+    - "sialylation"
+    - "half-life extension"
+    - "atomic layer deposition"
   
   dosing_intervals:
     # Typical LAI dosing patterns
+    # Source: technology_scopes.yaml > lai_keywords.interval_patterns
+    - "once-weekly"
+    - "once-weekly injection"
     - "once-monthly"
+    - "once every 2 weeks"
     - "once every 3 months"
     - "once every 6 months"
+    - "q2w"
     - "q4w"
     - "q8w"
     - "q12w"
+    - "3-month"
+    - "6-month"
     - "quarterly injection"
-    - "6-month injection"
+    - "biweekly injection"
+    - "monthly injection"
   
   hybrid_companies:
     # Big pharma with LAI activity (reference to existing scope)
@@ -117,6 +189,12 @@ exclusions:
   - "nasal spray"
   - "sublingual"
   - "inhalation"
+  # Manufacturing without LAI context
+  - "manufacturing facility"
+  - "production plant"
+  - "factory construction"
+  - "plant expansion"
+  - "manufacturing site"
 
 # MATCHING RULES - Explicit logic for Bedrock
 matching_rules:
@@ -135,6 +213,14 @@ matching_rules:
   - id: rule_4
     condition: "1+ exclusion detected"
     action: "reject (not LAI)"
+  
+  - id: rule_5
+    condition: "event_type == 'financial_results' AND signals_count < 2"
+    action: "reject (financial results need explicit LAI content)"
+  
+  - id: rule_6
+    condition: "event_type == 'corporate_move' AND manufacturing_terms AND NO technology_signals"
+    action: "reject (manufacturing without LAI technology)"
 
 # SCORING CRITERIA - Integrated scoring logic
 scoring:
@@ -145,7 +231,7 @@ scoring:
     regulatory: 70
     clinical_update: 50
     corporate_move: 40
-    financial_results: 30
+    financial_results: 0
     other: 20
   
   entity_boosts:
@@ -153,8 +239,21 @@ scoring:
     pure_player_company: 25
     trademark_mention: 20
     key_molecule: 15
-    hybrid_company: 10
+    dosing_interval: 15
     technology_family: 10
+    hybrid_company: 0
+  
+  boost_conditions:
+    hybrid_company:
+      base_boost: 0
+      conditional_boost: 10
+      requires_one_of:
+        - "technology_family"
+        - "dosing_interval"
+        - "key_molecule"
+        - "trademark_mention"
+      reasoning: "Hybrid companies need LAI-specific context"
+      coverage: "58 technology terms from technology_scopes.yaml"
   
   recency_boosts:
     # Boost/penalty based on item age
@@ -185,13 +284,14 @@ metadata:
     - "canonical/scoring/scoring_rules.yaml (LAI section)"
   
   element_count:
-    strong_signals: 16
-    medium_signals: 19
+    strong_signals: 13
+    medium_signals: 73
     weak_signals: 4
-    exclusions: 7
-    total: 46
+    exclusions: 12
+    total: 102
   
-  reduction_vs_previous: "65% (130 → 46 elements)"
+  enrichment_source: "technology_scopes.yaml (lai_keywords)"
+  coverage: "Comprehensive LAI technology terms from validated scope"
   
   notes: |
     This unified definition replaces 8 fragmented files with a single coherent source.
