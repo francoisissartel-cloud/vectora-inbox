@@ -70,12 +70,20 @@ def _resolve_scope_path(path: str, scopes: Dict[str, Any]) -> Any:
     """Résout un chemin de scope (ex: company_scopes.lai_companies_global)."""
     parts = path.split('.')
     
+    # DEBUG: Logger les clés disponibles
+    logger.debug(f"Résolution scope '{path}' - Clés disponibles: {list(scopes.keys())[:10]}...")
+    
     # Cas 1: Scope direct (ex: lai_companies_global)
     if len(parts) == 1:
         scope_name = parts[0]
+        # Chercher directement à la racine
+        if scope_name in scopes:
+            logger.info(f"Scope résolu (racine): {path}")
+            return scopes[scope_name]
         # Chercher dans toutes les catégories
-        for category in scopes.values():
+        for category_name, category in scopes.items():
             if isinstance(category, dict) and scope_name in category:
+                logger.info(f"Scope résolu (catégorie {category_name}): {path}")
                 return category[scope_name]
         logger.warning(f"Scope direct non trouvé: {scope_name}")
         return f"[SCOPE_NOT_FOUND: {path}]"
