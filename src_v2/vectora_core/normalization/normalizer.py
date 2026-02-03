@@ -498,7 +498,8 @@ def _enrich_item_with_normalization(
             "molecules": normalization_result.get("molecules_detected", []),
             "technologies": normalization_result.get("technologies_detected", []),
             "trademarks": normalization_result.get("trademarks_detected", []),
-            "indications": normalization_result.get("indications_detected", [])
+            "indications": normalization_result.get("indications_detected", []),
+            "dosing_intervals": normalization_result.get("dosing_intervals_detected", [])
         },
         "event_classification": {
             "primary_type": normalization_result.get("event_type", "other"),
