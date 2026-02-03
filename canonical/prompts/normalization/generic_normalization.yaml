@@ -61,8 +61,9 @@ user_template: |
 
   4. ENTITY EXTRACTION (ALL explicitly mentioned)
      - Companies: ALL pharmaceutical/biotech company names mentioned in text
-       Reference list (for context): {{ref:lai_companies_global}}
-       CRITICAL: Extract company names EXACTLY as they appear in text
+       CRITICAL: Extract EVERY company name that appears in the text
+       Examples: Teva, MedinCell, Camurus, Johnson & Johnson, Pfizer, Novartis
+       DO NOT limit to examples - extract ALL companies mentioned
      - Molecules: ALL drug/molecule names (INN, generic names)
      - Technologies: ALL technology keywords (e.g., "microspheres", "PEGylation")
      - Trademarks: ALL commercial product names (e.g., "UZEDY®", "Ozempic")
