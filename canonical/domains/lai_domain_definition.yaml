@@ -195,6 +195,9 @@ exclusions:
   - "factory construction"
   - "plant expansion"
   - "manufacturing site"
+  # Generic injectable terms (not LAI-specific)
+  - "injectables and devices"
+  - "injectable manufacturing"
 
 # MATCHING RULES - Explicit logic for Bedrock
 matching_rules:
@@ -221,6 +224,11 @@ matching_rules:
   - id: rule_6
     condition: "event_type == 'corporate_move' AND manufacturing_terms AND NO technology_signals"
     action: "reject (manufacturing without LAI technology)"
+  
+  - id: rule_7
+    condition: "pure_player_company + event_type == 'partnership'"
+    action: "match with medium confidence (score ≥60)"
+    reasoning: "Pure players LAI: all partnerships relevant"
 
 # SCORING CRITERIA - Integrated scoring logic
 scoring:

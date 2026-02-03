@@ -24,7 +24,8 @@ user_template: |
   4. Extract publication date with high priority
 
   TEXT TO ANALYZE:
-  {{item_text}}
+  Title: {{item_title}}
+  Content: {{item_text}}
 
   EXTRACTION TASKS:
 
@@ -43,15 +44,25 @@ user_template: |
 
   3. EVENT CLASSIFICATION
      - Classify into ONE primary type:
-       * partnership (collaborations, licensing, M&A)
+       * partnership (collaborations, licensing, M&A, grants, funding, research agreements)
        * regulatory (approvals, submissions, designations)
        * clinical_update (trial results, enrollments, milestones)
        * corporate_move (leadership, strategy, restructuring)
        * financial_results (earnings, funding, investments)
        * other (if none of above fit)
+     
+     CRITICAL DISTINCTIONS:
+     - Grant/funding for R&D → partnership (NOT financial_results)
+     - Quarterly earnings → financial_results
+     
+     EXAMPLES:
+     - "Company awarded $5M grant for malaria research" → partnership
+     - "Company reports Q3 earnings" → financial_results
 
   4. ENTITY EXTRACTION (ALL explicitly mentioned)
-     - Companies: ALL pharmaceutical/biotech company names
+     - Companies: ALL pharmaceutical/biotech company names mentioned in text
+       Reference list (for context): {{ref:company_scopes.lai_companies_global}}
+       CRITICAL: Extract company names EXACTLY as they appear in text
      - Molecules: ALL drug/molecule names (INN, generic names)
      - Technologies: ALL technology keywords (e.g., "microspheres", "PEGylation")
      - Trademarks: ALL commercial product names (e.g., "UZEDY®", "Ozempic")
@@ -59,7 +70,8 @@ user_template: |
      - Dosing Intervals: ALL dosing frequency terms EXPLICITLY mentioned
        Examples: "once-weekly", "once-monthly", "once every 3 months", 
                  "q4w", "q8w", "q12w", "quarterly", "semi-annual"
-       CRITICAL: Only extract if EXPLICITLY stated in text (title or body)
+       CRITICAL: Extract from BOTH title AND content
+       Priority: Check title FIRST (dosing often in headlines)
 
   RESPONSE FORMAT (JSON only, no additional text):
   {

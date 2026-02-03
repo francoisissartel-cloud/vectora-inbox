@@ -17,6 +17,35 @@ import re
 
 logger = logging.getLogger(__name__)
 
+# Variables globales pour scopes chargés depuis S3
+_exclusion_scopes_cache = None
+
+def initialize_exclusion_scopes(s3_io, config_bucket: str):
+    """Charge les exclusion_scopes depuis S3 (appelé au démarrage)."""
+    global _exclusion_scopes_cache
+    
+    try:
+        scopes = s3_io.read_yaml_from_s3(config_bucket, 'canonical/scopes/exclusion_scopes.yaml')
+        _exclusion_scopes_cache = scopes or {}
+        logger.info(f"Exclusion scopes chargés: {len(_exclusion_scopes_cache)} catégories")
+    except Exception as e:
+        logger.warning(f"Échec chargement exclusion_scopes: {e}. Utilisation fallback.")
+        _exclusion_scopes_cache = {}
+
+def _get_exclusion_terms() -> List[str]:
+    """Retourne la liste combinée des termes d'exclusion depuis S3."""
+    if not _exclusion_scopes_cache:
+        # Fallback sur keywords hardcodés
+        return EXCLUSION_KEYWORDS
+    
+    # Combiner hr_content, financial_generic, hr_recruitment_terms, financial_reporting_terms
+    terms = []
+    for scope_name in ['hr_content', 'financial_generic', 'hr_recruitment_terms', 'financial_reporting_terms']:
+        scope_terms = _exclusion_scopes_cache.get(scope_name, [])
+        terms.extend(scope_terms)
+    
+    return terms if terms else EXCLUSION_KEYWORDS
+
 # Mots-clés LAI pour filtrage de la presse
 LAI_KEYWORDS = [
     # Technologies LAI
@@ -180,12 +209,14 @@ def _contains_lai_keywords(text: str) -> bool:
 
 def _contains_exclusion_keywords(text: str) -> bool:
     """
-    Vérifie si le texte contient des mots-clés d'exclusion.
+    Vérifie si le texte contient des mots-clés d'exclusion (depuis S3 ou fallback).
     """
     text_lower = text.lower()
+    exclusion_terms = _get_exclusion_terms()
     
-    for keyword in EXCLUSION_KEYWORDS:
+    for keyword in exclusion_terms:
         if keyword.lower() in text_lower:
+            logger.debug(f"Exclusion détectée: '{keyword}' dans texte")
             return True
     
     return False

@@ -170,7 +170,8 @@ class BedrockNormalizationClient:
     def normalize_item(self, item_text: str, canonical_examples: Dict, 
                       domain_contexts: Optional[list] = None,
                       canonical_prompts: Dict[str, Any] = None,
-                      item_source_key: str = None) -> Dict[str, Any]:
+                      item_source_key: str = None,
+                      item: Dict[str, Any] = None) -> Dict[str, Any]:
         """
         Normalise un item via Bedrock avec Approche B OBLIGATOIRE.
         
@@ -180,6 +181,7 @@ class BedrockNormalizationClient:
             domain_contexts: Contextes de domaines (non utilisé en Approche B)
             canonical_prompts: Prompts canonical (non utilisé en Approche B)
             item_source_key: Source key pour détection pure player
+            item: Item complet (optionnel, pour extraire le titre)
         
         Returns:
             Résultat de normalisation avec champs LAI
@@ -196,7 +198,8 @@ class BedrockNormalizationClient:
                 raise ValueError(error_msg)
             
             # Construire prompt via Approche B
-            prompt = self._build_prompt_approche_b(item_text, item_source_key)
+            item_title = item.get('title', '') if isinstance(item, dict) else ''
+            prompt = self._build_prompt_approche_b(item_text, item_source_key, item_title)
             logger.info("Utilisation Approche B (prompt pré-construit)")
             
             # Appel Bedrock avec retry
@@ -274,19 +277,20 @@ class BedrockNormalizationClient:
                 'date_confidence': 0.0
             }
     
-    def _build_prompt_approche_b(self, item_text: str, item_source_key: str = None) -> str:
+    def _build_prompt_approche_b(self, item_text: str, item_source_key: str = None, item_title: str = "") -> str:
         """
         Construit le prompt générique (pas de contexte LAI spécifique).
         
         Args:
             item_text: Texte à analyser
             item_source_key: Non utilisé (normalisation générique)
+            item_title: Titre de l'item (pour extraction dosing intervals)
         
         Returns:
             Prompt final résolu
         """
         # Variables à substituer (générique)
-        variables = {'item_text': item_text}
+        variables = {'item_text': item_text, 'item_title': item_title}
         
         # Construire le prompt avec résolution des références
         prompt = prompt_resolver.build_prompt(

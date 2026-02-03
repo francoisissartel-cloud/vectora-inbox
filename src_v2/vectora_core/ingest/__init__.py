@@ -22,6 +22,7 @@ from ..shared import utils
 from . import source_fetcher
 from . import content_parser
 from . import ingestion_profiles
+from .ingestion_profiles import initialize_exclusion_scopes
 
 logger = logging.getLogger(__name__)
 
@@ -81,6 +82,10 @@ def run_ingest_for_client(
         resolved_sources = config_loader.resolve_sources_for_client(
             client_config, source_catalog, sources
         )
+        
+        # Initialiser exclusion scopes depuis S3
+        logger.info("Étape 2.5 : Initialisation des exclusion scopes depuis S3")
+        initialize_exclusion_scopes(s3_io, config_bucket)
         
         logger.info(f"Nombre de sources à traiter : {len(resolved_sources)}")
         

@@ -23,6 +23,9 @@ system_instructions: |
   3. If a technology/molecule/term is not in entities_detected, DO NOT add it
   4. Base your evaluation ONLY on the normalized data provided
   5. When in doubt, be conservative - reject rather than false positive
+  6. CRITICAL: technology_family MUST be from the 73 terms in lai_domain_definition
+     - DO NOT detect generic terms: "injectables", "devices", "manufacturing"
+  7. Manufacturing facilities WITHOUT specific LAI technology → REJECT
   
   HYBRID COMPANY SCORING RULE:
   - If hybrid_company detected, apply boost (10 points) ONLY if at least one of:

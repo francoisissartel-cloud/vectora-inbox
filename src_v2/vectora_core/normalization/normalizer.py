@@ -197,7 +197,7 @@ def _normalize_sequential(
             # Normalisation via Bedrock avec prompts canonical
             normalization_result = bedrock_client.normalize_item(
                 item_text, examples, canonical_prompts=canonical_prompts,
-                item_source_key=item.get('source_key')
+                item_source_key=item.get('source_key'), item=item
             )
             
             # NOUVEAU: Validation post-processing pour éviter les hallucinations
