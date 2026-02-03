@@ -61,7 +61,7 @@ user_template: |
 
   4. ENTITY EXTRACTION (ALL explicitly mentioned)
      - Companies: ALL pharmaceutical/biotech company names mentioned in text
-       Reference list (for context): {{ref:company_scopes.lai_companies_global}}
+       Reference list (for context): {{ref:lai_companies_global}}
        CRITICAL: Extract company names EXACTLY as they appear in text
      - Molecules: ALL drug/molecule names (INN, generic names)
      - Technologies: ALL technology keywords (e.g., "microspheres", "PEGylation")
