@@ -19,11 +19,10 @@ def validate_bedrock_response(bedrock_response: Dict[str, Any], original_content
     """
     Validation post-Bedrock pour détecter hallucinations
     """
-    entities = bedrock_response.get('entities', {})
     content_lower = original_content.lower()
     
     # Validation technologies
-    technologies = entities.get('technologies', [])
+    technologies = bedrock_response.get('technologies_detected', [])
     validated_technologies = []
     
     for tech in technologies:
@@ -34,7 +33,7 @@ def validate_bedrock_response(bedrock_response: Dict[str, Any], original_content
             logger.warning(f"Possible hallucination: {tech} not found in content")
     
     # Validation companies
-    companies = entities.get('companies', [])
+    companies = bedrock_response.get('companies_detected', [])
     validated_companies = []
     
     for company in companies:
