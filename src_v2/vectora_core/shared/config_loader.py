@@ -414,9 +414,6 @@ def load_canonical_prompts(config_bucket: str) -> Dict[str, Any]:
         "domain_scoring": {
             "lai_domain_scoring": "canonical/prompts/domain_scoring/lai_domain_scoring.yaml"
         },
-        "matching": {
-            "lai_matching": "canonical/prompts/matching/lai_matching.yaml"
-        },
         "editorial": {
             "lai_editorial": "canonical/prompts/editorial/lai_editorial.yaml"
         }
