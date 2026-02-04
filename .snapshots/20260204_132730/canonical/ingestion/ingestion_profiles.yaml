@@ -1,0 +1,286 @@
+# Profils d'ingestion pour Vectora Inbox
+# Ces profils définissent les critères de pré-filtrage avant normalisation Bedrock
+# 
+# Philosophie :
+# - Les profils d'ingestion sont un garde-fou pour éviter de normaliser du bruit
+# - Ils ne remplacent PAS les règles de matching post-normalisation
+# - Ils permettent d'économiser les ressources Bedrock sur les sources très larges
+#
+# Structure :
+# - Chaque profil définit une stratégie d'ingestion (broad, focused, signal_based)
+# - Les profils référencent les scopes existants (company_scopes, technology_scopes, etc.)
+# - La logique de combinaison est déclarative et configurable
+
+profiles:
+  # ========================================================================
+  # PROFILS CORPORATE
+  # ========================================================================
+  
+  corporate_pure_player_broad:
+    description: "Profil large pour pure players LAI - ingère quasiment tout sauf bruit évident"
+    strategy: "broad_ingestion"
+    rationale: "Les pure players LAI ont un taux de signal très élevé, donc très peu de bruit"
+    
+    signal_requirements:
+      mode: "exclude_only"
+      # On ingère tout SAUF les contenus explicitement exclus
+      exclusion_scopes:
+        - "exclusion_scopes.hr_content"
+        - "exclusion_scopes.esg_generic"
+        - "exclusion_scopes.financial_generic"
+        - "exclusion_scopes.anti_lai_routes"  # Ajout Phase 2
+        - "exclusion_scopes.hr_recruitment_terms"  # Ajout Phase 2
+        - "exclusion_scopes.financial_reporting_terms"  # Ajout Phase 2
+    
+    applicable_contexts:
+      source_types: ["press_corporate"]
+      company_scopes: ["lai_companies_pure_players", "lai_companies_mvp_core"]
+    
+    # Paramètres pour le runtime (phase future)
+    runtime_config:
+      default_action: "ingest"
+      exclusion_threshold: 0.8  # Seuil de confiance pour exclusion
+      # Pure players : ingestion large mais scoring contextuel (Phase 2)
+      corporate_pure_players:
+        ingest_all: true
+        apply_context_scoring: true
+      
+  corporate_hybrid_technology_focused:
+    description: "Profil focalisé pour hybrid/big pharma - ingère uniquement si signaux technologiques forts"
+    strategy: "signal_based_ingestion"
+    rationale: "Les hybrid ont beaucoup de bruit, on ne veut que les contenus avec signaux technology ou indication clairs"
+    
+    signal_requirements:
+      mode: "require_signals"
+      # On ingère SEULEMENT si au moins un signal requis est détecté
+      required_signal_groups:
+        - group_id: "technology_signals_high_precision"
+          description: "Signaux technologiques haute précision"
+          scopes:
+            - "lai_keywords.core_phrases"
+            - "lai_keywords.technology_terms_high_precision"
+          min_matches: 1
+          weight: 3.0
+          
+        - group_id: "technology_signals_supporting"
+          description: "Signaux technologiques de support"
+          scopes:
+            - "lai_keywords.interval_patterns"
+            - "lai_keywords.route_admin_terms"
+          min_matches: 1
+          weight: 2.0
+          
+        - group_id: "trademark_signals"
+          description: "Signaux de trademarks LAI"
+          scopes:
+            - "lai_trademarks_global"
+          min_matches: 1
+          weight: 2.5
+          
+      combination_logic: "technology_signals_high_precision OR technology_signals_supporting OR trademark_signals"
+      minimum_total_weight: 2.0
+    
+    applicable_contexts:
+      source_types: ["press_corporate"]
+      company_scopes: ["lai_companies_hybrid"]
+    
+    runtime_config:
+      default_action: "filter_out"
+      signal_detection_threshold: 0.6
+      
+  # ========================================================================
+  # PROFILS PRESSE SECTORIELLE
+  # ========================================================================
+  
+  press_technology_focused:
+    description: "Profil focalisé pour presse sectorielle - ingère si signaux LAI (entreprises + technologie + trademarks)"
+    strategy: "multi_signal_ingestion"
+    rationale: "La presse sectorielle est très bruyante, on veut uniquement les articles avec signaux du client"
+    
+    signal_requirements:
+      mode: "require_multi_signals"
+      # Critères plus stricts pour presse sectorielle (Phase 2)
+      sector_press_requirements:
+        require_one_of:
+          - lai_company_detected
+          - lai_technology_detected  
+          - lai_molecule_detected
+          - lai_trademark_detected
+        exclude_if:
+          - oral_route_detected
+          - anti_lai_terms_detected
+      
+      required_signal_groups:
+        - group_id: "entity_signals"
+          description: "Signaux d'entités LAI"
+          scopes:
+            - "lai_companies_global"
+            - "lai_molecules_global"
+          min_matches: 1
+          weight: 2.0
+          
+        - group_id: "technology_signals"
+          description: "Signaux technologiques LAI"
+          scopes:
+            - "lai_keywords.core_phrases"
+            - "lai_keywords.technology_terms_high_precision"
+            - "lai_keywords.interval_patterns"
+          min_matches: 1
+          weight: 2.0
+          
+        - group_id: "trademark_signals"
+          description: "Signaux de trademarks LAI"
+          scopes:
+            - "lai_trademarks_global"
+          min_matches: 1
+          weight: 1.5
+          
+      combination_logic: "entity_signals AND (technology_signals OR trademark_signals)"
+      minimum_total_weight: 3.0
+    
+    applicable_contexts:
+      source_types: ["press_sector"]
+      domains: ["tech_lai_ecosystem"]  # Lié aux watch_domains du client
+    
+    runtime_config:
+      default_action: "filter_out"
+      signal_detection_threshold: 0.7
+      
+  # ========================================================================
+  # PROFILS FUTURS (PRÉPARATION)
+  # ========================================================================
+  
+  pubmed_technology_focused:
+    description: "Profil focalisé pour PubMed - ingère si signaux technologiques + entités"
+    strategy: "academic_signal_ingestion"
+    rationale: "PubMed est très large, on veut les publications avec signaux LAI clairs"
+    
+    signal_requirements:
+      mode: "require_multi_signals"
+      required_signal_groups:
+        - group_id: "technology_signals_academic"
+          description: "Signaux technologiques adaptés au contexte académique"
+          scopes:
+            - "lai_keywords.core_phrases"
+            - "lai_keywords.technology_terms_high_precision"
+            - "lai_keywords.route_admin_terms"
+          min_matches: 2
+          weight: 3.0
+          
+        - group_id: "entity_signals_academic"
+          description: "Signaux d'entités dans contexte académique"
+          scopes:
+            - "lai_molecules_global"
+            - "lai_companies_global"
+          min_matches: 1
+          weight: 2.0
+          
+      combination_logic: "technology_signals_academic AND entity_signals_academic"
+      minimum_total_weight: 4.0
+    
+    applicable_contexts:
+      source_types: ["academic_database"]
+      domains: ["tech_lai_ecosystem"]
+    
+    runtime_config:
+      default_action: "filter_out"
+      signal_detection_threshold: 0.8
+      
+  pubmed_indication_focused:
+    description: "Profil focalisé pour PubMed par indication - ingère si signaux indication + LAI"
+    strategy: "indication_signal_ingestion"
+    rationale: "Pour surveillance par indication, on veut les publications LAI dans cette indication"
+    
+    signal_requirements:
+      mode: "require_multi_signals"
+      required_signal_groups:
+        - group_id: "indication_signals"
+          description: "Signaux d'indication thérapeutique"
+          scopes:
+            - "addiction_keywords"  # Exemple, sera rempli plus tard
+            - "psychiatry_keywords"  # Exemple, sera rempli plus tard
+          min_matches: 1
+          weight: 2.0
+          
+        - group_id: "technology_signals_indication"
+          description: "Signaux technologiques LAI"
+          scopes:
+            - "lai_keywords.core_phrases"
+            - "lai_keywords.technology_terms_high_precision"
+          min_matches: 1
+          weight: 2.0
+          
+      combination_logic: "indication_signals AND technology_signals_indication"
+      minimum_total_weight: 3.0
+    
+    applicable_contexts:
+      source_types: ["academic_database"]
+      domains: ["indication_addiction", "indication_schizophrenia"]
+    
+    runtime_config:
+      default_action: "filter_out"
+      signal_detection_threshold: 0.7
+
+# ========================================================================
+# PROFILS SPÉCIAUX
+# ========================================================================
+
+  default_broad:
+    description: "Profil par défaut - ingère tout (compatibilité ascendante)"
+    strategy: "no_filtering"
+    rationale: "Utilisé quand aucun profil spécifique n'est défini"
+    
+    signal_requirements:
+      mode: "ingest_all"
+    
+    applicable_contexts:
+      source_types: ["*"]  # Applicable à tous types de sources
+    
+    runtime_config:
+      default_action: "ingest"
+
+# ========================================================================
+# MÉTADONNÉES ET CONFIGURATION GLOBALE
+# ========================================================================
+
+metadata:
+  version: "1.0.0"
+  created_date: "2024-12-19"
+  description: "Profils d'ingestion pour Vectora Inbox MVP LAI"
+  
+  # Mapping des stratégies vers les algorithmes (pour le runtime futur)
+  strategy_implementations:
+    broad_ingestion: "exclusion_based_filter"
+    signal_based_ingestion: "weighted_signal_filter"
+    multi_signal_ingestion: "multi_signal_combiner"
+    academic_signal_ingestion: "academic_context_filter"
+    indication_signal_ingestion: "indication_context_filter"
+    no_filtering: "pass_through_filter"
+  
+  # Configuration globale pour tous les profils
+  global_config:
+    signal_detection_method: "keyword_matching"  # Méthode de détection des signaux
+    case_sensitive: false
+    partial_matching: true
+    minimum_text_length: 50  # Longueur minimale du texte pour appliquer le filtrage
+    
+  # Scopes de référence (validation)
+  referenced_scopes:
+    company_scopes:
+      - "lai_companies_pure_players"
+      - "lai_companies_mvp_core"
+      - "lai_companies_hybrid"
+      - "lai_companies_global"
+    technology_scopes:
+      - "lai_keywords.core_phrases"
+      - "lai_keywords.technology_terms_high_precision"
+      - "lai_keywords.interval_patterns"
+      - "lai_keywords.route_admin_terms"
+    trademark_scopes:
+      - "lai_trademarks_global"
+    molecule_scopes:
+      - "lai_molecules_global"
+    exclusion_scopes:
+      - "exclusion_scopes.hr_content"
+      - "exclusion_scopes.esg_generic"
+      - "exclusion_scopes.financial_generic"

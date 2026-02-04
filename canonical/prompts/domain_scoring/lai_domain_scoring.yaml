@@ -57,9 +57,6 @@ user_template: |
   - Indications: {{item_indications}}
   - Dosing Intervals: {{item_dosing_intervals}}
 
-  LAI DOMAIN DEFINITION:
-  {{ref:lai_domain_definition}}
-
   EVALUATION PROCESS:
 
   1. SIGNAL DETECTION

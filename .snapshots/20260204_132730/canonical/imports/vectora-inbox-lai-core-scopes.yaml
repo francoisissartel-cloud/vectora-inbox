@@ -1,0 +1,357 @@
+# Export de scopes LAI depuis l'ancien projet Vectora (RAG_LAI)
+# vers le nouveau projet Vectora Inbox (MVP simple, agnostique en indications).
+# Ce fichier sert de passerelle pour initialiser les scopes "lai_*" globaux.
+#
+# Export construit à partir des fichiers suivants :
+# - canonical/seeds/company_manifest.csv (seed entreprises LAI spécialisées)
+# - canonical/seeds/trademark_manifest.csv (seed trademarks LAI FDA)
+# - canonical/taxonomy/api.csv (molécules/INN avec is_lai_relevant=TRUE)
+# - canonical/taxonomy/technology_family.csv (familles de technologies LAI)
+# - canonical/taxonomy/technology_tag.csv (tags de technologies LAI)
+# - canonical/rules/lai_filter_rules.yaml (termes d'inclusion LAI)
+# - canonical/glossary/LAI_RATIONALE.md (rationale et différenciation LAI)
+#
+# Remarque : certaines entrées sont à vérifier manuellement.
+# Ce fichier contient uniquement des listes GLOBALES LAI (pas de séparation par indication).
+
+lai_scopes:
+  companies:
+    lai_companies_global:
+      # Entreprises spécialisées LAI (PURE_LAI du company_manifest.csv)
+      - MedinCell
+      - Camurus
+      - G2GBio
+      - DelSiTech
+      - Peptron
+      - Brii Biosciences
+      - Bolder BioTechnology
+      - Alar Pharmaceuticals
+      - Durect
+      - Foresee Pharmaceuticals
+      - Prolynx
+      - Taiwan Liposome
+      # TOUTES les entreprises avec produits LAI (extraites du trademark_manifest.csv)
+      - Contura
+      - CSL Behring
+      - Alkermes
+      - Lundbeck
+      - Pacira BioSciences
+      - Heron Therapeutics
+      - Braeburn
+      - Indivior
+      - ViiV Healthcare
+      - Janssen
+      - ASTA Medica (Baxter)
+      - Mallinckrodt
+      - Mundipharma
+      - Astellas Pharma
+      - Bioverativ
+      - Amgen
+      - AstraZeneca
+      - BeOne
+      - Novo Nordisk
+      - Sanofi
+      - Ipsen
+      - Gilead Sciences
+      - Cipla USA
+      - AbbVie
+      - Ascendis Pharma
+      - Pfizer
+      - Vifor Pharma
+      - Novartis
+      - CHEPLAPHARM
+      - janssen-pharmaceuticals
+      - Recordati
+      - Cidara Therapeutics
+      - Teva Pharmaceutical
+      - Luye Pharma
+      - PharmaEssentia
+      - Takeda Pharmaceutical
+      - Chugai Pharmaceutical
+      - OPKO Health
+      - Endo International
+      - Allergan
+      - Rhythm Pharmaceuticals
+      - Ascletis Biopharmaceutical
+      - ALK-Abello
+      - Bayer
+      - UroGen Pharma
+      - Revance Therapeutics
+      - Eli Lilly
+
+  molecules:
+    lai_molecules_global:
+      # Molécules LAI extraites de api.csv (is_lai_relevant=TRUE)
+      # Antipsychotiques LAI
+      - aripiprazole
+      - olanzapine
+      - paliperidone
+      - risperidone
+      - lumateperone tosylate
+      # Hormones et peptides LAI
+      - leuprolide
+      - leuprorelin
+      - triptorelin
+      - goserelin
+      - degarelix
+      - abarelix
+      - cetrorelix
+      - octreotide
+      - lanreotide
+      - pasireotide pamoate
+      - somatropin
+      - somapacitan
+      - somatrogon
+      - lonapegsomatropin
+      - eftansomatropin
+      - testosterone
+      - estradiol cypionate
+      - medroxyprogesterone acetate
+      - etonogestrel
+      - hydroxyprogesterone
+      # Diabète et métabolisme LAI
+      - insulin
+      - insulin icodec
+      - exenatide
+      - semaglutide
+      - liraglutide
+      - dulaglutide
+      - tirzepatide
+      - efpeglenatide
+      - efinopegdutide
+      - mazdutide
+      - amycretin
+      - cagrilintide
+      # Addiction LAI
+      - buprenorphine
+      - naltrexone
+      - naloxone
+      # Anesthésiques locaux LAI
+      - bupivacaine
+      - ropivacaine
+      - morphine
+      # Anti-infectieux LAI
+      - cabotegravir
+      - rilpivirine
+      - lenacapavir
+      - islatravir
+      - vancomycin
+      - tobramycin
+      - moxifloxacin
+      - ciprofloxacin
+      # Oncologie LAI
+      - paclitaxel
+      - docetaxel
+      - doxorubicin
+      - irinotecan
+      - cytarabine
+      - mitomycin C
+      - fulvestrant
+      # Anti-inflammatoires LAI
+      - dexamethasone
+      - triamcinolone
+      - methylprednisolone
+      - betamethasone
+      - diclofenac
+      - meloxicam
+      - celecoxib
+      # Biologiques LAI (facteurs de coagulation, anticorps, etc.)
+      - bevacizumab
+      - aflibercept
+      - ravulizumab
+      - satralizumab
+      - efanesoctocog alfa
+      - efmoroctocog alfa
+      - eftrenonacog alfa
+      - nonacog beta pegol
+      - rurioctocog alfa pegol
+      - turoctocog alfa pegol
+      - damoctocog alfa pegol
+      - darbepoetin alfa
+      - peginterferon alfa-2a
+      - ropeginterferon alfa-2b
+      - pegaspargase
+      - pegvisomant
+
+  trademarks:
+    lai_trademarks_global:
+      # Trademarks LAI extraites du trademark_manifest.csv (FDA scope)
+      - Plenaxis
+      - Idelvion
+      - Aristada
+      - Abilify Maintena
+      - Abilify Asimtufi
+      - Posimir
+      - Exparel
+      - Zynrelef
+      - Brixadi
+      - Sublocade
+      - Apretude
+      - Cabenuva
+      - Cetrotide
+      - Acthar Gel
+      - DepoCyt
+      - Firmagon
+      - ALTUVIIIO
+      - Elocta
+      - Parsabiv
+      - Faslodex
+      - ZOLADEX
+      - Sustol
+      - Tresiba
+      - Levemir
+      - Lantus
+      - Somatuline
+      - Sunlenca
+      - LUTRATE DEPOT
+      - Lupron depot
+      - CAMCEVI
+      - Skytrofa
+      - Depo provera
+      - Mircera
+      - Depodur
+      - Vivitrol
+      - Sandostatin
+      - Zyprexa Relprevv
+      - Invega trinza
+      - Signifor
+      - Somavert
+      - REZZAYO
+      - Risperdal Consta
+      - Uzedy
+      - Rykindo
+      - Besremi
+      - Adynovate
+      - Enspryng
+      - Ozempic
+      - Sogroya
+      - NGENLA
+      - Aveed
+      - Zilretta
+      - TRELSTAR
+      - Esperoct
+      - BYDUREON
+      - IMCIVREE
+      - Aranesp
+      - PEGASYS
+      - Jivi
+      - JELMYTO
+      - Perseris
+      - DAXXIFY
+      - WEGOVY
+      - Erzofri
+      - Victoza
+      - Trulicity
+      - Mounjaro
+      - Soliqua
+
+  technologies:
+    lai_keywords:
+      # Termes clés LAI extraits de lai_filter_rules.yaml et technology taxonomies
+      # Termes génériques LAI
+      - long-acting
+      - long acting
+      - long-acting formulation
+      - extended-release injection
+      - extended-release injectable
+      - controlled-release injection
+      - injectable controlled release
+      - sustained release injectable
+      - depot injection
+      - long-acting depot
+      - drug delivery system
+      - DDS
+      - half-life extension
+      # Technologies de formulation
+      - polymeric microspheres
+      - PLGA microspheres
+      - microsphere
+      - microspheres
+      - in-situ forming depot
+      - ISFD
+      - in situ depot
+      - Atrigel
+      - FluidCrystal
+      - SmartDepot
+      - multivesicular liposomes
+      - MVL
+      - DepoFoam
+      - BioSeizer
+      - liposomes
+      - liposomal
+      - PLEX
+      - thermo-responsive hydrogel
+      - hydrogel
+      - thermo-gel
+      - RTGel
+      - liquid crystalline depot
+      - liquid crystal
+      - nanosuspension
+      - nanocrystal
+      - nanosizing
+      - long-acting emulsion
+      - emulsion
+      - lipid emulsion
+      - oil-based
+      # Technologies de prolongation de demi-vie
+      - depot-forming prodrug
+      - depot prodrug
+      - long-acting prodrug
+      - PASylation
+      - PAS
+      - PEGylation
+      - PEGylated
+      - PEG
+      - site-specific PEGylation
+      - Fc fusion
+      - Fc-fusion
+      - IgG Fc fusion
+      - albumin binding
+      - albumin fusion
+      - albumin-binding
+      - lipidation
+      - fatty acid conjugation
+      - XTEN
+      - polypeptide extension
+      - glyco-engineering
+      - glycan engineering
+      - sialylation
+      - protein engineering
+      # Voies d'administration LAI
+      - subcutaneous
+      - intramuscular
+      - intravenous
+      - intravitreal
+      - intratumoral
+      - intra-articular
+      - intrathecal
+      - intravesical
+      - epidural
+      # Intervalles de dosage LAI
+      - once-monthly
+      - q4w
+      - q8w
+      - q12w
+      - 6-month
+      - quarterly injection
+      - once-weekly injection
+
+  exclusions:
+    lai_exclude_noise:
+      # Termes d'exclusion extraits de lai_filter_rules.yaml
+      - implantable device
+      - surgically implanted
+      - transdermal patch
+      - oral tablet
+      - oral capsule
+      - topical cream
+      - gene therapy
+      - cell therapy
+      - CAR-T
+      - vaccine
+      - vaccination
+      - prophylactic vaccine
+      # Exclusions supplémentaires (à compléter selon besoins)
+      - cosmetic # à compléter
+      - veterinary # à compléter
+      - diagnostic # à compléter

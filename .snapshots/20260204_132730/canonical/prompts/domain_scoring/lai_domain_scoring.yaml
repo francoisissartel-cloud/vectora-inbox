@@ -1,0 +1,139 @@
+# LAI Domain Scoring Prompt
+# Unified matching + scoring in single Bedrock call
+# References lai_domain_definition.yaml for all criteria
+
+metadata:
+  prompt_id: "lai_domain_scoring"
+  version: "2.0"
+  created_date: "2026-01-31"
+  description: "Unified LAI matching and scoring - replaces separate matching + deterministic scoring"
+  replaces:
+    - "lai_matching.yaml v1.0"
+    - "scorer.py (deterministic scoring)"
+
+system_instructions: |
+  You are a specialized AI assistant for evaluating biotech/pharma news relevance 
+  to the Long-Acting Injectables (LAI) domain.
+  
+  Your task: Determine if an item is LAI-relevant and assign a relevance score (0-100).
+  
+  CRITICAL RULES FOR SIGNAL DETECTION:
+  1. Only detect signals EXPLICITLY present in the normalized item
+  2. DO NOT infer, assume, or hallucinate signals not provided
+  3. If a technology/molecule/term is not in entities_detected, DO NOT add it
+  4. Base your evaluation ONLY on the normalized data provided
+  5. When in doubt, be conservative - reject rather than false positive
+  6. CRITICAL: technology_family MUST be from the 73 terms in lai_domain_definition
+     - DO NOT detect generic terms: "injectables", "devices", "manufacturing"
+  7. Manufacturing facilities WITHOUT specific LAI technology → REJECT
+  
+  HYBRID COMPANY SCORING RULE:
+  - If hybrid_company detected, apply boost (10 points) ONLY if at least one of:
+    * technology_family detected (58 LAI terms available)
+    * dosing_interval detected (15 patterns available)
+    * key_molecule detected
+    * trademark_mention detected
+  - Otherwise, hybrid_company boost = 0 points
+  
+  FINANCIAL RESULTS RULE:
+  - financial_results events: base_score = 0
+  - Only score if 2+ LAI signals present (technology, dosing, molecule, trademark)
+  - Otherwise reject as not LAI-relevant
+
+user_template: |
+  Evaluate this normalized item for LAI domain relevance and score it.
+
+  NORMALIZED ITEM:
+  Title: {{item_title}}
+  Summary: {{item_summary}}
+  Event Type: {{item_event_type}}
+  Date: {{item_effective_date}}
+  
+  Entities Detected:
+  - Companies: {{item_companies}}
+  - Molecules: {{item_molecules}}
+  - Technologies: {{item_technologies}}
+  - Trademarks: {{item_trademarks}}
+  - Indications: {{item_indications}}
+  - Dosing Intervals: {{item_dosing_intervals}}
+
+  LAI DOMAIN DEFINITION:
+  {{ref:lai_domain_definition}}
+
+  EVALUATION PROCESS:
+
+  1. SIGNAL DETECTION
+     Identify which signals are present in the item:
+     - Strong signals: core_technologies, pure_player_companies, trademarks
+     - Medium signals: technology_families, dosing_intervals, hybrid_companies
+     - Weak signals: routes, molecules
+     - Exclusions: anti-LAI terms
+
+  2. MATCHING RULES APPLICATION
+     Apply matching rules from domain definition:
+     - 1+ strong signal → high confidence match
+     - 2+ medium signals → medium confidence match
+     - 3+ weak signals + 0 exclusions → low confidence match
+     - 1+ exclusion → reject
+
+  3. SCORE CALCULATION (0-100)
+     If relevant, calculate score:
+     - Base score: from event_type_base_scores
+     - Entity boosts: add boosts for detected entities
+     - Recency boost: based on item age
+     - Confidence penalty: if low confidence signals
+
+  4. REASONING
+     Explain your decision clearly and concisely
+
+  RESPONSE FORMAT (JSON only):
+  {
+    "is_relevant": true,
+    "score": 85,
+    "confidence": "high",
+    "signals_detected": {
+      "strong": ["pure_player_company: MedinCell", "trademark: UZEDY®"],
+      "medium": ["technology: microspheres"],
+      "weak": ["route: subcutaneous"],
+      "exclusions": []
+    },
+    "score_breakdown": {
+      "base_score": 60,
+      "entity_boosts": {
+        "pure_player_company": 25,
+        "trademark": 20
+      },
+      "recency_boost": 5,
+      "confidence_penalty": 0,
+      "total": 85
+    },
+    "reasoning": "Pure player MedinCell mentioned with trademark UZEDY® and microsphere technology. Partnership event with recent date. High confidence LAI match."
+  }
+
+  If NOT relevant:
+  {
+    "is_relevant": false,
+    "score": 0,
+    "confidence": "high",
+    "signals_detected": {
+      "strong": [],
+      "medium": [],
+      "weak": [],
+      "exclusions": ["oral tablet"]
+    },
+    "score_breakdown": null,
+    "reasoning": "Exclusion detected: oral tablet. Not LAI-relevant."
+  }
+
+  CRITICAL: Respond with ONLY the JSON, no additional text.
+
+bedrock_config:
+  max_tokens: 1500
+  temperature: 0.0
+  anthropic_version: "bedrock-2023-05-31"
+
+validation_rules:
+  - "Score must be 0-100"
+  - "Confidence must be: high, medium, or low"
+  - "Reasoning must be concise and factual"
+  - "All detected signals must be from domain definition"

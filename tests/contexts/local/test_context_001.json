@@ -1,0 +1,11 @@
+{
+  "id": "test_context_001",
+  "created": "2026-02-02T20:03:31.260815",
+  "purpose": "E2E validation LAI Weekly pipeline - Architecture v2 domain scoring",
+  "status": "created",
+  "success": null,
+  "client_id": "lai_weekly_test_001",
+  "test_items": [],
+  "results": null,
+  "client_config_file": "c:\\Users\\franc\\OneDrive\\Bureau\\vectora-inbox\\client-config-examples\\test\\local\\test_context_001.yaml"
+}

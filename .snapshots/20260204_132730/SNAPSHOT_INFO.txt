@@ -1,0 +1,3 @@
+Snapshot: 20260204_132730
+Date: 2026-02-04T13:27:30.688525
+Description: Baseline avant optimisations Bedrock

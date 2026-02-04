@@ -1,0 +1,12 @@
+{
+  "id": "test_context_006",
+  "created": "2026-02-04T11:18:32.393849",
+  "purpose": "Validation optimisations Bedrock (Prompt Caching + domain_definition v2.1)",
+  "status": "completed",
+  "success": true,
+  "client_id": "lai_weekly_test_006",
+  "test_items": [],
+  "results": {"test_type": "quick_validation", "timestamp": "2026-02-04T11:18:32.393849", "note": "Validated via test_optimizations_quick.py"},
+  "client_config_file": "c:\\Users\\franc\\OneDrive\\Bureau\\vectora-inbox\\client-config-examples\\test\\local\\test_context_006.yaml",
+  "updated": "2026-02-04T11:18:32.393849"
+}

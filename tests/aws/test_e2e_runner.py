@@ -61,7 +61,7 @@ def check_local_success():
     for entry in registry['contexts']['local']['history']:
         if entry['id'] == current_local:
             if entry['success'] is True:
-                print(f"✅ Test local validé: {current_local}")
+                print(f"[OK] Test local valide: {current_local}")
                 return True, current_local
             else:
                 print("\n" + "="*80)
@@ -154,7 +154,7 @@ def create_aws_context(local_context_id, purpose):
     registry['last_updated'] = datetime.now().isoformat()
     save_registry(registry)
     
-    print(f"✅ Contexte AWS créé: {context_id}")
+    print(f"[OK] Contexte AWS cree: {context_id}")
     print(f"   Client ID: {context['client_id']}")
     print(f"   Promu depuis: {local_context_id}")
     print(f"   Config local: {config_file}")
@@ -178,7 +178,7 @@ def upload_config_to_s3(config: dict, client_id: str, env: str) -> str:
     )
     
     s3_path = f"s3://{bucket}/{key}"
-    print(f"✅ Config uploaded to {s3_path}")
+    print(f"[OK] Config uploaded to {s3_path}")
     return s3_path
 
 def update_context_status(context_id, status, success=None, results=None):
@@ -210,7 +210,7 @@ def update_context_status(context_id, status, success=None, results=None):
 def run_aws_e2e_test(context):
     """Exécute le test E2E sur AWS."""
     print(f"\n{'='*80}")
-    print(f"☁️  TEST E2E AWS - {context['id']}")
+    print(f"[AWS] TEST E2E AWS - {context['id']}")
     print(f"{'='*80}")
     print(f"Client ID: {context['client_id']}")
     print(f"Purpose: {context['purpose']}")
@@ -221,7 +221,7 @@ def run_aws_e2e_test(context):
     
     try:
         # Invoke workflow E2E complet
-        print(f"🚀 Invocation workflow E2E complet (ingest → normalize → newsletter)...")
+        print(f"[RUN] Invocation workflow E2E complet (ingest -> normalize -> newsletter)...")
         result = subprocess.run(
             [
                 sys.executable,
@@ -240,7 +240,7 @@ def run_aws_e2e_test(context):
             print(result.stdout)
         
         if result.returncode == 0:
-            print("✅ Workflow E2E AWS réussi")
+            print(f"[OK] Workflow E2E AWS reussi")
             update_context_status(
                 context['id'],
                 'completed',
@@ -249,14 +249,14 @@ def run_aws_e2e_test(context):
             )
             return True
         else:
-            print(f"❌ Workflow E2E AWS échoué")
+            print(f"[FAIL] Workflow E2E AWS echoue")
             if result.stderr:
                 print(result.stderr)
             update_context_status(context['id'], 'failed', success=False)
             return False
     
     except Exception as e:
-        print(f"❌ Erreur: {e}")
+        print(f"[FAIL] Erreur: {e}")
         update_context_status(context['id'], 'failed', success=False)
         return False
 
@@ -282,7 +282,7 @@ def main():
         
         # Créer contexte AWS
         context = create_aws_context(local_context, args.promote)
-        print("\n✅ Contexte AWS prêt. Exécutez maintenant:")
+        print("\n[OK] Contexte AWS pret. Executez maintenant:")
         print(f"   python tests/aws/test_e2e_runner.py --run")
     
     elif args.run:

@@ -1,0 +1,98 @@
+client_profile:
+  name: LAI Weekly - test_context_006 (local)
+  client_id: lai_weekly_test_006
+  active: true
+  language: en
+  frequency: weekly
+  tone: executive
+  voice: concise
+  target_audience: executives
+pipeline:
+  newsletter_mode: latest_run_only
+  default_period_days: 30
+bedrock_config:
+  normalization_prompt: generic_normalization
+  matching_prompt: lai_matching
+  editorial_prompt: lai_editorial
+  enable_domain_scoring: true
+watch_domains:
+- id: tech_lai_ecosystem
+  type: technology
+  priority: high
+  technology_scope: lai_keywords
+  company_scope: lai_companies_global
+  molecule_scope: lai_molecules_global
+  trademark_scope: lai_trademarks_global
+  technology_profile: technology_complex
+  matching_profile: balanced
+  enabled: true
+source_config:
+  source_bouquets_enabled:
+  - lai_corporate_mvp
+  - lai_press_mvp
+  sources_extra_enabled: []
+  content_filters:
+    min_word_count: 50
+matching_config:
+  min_domain_score: 0.25
+  min_confidence_level: low
+  enable_fallback_mode: true
+  max_domains_per_item: 1
+  enable_diagnostic_mode: true
+scoring_config:
+  event_type_weight_overrides:
+    partnership: 8
+    clinical_update: 6
+    regulatory: 7
+newsletter_selection:
+  max_items_total: 20
+  min_score_threshold: 0
+  deduplication:
+    enabled: true
+    similarity_threshold: 0.75
+newsletter_layout:
+  distribution_strategy: specialized_with_fallback
+  sections:
+  - id: regulatory_updates
+    title: Regulatory Updates
+    source_domains:
+    - tech_lai_ecosystem
+    max_items: 6
+    filter_event_types:
+    - regulatory
+  - id: partnerships_deals
+    title: Partnerships & Deals
+    source_domains:
+    - tech_lai_ecosystem
+    max_items: 4
+    filter_event_types:
+    - partnership
+    - corporate_move
+  - id: clinical_updates
+    title: Clinical Updates
+    source_domains:
+    - tech_lai_ecosystem
+    max_items: 5
+    filter_event_types:
+    - clinical_update
+  - id: others
+    title: Other Signals
+    source_domains:
+    - tech_lai_ecosystem
+    max_items: 8
+    filter_event_types:
+    - '*'
+newsletter_delivery:
+  format: markdown
+  include_tldr: true
+  include_intro: true
+  delivery_method: s3
+metadata:
+  test_context_id: test_context_006
+  test_purpose: Validation optimisations Bedrock (Prompt Caching + domain_definition
+    v2.1)
+  test_environment: local
+  created_date: '2026-02-04T11:18:32.407148'
+  promoted_from: 'null'
+  vertical: LAI
+  target_market: Long-Acting Injectables

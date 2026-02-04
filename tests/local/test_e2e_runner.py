@@ -89,7 +89,7 @@ def create_new_context(purpose, base_client="lai_weekly"):
     registry['last_updated'] = datetime.now().isoformat()
     save_registry(registry)
     
-    print(f"✅ Nouveau contexte créé: {context_id}")
+    print(f"[OK] Nouveau contexte cree: {context_id}")
     print(f"   Client ID: {context['client_id']}")
     print(f"   Purpose: {purpose}")
     print(f"   Fichier: {context_file}")
@@ -103,12 +103,12 @@ def get_current_context():
     context_id = registry['contexts']['local'].get('current')
     
     if not context_id:
-        print("❌ Aucun contexte actif. Créez-en un avec --new-context")
+        print("[ERROR] Aucun contexte actif. Creez-en un avec --new-context")
         return None
     
     context_file = CONTEXTS_LOCAL_DIR / f"{context_id}.json"
     if not context_file.exists():
-        print(f"❌ Fichier contexte introuvable: {context_file}")
+        print(f"[ERROR] Fichier contexte introuvable: {context_file}")
         return None
     
     with open(context_file) as f:
@@ -143,7 +143,7 @@ def update_context_status(context_id, status, success=None, results=None):
 def run_local_e2e_test(context, test_type="complete"):
     """Exécute le test E2E local."""
     print(f"\n{'='*80}")
-    print(f"🧪 TEST E2E LOCAL - {context['id']}")
+    print(f"[TEST] E2E LOCAL - {context['id']}")
     print(f"{'='*80}")
     print(f"Client ID: {context['client_id']}")
     print(f"Purpose: {context['purpose']}")
@@ -157,7 +157,7 @@ def run_local_e2e_test(context, test_type="complete"):
         from tests.local.test_e2e_domain_scoring_complete import test_e2e_domain_scoring_complete
         success = test_e2e_domain_scoring_complete()
     else:
-        print(f"❌ Type de test inconnu: {test_type}")
+        print(f"[ERROR] Type de test inconnu: {test_type}")
         return False
     
     # Mettre à jour contexte
@@ -179,19 +179,19 @@ def check_local_success_before_aws():
     
     current_local = registry['contexts']['local'].get('current')
     if not current_local:
-        print("❌ BLOCAGE: Aucun test local exécuté")
-        print("   Exécutez d'abord: python tests/local/test_e2e_runner.py --new-context 'description'")
+        print("[BLOCKED] Aucun test local execute")
+        print("   Executez d'abord: python tests/local/test_e2e_runner.py --new-context 'description'")
         return False
     
     # Vérifier succès
     for entry in registry['contexts']['local']['history']:
         if entry['id'] == current_local:
             if entry['success'] is True:
-                print(f"✅ Test local {current_local} validé avec succès")
+                print(f"[OK] Test local {current_local} valide avec succes")
                 return True
             else:
-                print(f"❌ BLOCAGE: Test local {current_local} n'a pas réussi")
-                print("   Corrigez les erreurs avant de déployer sur AWS")
+                print(f"[BLOCKED] Test local {current_local} n'a pas reussi")
+                print("   Corrigez les erreurs avant de deployer sur AWS")
                 return False
     
     return False
@@ -218,7 +218,7 @@ def main():
     elif args.status:
         context = get_current_context()
         if context:
-            print(f"\n📊 Contexte actuel: {context['id']}")
+            print(f"\n[STATUS] Contexte actuel: {context['id']}")
             print(f"   Client ID: {context['client_id']}")
             print(f"   Purpose: {context['purpose']}")
             print(f"   Status: {context['status']}")
@@ -227,9 +227,9 @@ def main():
     
     elif args.list:
         registry = load_registry()
-        print("\n📋 Historique contextes locaux:")
+        print("\n[LIST] Historique contextes locaux:")
         for entry in reversed(registry['contexts']['local']['history']):
-            status_icon = "✅" if entry.get('success') else "❌" if entry.get('success') is False else "⏳"
+            status_icon = "[OK]" if entry.get('success') else "[FAIL]" if entry.get('success') is False else "[PEND]"
             print(f"   {status_icon} {entry['id']} - {entry['purpose']} ({entry['status']})")
     
     else:

@@ -1,0 +1,15 @@
+{
+  "id": "test_context_003",
+  "created": "2026-02-03T13:21:19.103722",
+  "purpose": "Canonical-v2.2",
+  "status": "completed",
+  "success": true,
+  "client_id": "lai_weekly_test_003",
+  "test_items": [],
+  "results": {
+    "test_type": "complete",
+    "timestamp": "2026-02-03T13:25:42.089188"
+  },
+  "client_config_file": "c:\\Users\\franc\\OneDrive\\Bureau\\vectora-inbox\\client-config-examples\\test\\local\\test_context_003.yaml",
+  "updated": "2026-02-03T13:25:42.089574"
+}

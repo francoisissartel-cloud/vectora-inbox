@@ -1,0 +1,13 @@
+{
+  "id": "test_context_001",
+  "created": "2026-02-04T11:22:36.817536",
+  "purpose": "Validation AWS optimisations Bedrock v1.4.3",
+  "status": "failed",
+  "success": false,
+  "promoted_from_local": "test_context_006",
+  "client_id": "lai_weekly_v1",
+  "results": null,
+  "client_config_file": "c:\\Users\\franc\\OneDrive\\Bureau\\vectora-inbox\\client-config-examples\\test\\aws\\test_context_001.yaml",
+  "s3_config_path": "s3://vectora-inbox-config-dev/clients/lai_weekly_v1.yaml",
+  "updated": "2026-02-04T11:23:10.343151"
+}

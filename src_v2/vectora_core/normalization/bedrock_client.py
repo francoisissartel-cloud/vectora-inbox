@@ -329,7 +329,6 @@ class BedrockNormalizationClient:
         """
         Invoque Bedrock avec un prompt template et contexte.
         Utilisé pour domain scoring (2ème appel Bedrock).
-        Supporte Prompt Caching pour réduire latence et coûts.
         
         Args:
             prompt_template: Template de prompt (lai_domain_scoring.yaml)
@@ -339,63 +338,31 @@ class BedrockNormalizationClient:
         Returns:
             Réponse texte de Bedrock
         """
-        # Extraire system_instructions et user_template
-        system_instructions = prompt_template.get('system_instructions', '')
-        user_template = prompt_template.get('user_template', '')
-        
-        # Préparer domain_definition en YAML
-        domain_yaml = ''
+        # Ajouter domain_definition aux scopes pour résolution {{ref:lai_domain_definition}}
+        scopes_with_domain = dict(self.canonical_scopes) if self.canonical_scopes else {}
         if domain_definition:
-            import yaml
-            domain_yaml = yaml.dump(domain_definition, default_flow_style=False, allow_unicode=True)
+            scopes_with_domain['lai_domain_definition'] = domain_definition
         
-        # Construire item_data depuis contexte
-        item_data = f"""NORMALIZED ITEM:
-Title: {context.get('item_title', '')}
-Summary: {context.get('item_summary', '')}
-Event Type: {context.get('item_event_type', '')}
-Date: {context.get('item_effective_date', '')}
-
-Entities Detected:
-- Companies: {context.get('item_companies', '')}
-- Molecules: {context.get('item_molecules', '')}
-- Technologies: {context.get('item_technologies', '')}
-- Trademarks: {context.get('item_trademarks', '')}
-- Indications: {context.get('item_indications', '')}
-- Dosing Intervals: {context.get('item_dosing_intervals', '')}"""
+        # Construire le prompt avec résolution des références
+        full_prompt = prompt_resolver.build_prompt(
+            prompt_template,
+            scopes_with_domain,
+            context
+        )
         
-        # Extraire instructions d'évaluation depuis user_template
-        eval_instructions = user_template.split('NORMALIZED ITEM:')[0].strip()
-        
-        # Appel Bedrock avec Prompt Caching
         request_body = {
             "anthropic_version": "bedrock-2023-05-31",
             "max_tokens": prompt_template.get('bedrock_config', {}).get('max_tokens', 1500),
             "messages": [
                 {
                     "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": system_instructions
-                        },
-                        {
-                            "type": "text",
-                            "text": f"LAI DOMAIN DEFINITION:\n{domain_yaml}"
-                        },
-                        {
-                            "type": "text",
-                            "text": eval_instructions
-                        },
-                        {
-                            "type": "text",
-                            "text": item_data
-                        }
-                    ]
+                    "content": full_prompt
                 }
             ],
             "temperature": prompt_template.get('bedrock_config', {}).get('temperature', 0.0)
         }
         
         response_text = call_bedrock_with_retry(self.model_id, request_body)
+        logger.info(f"DEBUG invoke_with_prompt - Response length: {len(response_text)}")
+        logger.info(f"DEBUG invoke_with_prompt - Response preview: {response_text[:500]}")
         return response_text

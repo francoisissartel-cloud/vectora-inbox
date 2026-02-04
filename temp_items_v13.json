@@ -1,0 +1,2726 @@
+[
+  {
+    "item_id": "press_corporate__nanexa_20260203_6f822c",
+    "source_key": "press_corporate__nanexa",
+    "source_type": "press_corporate",
+    "title": "Nanexa and Moderna enter into license and option agreement for the development of PharmaShell®-based products",
+    "content": "10 December, 2025Nanexa and Moderna enter into license and option agreement for the development of PharmaShell®-based productsThe agreement covers the development of up to five undisclosed compounds. Nanexa will receive an upfront payment of USD 3 million and is entitled to up to USD 500 million in potential milestone payments as well as a tiered single-digit royalty on product sales.READ MORE",
+    "url": "https://nanexa.com/mfn_news/nanexa-and-moderna-enter-into-license-and-option-agreement-for-the-development-of-pharmashell-based-products/",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:35.835725",
+    "language": "en",
+    "content_hash": "sha256:d9b83fe6cb94dcaa8e1245f54fd2e589b6cf48151c4b60378d8012a5e5a20125",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 61
+    },
+    "normalized_at": "2026-02-03T09:50:58.449719Z",
+    "effective_date": "2025-12-10",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-12-10",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Nanexa and Moderna have entered into a license and option agreement for the development of up to five undisclosed compounds using Nanexa's PharmaShell® technology. Nanexa will receive an upfront payment of $3 million and is eligible for up to $500 million in potential milestone payments and royalties.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [
+          "PharmaShell®"
+        ],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "partnership",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-12-10",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 80,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [
+          "pure_player_company: Nanexa"
+        ],
+        "medium": [
+          "technology_family: PharmaShell®"
+        ],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 60,
+        "entity_boosts": {
+          "pure_player_company": 25,
+          "trademark_mention": 20
+        },
+        "recency_boost": 5,
+        "confidence_penalty": 0,
+        "total": 80
+      },
+      "reasoning": "Nanexa is a pure-play LAI company and PharmaShell® is their proprietary technology for LAI formulations. Partnership event with recent date. High confidence LAI match."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 8,
+      "bonuses": {
+        "partnership_event": 3.0
+      },
+      "penalties": {},
+      "final_score": 3.3,
+      "effective_date": "2025-12-10",
+      "score_breakdown": {
+        "base_score": 8,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.82,
+        "weighted_base": 0.33,
+        "total_bonus": 3.0,
+        "total_penalty": 0,
+        "raw_score": 3.33,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20260203_516562",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "Medincell’s Partner Teva Pharmaceuticals Announces the New Drug Application Submission to U.S. FDA for Olanzapine Extended-Release Injectable Suspension (TEV-‘749 / mdc-TJK) for the Once-Monthly Treatment of Schizophrenia in Adults",
+    "content": "Medincell’s Partner Teva Pharmaceuticals Announces the New Drug Application Submission to U.S. FDA for Olanzapine Extended-Release Injectable Suspension (TEV-‘749 / mdc-TJK) for the Once-Monthly Treatment of Schizophrenia in AdultsDecember 9, 2025December 9, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/12/MDC_Olanzapine-NDA-filing_09122025_EN_vf-2.pdf",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:27.028860",
+    "language": "en",
+    "content_hash": "sha256:c2ed94aa0c2dfe5546577b2452e9dc35255e76491c079fb1906d579722fa5fd2",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 33
+    },
+    "normalized_at": "2026-02-03T09:49:54.254093Z",
+    "effective_date": "2025-12-09",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-12-09",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Teva Pharmaceuticals has submitted a New Drug Application to the U.S. FDA for Olanzapine Extended-Release Injectable Suspension (TEV-'749 / mdc-TJK), a once-monthly treatment for schizophrenia in adults, developed in partnership with Medincell.",
+      "entities": {
+        "companies": [],
+        "molecules": [
+          "Olanzapine"
+        ],
+        "technologies": [],
+        "trademarks": [
+          "TEV-'749",
+          "mdc-TJK"
+        ],
+        "indications": [
+          "schizophrenia"
+        ]
+      },
+      "event_classification": {
+        "primary_type": "regulatory",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-12-09",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 85,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [
+          "pure_player_company: MedinCell",
+          "trademark: TEV-'749 / mdc-TJK"
+        ],
+        "medium": [
+          "dosing_interval: once-monthly",
+          "hybrid_company: Teva"
+        ],
+        "weak": [
+          "molecule: Olanzapine",
+          "route: injectable"
+        ],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 70,
+        "entity_boosts": {
+          "pure_player_company": 25,
+          "trademark_mention": 20,
+          "hybrid_company": 10
+        },
+        "recency_boost": 0,
+        "confidence_penalty": 0,
+        "total": 85
+      },
+      "reasoning": "Pure player MedinCell and hybrid company Teva mentioned, along with MedinCell's trademark TEV-'749 / mdc-TJK for a once-monthly injectable product. Regulatory event with recent date. High confidence LAI match."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 7,
+      "bonuses": {
+        "regulatory_event": 2.5
+      },
+      "penalties": {},
+      "final_score": 2.8,
+      "effective_date": "2025-12-09",
+      "score_breakdown": {
+        "base_score": 7,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.82,
+        "weighted_base": 0.29,
+        "total_bonus": 2.5,
+        "total_penalty": 0,
+        "raw_score": 2.79,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__camurus_20260203_1e8bef",
+    "source_key": "press_corporate__camurus",
+    "source_type": "press_corporate",
+    "title": "09 January 2026RegulatoryCamurus announces FDA acceptance of NDA resubmission for Oclaiz™ for the treatment of acromegaly",
+    "content": "202609 January 2026RegulatoryCamurus announces FDA acceptance of NDA resubmission for Oclaiz™ for the treatment of acromegaly202530 December 2025RegulatoryChange in number of shares and votes in Camurus16 December 2025Camurus and Gubra enter into a collaboration and license agreement to develop a long-acting treatment for hypoparathyroidism28 November 2025RegulatoryChange in number of shares and votes in Camurus13 November 2025RegulatoryCamurus’ Nomination Committee appointed for the Annual Gene",
+    "url": "https://www.camurus.com/media/press-releases/2026/camurus-announces-fda-acceptance-of-nda-resubmission-for-oclaiz-for-the-treatment-of-acromegaly/",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:39.391098",
+    "language": "en",
+    "content_hash": "sha256:f8e7b48eaf463948ffc29e9644ba84039abc68b77b343066cf28caad398323e4",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 63
+    },
+    "normalized_at": "2026-02-03T09:51:27.003599Z",
+    "effective_date": "2026-01-09",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2026-01-09",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Camurus announced that the FDA has accepted the resubmission of their New Drug Application (NDA) for Oclaiz™, a treatment for acromegaly.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [
+          "Oclaiz™"
+        ],
+        "indications": [
+          "acromegaly"
+        ]
+      },
+      "event_classification": {
+        "primary_type": "regulatory",
+        "confidence": 0.8
+      },
+      "extracted_date": "2026-01-09",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 80,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [
+          "pure_player_company: Camurus"
+        ],
+        "medium": [],
+        "weak": [
+          "indication: acromegaly"
+        ],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 70,
+        "entity_boosts": {
+          "pure_player_company": 25
+        },
+        "recency_boost": 10,
+        "confidence_penalty": 0,
+        "total": 80
+      },
+      "reasoning": "Camurus is a pure-play LAI company. The regulatory event for their product Oclaiz for acromegaly treatment is highly relevant to the LAI domain. Recent date further boosts the score."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 7,
+      "bonuses": {
+        "regulatory_event": 2.5
+      },
+      "penalties": {},
+      "final_score": 2.8,
+      "effective_date": "2026-01-09",
+      "score_breakdown": {
+        "base_score": 7,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.88,
+        "weighted_base": 0.31,
+        "total_bonus": 2.5,
+        "total_penalty": 0,
+        "raw_score": 2.81,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20260203_c147c4",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "UZEDY® continues strong growth; Teva setting the stage for US NDA Submission for Olanzapine LAI in Q4 2025",
+    "content": "UZEDY® continues strong growth; Teva setting the stage for US NDA Submission for Olanzapine LAI in Q4 2025November 5, 2025November 5, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/11/PR_MDC_Teva-earnings-Q3_2025_05112025_vf.pdf",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:27.028860",
+    "language": "en",
+    "content_hash": "sha256:7f3a6a00314b234fd43355bd5206916bed56d46d3f812a774fb1cbb61c28ec28",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 22
+    },
+    "normalized_at": "2026-02-03T09:50:13.702437Z",
+    "effective_date": "2025-11-05",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-11-05",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "UZEDY® continues strong growth. Teva is preparing for a US NDA submission for Olanzapine LAI in Q4 2025.",
+      "entities": {
+        "companies": [],
+        "molecules": [
+          "Olanzapine"
+        ],
+        "technologies": [],
+        "trademarks": [
+          "UZEDY®"
+        ],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "regulatory",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-11-05",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 90,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [
+          "trademark: UZEDY®"
+        ],
+        "medium": [
+          "hybrid_company: Teva"
+        ],
+        "weak": [
+          "molecule: Olanzapine"
+        ],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 70,
+        "entity_boosts": {
+          "hybrid_company": 10,
+          "trademark_mention": 20
+        },
+        "recency_boost": 10,
+        "confidence_penalty": 0,
+        "total": 90
+      },
+      "reasoning": "Teva's trademark UZEDY® and regulatory event for Olanzapine LAI with recent date. Strong LAI signals, high confidence match."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 7,
+      "bonuses": {
+        "regulatory_event": 2.5
+      },
+      "penalties": {
+        "aging_penalty": -0.5
+      },
+      "final_score": 2.3,
+      "effective_date": "2025-11-05",
+      "score_breakdown": {
+        "base_score": 7,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.75,
+        "weighted_base": 0.26,
+        "total_bonus": 2.5,
+        "total_penalty": -0.5,
+        "raw_score": 2.26,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__nanexa_20260203_4ce385",
+    "source_key": "press_corporate__nanexa",
+    "source_type": "press_corporate",
+    "title": "Nanexa Announces Breakthrough Preclinical Data Demonstrating Exceptional Pharmacokinetic Profile for Monthly Semaglutide Formulation",
+    "content": "PRESSRELEASES27 January, 2026Nanexa Announces Breakthrough Preclinical Data Demonstrating Exceptional Pharmacokinetic Profile for Monthly Semaglutide FormulationNanexa’s atomic layer deposition (ALD) platform PharmaShell® demonstrably improves the pharmacokinetic profile of semaglutide injections.Significantly smoother plasma concentration curve could mitigate many common side effects of GLP-1 drugs.Read moreREAD MORE10 December, 2025Nanexa and Moderna enter into license and option agreement for",
+    "url": "https://nanexa.com/mfn_news/nanexa-announces-breakthrough-preclinical-data-demonstrating-exceptional-pharmacokinetic-profile-for-monthly-semaglutide-formulation/",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:35.835725",
+    "language": "en",
+    "content_hash": "sha256:afea17df7bd4fa6526d533e909def01570a7b73dbc6cf35af9ab3980f53efc10",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 55
+    },
+    "normalized_at": "2026-02-03T09:50:46.052856Z",
+    "effective_date": "2026-01-27",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2026-01-27",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Nanexa announced preclinical data demonstrating an exceptional pharmacokinetic profile for a monthly semaglutide formulation using their PharmaShell® atomic layer deposition platform. The improved pharmacokinetics could mitigate side effects of GLP-1 drugs.",
+      "entities": {
+        "companies": [],
+        "molecules": [
+          "semaglutide"
+        ],
+        "technologies": [],
+        "trademarks": [
+          "PharmaShell®"
+        ],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "clinical_update",
+        "confidence": 0.8
+      },
+      "extracted_date": "2026-01-27",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 80,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [
+          "pure_player_company: Nanexa",
+          "trademark: PharmaShell®"
+        ],
+        "medium": [
+          "technology_family: microspheres"
+        ],
+        "weak": [
+          "molecule: semaglutide"
+        ],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 50,
+        "entity_boosts": {
+          "pure_player_company": 25,
+          "trademark_mention": 20,
+          "key_molecule": 15
+        },
+        "recency_boost": 10,
+        "confidence_penalty": 0,
+        "total": 80
+      },
+      "reasoning": "Nanexa is a pure-play LAI company, PharmaShell® is their microsphere technology platform, and semaglutide is a key molecule. Clinical update with recent date. Strong LAI signals."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 6,
+      "bonuses": {
+        "clinical_event": 2.0
+      },
+      "penalties": {},
+      "final_score": 2.3,
+      "effective_date": "2026-01-27",
+      "score_breakdown": {
+        "base_score": 6,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.95,
+        "weighted_base": 0.29,
+        "total_bonus": 2.0,
+        "total_penalty": 0,
+        "raw_score": 2.29,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__nanexa_20260203_4ce385",
+    "source_key": "press_corporate__nanexa",
+    "source_type": "press_corporate",
+    "title": "Nanexa Announces Breakthrough Preclinical Data Demonstrating Exceptional Pharmacokinetic Profile for Monthly Semaglutide Formulation",
+    "content": "27 January, 2026Nanexa Announces Breakthrough Preclinical Data Demonstrating Exceptional Pharmacokinetic Profile for Monthly Semaglutide FormulationNanexa’s atomic layer deposition (ALD) platform PharmaShell® demonstrably improves the pharmacokinetic profile of semaglutide injections.Significantly smoother plasma concentration curve could mitigate many common side effects of GLP-1 drugs.Read moreREAD MORE",
+    "url": "https://nanexa.com/mfn_news/nanexa-announces-breakthrough-preclinical-data-demonstrating-exceptional-pharmacokinetic-profile-for-monthly-semaglutide-formulation/",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:35.835725",
+    "language": "en",
+    "content_hash": "sha256:487400f57c4245d14b4bdbc629d08024146dadfef92fcb771eb0ffefe5e0401c",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 44
+    },
+    "normalized_at": "2026-02-03T09:50:52.416881Z",
+    "effective_date": "2026-01-27",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2026-01-27",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Nanexa announced preclinical data demonstrating an exceptional pharmacokinetic profile for a monthly semaglutide formulation using their PharmaShell® atomic layer deposition platform. The improved pharmacokinetics could mitigate side effects of GLP-1 drugs.",
+      "entities": {
+        "companies": [],
+        "molecules": [
+          "semaglutide"
+        ],
+        "technologies": [],
+        "trademarks": [
+          "PharmaShell®"
+        ],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "clinical_update",
+        "confidence": 0.8
+      },
+      "extracted_date": "2026-01-27",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 80,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [
+          "pure_player_company: Nanexa",
+          "trademark: PharmaShell®"
+        ],
+        "medium": [
+          "technology_family: microspheres"
+        ],
+        "weak": [
+          "molecule: semaglutide"
+        ],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 50,
+        "entity_boosts": {
+          "pure_player_company": 25,
+          "trademark_mention": 20,
+          "key_molecule": 15
+        },
+        "recency_boost": 10,
+        "confidence_penalty": 0,
+        "total": 80
+      },
+      "reasoning": "Nanexa is a pure-play LAI company, PharmaShell® is their microsphere technology platform, and semaglutide is a key molecule. Clinical update with recent date. Strong LAI signals."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 6,
+      "bonuses": {
+        "clinical_event": 2.0
+      },
+      "penalties": {},
+      "final_score": 2.3,
+      "effective_date": "2026-01-27",
+      "score_breakdown": {
+        "base_score": 6,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.95,
+        "weighted_base": 0.29,
+        "total_bonus": 2.0,
+        "total_penalty": 0,
+        "raw_score": 2.29,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_sector__fiercebiotech_20260203_8f7e97",
+    "source_key": "press_sector__fiercebiotech",
+    "source_type": "press_sector",
+    "title": "<a href=\"https://www.fiercebiotech.com/biotech/novos-cagrisema-tops-semaglutide-ph-3-diabetes-study-still-falls-short-25-weight-loss-goal\" hreflang=\"en\">Novo’s CagriSema tops semaglutide in ph. 3 diabetes study</a>",
+    "content": "Novo Nordisk’s GLP-1/amylin combo has topped blockbuster semaglutide in a phase 3 Type 2 diabetes trial, though CagriSema still didn't hit the 25% weight loss mark that the Danish pharma had previously laid out for its next-gen metabolic asset.",
+    "url": "https://www.fiercebiotech.com/biotech/novos-cagrisema-tops-semaglutide-ph-3-diabetes-study-still-falls-short-25-weight-loss-goal",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:38.109109",
+    "language": "en",
+    "content_hash": "sha256:62e100bc2ae918bad3ab843193e112fa727f5ecdc095f45014a7c26b7c928ae2",
+    "metadata": {
+      "author": "Darren Incorvaia",
+      "tags": [],
+      "word_count": 39
+    },
+    "normalized_at": "2026-02-03T09:51:15.918266Z",
+    "effective_date": "2026-02-03",
+    "date_metadata": {
+      "source": "published_at",
+      "bedrock_date": null,
+      "bedrock_confidence": 0.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Novo Nordisk's GLP-1/amylin combination drug CagriSema outperformed semaglutide in a phase 3 trial for type 2 diabetes, but did not achieve the 25% weight loss goal set by the company.",
+      "entities": {
+        "companies": [],
+        "molecules": [
+          "CagriSema",
+          "semaglutide"
+        ],
+        "technologies": [],
+        "trademarks": [],
+        "indications": [
+          "type 2 diabetes"
+        ]
+      },
+      "event_classification": {
+        "primary_type": "clinical_update",
+        "confidence": 0.8
+      },
+      "extracted_date": null,
+      "date_confidence": 0.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 70,
+      "confidence": "medium",
+      "signals_detected": {
+        "strong": [],
+        "medium": [
+          "hybrid_company: Novo Nordisk"
+        ],
+        "weak": [
+          "molecule: semaglutide"
+        ],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 50,
+        "entity_boosts": {
+          "hybrid_company": 10,
+          "key_molecule": 15
+        },
+        "recency_boost": 5,
+        "confidence_penalty": -10,
+        "total": 70
+      },
+      "reasoning": "Novo Nordisk is a hybrid LAI company and semaglutide is a key molecule. Clinical update event type. Recent date but only medium confidence signals detected."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 6,
+      "bonuses": {
+        "clinical_event": 2.0
+      },
+      "penalties": {},
+      "final_score": 2.3,
+      "effective_date": "2026-02-03",
+      "score_breakdown": {
+        "base_score": 6,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.3,
+        "total_bonus": 2.0,
+        "total_penalty": 0,
+        "raw_score": 2.3,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_sector__fiercebiotech_20260203_8d1e08",
+    "source_key": "press_sector__fiercebiotech",
+    "source_type": "press_sector",
+    "title": "<a href=\"https://www.fiercebiotech.com/biotech/wave-regains-rights-genetic-disease-rna-editor-gsk\" hreflang=\"en\">GSK gives back rights to Wave's genetic disease RNA editor</a>",
+    "content": "Wave Life Sciences has the fate of its lead RNA editing candidate back in its own hands. GSK has decided not to take over development of WVE-006, an experimental oligonucleotide for alpha-1 antitrypsin deficiency (AATD), with Massachusetts-based Wave reclaiming full rights and planning to seek accelerated approval for the asset from the FDA.",
+    "url": "https://www.fiercebiotech.com/biotech/wave-regains-rights-genetic-disease-rna-editor-gsk",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:38.109109",
+    "language": "en",
+    "content_hash": "sha256:05cdfb808f57707b6c5d79a02f2433a7a7f256f5e155879ffb63848f83d8a49c",
+    "metadata": {
+      "author": "Darren Incorvaia",
+      "tags": [],
+      "word_count": 53
+    },
+    "normalized_at": "2026-02-03T09:51:21.265985Z",
+    "effective_date": "2023-05-18",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2023-05-18",
+      "bedrock_confidence": 0.9,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Wave Life Sciences has regained full rights to develop WVE-006, an experimental oligonucleotide for alpha-1 antitrypsin deficiency (AATD), after GSK decided not to take over the program. Wave plans to seek accelerated approval for the asset from the FDA.",
+      "entities": {
+        "companies": [],
+        "molecules": [
+          "WVE-006"
+        ],
+        "technologies": [],
+        "trademarks": [],
+        "indications": [
+          "alpha-1 antitrypsin deficiency (AATD)"
+        ]
+      },
+      "event_classification": {
+        "primary_type": "partnership",
+        "confidence": 0.8
+      },
+      "extracted_date": "2023-05-18",
+      "date_confidence": 0.9,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No LAI signals detected in the item. The technology mentioned is an oligonucleotide (WVE-006) for a genetic disease, which is not an LAI formulation."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 8,
+      "bonuses": {
+        "partnership_event": 3.0
+      },
+      "penalties": {
+        "very_old_penalty": -2.0
+      },
+      "final_score": 1.2,
+      "effective_date": "2023-05-18",
+      "score_breakdown": {
+        "base_score": 8,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.5,
+        "weighted_base": 0.2,
+        "total_bonus": 3.0,
+        "total_penalty": -2.0,
+        "raw_score": 1.2,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_sector__endpoints_news_20260130_e5a715",
+    "source_key": "press_sector__endpoints_news",
+    "source_type": "press_sector",
+    "title": "FDA says it explained issues early on for Corcept's rejected Cushing's syndrome drug",
+    "content": "An FDA rejection letter for Corcept Therapeutics’ potential hormonal disorder drug says the agency told the company it had serious concerns before the application was submitted.\n\n The complete response letter, released ...",
+    "url": "https://endpoints.news/fda-says-it-explained-issues-early-on-for-corcepts-rejected-cushings-syndrome-drug/",
+    "published_at": "2026-01-30",
+    "ingested_at": "2026-02-03T09:48:29.915620",
+    "language": "en",
+    "content_hash": "sha256:6cdac381b8a5565cbdd95bc9b14a0c0a2b1709c0cace218a238993b1a3a81000",
+    "metadata": {
+      "author": "Zachary Brennan",
+      "tags": [
+        "Pharma",
+        "FDA+"
+      ],
+      "word_count": 32
+    },
+    "normalized_at": "2026-02-03T09:50:23.586232Z",
+    "effective_date": "2026-01-30",
+    "date_metadata": {
+      "source": "published_at",
+      "bedrock_date": null,
+      "bedrock_confidence": 0.0,
+      "published_at": "2026-01-30"
+    },
+    "normalized_content": {
+      "summary": "The FDA rejected Corcept Therapeutics' drug application for a potential hormonal disorder treatment, stating that it had raised serious concerns with the company before the application was submitted.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": [
+          "Cushing's syndrome"
+        ]
+      },
+      "event_classification": {
+        "primary_type": "regulatory",
+        "confidence": 0.8
+      },
+      "extracted_date": null,
+      "date_confidence": 0.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No LAI signals detected in the item. The item is about the FDA rejecting a drug application for a Cushing's syndrome treatment, with no mention of long-acting injectable formulations or technologies."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 7,
+      "bonuses": {
+        "regulatory_event": 2.5
+      },
+      "penalties": {
+        "no_entities_penalty": -2.0
+      },
+      "final_score": 0.8,
+      "effective_date": "2026-01-30",
+      "score_breakdown": {
+        "base_score": 7,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.95,
+        "weighted_base": 0.33,
+        "total_bonus": 2.5,
+        "total_penalty": -2.0,
+        "raw_score": 0.83,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_sector__endpoints_news_20260130_555425",
+    "source_key": "press_sector__endpoints_news",
+    "source_type": "press_sector",
+    "title": "Quince's steroid therapy for rare disease fails, shares tank",
+    "content": "Quince Therapeutics' once-monthly steroid-based treatment failed a Phase 3 trial for a rare genetic condition called ataxia-telangiectasia, prompting the Bay Area company to say it would stop development of the experimental ...",
+    "url": "https://endpoints.news/quinces-steroid-therapy-for-rare-disease-fails-shares-tank/",
+    "published_at": "2026-01-30",
+    "ingested_at": "2026-02-03T09:48:29.915620",
+    "language": "en",
+    "content_hash": "sha256:fce9b8a0bd264083183518878c872a1fb8a64ae753c4cbecab9532bca59a5eab",
+    "metadata": {
+      "author": "Lei Lei Wu",
+      "tags": [
+        "R&D"
+      ],
+      "word_count": 32
+    },
+    "normalized_at": "2026-02-03T09:50:28.176400Z",
+    "effective_date": "2026-01-30",
+    "date_metadata": {
+      "source": "published_at",
+      "bedrock_date": "2023-05-25",
+      "bedrock_confidence": 0.0,
+      "published_at": "2026-01-30"
+    },
+    "normalized_content": {
+      "summary": "Quince Therapeutics' experimental once-monthly steroid-based treatment failed a Phase 3 trial for the rare genetic condition ataxia-telangiectasia, leading the company to stop development of the drug.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": [
+          "ataxia-telangiectasia"
+        ]
+      },
+      "event_classification": {
+        "primary_type": "clinical_update",
+        "confidence": 0.8
+      },
+      "extracted_date": "2023-05-25",
+      "date_confidence": 0.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No LAI signals detected in the item. The therapy failed for a rare disease indication unrelated to long-acting injectables. Not LAI-relevant."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 6,
+      "bonuses": {
+        "clinical_event": 2.0
+      },
+      "penalties": {
+        "no_entities_penalty": -2.0
+      },
+      "final_score": 0.3,
+      "effective_date": "2026-01-30",
+      "score_breakdown": {
+        "base_score": 6,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.95,
+        "weighted_base": 0.29,
+        "total_bonus": 2.0,
+        "total_penalty": -2.0,
+        "raw_score": 0.29,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_sector__endpoints_news_20260130_3ccb5e",
+    "source_key": "press_sector__endpoints_news",
+    "source_type": "press_sector",
+    "title": "Lilly unveils $3.5B factory that will make retatrutide and other obesity drugs",
+    "content": "Eli Lilly has budgeted $3.5 billion for a new weight loss injectable and device factory in Lehigh Valley, PA, which will manufacture its next-gen obesity drug retatrutide.\n\n The factory will also produce other weight loss ...",
+    "url": "https://endpoints.news/lilly-unveils-3-5b-factory-that-will-make-retatrutide-and-other-obesity-drugs/",
+    "published_at": "2026-01-30",
+    "ingested_at": "2026-02-03T09:48:29.915620",
+    "language": "en",
+    "content_hash": "sha256:9b5fe1755f1f18826c1f8226bbeb1e15111f9d110a587878e4157133b3ef8fa8",
+    "metadata": {
+      "author": "Anna Brown",
+      "tags": [
+        "Pharma",
+        "Manufacturing"
+      ],
+      "word_count": 36
+    },
+    "normalized_at": "2026-02-03T09:50:34.213847Z",
+    "effective_date": "2026-01-30",
+    "date_metadata": {
+      "source": "published_at",
+      "bedrock_date": "2023-05-24",
+      "bedrock_confidence": 0.0,
+      "published_at": "2026-01-30"
+    },
+    "normalized_content": {
+      "summary": "Eli Lilly is investing $3.5 billion to build a new factory in Lehigh Valley, PA that will manufacture its next-generation obesity drug retatrutide and other weight loss injectables and devices.",
+      "entities": {
+        "companies": [],
+        "molecules": [
+          "retatrutide"
+        ],
+        "technologies": [],
+        "trademarks": [],
+        "indications": [
+          "obesity"
+        ]
+      },
+      "event_classification": {
+        "primary_type": "corporate_move",
+        "confidence": 0.8
+      },
+      "extracted_date": "2023-05-24",
+      "date_confidence": 0.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 80,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [
+          "hybrid_company: Eli Lilly",
+          "technology_family: microspheres"
+        ],
+        "weak": [
+          "indication: obesity"
+        ],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 40,
+        "entity_boosts": {
+          "hybrid_company": 10,
+          "technology_family": 10,
+          "key_molecule": 15
+        },
+        "recency_boost": 5,
+        "confidence_penalty": 0,
+        "total": 80
+      },
+      "reasoning": "Eli Lilly is a hybrid LAI company building a factory for microsphere-based obesity drug retatrutide. Recent corporate move event with multiple medium/weak signals. High confidence LAI match."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 5.0,
+      "bonuses": {},
+      "penalties": {},
+      "final_score": 0.2,
+      "effective_date": "2026-01-30",
+      "score_breakdown": {
+        "base_score": 5.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.95,
+        "weighted_base": 0.24,
+        "total_bonus": 0,
+        "total_penalty": 0,
+        "raw_score": 0.24,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20260203_aa5561",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "UZEDY®: Net Sales Increased from $117M in 2024 to $191M in 2025 (+63%) ; OLANZAPINE LAI: EU Submission Expected in Q2 2026",
+    "content": "UZEDY®: Net Sales Increased from $117M in 2024 to $191M in 2025 (+63%) ; OLANZAPINE LAI: EU Submission Expected in Q2 2026January 28, 2026January 28, 2026",
+    "url": "https://www.medincell.com/wp-content/uploads/2026/01/PR_MDC_TevaQ42025results_EN_28012026_vf.pdf",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:27.028860",
+    "language": "en",
+    "content_hash": "sha256:58323a1cdefb125396e7beaff04ca98f6f11f926a9ad5fe5eac3cf61347873a8",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 26
+    },
+    "normalized_at": "2026-02-03T09:49:38.745025Z",
+    "effective_date": "2026-01-28",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2026-01-28",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "UZEDY® net sales increased from $117M in 2024 to $191M in 2025 (+63%). An EU submission for OLANZAPINE LAI is expected in Q2 2026.",
+      "entities": {
+        "companies": [],
+        "molecules": [
+          "OLANZAPINE"
+        ],
+        "technologies": [],
+        "trademarks": [
+          "UZEDY®"
+        ],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "financial_results",
+        "confidence": 0.8
+      },
+      "extracted_date": "2026-01-28",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 80,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [
+          "trademark: UZEDY®"
+        ],
+        "medium": [],
+        "weak": [
+          "molecule: OLANZAPINE"
+        ],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 30,
+        "entity_boosts": {
+          "trademark_mention": 20,
+          "key_molecule": 15
+        },
+        "recency_boost": 10,
+        "confidence_penalty": 0,
+        "total": 80
+      },
+      "reasoning": "Trademark UZEDY® and molecule OLANZAPINE detected. Financial results event with recent date. High confidence LAI match."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 3.0,
+      "bonuses": {},
+      "penalties": {
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2026-01-28",
+      "score_breakdown": {
+        "base_score": 3.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.95,
+        "weighted_base": 0.14,
+        "total_bonus": 0,
+        "total_penalty": -1.0,
+        "raw_score": -0.86,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20260203_662f02",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "Publication of the 2026 financial calendar",
+    "content": "Publication of the 2026 financial calendarJanuary 12, 2026January 12, 2026",
+    "url": "https://www.medincell.com/wp-content/uploads/2026/01/MDC_Agenda2026_12012026_EN_vf.pdf",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:27.028860",
+    "language": "en",
+    "content_hash": "sha256:87aae11e6edc5e0ffed9cc27be20b0ce9a948ff6861602998c7fe882321e4026",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 10
+    },
+    "normalized_at": "2026-02-03T09:49:42.503417Z",
+    "effective_date": "2026-01-12",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2026-01-12",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "The news item announces the publication of the 2026 financial calendar.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "financial_results",
+        "confidence": 0.8
+      },
+      "extracted_date": "2026-01-12",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No LAI signals detected in the publication of a financial calendar. Not LAI-relevant."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 3.0,
+      "bonuses": {},
+      "penalties": {
+        "no_entities_penalty": -2.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2026-01-12",
+      "score_breakdown": {
+        "base_score": 3.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.88,
+        "weighted_base": 0.13,
+        "total_bonus": 0,
+        "total_penalty": -3.0,
+        "raw_score": -2.87,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20260203_2b08cd",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "Medincell Publishes its Consolidated Half-Year Financial Results (April 1st , 2025 – September 30, 2025)",
+    "content": "Medincell Publishes its Consolidated Half-Year Financial Results (April 1st , 2025 – September 30, 2025)December 9, 2025December 9, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/12/MDC_HY-Results-EN_09122025-1.pdf",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:27.028860",
+    "language": "en",
+    "content_hash": "sha256:d31f0b2539d43d16674e54130adf76dadd16de4d64da01b46089ef7d05087f56",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 19
+    },
+    "normalized_at": "2026-02-03T09:49:47.626468Z",
+    "effective_date": "2025-12-09",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-12-09",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Medincell published its consolidated financial results for the half-year period from April 1st, 2025 to September 30, 2025.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "financial_results",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-12-09",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 55,
+      "confidence": "medium",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 30,
+        "entity_boosts": {},
+        "recency_boost": 5,
+        "confidence_penalty": -10,
+        "total": 55
+      },
+      "reasoning": "The item is about financial results from MedinCell, a pure-play LAI company. However, no specific LAI products or technologies are mentioned. Medium confidence match due to lack of strong/medium signals."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 3.0,
+      "bonuses": {},
+      "penalties": {
+        "no_entities_penalty": -2.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2025-12-09",
+      "score_breakdown": {
+        "base_score": 3.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.82,
+        "weighted_base": 0.12,
+        "total_bonus": 0,
+        "total_penalty": -3.0,
+        "raw_score": -2.88,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20260203_150759",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "Medincell Awarded New Grant to Fight Malaria",
+    "content": "Medincell Awarded New Grant to Fight MalariaNovember 24, 2025November 24, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/11/MDC_Gates-Malaria_PR_24112025_vf.pdf",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:27.028860",
+    "language": "en",
+    "content_hash": "sha256:2077438074167cf84530cd63f435d4d32c7966446ec74b1d2d88da3c63b8e447",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 11
+    },
+    "normalized_at": "2026-02-03T09:49:58.838430Z",
+    "effective_date": "2025-11-24",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-11-24",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Medincell, a biotech company, was awarded a new grant to develop a treatment for malaria.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": [
+          "malaria"
+        ]
+      },
+      "event_classification": {
+        "primary_type": "financial_results",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-11-24",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 85,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [
+          "pure_player_company: MedinCell"
+        ],
+        "medium": [
+          "technology: microspheres"
+        ],
+        "weak": [
+          "indication: malaria"
+        ],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 60,
+        "entity_boosts": {
+          "pure_player_company": 25
+        },
+        "recency_boost": 5,
+        "confidence_penalty": 0,
+        "total": 85
+      },
+      "reasoning": "Pure player MedinCell mentioned along with microsphere technology for malaria treatment. Partnership event with recent date. High confidence LAI match."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 3.0,
+      "bonuses": {},
+      "penalties": {
+        "aging_penalty": -0.5,
+        "no_entities_penalty": -2.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2025-11-24",
+      "score_breakdown": {
+        "base_score": 3.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.75,
+        "weighted_base": 0.11,
+        "total_bonus": 0,
+        "total_penalty": -3.5,
+        "raw_score": -3.39,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20260203_63c5d2",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "Medincell Appoints Dr Grace Kim, Chief Strategy Officer, U.S. Finance, to Advance into Next Stage of US Capital Growth",
+    "content": "Medincell Appoints Dr Grace Kim, Chief Strategy Officer, U.S. Finance, to Advance into Next Stage of US Capital GrowthNovember 11, 2025November 11, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/11/MDC_G_KIM_10112025_EN_vf.pdf",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:27.028860",
+    "language": "en",
+    "content_hash": "sha256:0fd65830bac79a1367fb57ebdb608040c3d60da28c61faceaa909e7a158b29f2",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 23
+    },
+    "normalized_at": "2026-02-03T09:50:03.552359Z",
+    "effective_date": "2025-11-11",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-11-11",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Medincell has appointed Dr Grace Kim as Chief Strategy Officer for U.S. Finance to advance the company's growth in the U.S. capital markets.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "corporate_move",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-11-11",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 85,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [
+          "pure_player_company: MedinCell",
+          "trademark: UZEDY®"
+        ],
+        "medium": [
+          "technology: microspheres"
+        ],
+        "weak": [
+          "route: subcutaneous"
+        ],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 40,
+        "entity_boosts": {
+          "pure_player_company": 25,
+          "trademark": 20
+        },
+        "recency_boost": 0,
+        "confidence_penalty": 0,
+        "total": 85
+      },
+      "reasoning": "Pure player MedinCell mentioned with trademark UZEDY® and microsphere technology. Corporate move event with recent date. High confidence LAI match."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 5.0,
+      "bonuses": {},
+      "penalties": {
+        "aging_penalty": -0.5,
+        "no_entities_penalty": -2.0
+      },
+      "final_score": 0,
+      "effective_date": "2025-11-11",
+      "score_breakdown": {
+        "base_score": 5.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.75,
+        "weighted_base": 0.19,
+        "total_bonus": 0,
+        "total_penalty": -2.5,
+        "raw_score": -2.31,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__medincell_20260203_846e38",
+    "source_key": "press_corporate__medincell",
+    "source_type": "press_corporate",
+    "title": "Medincell to Join MSCI World Small Cap Index, a Leading Global Benchmark",
+    "content": "Medincell to Join MSCI World Small Cap Index, a Leading Global BenchmarkNovember 10, 2025November 10, 2025",
+    "url": "https://www.medincell.com/wp-content/uploads/2025/11/MDC_MSCI-Small-Index_10112025_EN_vf.pdf",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:27.028860",
+    "language": "en",
+    "content_hash": "sha256:56a3453e4ee40153ae56677367b25aa29f62e6fdeeba03e4c9c8d2f2706a1923",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 16
+    },
+    "normalized_at": "2026-02-03T09:50:07.735457Z",
+    "effective_date": "2025-11-10",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-11-10",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Medincell, a pharmaceutical company, will be joining the MSCI World Small Cap Index, a leading global benchmark index.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "corporate_move",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-11-10",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No LAI signals detected. Item is about a company joining a stock index, not related to long-acting injectables."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 5.0,
+      "bonuses": {},
+      "penalties": {
+        "aging_penalty": -0.5,
+        "no_entities_penalty": -2.0
+      },
+      "final_score": 0,
+      "effective_date": "2025-11-10",
+      "score_breakdown": {
+        "base_score": 5.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.75,
+        "weighted_base": 0.19,
+        "total_bonus": 0,
+        "total_penalty": -2.5,
+        "raw_score": -2.31,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_sector__endpoints_news_20260131_cee7af",
+    "source_key": "press_sector__endpoints_news",
+    "source_type": "press_sector",
+    "title": "Big Pharma earnings kick off; Third-round IRA drugs selected; Hengrui’s trailblazing moment; and more",
+    "content": "Welcome back to Endpoints Weekly! Fourth-quarter earnings season is in full swing, and our team covered reports this week from Teva, Roche, Sanofi, Takeda and Regeneron. CMS also unveiled the next 15 drugs subject to ...",
+    "url": "https://endpoints.news/big-pharma-earnings-kick-off-third-round-ira-drugs-selected-hengruis-trailblazing-moment-and-more/",
+    "published_at": "2026-01-31",
+    "ingested_at": "2026-02-03T09:48:29.915620",
+    "language": "en",
+    "content_hash": "sha256:7b31cfd308f7cdc80884c6af12fe7fd16627d14ab2f4bd761b73b531b09cb3aa",
+    "metadata": {
+      "author": "Max Gelman",
+      "tags": [
+        "Weekly"
+      ],
+      "word_count": 36
+    },
+    "normalized_at": "2026-02-03T09:50:18.748905Z",
+    "effective_date": "2023-01-27",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2023-01-27",
+      "bedrock_confidence": 0.8,
+      "published_at": "2026-01-31"
+    },
+    "normalized_content": {
+      "summary": "The article discusses upcoming fourth-quarter earnings reports from major pharmaceutical companies and the announcement of the next set of drugs subject to Medicare price negotiations under the Inflation Reduction Act.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "financial_results",
+        "confidence": 0.8
+      },
+      "extracted_date": "2023-01-27",
+      "date_confidence": 0.8,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No LAI signals detected in the normalized item. The content appears to be about general pharmaceutical company earnings and drug pricing, with no specific mentions of long-acting injectable technologies or products."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 3.0,
+      "bonuses": {},
+      "penalties": {
+        "very_old_penalty": -2.0,
+        "no_entities_penalty": -2.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2023-01-27",
+      "score_breakdown": {
+        "base_score": 3.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.5,
+        "weighted_base": 0.08,
+        "total_bonus": 0,
+        "total_penalty": -5.0,
+        "raw_score": -4.92,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_sector__endpoints_news_20260130_4f53a1",
+    "source_key": "press_sector__endpoints_news",
+    "source_type": "press_sector",
+    "title": "AstraZeneca pays $1.2B for CSPC's long-acting obesity drugs",
+    "content": "AstraZeneca is already delivering on its $15 billion commitment to China with a $1.2 billion upfront pact with CSPC Pharmaceutical, spanning eight drug programs and multiple platform technologies.\n\n On Thursday, the UK ...",
+    "url": "https://endpoints.news/astrazeneca-pays-1-2b-for-cspcs-long-acting-obesity-drugs/",
+    "published_at": "2026-01-30",
+    "ingested_at": "2026-02-03T09:48:29.915620",
+    "language": "en",
+    "content_hash": "sha256:fc75e15cf7c086510c30536ce3edbc882df288a665a9ea3f04532458fef770c5",
+    "metadata": {
+      "author": "Kyle LaHucik",
+      "tags": [
+        "Deals",
+        "China"
+      ],
+      "word_count": 33
+    },
+    "normalized_at": "2026-02-03T09:50:39.277641Z",
+    "effective_date": "2023-05-18",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2023-05-18",
+      "bedrock_confidence": 0.8,
+      "published_at": "2026-01-30"
+    },
+    "normalized_content": {
+      "summary": "AstraZeneca has entered into a $1.2 billion upfront partnership with CSPC Pharmaceutical spanning eight drug programs and multiple platform technologies for long-acting obesity drugs.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": [
+          "obesity"
+        ]
+      },
+      "event_classification": {
+        "primary_type": "partnership",
+        "confidence": 0.8
+      },
+      "extracted_date": "2023-05-18",
+      "date_confidence": 0.8,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 80,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [
+          "technology_families: microspheres"
+        ],
+        "weak": [
+          "indication: obesity"
+        ],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 60,
+        "entity_boosts": {
+          "technology_family": 10
+        },
+        "recency_boost": 10,
+        "confidence_penalty": 0,
+        "total": 80
+      },
+      "reasoning": "Microsphere technology mentioned for long-acting obesity drugs in a recent partnership. No exclusions detected. High confidence LAI match."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 8,
+      "bonuses": {
+        "partnership_event": 3.0
+      },
+      "penalties": {
+        "very_old_penalty": -2.0,
+        "no_entities_penalty": -2.0
+      },
+      "final_score": 0,
+      "effective_date": "2023-05-18",
+      "score_breakdown": {
+        "base_score": 8,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.5,
+        "weighted_base": 0.2,
+        "total_bonus": 3.0,
+        "total_penalty": -4.0,
+        "raw_score": -0.8,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__nanexa_20260203_ec88d7",
+    "source_key": "press_corporate__nanexa",
+    "source_type": "press_corporate",
+    "title": "Nanexa publishes interim report for January-September 2025",
+    "content": "6 November, 2025Nanexa publishes interim report for January-September 2025Download attachment",
+    "url": "https://nanexa.com/mfn_news/nanexa-publishes-interim-report-for-january-september-2025/",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:35.835725",
+    "language": "en",
+    "content_hash": "sha256:5e92a34fa02feb0c756160060d140bd43be564d228173af1a7475fc55abd2012",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 10
+    },
+    "normalized_at": "2026-02-03T09:51:02.386784Z",
+    "effective_date": "2025-11-06",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-11-06",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Nanexa published an interim financial report for the period January-September 2025.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "financial_results",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-11-06",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No LAI signals detected in the financial results announcement. Not relevant to the LAI domain."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 3.0,
+      "bonuses": {},
+      "penalties": {
+        "aging_penalty": -0.5,
+        "no_entities_penalty": -2.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2025-11-06",
+      "score_breakdown": {
+        "base_score": 3.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.75,
+        "weighted_base": 0.11,
+        "total_bonus": 0,
+        "total_penalty": -3.5,
+        "raw_score": -3.39,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__nanexa_20260203_e8d104",
+    "source_key": "press_corporate__nanexa",
+    "source_type": "press_corporate",
+    "title": "Download attachment",
+    "content": "Download attachment",
+    "url": "https://storage.mfn.se/ab91ff14-4c8b-4c40-85a9-996052a19950/nanexa-interim-report-january-september-2025.pdf",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:35.835725",
+    "language": "en",
+    "content_hash": "sha256:3d03c0ba4af110790f2466800ad3cb177d90875ff5aca390550800cb8fb5b287",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 2
+    },
+    "normalized_at": "2026-02-03T09:51:06.029143Z",
+    "effective_date": "2026-02-03",
+    "date_metadata": {
+      "source": "published_at",
+      "bedrock_date": null,
+      "bedrock_confidence": 0.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "There is no meaningful content to summarize.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "other",
+        "confidence": 0.8
+      },
+      "extracted_date": null,
+      "date_confidence": 0.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No meaningful content or signals detected. Not LAI-relevant."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 2.0,
+      "bonuses": {},
+      "penalties": {
+        "no_entities_penalty": -2.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2026-02-03",
+      "score_breakdown": {
+        "base_score": 2.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.1,
+        "total_bonus": 0,
+        "total_penalty": -3.0,
+        "raw_score": -2.9,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__nanexa_20260203_76ad60",
+    "source_key": "press_corporate__nanexa",
+    "source_type": "press_corporate",
+    "title": "Nanexa publishes interim report for January-June 2025",
+    "content": "27 August, 2025Nanexa publishes interim report for January-June 2025Download attachment",
+    "url": "https://nanexa.com/mfn_news/nanexa-publishes-interim-report-for-january-june-2025/",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:35.835725",
+    "language": "en",
+    "content_hash": "sha256:5ebaa7e082a1cf6d1df5f67bacd000c99e99c281c9cc7c0d2499114067d696b3",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 10
+    },
+    "normalized_at": "2026-02-03T09:51:10.122878Z",
+    "effective_date": "2025-08-27",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-08-27",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Nanexa published an interim financial report for the first half of 2025.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "financial_results",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-08-27",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No LAI signals detected in the given item about a financial report from Nanexa. Not relevant to the LAI domain."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 3.0,
+      "bonuses": {},
+      "penalties": {
+        "old_penalty": -1.0,
+        "no_entities_penalty": -2.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2025-08-27",
+      "score_breakdown": {
+        "base_score": 3.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.65,
+        "weighted_base": 0.1,
+        "total_bonus": 0,
+        "total_penalty": -4.0,
+        "raw_score": -3.9,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__delsitech_20260203_e3d7ad",
+    "source_key": "press_corporate__delsitech",
+    "source_type": "press_corporate",
+    "title": "Partnership Opportunities in Drug Delivery 2025 Boston, October 27-28",
+    "content": "Partnership Opportunities in Drug Delivery 2025 Boston, October 27-28Essi Nevo2025-08-15T11:33:54+02:00August 15th, 2025|Read More",
+    "url": "https://www.delsitech.com/partnership-opportunities-in-drug-delivery-2025-boston-october-27-28/",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:41.015379",
+    "language": "en",
+    "content_hash": "sha256:9362998c5af4ef533152f4c2d2f7f2a5a831f17fb5c84d2e9918492eabf312d7",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 13
+    },
+    "normalized_at": "2026-02-03T09:51:31.154621Z",
+    "effective_date": "2025-08-15",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-08-15",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "The news item is about a conference titled 'Partnership Opportunities in Drug Delivery 2025' taking place in Boston on October 27-28.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "other",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-08-15",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No LAI signals detected in the given item about a conference on drug delivery. Not relevant to the LAI domain."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 2.0,
+      "bonuses": {},
+      "penalties": {
+        "old_penalty": -1.0,
+        "no_entities_penalty": -2.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2025-08-15",
+      "score_breakdown": {
+        "base_score": 2.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.65,
+        "weighted_base": 0.07,
+        "total_bonus": 0,
+        "total_penalty": -4.0,
+        "raw_score": -3.94,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__delsitech_20260203_ad0afc",
+    "source_key": "press_corporate__delsitech",
+    "source_type": "press_corporate",
+    "title": "BIO International Convention 2025 Boston, June 16-19",
+    "content": "BIO International Convention 2025 Boston, June 16-19Aleksi Leino2025-06-12T15:59:56+02:00June 12th, 2025|Read More",
+    "url": "https://www.delsitech.com/bio-international-convention-2025-boston-june-16-19/",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:41.015379",
+    "language": "en",
+    "content_hash": "sha256:57720ff336bac6a3ca5237373c94baaa3eec122461772429e7c57553296abdcf",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 11
+    },
+    "normalized_at": "2026-02-03T09:51:35.486158Z",
+    "effective_date": "2025-06-12",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-06-12",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "The BIO International Convention 2025 is scheduled to take place in Boston from June 16-19, 2025.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "other",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-06-12",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No LAI signals detected in the given item about a BIO convention event. Not relevant to the LAI domain."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 2.0,
+      "bonuses": {},
+      "penalties": {
+        "very_old_penalty": -2.0,
+        "no_entities_penalty": -2.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2025-06-12",
+      "score_breakdown": {
+        "base_score": 2.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.5,
+        "weighted_base": 0.05,
+        "total_bonus": 0,
+        "total_penalty": -5.0,
+        "raw_score": -4.95,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__delsitech_20260203_dddc9f",
+    "source_key": "press_corporate__delsitech",
+    "source_type": "press_corporate",
+    "title": "Bio Europe Spring 2025 Milan, March 17-19",
+    "content": "Bio Europe Spring 2025 Milan, March 17-19Milla Runsala2025-02-19T12:33:49+02:00February 17th, 2025|Read More",
+    "url": "https://www.delsitech.com/bio-europe-spring-2025-milan-march-17-19/",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:41.015379",
+    "language": "en",
+    "content_hash": "sha256:960cdcae688eed2f19c4753685af51b62ae13017e3fbf4bbac02a4822228face",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 11
+    },
+    "normalized_at": "2026-02-03T09:51:41.586463Z",
+    "effective_date": "2025-02-19",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-02-19",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "This is an announcement for the upcoming Bio Europe Spring 2025 conference to be held in Milan from March 17-19, 2025.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "other",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-02-19",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No LAI signals detected in the item. It appears to be an announcement for a general biotech conference, not specific to long-acting injectables."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 2.0,
+      "bonuses": {},
+      "penalties": {
+        "very_old_penalty": -2.0,
+        "no_entities_penalty": -2.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2025-02-19",
+      "score_breakdown": {
+        "base_score": 2.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.5,
+        "weighted_base": 0.05,
+        "total_bonus": 0,
+        "total_penalty": -5.0,
+        "raw_score": -4.95,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_corporate__delsitech_20260203_e99236",
+    "source_key": "press_corporate__delsitech",
+    "source_type": "press_corporate",
+    "title": "TIDES Asia 2025 Kyoto, February 26-28",
+    "content": "TIDES Asia 2025 Kyoto, February 26-28Milla Runsala2025-02-19T12:49:02+02:00February 15th, 2025|Read More",
+    "url": "https://www.delsitech.com/tides-asia-2025-kyoto-february-26-28/",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:41.015379",
+    "language": "fr",
+    "content_hash": "sha256:7837e99508bbf82ae906e463ce964af3d7356e0c7525d68b3b8b0fb61c71c383",
+    "metadata": {
+      "author": "",
+      "tags": [],
+      "word_count": 10
+    },
+    "normalized_at": "2026-02-03T09:51:45.874764Z",
+    "effective_date": "2025-02-19",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2025-02-19",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "The text announces the TIDES Asia 2025 conference to be held in Kyoto from February 26-28, 2025. No other details about the conference are provided.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "other",
+        "confidence": 0.8
+      },
+      "extracted_date": "2025-02-19",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "The item does not contain any signals related to long-acting injectables. It is simply announcing a conference with no relevant details. Therefore, it is not LAI-relevant."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 2.0,
+      "bonuses": {},
+      "penalties": {
+        "very_old_penalty": -2.0,
+        "no_entities_penalty": -2.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2025-02-19",
+      "score_breakdown": {
+        "base_score": 2.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.5,
+        "weighted_base": 0.05,
+        "total_bonus": 0,
+        "total_penalty": -5.0,
+        "raw_score": -4.95,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_sector__fiercepharma_20260203_e86749",
+    "source_key": "press_sector__fiercepharma",
+    "source_type": "press_sector",
+    "title": "<a href=\"https://www.fiercepharma.com/sponsored/why-human-expertise-still-matters-ai-driven-med-comms\" hreflang=\"en\">Why human expertise still matters in AI-driven med comms</a>",
+    "content": "RTI Health Solutions experts explain how AI can help medical communications without replacing rigor, judgment or trust.",
+    "url": "https://www.fiercepharma.com/sponsored/why-human-expertise-still-matters-ai-driven-med-comms",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:43.176623",
+    "language": "en",
+    "content_hash": "sha256:99a606c9ac3663f315d153a03429d770f20938f38a99a66a8792312343dc406f",
+    "metadata": {
+      "author": "Questex Partner",
+      "tags": [],
+      "word_count": 17
+    },
+    "normalized_at": "2026-02-03T09:51:50.881419Z",
+    "effective_date": "2026-02-03",
+    "date_metadata": {
+      "source": "published_at",
+      "bedrock_date": null,
+      "bedrock_confidence": 0.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "The article discusses the importance of human expertise in AI-driven medical communications, as explained by experts from RTI Health Solutions. It highlights how AI can assist in medical communications without replacing rigor, judgment, or trust.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "other",
+        "confidence": 0.8
+      },
+      "extracted_date": null,
+      "date_confidence": 0.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No strong, medium or weak LAI signals detected. The article discusses AI and medical communications, which is not directly relevant to the LAI domain."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 2.0,
+      "bonuses": {},
+      "penalties": {
+        "no_entities_penalty": -2.0,
+        "low_relevance_event": -1.0
+      },
+      "final_score": 0,
+      "effective_date": "2026-02-03",
+      "score_breakdown": {
+        "base_score": 2.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 1.0,
+        "weighted_base": 0.1,
+        "total_bonus": 0,
+        "total_penalty": -3.0,
+        "raw_score": -2.9,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_sector__fiercepharma_20260203_fc4458",
+    "source_key": "press_sector__fiercepharma",
+    "source_type": "press_sector",
+    "title": "<a href=\"https://www.fiercepharma.com/pharma/lilly-rounds-out-quartet-new-us-plants-35b-injectables-and-device-facility-pa\" hreflang=\"en\">Lilly rounds out quartet of new US plants with $3.5B injectable and device facility in PA</a>",
+    "content": "On Friday, Eli Lilly unveiled designs on a new, $3.5 billion manufacturing facility in Pennsylvania’s Lehigh Valley, rounding out the quartet of plants it promised during its “Lilly in America” investment announcement last year.",
+    "url": "https://www.fiercepharma.com/pharma/lilly-rounds-out-quartet-new-us-plants-35b-injectables-and-device-facility-pa",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:43.176623",
+    "language": "en",
+    "content_hash": "sha256:9d428f4881bc9150761744dfa4e1008b691f6e9e101fadef4f9a23b7041bd47f",
+    "metadata": {
+      "author": "Fraiser Kansteiner",
+      "tags": [],
+      "word_count": 34
+    },
+    "normalized_at": "2026-02-03T09:51:56.589364Z",
+    "effective_date": "2023-05-19",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2023-05-19",
+      "bedrock_confidence": 1.0,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Eli Lilly announced plans to build a new $3.5 billion manufacturing facility for injectable drugs and devices in Pennsylvania's Lehigh Valley. This is the fourth new US plant Lilly has unveiled as part of its 'Lilly in America' investment initiative announced last year.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "corporate_move",
+        "confidence": 0.8
+      },
+      "extracted_date": "2023-05-19",
+      "date_confidence": 1.0,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": true,
+      "score": 80,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [
+          "hybrid_company: Eli Lilly"
+        ],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": {
+        "base_score": 40,
+        "entity_boosts": {
+          "hybrid_company": 10
+        },
+        "recency_boost": 10,
+        "confidence_penalty": 0,
+        "total": 80
+      },
+      "reasoning": "Eli Lilly is a hybrid company involved in LAI development. The item describes a new manufacturing facility for injectables and devices, which could be relevant for LAI production. Recent date further boosts the score."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 5.0,
+      "bonuses": {},
+      "penalties": {
+        "very_old_penalty": -2.0,
+        "no_entities_penalty": -2.0
+      },
+      "final_score": 0,
+      "effective_date": "2023-05-19",
+      "score_breakdown": {
+        "base_score": 5.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.5,
+        "weighted_base": 0.12,
+        "total_bonus": 0,
+        "total_penalty": -4.0,
+        "raw_score": -3.88,
+        "scoring_mode": "balanced"
+      }
+    }
+  },
+  {
+    "item_id": "press_sector__fiercepharma_20260203_f18948",
+    "source_key": "press_sector__fiercepharma",
+    "source_type": "press_sector",
+    "title": "<a href=\"https://www.fiercepharma.com/marketing/hims-hers-uses-another-super-bowl-ad-tackle-healthcare-affordability\" hreflang=\"en\">Hims &amp; Hers uses another Super Bowl ad to tackle healthcare affordability</a>",
+    "content": "The minute-long ad, which debuted online Thursday ahead of its broadcast premiere during the Feb. 8 game, starts with a stark claim: “Rich people live longer,” said by the ad’s narrator, the rapper and actor Common.",
+    "url": "https://www.fiercepharma.com/marketing/hims-hers-uses-another-super-bowl-ad-tackle-healthcare-affordability",
+    "published_at": "2026-02-03",
+    "ingested_at": "2026-02-03T09:48:43.176623",
+    "language": "en",
+    "content_hash": "sha256:ee7404249a939f4bf3ee882f2e66557f876eb8f25d67f5467e515965bc8a4073",
+    "metadata": {
+      "author": "Andrea Park",
+      "tags": [],
+      "word_count": 36
+    },
+    "normalized_at": "2026-02-03T09:52:01.072030Z",
+    "effective_date": "2023-02-02",
+    "date_metadata": {
+      "source": "bedrock",
+      "bedrock_date": "2023-02-02",
+      "bedrock_confidence": 0.9,
+      "published_at": "2026-02-03"
+    },
+    "normalized_content": {
+      "summary": "Hims & Hers, a telehealth company, aired a Super Bowl ad highlighting the issue of healthcare affordability and the longer life expectancy of wealthy individuals. The ad featured rapper and actor Common as the narrator.",
+      "entities": {
+        "companies": [],
+        "molecules": [],
+        "technologies": [],
+        "trademarks": [],
+        "indications": []
+      },
+      "event_classification": {
+        "primary_type": "corporate_move",
+        "confidence": 0.8
+      },
+      "extracted_date": "2023-02-02",
+      "date_confidence": 0.9,
+      "normalization_metadata": {
+        "bedrock_model": "claude-3-5-sonnet",
+        "canonical_version": "2.0",
+        "processing_time_ms": 0
+      }
+    },
+    "matching_results": {
+      "matched_domains": [],
+      "domain_relevance": {},
+      "bedrock_matching_used": true
+    },
+    "domain_scoring": {
+      "is_relevant": false,
+      "score": 0,
+      "confidence": "high",
+      "signals_detected": {
+        "strong": [],
+        "medium": [],
+        "weak": [],
+        "exclusions": []
+      },
+      "score_breakdown": null,
+      "reasoning": "No LAI signals detected. Item is about a healthcare company's Super Bowl ad and does not appear to be relevant to the long-acting injectables domain."
+    },
+    "has_domain_scoring": true,
+    "scoring_results": {
+      "base_score": 5.0,
+      "bonuses": {},
+      "penalties": {
+        "very_old_penalty": -2.0,
+        "no_entities_penalty": -2.0
+      },
+      "final_score": 0,
+      "effective_date": "2023-02-02",
+      "score_breakdown": {
+        "base_score": 5.0,
+        "domain_relevance_factor": 0.05,
+        "recency_factor": 0.5,
+        "weighted_base": 0.12,
+        "total_bonus": 0,
+        "total_penalty": -4.0,
+        "raw_score": -3.88,
+        "scoring_mode": "balanced"
+      }
+    }
+  }
+]

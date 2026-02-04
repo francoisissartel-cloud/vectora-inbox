@@ -1,14 +1,67 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-02-02",
+  "last_updated": "2026-02-04T11:23:10.343898",
   "contexts": {
     "local": {
-      "current": "test_context_001",
-      "history": []
+      "current": "test_context_006",
+      "history": [
+        {
+          "id": "test_context_001",
+          "created": "2026-02-02T20:03:31.260815",
+          "purpose": "E2E validation LAI Weekly pipeline - Architecture v2 domain scoring",
+          "status": "created",
+          "success": null
+        },
+        {
+          "id": "test_context_002",
+          "created": "2026-02-02T20:03:56.728616",
+          "purpose": "E2E validation LAI Weekly pipeline - Architecture v2 domain scoring",
+          "status": "completed",
+          "success": true
+        },
+        {
+          "id": "test_context_003",
+          "created": "2026-02-03T13:21:19.103722",
+          "purpose": "Canonical-v2.2",
+          "status": "completed",
+          "success": true
+        },
+        {
+          "id": "test_context_004",
+          "created": "2026-02-03T16:04:32.950342",
+          "purpose": "V16 Corrections",
+          "status": "completed",
+          "success": true
+        },
+        {
+          "id": "test_context_005",
+          "created": "2026-02-03T16:48:17.311607",
+          "purpose": "V16 Corrections Post E2E V15",
+          "status": "completed",
+          "success": true
+        },
+        {
+          "id": "test_context_006",
+          "created": "2026-02-04T11:18:32.393849",
+          "purpose": "Validation optimisations Bedrock (Prompt Caching + domain_definition v2.1)",
+          "status": "completed",
+          "success": true
+        }
+      ]
     },
     "aws": {
-      "current": null,
-      "history": []
+      "current": "test_context_001",
+      "history": [
+        {
+          "id": "test_context_001",
+          "created": "2026-02-04T11:22:36.817536",
+          "purpose": "Validation AWS optimisations Bedrock v1.4.3",
+          "status": "failed",
+          "success": false,
+          "promoted_from_local": "test_context_006",
+          "client_id": "lai_weekly_v1"
+        }
+      ]
     }
   },
   "rules": {

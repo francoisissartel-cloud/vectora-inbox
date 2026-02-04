@@ -47,7 +47,8 @@ def score_item_for_domain(
             'item_molecules': ', '.join(entities.get('molecules', [])),
             'item_technologies': ', '.join(entities.get('technologies', [])),
             'item_trademarks': ', '.join(entities.get('trademarks', [])),
-            'item_indications': ', '.join(entities.get('indications', []))
+            'item_indications': ', '.join(entities.get('indications', [])),
+            'item_dosing_intervals': ', '.join(entities.get('dosing_intervals', []))
         }
         
         # Appel Bedrock avec prompt domain scoring

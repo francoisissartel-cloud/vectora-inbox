@@ -1,0 +1,192 @@
+# LAI Weekly Template - Client Config (Optimisé v2.0)
+# Template pour génération automatique configs test
+# Compatible architecture 2 appels Bedrock (normalization + domain_scoring)
+
+# ============================================================================
+# PROFIL CLIENT
+# ============================================================================
+
+client_profile:
+  name: "{{NAME}}"
+  client_id: "{{CLIENT_ID}}"
+  active: true
+  language: "en"
+  frequency: "weekly"
+  tone: "executive"
+  voice: "concise"
+  target_audience: "executives"
+
+# ============================================================================
+# PIPELINE
+# ============================================================================
+
+pipeline:
+  newsletter_mode: "latest_run_only"
+  default_period_days: 30
+
+# ============================================================================
+# BEDROCK CONFIG (Architecture 2 Appels)
+# ============================================================================
+
+bedrock_config:
+  # Appel 1: Normalisation générique (extraction entités + classification)
+  normalization_prompt: "generic_normalization"
+  
+  # Appel 2: Domain scoring (si enable_domain_scoring: true)
+  # Charge automatiquement: canonical/prompts/domain_scoring/lai_domain_scoring.yaml
+  enable_domain_scoring: true
+  
+  # Prompts additionnels (newsletter v2)
+  matching_prompt: "lai_matching"
+  editorial_prompt: "lai_editorial"
+
+# ============================================================================
+# DOMAINES DE VEILLE
+# ============================================================================
+
+watch_domains:
+  - id: "tech_lai_ecosystem"
+    type: "technology"
+    priority: "high"
+    
+    # Scopes canonical (chargés automatiquement depuis S3)
+    technology_scope: "lai_keywords"           # canonical/scopes/technology_scopes.yaml
+    company_scope: "lai_companies_global"      # canonical/scopes/company_scopes.yaml
+    molecule_scope: "lai_molecules_global"     # canonical/scopes/molecule_scopes.yaml
+    trademark_scope: "lai_trademarks_global"   # canonical/scopes/trademark_scopes.yaml
+    
+    # Profils matching
+    technology_profile: "technology_complex"
+    matching_profile: "balanced"
+    
+    enabled: true
+
+# ============================================================================
+# SOURCES
+# ============================================================================
+
+source_config:
+  source_bouquets_enabled:
+    - "lai_corporate_mvp"
+    - "lai_press_mvp"
+  sources_extra_enabled: []
+  content_filters:
+    min_word_count: 50
+
+# ============================================================================
+# MATCHING CONFIG
+# ============================================================================
+
+matching_config:
+  min_domain_score: 0.25                    # Seuil global
+  min_confidence_level: "low"               # low/medium/high
+  enable_fallback_mode: true                # Fallback si aucun match
+  max_domains_per_item: 1                   # 1 domaine par item
+  enable_diagnostic_mode: true              # Logs détaillés
+
+# ============================================================================
+# SCORING CONFIG
+# ============================================================================
+
+scoring_config:
+  # Poids événements
+  event_type_weight_overrides:
+    partnership: 8
+    clinical_update: 6
+    regulatory: 7
+
+# ============================================================================
+# NEWSLETTER SELECTION
+# ============================================================================
+
+newsletter_selection:
+  max_items_total: 20
+  min_score_threshold: 0
+  deduplication:
+    enabled: true
+    similarity_threshold: 0.75
+
+# ============================================================================
+# NEWSLETTER LAYOUT
+# ============================================================================
+
+newsletter_layout:
+  distribution_strategy: "specialized_with_fallback"
+  sections:
+    - id: "regulatory_updates"
+      title: "Regulatory Updates"
+      source_domains: ["tech_lai_ecosystem"]
+      max_items: 6
+      filter_event_types: ["regulatory"]
+      
+    - id: "partnerships_deals"
+      title: "Partnerships & Deals"
+      source_domains: ["tech_lai_ecosystem"]
+      max_items: 4
+      filter_event_types: ["partnership", "corporate_move"]
+      
+    - id: "clinical_updates"
+      title: "Clinical Updates"
+      source_domains: ["tech_lai_ecosystem"]
+      max_items: 5
+      filter_event_types: ["clinical_update"]
+      
+    - id: "others"
+      title: "Other Signals"
+      source_domains: ["tech_lai_ecosystem"]
+      max_items: 8
+      filter_event_types: ["*"]
+
+# ============================================================================
+# DELIVERY
+# ============================================================================
+
+newsletter_delivery:
+  format: "markdown"
+  include_tldr: true
+  include_intro: true
+  delivery_method: "s3"
+
+# ============================================================================
+# METADATA (Pour système de contextes)
+# ============================================================================
+
+metadata:
+  test_context_id: "{{CONTEXT_ID}}"
+  test_purpose: "{{PURPOSE}}"
+  test_environment: "{{ENVIRONMENT}}"
+  created_date: "{{DATE}}"
+  promoted_from: "{{PROMOTED_FROM}}"
+  vertical: "LAI"
+  target_market: "Long-Acting Injectables"
+  template_version: "2.0.0"
+  canonical_version: "2.0"
+
+# ============================================================================
+# NOTES ARCHITECTURE 2 APPELS BEDROCK
+# ============================================================================
+#
+# APPEL 1: Normalisation (generic_normalization.yaml)
+# - Extraction entités: companies, molecules, technologies, trademarks
+# - Classification événement: partnership, regulatory, clinical_update, etc.
+# - Génération résumé
+# - Extraction date + confidence
+#
+# APPEL 2: Domain Scoring (lai_domain_scoring.yaml) - SI enable_domain_scoring: true
+# - Détection signaux: strong/medium/weak
+# - Application matching rules
+# - Calcul score 0-100
+# - Génération reasoning
+#
+# FICHIERS REQUIS SUR S3:
+# ✅ canonical/prompts/normalization/generic_normalization.yaml
+# ✅ canonical/prompts/domain_scoring/lai_domain_scoring.yaml
+# ✅ canonical/domains/lai_domain_definition.yaml
+# ✅ canonical/scopes/*.yaml (companies, molecules, technologies, trademarks)
+#
+# VALIDATION ATTENDUE:
+# ✅ Section domain_scoring présente dans items.json
+# ✅ Champs: is_relevant, score, confidence, signals_detected, reasoning
+# ✅ 2 appels Bedrock par item (logs CloudWatch)
+#
+# ============================================================================
