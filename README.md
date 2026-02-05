@@ -65,6 +65,8 @@ ingest-v2 → normalize-score-v2 → newsletter-v2
 - [Maintenance Blueprint](docs/architecture/BLUEPRINT_MAINTENANCE.md) - 🔧 **Comment maintenir le blueprint à jour**
 - [Workflows](.q-context/vectora-inbox-workflows.md) - Scénarios détaillés
 - [Guide Q Developer](.q-context/vectora-inbox-q-prompting-guide.md) - Comment prompter Q
+- [Test E2E Gold Standard](.q-context/test-e2e-gold-standard.md) - 🏆 **Modèle de rapport E2E**
+- [Guide Génération Rapports E2E](.q-context/guide-generation-rapports-e2e.md) - 📝 **Comment générer rapports E2E**
 
 ---
 
