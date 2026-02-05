@@ -9,7 +9,21 @@
 
 ## 📚 RAPPORTS DISPONIBLES
 
-### 1. Guide d'analyse humaine ⭐ **COMMENCER ICI**
+### 1. Rapport avec Métriques ⭐ **POUR PILOTAGE**
+**Fichier**: `test_e2e_v23_rapport_detaille_item_par_item_2026-02-04_avec_metriques.md`
+
+Rapport complet avec métriques opérationnelles :
+- ⚡ Métriques de performance (temps, throughput)
+- 🤖 Métriques Bedrock (appels, tokens, coûts)
+- 📊 Volumétrie détaillée (ingestion → filtrage)
+- 💰 Projections coûts (par fréquence et volume)
+- 🎯 KPIs pilotage (performance, qualité, coûts)
+- Détail des 32 items (20 pertinents + 12 non-pertinents)
+- Analyse par catégorie
+
+**Utilisation** : Vision complète du workflow avec métriques pour pilotage opérationnel
+
+### 2. Guide d'analyse humaine ⭐ **COMMENCER ICI**
 **Fichier**: `GUIDE_ANALYSE_HUMAINE_V23.md`
 
 Guide complet pour analyser les décisions du système avec un œil humain :
@@ -19,7 +33,7 @@ Guide complet pour analyser les décisions du système avec un œil humain :
 - Template d'analyse
 - Métriques à calculer
 
-### 2. Rapport enrichi avec JSON ⭐ **POUR ANALYSE DÉTAILLÉE**
+### 3. Rapport enrichi avec JSON ⭐ **POUR ANALYSE DÉTAILLÉE**
 **Fichier**: `test_e2e_v23_rapport_enrichi_avec_json_2026-02-04.md`
 
 Analyse détaillée de 5 items relevant + 3 items non-relevant :
@@ -31,7 +45,7 @@ Analyse détaillée de 5 items relevant + 3 items non-relevant :
 
 **Utilisation** : Analyser item par item pour valider les décisions
 
-### 3. Rapport détaillé complet
+### 4. Rapport détaillé complet
 **Fichier**: `test_e2e_v23_rapport_detaille_item_par_item_2026-02-04.md` (47.6 KB)
 
 Vue d'ensemble des 32 items :
@@ -43,14 +57,14 @@ Vue d'ensemble des 32 items :
 
 **Utilisation** : Vue d'ensemble rapide de tous les items
 
-### 4. Données brutes
+### 5. Données brutes
 **Fichier**: `tests/data_snapshots/golden_test_v23_2026-02-04.json`
 
 Données JSON complètes des 32 items curés.
 
 **Utilisation** : Analyse programmatique, comparaison avec futurs runs
 
-### 5. README Golden Test
+### 6. README Golden Test
 **Fichier**: `tests/data_snapshots/GOLDEN_TEST_V23_README.md`
 
 Documentation du golden test :
@@ -63,7 +77,14 @@ Documentation du golden test :
 
 ## 🎯 WORKFLOW RECOMMANDÉ
 
-### Pour analyse humaine complète
+### Pour pilotage opérationnel (15 min)
+
+1. **Consulter** `test_e2e_v23_rapport_detaille_item_par_item_2026-02-04_avec_metriques.md` (15 min)
+   - Vérifier KPIs (performance, qualité, coûts)
+   - Analyser projections pour scaling
+   - Identifier points d'optimisation
+
+### Pour analyse humaine complète (1h)
 
 1. **Lire** `GUIDE_ANALYSE_HUMAINE_V23.md` (5 min)
    - Comprendre les critères de validation
