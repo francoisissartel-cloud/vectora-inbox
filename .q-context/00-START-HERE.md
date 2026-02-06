@@ -63,25 +63,28 @@
 - [ ] Test AWS vs baseline V17
 
 ## Rollback
-- Backup: [fichiers]
+- Backup: .backup/YYYYMMDD_HHMMSS/
 - Commandes: [restore]
 ```
 
 ---
 
-### Etape 2: Backup (AVANT modification)
+### Etape 2: Backup Local (AVANT modification)
 
 **Checklist**:
-- [ ] Git: Creer branche `git checkout -b feature/xxx`
-- [ ] Snapshot local: Copie src_v2 + canonical
+- [ ] Creer backup horodate
   ```bash
-  python scripts/snapshot/create_snapshot.py --description "Avant [modification]"
+  python scripts/backup/create_local_backup.py --description "Avant [modification]"
+  ```
+- [ ] Verifier backup cree
+  ```bash
+  python scripts/backup/list_backups.py
   ```
 - [ ] S3: Backup canonical si modifie
   ```bash
   aws s3 sync s3://vectora-inbox-data-dev/canonical/ .tmp/backup_canonical_$(date +%Y%m%d_%H%M%S)/ --profile rag-lai-prod
   ```
-- [ ] Documenter versions actuelles dans MANIFEST.md
+- [ ] Documenter backup dans MANIFEST.md
 
 ---
 
@@ -90,13 +93,12 @@
 **Checklist**:
 - [ ] Modifier fichiers selon MANIFEST.md
 - [ ] Incrementer VERSION si code Lambda modifie
-- [ ] Commit AVANT build
+- [ ] Comparer avec backup
   ```bash
-  git add .
-  git commit -m "feat: [description]"
+  python scripts/backup/compare_with_backup.py --backup-id YYYYMMDD_HHMMSS
   ```
 
-**IMPORTANT**: Git AVANT build (regle critique #3)
+**IMPORTANT**: Backup local AVANT modification (regle critique #3)
 
 ---
 
@@ -173,12 +175,18 @@ Domain scoring:      X% (V17: 100%)
 ### Etape 7: Decision (Merge ou Rollback)
 
 **Si SUCCES**:
-- [ ] Push branche
-- [ ] Creer PR vers develop
-- [ ] Merge apres review
+- [ ] Valider modifications finales
+- [ ] Archiver backup
+  ```bash
+  python scripts/backup/archive_backup.py --backup-id YYYYMMDD_HHMMSS --success
+  ```
 
 **Si ECHEC**:
 - [ ] Analyser causes
+- [ ] Rollback local
+  ```bash
+  python scripts/backup/restore_backup.py --backup-id YYYYMMDD_HHMMSS
+  ```
 - [ ] Rollback S3 si necessaire
   ```bash
   aws s3 sync .tmp/backup_canonical_YYYYMMDD_HHMMSS/ s3://vectora-inbox-data-dev/canonical/ --profile rag-lai-prod
@@ -188,6 +196,21 @@ Domain scoring:      X% (V17: 100%)
 ---
 
 ## COMMANDES ESSENTIELLES
+
+### Backup & Restore Local
+```bash
+# Creer backup local
+python scripts/backup/create_local_backup.py --description "Avant optimisation X"
+
+# Lister backups
+python scripts/backup/list_backups.py
+
+# Comparer avec backup
+python scripts/backup/compare_with_backup.py --backup-id 20260204_143022
+
+# Restaurer backup
+python scripts/backup/restore_backup.py --backup-id 20260204_143022
+```
 
 ### Build & Deploy
 ```bash
@@ -215,17 +238,17 @@ aws s3 cp s3://vectora-inbox-data-dev/curated/lai_weekly_vX/YYYY/MM/DD/items.jso
 
 ### Snapshot & Diff
 ```bash
-# Creer snapshot AVANT modification
-python scripts/snapshot/create_snapshot.py --description "Avant optimisation X"
+# Creer backup local AVANT modification
+python scripts/backup/create_local_backup.py --description "Avant optimisation X"
 
-# Lister snapshots
-python scripts/snapshot/create_snapshot.py --list
+# Lister backups disponibles
+python scripts/backup/list_backups.py
 
-# Comparer avec snapshot
-python scripts/snapshot/diff_snapshot.py 20260204_132730
+# Comparer avec backup
+python scripts/backup/compare_with_backup.py --backup-id 20260204_143022
 
 # Diff detaille
-python scripts/snapshot/diff_snapshot.py 20260204_132730 --diff
+python scripts/backup/compare_with_backup.py --backup-id 20260204_143022 --detailed
 ```
 
 ### Backup & Restore S3

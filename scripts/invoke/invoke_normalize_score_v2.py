@@ -57,6 +57,12 @@ def get_test_event(event_name):
         "lai_weekly_v12": {
             "client_id": "lai_weekly_v12"
         },
+        "lai_weekly_v18_scoring_v3": {
+            "client_id": "lai_weekly_v18_scoring_v3"
+        },
+        "lai_weekly_v24": {
+            "client_id": "lai_weekly_v24"
+        },
         "minimal": {
             "client_id": "lai_weekly_v3",
             "period_days": 1
@@ -185,7 +191,7 @@ def measure_cold_start():
 def main():
     parser = argparse.ArgumentParser(description="Invocation standardisée normalize_score_v2")
     parser.add_argument("--event", default="lai_weekly_v3", 
-                       choices=["lai_weekly_v3", "lai_weekly_v7", "lai_weekly_v8", "lai_weekly_v9", "lai_weekly_v10", "lai_weekly_v11", "lai_weekly_v12", "minimal", "full"],
+                       choices=["lai_weekly_v3", "lai_weekly_v7", "lai_weekly_v8", "lai_weekly_v9", "lai_weekly_v10", "lai_weekly_v11", "lai_weekly_v12", "lai_weekly_v18_scoring_v3", "lai_weekly_v24", "minimal", "full"],
                        help="Event de test à utiliser")
     parser.add_argument("--performance", action="store_true",
                        help="Mesurer les performances (cold/warm start)")

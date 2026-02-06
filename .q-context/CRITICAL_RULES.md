@@ -40,35 +40,28 @@ ingest-v2 → normalize-score-v2 → newsletter-v2
 
 ---
 
-### 3. Git AVANT Build
+### 3. Backup Local AVANT Modification
 
 **✅ OBLIGATOIRE**:
 ```bash
-# 1. Créer branche
-git checkout -b feature/my-feature
+# Creer backup horodate
+python scripts/backup/create_local_backup.py --description "Avant modification X"
 
-# 2. Modifier code
-# ...
-
-# 3. Commit
-git commit -m "feat: description"
-
-# 4. Build
-python scripts/build/build_all.py
-
-# 5. Deploy
-python scripts/deploy/deploy_env.py --env dev
+# Structure backup:
+.backup/
+├── 20260204_143022_avant_modification_X/
+│   ├── src_v2/          # Copie complete code
+│   ├── canonical/       # Copie complete config
+│   ├── VERSION          # Version actuelle
+│   └── BACKUP_INFO.txt  # Metadata backup
 ```
 
 **❌ INTERDIT**:
-```bash
-# ❌ Build → Deploy → Commit (MAUVAIS ORDRE)
-python scripts/build/build_all.py
-python scripts/deploy/deploy_env.py --env dev
-git commit -m "feat: description"
-```
+- Modifier sans backup
+- Ecraser backup existant
+- Backup partiel (src_v2 OU canonical)
 
-**Raison**: Git = source de vérité. Commit AVANT build pour traçabilité.
+**Raison**: Backup local = rollback instantané. Copie complète garantit restauration exacte.
 
 ---
 

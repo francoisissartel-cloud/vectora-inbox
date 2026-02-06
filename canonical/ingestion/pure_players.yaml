@@ -1,0 +1,19 @@
+# Liste des pure players LAI
+# Ces entreprises bénéficient d'un profil d'ingestion large (tout est LAI chez eux)
+# 
+# Profil appliqué : corporate_pure_player_broad
+# - Ingestion large : tout est conservé par défaut
+# - Exclusions minimales : seuls les keywords d'exclusion sont filtrés
+# - Pas de vérification LAI keywords : tout est LAI chez ces entreprises
+#
+# Pour ajouter un pure player :
+# 1. Ajouter le company_id dans la liste ci-dessous
+# 2. Upload sur S3 : aws s3 cp canonical/ingestion/pure_players.yaml s3://vectora-inbox-config-{env}/canonical/ingestion/pure_players.yaml
+# 3. Pas de rebuild nécessaire : pris en compte au prochain cold start Lambda
+
+lai_pure_players:
+  - medincell
+  - camurus
+  - delsitech
+  - nanexa
+  - peptron

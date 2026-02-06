@@ -1,0 +1,90 @@
+# LAI Domain Scoring Prompt v3.1 - Simple et Efficace
+# Pas de références dynamiques, logique claire
+
+metadata:
+  prompt_id: "lai_domain_scoring"
+  version: "3.1"
+  created_date: "2026-02-05"
+  description: "Prompt simple sans références dynamiques - focus signaux LAI uniquement"
+
+system_instructions: |
+  You are evaluating pharma/biotech news for Long-Acting Injectable (LAI) relevance.
+  
+  LAI = Injectable drugs providing sustained release over weeks/months after single injection.
+  
+  EVALUATE ONLY these LAI signals (IGNORE company names/types):
+  
+  STRONG SIGNALS (1+ = relevant):
+  - LAI trademarks: UZEDY, Aristada, Brixadi, Sublocade, Apretude, Cabenuva, CAMCEVI, 
+    Skytrofa, Vivitrol, Sandostatin, Invega, Risperdal Consta, Zyprexa Relprevv, 
+    Lupron depot, ZOLADEX, Tresiba, Lantus, Ozempic, Wegovy, Trulicity, Mounjaro, 
+    PharmaShell, BEPO, SiliaShell, Oclaiz, etc.
+  - Core LAI terms: long-acting injectable, LAI, depot injection, extended-release injectable, 
+    sustained-release injectable, controlled-release injection
+  
+  MEDIUM SIGNALS (2+ = relevant):
+  - Technologies: microspheres, PLGA, depot, hydrogel, PEGylation, Fc fusion, 
+    atomic layer deposition, drug delivery system, controlled release, extended release
+  - Dosing: once-monthly, once-weekly, q4w, q8w, q12w, monthly injection, 
+    quarterly injection, every 3 months, every 6 months
+  
+  EXCLUSIONS (1+ = reject):
+  - oral tablet, oral capsule, transdermal patch, implantable device, 
+    gene therapy, cell therapy, vaccine, cosmetic, veterinary
+  
+  SCORING:
+  - Base: partnership=60, regulatory=70, clinical=50, corporate=40, financial=0, other=20
+  - Boosts: trademark+20, dosing+15, technology+10
+  - Recency: <7days+10, <30days+5
+  - Threshold: ≥50 = relevant
+  
+  CRITICAL: Base scoring ONLY on LAI signals above. Do NOT invent categories like 
+  "pure_player_company" or "hybrid_company". Focus ONLY on trademarks, technologies, dosing.
+
+user_template: |
+  Evaluate this item for LAI relevance.
+
+  Title: {{item_title}}
+  Summary: {{item_summary}}
+  Event: {{item_event_type}}
+  Date: {{item_effective_date}}
+  
+  Entities:
+  - Companies: {{item_companies}}
+  - Technologies: {{item_technologies}}
+  - Trademarks: {{item_trademarks}}
+  - Molecules: {{item_molecules}}
+  - Dosing: {{item_dosing_intervals}}
+  - Indications: {{item_indications}}
+
+  Return JSON with this EXACT structure:
+  {
+    "is_relevant": true,
+    "score": 75,
+    "confidence": "high",
+    "signals_detected": {
+      "strong": ["trademark: UZEDY"],
+      "medium": ["technology: microspheres", "dosing: monthly"],
+      "weak": ["molecule: semaglutide"],
+      "exclusions": []
+    },
+    "score_breakdown": {
+      "base_score": 60,
+      "entity_boosts": {"trademark": 20, "technology": 10},
+      "recency_boost": 5,
+      "confidence_penalty": 0,
+      "total": 75
+    },
+    "reasoning": "Trademark UZEDY detected with microsphere technology and monthly dosing. Multiple LAI signals."
+  }
+
+bedrock_config:
+  max_tokens: 1500
+  temperature: 0.0
+  anthropic_version: "bedrock-2023-05-31"
+
+validation_rules:
+  - "Score 0-100"
+  - "Use EXACT JSON structure shown"
+  - "Do NOT invent signal categories"
+  - "Focus ONLY on LAI signals listed"

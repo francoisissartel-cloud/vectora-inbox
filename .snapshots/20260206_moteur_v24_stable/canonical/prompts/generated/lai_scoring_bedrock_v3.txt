@@ -1,0 +1,265 @@
+=== LAI DOMAIN SCORING PROMPT v3.0 ===
+Generated: 2026-02-05 11:00:45
+Sources: technology_scopes.yaml, trademark_scopes.yaml, exclusion_scopes.yaml
+
+MISSION:
+Evaluate if a pharma/biotech news item is relevant to Long-Acting Injectables (LAI).
+Return: is_relevant (bool), score (0-100), reasoning (string).
+
+DEFINITION LAI:
+Injectable pharmaceutical formulations providing sustained drug release over weeks to months 
+after a single injection. Improves patient adherence and therapeutic outcomes.
+
+Key characteristics:
+- Extended release: weeks to months duration
+- Injectable routes: SC, IM, intravitreal, intratumoral
+- Technologies: microspheres, depots, hydrogels, PEGylation, Fc fusion
+- Dosing: weekly, monthly, quarterly, semi-annual
+
+MATCHING LOGIC (simplified - NO company type distinction):
+
+1. STRONG SIGNALS (1+ detected = relevant)
+   - Core LAI terms: long-acting injectable, long acting injectable, long-acting formulation... [13 total]
+   - LAI trademarks: Plenaxis, Idelvion, Aristada... [76 total]
+
+2. MEDIUM SIGNALS (2+ detected = relevant)
+   - Technology families: drug delivery system, drug delivery, controlled release... [56 total]
+   - Dosing intervals: once-monthly, once-weekly injection, once every 2 weeks... [14 total]
+
+3. EXCLUSIONS (1+ detected = reject)
+   - Anti-LAI terms: implantable device, surgically implanted, transdermal patch... [21 total]
+
+SCORING RULES:
+- Base score by event_type:
+  * partnership: 60
+  * regulatory: 70
+  * clinical_update: 50
+  * corporate_move: 40
+  * financial_results: 0 (only score if 2+ LAI signals)
+  * other: 20
+
+- Entity boosts:
+  * +20 if trademark detected
+  * +15 if dosing_interval detected
+  * +10 if technology_family detected
+
+- Recency boost:
+  * +10 if item < 7 days old
+  * +5 if item < 30 days old
+
+- Threshold: score >= 50 = relevant
+
+CRITICAL RULES:
+1. IGNORE company type (pure_player vs hybrid) - focus ONLY on LAI signals
+2. Manufacturing news WITHOUT LAI technology → REJECT
+3. Financial results WITHOUT 2+ LAI signals → REJECT
+4. Be conservative: when in doubt, REJECT
+5. Only detect signals EXPLICITLY present in the item data
+
+OUTPUT FORMAT (JSON only, no additional text):
+{
+  "is_relevant": true,
+  "score": 75,
+  "reasoning": "Trademark UZEDY detected + microsphere technology + partnership event"
+}
+
+If NOT relevant:
+{
+  "is_relevant": false,
+  "score": 0,
+  "reasoning": "Exclusion detected: oral tablet. Not LAI-relevant."
+}
+
+=== FULL TERM LISTS ===
+
+[CORE LAI TERMS - 13 terms]
+- long-acting injectable
+- long acting injectable
+- long-acting formulation
+- extended-release injection
+- extended-release injectable
+- controlled-release injection
+- injectable controlled release
+- sustained release injectable
+- sustained-release injectable
+- depot injection
+- long-acting depot
+- long-acting
+- long acting
+
+[LAI TRADEMARKS - 76 terms]
+- Plenaxis
+- Idelvion
+- Aristada
+- Abilify Maintena
+- Abilify Asimtufi
+- Posimir
+- Exparel
+- Zynrelef
+- Brixadi
+- Sublocade
+- Apretude
+- Cabenuva
+- Cetrotide
+- Acthar Gel
+- DepoCyt
+- Firmagon
+- ALTUVIIIO
+- Elocta
+- Parsabiv
+- Faslodex
+- ZOLADEX
+- Sustol
+- Tresiba
+- Levemir
+- Lantus
+- Somatuline
+- Sunlenca
+- LUTRATE DEPOT
+- Lupron depot
+- CAMCEVI
+- Skytrofa
+- Depo provera
+- Mircera
+- Depodur
+- Vivitrol
+- Sandostatin
+- Zyprexa Relprevv
+- Invega trinza
+- Signifor
+- Somavert
+- REZZAYO
+- Risperdal Consta
+- Uzedy
+- UZEDY
+- UZEDY®
+- Rykindo
+- Besremi
+- Adynovate
+- Enspryng
+- Ozempic
+- Sogroya
+- NGENLA
+- Aveed
+- Zilretta
+- TRELSTAR
+- Esperoct
+- BYDUREON
+- IMCIVREE
+- Aranesp
+- PEGASYS
+- Jivi
+- JELMYTO
+- Perseris
+- DAXXIFY
+- WEGOVY
+- Erzofri
+- Victoza
+- Trulicity
+- Mounjaro
+- Soliqua
+- PharmaShell®
+- PharmaShell
+- BEPO®
+- BEPO
+- SiliaShell®
+- SiliaShell Oclaiz
+
+[TECHNOLOGY FAMILIES - 56 terms]
+- drug delivery system
+- drug delivery
+- controlled release
+- sustained release
+- extended release
+- modified release
+- PharmaShell®
+- PharmaShell
+- Pharmashell
+- pharma shell
+- SiliaShell®
+- BEPO®
+- extended-release injectable
+- long-acting injectable
+- LAI
+- depot injection
+- once-monthly injection
+- atomic layer deposition
+- Half life extension
+- half life extended
+- polymeric microspheres
+- PLGA microspheres
+- PLA microspheres
+- in-situ forming depot
+- Atrigel
+- FluidCrystal
+- SmartDepot
+- multivesicular liposomes
+- DepoFoam
+- BioSeizer
+- thermo-responsive hydrogel
+- RTGel
+- liquid crystalline depot
+- liquid crystal depot
+- depot-forming prodrug
+- depot prodrug
+- long-acting prodrug
+- long-acting emulsion
+- Medisorb
+- CriPec
+- DiffuSphere
+- PASylation
+- site-specific PEGylation
+- Fc fusion
+- Fc-fusion
+- IgG Fc fusion
+- albumin binding
+- albumin fusion
+- albumin-binding
+- lipidation
+- fatty acid conjugation
+- polypeptide extension
+- glyco-engineering
+- glycan engineering
+- sialylation
+- half-life extension
+
+[DOSING INTERVALS - 14 patterns]
+- once-monthly
+- once-weekly injection
+- once every 2 weeks
+- once every 3 months
+- once every 6 months
+- q4w
+- q8w
+- q12w
+- q2w
+- 6-month
+- 3-month
+- quarterly injection
+- biweekly injection
+- monthly injection
+
+[EXCLUSIONS - 21 terms]
+- implantable device
+- surgically implanted
+- transdermal patch
+- oral tablet
+- oral capsule
+- topical cream
+- gene therapy
+- cell therapy
+- CAR-T
+- vaccine
+- vaccination
+- prophylactic vaccine
+- cosmetic
+- veterinary
+- diagnostic
+- oral tablet
+- oral capsule
+- oral drug
+- oral medication
+- pill factory
+- tablet manufacturing
+
+=== END PROMPT ===

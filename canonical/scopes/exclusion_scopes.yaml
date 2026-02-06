@@ -24,44 +24,69 @@ lai_exclude_noise:
 # SCOPES D'EXCLUSION POUR PROFILS D'INGESTION
 # ========================================================================
 
-# Contenu RH/Ressources Humaines (pour filtrage corporate)
+# Contenu RH/Ressources Humaines + Événements corporate (pour filtrage corporate)
 hr_content:
-  - "job opening"
-  - "career opportunity"
-  - "we are hiring"
-  - "join our team"
-  - "human resources"
-  - "employee benefits"
-  - "workplace culture"
-  - "diversity and inclusion"
-  - "employee recognition"
-  - "staff appointment"
-  - "new hire"
-  - "promotion announcement"
-  - "retirement announcement"
-  - "leadership change"
-  - "organizational restructuring"
-  - "employee training"
-  - "professional development"
-  - "company retreat"
-  - "team building"
-  - "employee survey"
-  - "compensation review"
+  - job opening
+  - career opportunity
+  - we are hiring
+  - join our team
+  - human resources
+  - employee benefits
+  - workplace culture
+  - diversity and inclusion
+  - employee recognition
+  - staff appointment
+  - new hire
+  - promotion announcement
+  - retirement announcement
+  - leadership change
+  - organizational restructuring
+  - employee training
+  - professional development
+  - company retreat
+  - team building
+  - employee survey
+  - compensation review
+  - BIO International Convention
+  - Bio Europe Spring
+  - TIDES Asia
+  - Drug Delivery Partnership
+  - conference announcement
+  - save the date
+  - register now
+  - booth number
+  - exhibition booth
+  - visit us at booth
+  - conference participation
+  - trade show
+  - industry event
+  - webinar announcement
+  - company presentation
+  - investor day
+  - analyst meeting
+  - press conference
+  - media interview
+  - award ceremony
+  - appoints chief
+  - management to present
+  - participate in conference
+  - healthcare conference
+  - investor conference
 
 # Termes de recrutement spécifiques (ajout pour filtrage LAI)
 hr_recruitment_terms:
-  - "hiring"
-  - "seeks.*engineer"
-  - "seeks.*director"
-  - "seeks.*experienced"
-  - "recruiting"
-  - "job opening"
-  - "career opportunity"
-  - "position available"
-  - "we are looking for"
-  - "join our team"
-  - "process engineer"
-  - "quality director"
+  - hiring
+  - seeks engineer
+  - seeks director
+  - seeks experienced
+  - recruiting
+  - job opening
+  - career opportunity
+  - position available
+  - we are looking for
+  - join our team
+  - process engineer
+  - quality director
 
 # Contenu ESG généraliste (Environnement, Social, Gouvernance)
 esg_generic:
@@ -85,56 +110,75 @@ esg_generic:
   - "proxy statement"
   - "corporate governance"
   - "executive compensation"
+  # Quick Win v25: Corporate générique (ajouté ici car corporate_noise_terms non référencé)
+  - "chief strategy officer"
+  - "chief financial officer"
+  - "index inclusion"
+  - "joins.*index"
+  - "added to.*index"
+  - "appoints.*chief"
 
 # Contenu financier généraliste (non spécifique aux produits)
 financial_generic:
-  - "quarterly earnings"
-  - "financial results"
-  - "revenue guidance"
-  - "cost reduction"
-  - "operational efficiency"
-  - "market capitalization"
-  - "stock price"
-  - "dividend payment"
-  - "share buyback"
-  - "credit rating"
-  - "debt refinancing"
-  - "cash flow"
-  - "working capital"
-  - "capital expenditure"
-  - "return on investment"
-  - "profit margin"
-  - "EBITDA"
-  - "balance sheet"
-  - "income statement"
-  - "financial guidance"
+  - quarterly earnings
+  - financial results
+  - revenue guidance
+  - cost reduction
+  - operational efficiency
+  - market capitalization
+  - stock price
+  - dividend payment
+  - share buyback
+  - credit rating
+  - debt refinancing
+  - cash flow
+  - working capital
+  - capital expenditure
+  - return on investment
+  - profit margin
+  - EBITDA
+  - balance sheet
+  - income statement
+  - financial guidance
+  - publishes interim report
+  - financial calendar
+  - publication of the
+  - consolidated half-year
+  - chief strategy officer
+  - chief financial officer
+  - index inclusion
+  - MSCI World
+  - MSCI Small Cap
 
 # Termes de reporting financier spécifiques (ajout pour filtrage LAI)
 financial_reporting_terms:
-  - "publishes.*financial results"
-  - "consolidated.*results"
-  - "interim report.*january"
-  - "half-year.*results"
-  - "quarterly.*results"
-  - "financial results"
-  - "earnings"
-  - "revenue"
-  - "guidance"
-  - "financial performance"
-  # Termes boursiers
-  - "MSCI"
-  - "MSCI World"
-  - "MSCI Small Cap"
-  - "stock index"
-  - "market index"
-  - "benchmark index"
-  - "financial calendar"
-  - "interim report"
-  - "half-year results"
-  - "consolidated results"
-  - "market cap"
-  - "share price"
-  - "trading volume"
+  - publishes financial results
+  - consolidated results
+  - interim report january
+  - half-year results
+  - quarterly results
+  - financial results
+  - earnings
+  - revenue
+  - guidance
+  - financial performance
+  - MSCI
+  - MSCI World
+  - MSCI Small Cap
+  - stock index
+  - market index
+  - benchmark index
+  - financial calendar
+  - interim report
+  - half-year results
+  - consolidated results
+  - market cap
+  - share price
+  - trading volume
+  - publishes interim report
+  - publication of the
+  - consolidated half-year
+  - fiscal year results
 
 # Nouvelles exclusions anti-LAI (Phase 1)
 anti_lai_routes:
@@ -162,6 +206,17 @@ event_generic:
   - "office opening"
   - "facility expansion"
   - "manufacturing update"
+  # Quick Win v25: Conférences génériques
+  - "BIO International Convention"
+  - "Bio Europe Spring"
+  - "TIDES Asia"
+  - "Drug Delivery Partnership"
+  - "conference announcement"
+  - "save the date"
+  - "register now"
+  - "booth number"
+  - "exhibition booth"
+  - "visit us at booth"
 
 # Nouveaux termes corporate
 corporate_noise_terms:
@@ -170,6 +225,12 @@ corporate_noise_terms:
   - "participate in.*conference"
   - "healthcare conference"
   - "investor.*conference"
+  # Quick Win v25: Corporate générique
+  - "chief strategy officer"
+  - "chief financial officer"
+  - "index inclusion"
+  - "joins.*index"
+  - "added to.*index"
 
 # Contextes non pertinents (optionnel, à compléter si besoin).
 exclude_contexts: []

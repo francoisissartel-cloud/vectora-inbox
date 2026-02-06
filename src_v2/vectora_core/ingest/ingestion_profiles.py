@@ -16,69 +16,57 @@ import logging
 import re
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)  # Force DEBUG pour ce module
 
 # Variables globales pour scopes chargés depuis S3
 _exclusion_scopes_cache = None
+_pure_players_cache = None
 
 def initialize_exclusion_scopes(s3_io, config_bucket: str):
     """Charge les exclusion_scopes depuis S3 (appelé au démarrage)."""
     global _exclusion_scopes_cache
     
-    try:
-        scopes = s3_io.read_yaml_from_s3(config_bucket, 'canonical/scopes/exclusion_scopes.yaml')
-        _exclusion_scopes_cache = scopes or {}
-        logger.info(f"Exclusion scopes chargés: {len(_exclusion_scopes_cache)} catégories")
-    except Exception as e:
-        logger.warning(f"Échec chargement exclusion_scopes: {e}. Utilisation fallback.")
-        _exclusion_scopes_cache = {}
+    scopes = s3_io.read_yaml_from_s3(config_bucket, 'canonical/scopes/exclusion_scopes.yaml')
+    _exclusion_scopes_cache = scopes or {}
+    logger.info(f"[INIT] Exclusion scopes chargés: {len(_exclusion_scopes_cache)} catégories")
+    logger.info(f"[INIT] Catégories: {list(_exclusion_scopes_cache.keys())}")
+    
+    if not _exclusion_scopes_cache:
+        raise RuntimeError("Exclusion scopes vide après chargement S3")
+
+def initialize_pure_players(s3_io, config_bucket: str):
+    """Charge les pure players depuis S3 (appelé au démarrage)."""
+    global _pure_players_cache
+    
+    scopes = s3_io.read_yaml_from_s3(config_bucket, 'canonical/scopes/company_scopes.yaml')
+    pure_players = scopes.get('lai_companies_pure_players', [])
+    _pure_players_cache = [company.lower() for company in pure_players]
+    logger.info(f"[INIT] Pure players chargés: {len(_pure_players_cache)} entreprises")
+    
+    if not _pure_players_cache:
+        raise RuntimeError("Pure players vide après chargement S3")
 
 def _get_exclusion_terms() -> List[str]:
     """Retourne la liste combinée des termes d'exclusion depuis S3."""
     if not _exclusion_scopes_cache:
-        # Fallback sur keywords hardcodés
-        return EXCLUSION_KEYWORDS
+        logger.error("ERREUR: exclusion_scopes non chargé depuis S3")
+        raise RuntimeError("Exclusion scopes non initialisés")
     
-    # Combiner hr_content, financial_generic, hr_recruitment_terms, financial_reporting_terms
+    # Lire TOUS les scopes (sauf métadonnées)
     terms = []
-    for scope_name in ['hr_content', 'financial_generic', 'hr_recruitment_terms', 'financial_reporting_terms']:
-        scope_terms = _exclusion_scopes_cache.get(scope_name, [])
-        terms.extend(scope_terms)
+    excluded_keys = ['exclude_contexts', 'lai_exclusion_scopes', 'lai_exclude_noise']
+    for scope_name, scope_terms in _exclusion_scopes_cache.items():
+        if scope_name not in excluded_keys and isinstance(scope_terms, list):
+            terms.extend(scope_terms)
+            logger.debug(f"[EXCLUSION] Scope '{scope_name}': {len(scope_terms)} termes")
     
-    return terms if terms else EXCLUSION_KEYWORDS
+    if not terms:
+        logger.error("ERREUR: Aucun terme d'exclusion trouvé dans S3")
+        raise RuntimeError("Exclusion scopes vides")
+    
+    logger.debug(f"[EXCLUSION] Total termes combinés: {len(terms)}")
+    return terms
 
-# Mots-clés LAI pour filtrage de la presse
-LAI_KEYWORDS = [
-    # Technologies LAI
-    "injectable", "injection", "long-acting", "extended-release", "depot", 
-    "sustained-release", "controlled-release", "implant", "microsphere",
-    "LAI", "long acting injectable", "once-monthly", "once-weekly",
-    
-    # Entreprises LAI
-    "medincell", "camurus", "delsitech", "nanexa", "peptron", "teva",
-    "uzedy", "bydureon", "invega", "risperdal", "abilify maintena",
-    
-    # Molécules LAI
-    "olanzapine", "risperidone", "paliperidone", "aripiprazole", 
-    "haloperidol", "fluphenazine", "exenatide", "naltrexone",
-    
-    # Routes d'administration
-    "intramuscular", "subcutaneous", "im injection", "sc injection"
-]
-
-# Mots-clés d'exclusion (bruit)
-EXCLUSION_KEYWORDS = [
-    # RH et recrutement
-    "hiring", "recruitment", "job opening", "career", "seeks an experienced",
-    "is hiring", "appointment of", "leadership change", "joins as",
-    
-    # Événements corporate génériques
-    "conference", "webinar", "presentation", "meeting", "congress",
-    "summit", "symposium", "event", "participate in", "to present at",
-    
-    # Routes non-LAI
-    "oral", "tablet", "capsule", "pill", "topical", "nasal spray",
-    "eye drops", "cream", "gel", "patch"
-]
 
 
 def apply_ingestion_profile(items: List[Dict[str, Any]], source_meta: Dict[str, Any], ingestion_mode: str = "balanced") -> List[Dict[str, Any]]:
@@ -129,26 +117,32 @@ def _apply_corporate_profile(items: List[Dict[str, Any]], source_meta: Dict[str,
     company_id = source_meta.get('company_id', '')
     
     # Vérifier si c'est un pure player LAI
-    lai_pure_players = ['medincell', 'camurus', 'delsitech', 'nanexa', 'peptron']
-    is_lai_pure_player = company_id.lower() in lai_pure_players
+    if not _pure_players_cache:
+        raise RuntimeError("Pure players non initialisés")
+    is_lai_pure_player = company_id.lower() in _pure_players_cache
     
     if is_lai_pure_player:
         logger.info(f"Pure player LAI détecté : {company_id} - ingestion large avec exclusions minimales")
         filtered_items = []
+        excluded_count = 0
         
         for item in items:
             title = item.get('title', '').lower()
             content = item.get('content', '').lower()
             text = f"{title} {content}"
             
-            # Exclure le bruit évident
+            logger.debug(f"[PROFIL] Analyse item: '{title[:80]}...'")
+            
+            # Exclure le bruit évident - FILTRAGE ACTIF
             if _contains_exclusion_keywords(text):
-                logger.debug(f"Item corporate exclu (bruit) : {item.get('title', '')[:50]}...")
+                logger.info(f"[PROFIL] ❌ Item corporate EXCLU (bruit) : {item.get('title', '')[:80]}")
+                excluded_count += 1
                 continue
             
+            logger.debug(f"[PROFIL] ✅ Item corporate CONSERVÉ : {item.get('title', '')[:80]}")
             filtered_items.append(item)
         
-        logger.info(f"Profil corporate LAI : {len(filtered_items)}/{len(items)} items conservés")
+        logger.info(f"Profil corporate LAI : {len(filtered_items)}/{len(items)} items conservés, {excluded_count} exclus")
         return filtered_items
     else:
         # Entreprise non-LAI : filtrage plus strict
@@ -197,14 +191,10 @@ def _filter_by_lai_keywords(items: List[Dict[str, Any]], source_key: str) -> Lis
 def _contains_lai_keywords(text: str) -> bool:
     """
     Vérifie si le texte contient des mots-clés LAI.
+    Pour l'instant, retourne toujours True (pas de filtrage LAI).
+    TODO: Charger depuis canonical si nécessaire.
     """
-    text_lower = text.lower()
-    
-    for keyword in LAI_KEYWORDS:
-        if keyword.lower() in text_lower:
-            return True
-    
-    return False
+    return True
 
 
 def _contains_exclusion_keywords(text: str) -> bool:
@@ -214,11 +204,16 @@ def _contains_exclusion_keywords(text: str) -> bool:
     text_lower = text.lower()
     exclusion_terms = _get_exclusion_terms()
     
+    logger.info(f"[FILTRAGE] Vérification exclusion - Texte: {text_lower[:100]}...")
+    logger.info(f"[FILTRAGE] Nombre termes: {len(exclusion_terms)}")
+    logger.info(f"[FILTRAGE] Premiers 10 termes: {exclusion_terms[:10]}")
+    
     for keyword in exclusion_terms:
         if keyword.lower() in text_lower:
-            logger.debug(f"Exclusion détectée: '{keyword}' dans texte")
+            logger.info(f"[FILTRAGE] MATCH: '{keyword}' trouvé")
             return True
     
+    logger.info(f"[FILTRAGE] Aucun match")
     return False
 
 
