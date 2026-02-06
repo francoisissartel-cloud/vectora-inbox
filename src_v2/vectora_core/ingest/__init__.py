@@ -22,7 +22,7 @@ from ..shared import utils
 from . import source_fetcher
 from . import content_parser
 from . import ingestion_profiles
-from .ingestion_profiles import initialize_exclusion_scopes, initialize_pure_players
+from .ingestion_profiles import initialize_exclusion_scopes, initialize_pure_players, initialize_lai_keywords
 
 logger = logging.getLogger(__name__)
 
@@ -76,6 +76,8 @@ def run_ingest_for_client(
     initialize_exclusion_scopes(s3_io, config_bucket)
     logger.info("Initialisation pure players depuis S3")
     initialize_pure_players(s3_io, config_bucket)
+    logger.info("Initialisation LAI keywords depuis S3")
+    initialize_lai_keywords(s3_io, config_bucket)
     
     try:
         # Étape 1 : Charger les configurations

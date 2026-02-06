@@ -1,0 +1,211 @@
+# Keywords LAI pour filtrage de la presse sectorielle
+# Généré depuis canonical/scopes/technology_scopes.yaml + trademark_scopes.yaml + imports/*.csv
+# Ces keywords permettent de filtrer les articles de presse générique pour ne garder que ceux pertinents LAI
+
+lai_keywords:
+  # Core phrases LAI (haute précision)
+  - long-acting injectable
+  - long acting injectable
+  - long-acting formulation
+  - extended-release injection
+  - extended-release injectable
+  - controlled-release injection
+  - injectable controlled release
+  - sustained release injectable
+  - sustained-release injectable
+  - depot injection
+  - long-acting depot
+  - long-acting
+  - long acting
+  - LAI
+  
+  # Technologies DDS (Drug Delivery Systems)
+  - drug delivery system
+  - drug delivery
+  - controlled release
+  - sustained release
+  - extended release
+  - modified release
+  - polymeric microspheres
+  - PLGA microspheres
+  - PLA microspheres
+  - in-situ forming depot
+  - ISFD
+  - Atrigel
+  - FluidCrystal
+  - SmartDepot
+  - multivesicular liposomes
+  - DepoFoam
+  - BioSeizer
+  - thermo-responsive hydrogel
+  - RTGel
+  - liquid crystalline depot
+  - liquid crystal depot
+  - depot-forming prodrug
+  - depot prodrug
+  - long-acting prodrug
+  - long-acting emulsion
+  - Medisorb
+  - CriPec
+  - DiffuSphere
+  - microsphere
+  - microspheres
+  - nanocrystal
+  - nanosizing
+  - oil-based
+  - liquid crystal
+  
+  # Technologies HLE (Half-Life Extension)
+  - PASylation
+  - site-specific PEGylation
+  - PEGylation
+  - PEGylated
+  - Fc fusion
+  - Fc-fusion
+  - IgG Fc fusion
+  - albumin binding
+  - albumin fusion
+  - albumin-binding
+  - lipidation
+  - fatty acid conjugation
+  - polypeptide extension
+  - XTEN
+  - glyco-engineering
+  - glycan engineering
+  - sialylation
+  - half-life extension
+  - half life extension
+  - half life extended
+  
+  # Technologies propriétaires
+  - PharmaShell
+  - SiliaShell
+  - BEPO
+  - atomic layer deposition
+  
+  # Routes d'administration LAI
+  - intramuscular
+  - subcutaneous
+  - intravitreal
+  - intratumoral
+  - intra-articular
+  - intrathecal
+  - intravesical
+  - epidural
+  - intraocular
+  - intradermal
+  - intratympanic
+  - surgical site instillation
+  - IM injection
+  - SC injection
+  - im injection
+  - sc injection
+  
+  # Patterns d'intervalle LAI
+  - once-monthly
+  - once-weekly injection
+  - once every 2 weeks
+  - once every 3 months
+  - once every 6 months
+  - q4w
+  - q8w
+  - q12w
+  - q2w
+  - 6-month
+  - 3-month
+  - quarterly injection
+  - biweekly injection
+  - monthly injection
+  
+  # Trademarks LAI
+  - Aristada
+  - Abilify Maintena
+  - Abilify Asimtufi
+  - Posimir
+  - Exparel
+  - Zynrelef
+  - Brixadi
+  - Sublocade
+  - Apretude
+  - Cabenuva
+  - Firmagon
+  - ALTUVIIIO
+  - Elocta
+  - Parsabiv
+  - Faslodex
+  - ZOLADEX
+  - Sustol
+  - Tresiba
+  - Levemir
+  - Lantus
+  - Somatuline
+  - Sunlenca
+  - Lupron depot
+  - CAMCEVI
+  - Skytrofa
+  - Depo provera
+  - Mircera
+  - Depodur
+  - Vivitrol
+  - Sandostatin
+  - Zyprexa Relprevv
+  - Invega trinza
+  - Invega
+  - Signifor
+  - Somavert
+  - REZZAYO
+  - Risperdal Consta
+  - Risperdal
+  - Uzedy
+  - UZEDY
+  - Rykindo
+  - Besremi
+  - Adynovate
+  - Enspryng
+  - Ozempic
+  - Sogroya
+  - NGENLA
+  - Aveed
+  - Zilretta
+  - TRELSTAR
+  - Esperoct
+  - BYDUREON
+  - Bydureon
+  - IMCIVREE
+  - Aranesp
+  - PEGASYS
+  - Jivi
+  - JELMYTO
+  - Perseris
+  - DAXXIFY
+  - WEGOVY
+  - Wegovy
+  - Erzofri
+  - Victoza
+  - Trulicity
+  - Mounjaro
+  - Soliqua
+  - Oclaiz
+  
+  # Molécules LAI
+  - olanzapine
+  - risperidone
+  - paliperidone
+  - aripiprazole
+  - haloperidol
+  - fluphenazine
+  - exenatide
+  - naltrexone
+  
+  # Entreprises pure players LAI
+  - medincell
+  - camurus
+  - delsitech
+  - nanexa
+  - peptron
+  
+  # Termes génériques (usage)
+  - injectable
+  - injection
+  - depot
+  - implant

@@ -21,6 +21,7 @@ logger.setLevel(logging.DEBUG)  # Force DEBUG pour ce module
 # Variables globales pour scopes chargés depuis S3
 _exclusion_scopes_cache = None
 _pure_players_cache = None
+_lai_keywords_cache = None
 
 def initialize_exclusion_scopes(s3_io, config_bucket: str):
     """Charge les exclusion_scopes depuis S3 (appelé au démarrage)."""
@@ -33,6 +34,18 @@ def initialize_exclusion_scopes(s3_io, config_bucket: str):
     
     if not _exclusion_scopes_cache:
         raise RuntimeError("Exclusion scopes vide après chargement S3")
+
+def initialize_lai_keywords(s3_io, config_bucket: str):
+    """Charge les LAI keywords depuis S3 (appelé au démarrage)."""
+    global _lai_keywords_cache
+    
+    scopes = s3_io.read_yaml_from_s3(config_bucket, 'canonical/scopes/lai_keywords.yaml')
+    keywords = scopes.get('lai_keywords', [])
+    _lai_keywords_cache = [kw.lower() for kw in keywords]
+    logger.info(f"[INIT] LAI keywords chargés: {len(_lai_keywords_cache)} keywords")
+    
+    if not _lai_keywords_cache:
+        raise RuntimeError("LAI keywords vide après chargement S3")
 
 def initialize_pure_players(s3_io, config_bucket: str):
     """Charge les pure players depuis S3 (appelé au démarrage)."""
@@ -191,10 +204,17 @@ def _filter_by_lai_keywords(items: List[Dict[str, Any]], source_key: str) -> Lis
 def _contains_lai_keywords(text: str) -> bool:
     """
     Vérifie si le texte contient des mots-clés LAI.
-    Pour l'instant, retourne toujours True (pas de filtrage LAI).
-    TODO: Charger depuis canonical si nécessaire.
     """
-    return True
+    if not _lai_keywords_cache:
+        raise RuntimeError("LAI keywords non initialisés")
+    
+    text_lower = text.lower()
+    
+    for keyword in _lai_keywords_cache:
+        if keyword in text_lower:
+            return True
+    
+    return False
 
 
 def _contains_exclusion_keywords(text: str) -> bool:
