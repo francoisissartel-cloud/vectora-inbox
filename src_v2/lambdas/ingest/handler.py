@@ -24,7 +24,7 @@ from vectora_core.ingest import run_ingest_for_client, run_ingest_for_active_cli
 
 # Configuration du logger
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)  # Activé pour diagnostic approfondi
+logger.setLevel(logging.INFO)
 
 
 def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:

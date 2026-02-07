@@ -16,70 +16,98 @@ import logging
 import re
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)  # Force DEBUG pour ce module
 
 # Variables globales pour scopes chargés depuis S3
 _exclusion_scopes_cache = None
 _pure_players_cache = None
+_hybrid_players_cache = None
 _lai_keywords_cache = None
 
 def initialize_exclusion_scopes(s3_io, config_bucket: str):
     """Charge les exclusion_scopes depuis S3 (appelé au démarrage)."""
     global _exclusion_scopes_cache
     
-    scopes = s3_io.read_yaml_from_s3(config_bucket, 'canonical/scopes/exclusion_scopes.yaml')
-    _exclusion_scopes_cache = scopes or {}
-    logger.info(f"[INIT] Exclusion scopes chargés: {len(_exclusion_scopes_cache)} catégories")
-    logger.info(f"[INIT] Catégories: {list(_exclusion_scopes_cache.keys())}")
+    try:
+        scopes = s3_io.read_yaml_from_s3(config_bucket, 'canonical/scopes/exclusion_scopes.yaml')
+        _exclusion_scopes_cache = scopes or {}
+        logger.info(f"Exclusion scopes chargés: {len(_exclusion_scopes_cache)} catégories")
+        
+        # Log détaillé des scopes chargés
+        for scope_name, scope_terms in _exclusion_scopes_cache.items():
+            if isinstance(scope_terms, list):
+                logger.debug(f"Scope '{scope_name}': {len(scope_terms)} termes")
+    except Exception as e:
+        logger.error(f"Échec chargement exclusion_scopes: {e}")
+        raise RuntimeError(f"Impossible de charger exclusion_scopes depuis S3: {e}")
+
+def initialize_company_scopes(s3_io, config_bucket: str):
+    """Charge les company scopes depuis S3 (appelé au démarrage)."""
+    global _pure_players_cache, _hybrid_players_cache
     
-    if not _exclusion_scopes_cache:
-        raise RuntimeError("Exclusion scopes vide après chargement S3")
+    try:
+        scopes = s3_io.read_yaml_from_s3(config_bucket, 'canonical/scopes/company_scopes.yaml')
+        
+        pure_players = scopes.get('lai_companies_pure_players', [])
+        _pure_players_cache = [company.lower() for company in pure_players]
+        
+        hybrid_players = scopes.get('lai_companies_hybrid', [])
+        _hybrid_players_cache = [company.lower() for company in hybrid_players]
+        
+        logger.info(f"Company scopes: {len(_pure_players_cache)} pure players, {len(_hybrid_players_cache)} hybrid players")
+    except Exception as e:
+        logger.error(f"Échec chargement company_scopes: {e}")
+        raise RuntimeError(f"Impossible de charger company_scopes depuis S3: {e}")
 
 def initialize_lai_keywords(s3_io, config_bucket: str):
     """Charge les LAI keywords depuis S3 (appelé au démarrage)."""
     global _lai_keywords_cache
     
-    scopes = s3_io.read_yaml_from_s3(config_bucket, 'canonical/scopes/lai_keywords.yaml')
-    keywords = scopes.get('lai_keywords', [])
-    _lai_keywords_cache = [kw.lower() for kw in keywords]
-    logger.info(f"[INIT] LAI keywords chargés: {len(_lai_keywords_cache)} keywords")
-    
-    if not _lai_keywords_cache:
-        raise RuntimeError("LAI keywords vide après chargement S3")
-
-def initialize_pure_players(s3_io, config_bucket: str):
-    """Charge les pure players depuis S3 (appelé au démarrage)."""
-    global _pure_players_cache
-    
-    scopes = s3_io.read_yaml_from_s3(config_bucket, 'canonical/scopes/company_scopes.yaml')
-    pure_players = scopes.get('lai_companies_pure_players', [])
-    _pure_players_cache = [company.lower() for company in pure_players]
-    logger.info(f"[INIT] Pure players chargés: {len(_pure_players_cache)} entreprises")
-    
-    if not _pure_players_cache:
-        raise RuntimeError("Pure players vide après chargement S3")
+    try:
+        # Charger technology_scopes.yaml et trademark_scopes.yaml
+        tech_scopes = s3_io.read_yaml_from_s3(config_bucket, 'canonical/scopes/technology_scopes.yaml')
+        trademark_scopes = s3_io.read_yaml_from_s3(config_bucket, 'canonical/scopes/trademark_scopes.yaml')
+        
+        keywords = []
+        # Ajouter core_phrases, technology_terms_high_precision, interval_patterns
+        lai_keywords_section = tech_scopes.get('lai_keywords', {})
+        for scope in ['core_phrases', 'technology_terms_high_precision', 'interval_patterns']:
+            keywords.extend(lai_keywords_section.get(scope, []))
+        
+        # Ajouter trademarks
+        keywords.extend(trademark_scopes.get('lai_trademarks_global', []))
+        
+        _lai_keywords_cache = keywords
+        logger.info(f"LAI keywords: {len(_lai_keywords_cache)} termes chargés")
+    except Exception as e:
+        logger.error(f"Échec chargement LAI keywords: {e}")
+        raise RuntimeError(f"Impossible de charger LAI keywords depuis S3: {e}")
 
 def _get_exclusion_terms() -> List[str]:
     """Retourne la liste combinée des termes d'exclusion depuis S3."""
     if not _exclusion_scopes_cache:
-        logger.error("ERREUR: exclusion_scopes non chargé depuis S3")
         raise RuntimeError("Exclusion scopes non initialisés")
     
-    # Lire TOUS les scopes (sauf métadonnées)
+    # Combiner tous les scopes d'exclusion pertinents
     terms = []
-    excluded_keys = ['exclude_contexts', 'lai_exclusion_scopes', 'lai_exclude_noise']
-    for scope_name, scope_terms in _exclusion_scopes_cache.items():
-        if scope_name not in excluded_keys and isinstance(scope_terms, list):
+    for scope_name in ['hr_content', 'financial_generic', 'hr_recruitment_terms', 'financial_reporting_terms', 
+                       'esg_generic', 'event_generic', 'corporate_noise_terms', 'anti_lai_routes']:
+        scope_terms = _exclusion_scopes_cache.get(scope_name, [])
+        if isinstance(scope_terms, list):
             terms.extend(scope_terms)
-            logger.debug(f"[EXCLUSION] Scope '{scope_name}': {len(scope_terms)} termes")
     
-    if not terms:
-        logger.error("ERREUR: Aucun terme d'exclusion trouvé dans S3")
-        raise RuntimeError("Exclusion scopes vides")
-    
-    logger.debug(f"[EXCLUSION] Total termes combinés: {len(terms)}")
     return terms
 
+def _is_pure_player(company_id: str) -> bool:
+    """Vérifie si l'entreprise est un pure player LAI."""
+    if not _pure_players_cache:
+        raise RuntimeError("Company scopes non initialisés")
+    return company_id.lower() in _pure_players_cache
+
+def _is_hybrid_player(company_id: str) -> bool:
+    """Vérifie si l'entreprise est un hybrid player."""
+    if not _hybrid_players_cache:
+        raise RuntimeError("Company scopes non initialisés")
+    return company_id.lower() in _hybrid_players_cache
 
 
 def apply_ingestion_profile(items: List[Dict[str, Any]], source_meta: Dict[str, Any], ingestion_mode: str = "balanced") -> List[Dict[str, Any]]:
@@ -123,44 +151,46 @@ def apply_ingestion_profile(items: List[Dict[str, Any]], source_meta: Dict[str, 
 
 def _apply_corporate_profile(items: List[Dict[str, Any]], source_meta: Dict[str, Any]) -> List[Dict[str, Any]]:
     """
-    Applique le profil corporate_pure_player_broad.
-    Ingestion large avec exclusion du bruit évident.
+    Applique le profil corporate avec différenciation pure/hybrid players.
     """
     source_key = source_meta.get('source_key', '')
     company_id = source_meta.get('company_id', '')
     
-    # Vérifier si c'est un pure player LAI
-    if not _pure_players_cache:
-        raise RuntimeError("Pure players non initialisés")
-    is_lai_pure_player = company_id.lower() in _pure_players_cache
+    # Vérifier type d'entreprise
+    is_pure = _is_pure_player(company_id)
+    is_hybrid = _is_hybrid_player(company_id)
     
-    if is_lai_pure_player:
-        logger.info(f"Pure player LAI détecté : {company_id} - ingestion large avec exclusions minimales")
-        filtered_items = []
-        excluded_count = 0
-        
-        for item in items:
-            title = item.get('title', '').lower()
-            content = item.get('content', '').lower()
-            text = f"{title} {content}"
-            
-            logger.debug(f"[PROFIL] Analyse item: '{title[:80]}...'")
-            
-            # Exclure le bruit évident - FILTRAGE ACTIF
-            if _contains_exclusion_keywords(text):
-                logger.info(f"[PROFIL] ❌ Item corporate EXCLU (bruit) : {item.get('title', '')[:80]}")
-                excluded_count += 1
-                continue
-            
-            logger.debug(f"[PROFIL] ✅ Item corporate CONSERVÉ : {item.get('title', '')[:80]}")
-            filtered_items.append(item)
-        
-        logger.info(f"Profil corporate LAI : {len(filtered_items)}/{len(items)} items conservés, {excluded_count} exclus")
-        return filtered_items
+    if is_pure:
+        logger.info(f"Pure player: {company_id} - exclusions seules (pas de filtrage LAI)")
+        return _filter_by_exclusions_only(items, source_key)
+    
+    elif is_hybrid:
+        logger.info(f"Hybrid player: {company_id} - exclusions + LAI keywords requis")
+        return _filter_by_exclusions_and_lai(items, source_key)
+    
     else:
-        # Entreprise non-LAI : filtrage plus strict
-        logger.info(f"Entreprise non-LAI : {company_id} - filtrage par mots-clés LAI")
-        return _filter_by_lai_keywords(items, source_key)
+        logger.info(f"Entreprise inconnue: {company_id} - filtrage strict")
+        return _filter_by_exclusions_and_lai(items, source_key)
+
+def _filter_by_exclusions_only(items: List[Dict[str, Any]], source_key: str) -> List[Dict[str, Any]]:
+    """Filtre uniquement par exclusions (pour pure players)."""
+    filtered = []
+    for item in items:
+        text = f"{item.get('title', '')} {item.get('content', '')}".lower()
+        if not _contains_exclusion_keywords(text):
+            filtered.append(item)
+    logger.info(f"{source_key}: {len(filtered)}/{len(items)} items (exclusions seules)")
+    return filtered
+
+def _filter_by_exclusions_and_lai(items: List[Dict[str, Any]], source_key: str) -> List[Dict[str, Any]]:
+    """Filtre par exclusions ET LAI keywords (pour hybrid players et inconnus)."""
+    filtered = []
+    for item in items:
+        text = f"{item.get('title', '')} {item.get('content', '')}".lower()
+        if not _contains_exclusion_keywords(text) and _contains_lai_keywords(text):
+            filtered.append(item)
+    logger.info(f"{source_key}: {len(filtered)}/{len(items)} items (exclusions + LAI)")
+    return filtered
 
 
 def _apply_press_profile(items: List[Dict[str, Any]], source_meta: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -178,27 +208,7 @@ def _filter_by_lai_keywords(items: List[Dict[str, Any]], source_key: str) -> Lis
     """
     Filtre les items par présence de mots-clés LAI.
     """
-    filtered_items = []
-    
-    for item in items:
-        title = item.get('title', '').lower()
-        content = item.get('content', '').lower()
-        text = f"{title} {content}"
-        
-        # Exclure d'abord le bruit évident
-        if _contains_exclusion_keywords(text):
-            logger.debug(f"Item exclu (bruit) : {item.get('title', '')[:50]}...")
-            continue
-        
-        # Vérifier la présence de mots-clés LAI
-        if _contains_lai_keywords(text):
-            filtered_items.append(item)
-            logger.debug(f"Item conservé (mots-clés LAI) : {item.get('title', '')[:50]}...")
-        else:
-            logger.debug(f"Item exclu (pas de mots-clés LAI) : {item.get('title', '')[:50]}...")
-    
-    logger.info(f"Filtrage LAI pour {source_key} : {len(filtered_items)}/{len(items)} items conservés")
-    return filtered_items
+    return _filter_by_exclusions_and_lai(items, source_key)
 
 
 def _contains_lai_keywords(text: str) -> bool:
@@ -209,9 +219,8 @@ def _contains_lai_keywords(text: str) -> bool:
         raise RuntimeError("LAI keywords non initialisés")
     
     text_lower = text.lower()
-    
     for keyword in _lai_keywords_cache:
-        if keyword in text_lower:
+        if keyword.lower() in text_lower:
             return True
     
     return False
@@ -224,16 +233,11 @@ def _contains_exclusion_keywords(text: str) -> bool:
     text_lower = text.lower()
     exclusion_terms = _get_exclusion_terms()
     
-    logger.info(f"[FILTRAGE] Vérification exclusion - Texte: {text_lower[:100]}...")
-    logger.info(f"[FILTRAGE] Nombre termes: {len(exclusion_terms)}")
-    logger.info(f"[FILTRAGE] Premiers 10 termes: {exclusion_terms[:10]}")
-    
     for keyword in exclusion_terms:
         if keyword.lower() in text_lower:
-            logger.info(f"[FILTRAGE] MATCH: '{keyword}' trouvé")
+            logger.debug(f"Exclusion détectée: '{keyword}' dans texte")
             return True
     
-    logger.info(f"[FILTRAGE] Aucun match")
     return False
 
 

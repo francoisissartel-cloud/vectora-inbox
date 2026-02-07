@@ -22,7 +22,7 @@ from ..shared import utils
 from . import source_fetcher
 from . import content_parser
 from . import ingestion_profiles
-from .ingestion_profiles import initialize_exclusion_scopes, initialize_pure_players, initialize_lai_keywords
+from .ingestion_profiles import initialize_exclusion_scopes, initialize_company_scopes, initialize_lai_keywords
 
 logger = logging.getLogger(__name__)
 
@@ -71,14 +71,6 @@ def run_ingest_for_client(
     if not config_bucket or not data_bucket:
         raise ValueError("Variables d'environnement manquantes : CONFIG_BUCKET, DATA_BUCKET")
     
-    # Initialiser exclusion scopes et pure players AVANT tout traitement
-    logger.info("Initialisation exclusion scopes depuis S3")
-    initialize_exclusion_scopes(s3_io, config_bucket)
-    logger.info("Initialisation pure players depuis S3")
-    initialize_pure_players(s3_io, config_bucket)
-    logger.info("Initialisation LAI keywords depuis S3")
-    initialize_lai_keywords(s3_io, config_bucket)
-    
     try:
         # Étape 1 : Charger les configurations
         logger.info("Chargement des configurations depuis S3")
@@ -90,6 +82,18 @@ def run_ingest_for_client(
         resolved_sources = config_loader.resolve_sources_for_client(
             client_config, source_catalog, sources
         )
+        
+        # Initialiser exclusion scopes depuis S3
+        logger.info("Étape 2.5 : Initialisation des exclusion scopes depuis S3")
+        initialize_exclusion_scopes(s3_io, config_bucket)
+        
+        # Initialiser company scopes depuis S3
+        logger.info("Étape 2.6 : Initialisation des company scopes depuis S3")
+        initialize_company_scopes(s3_io, config_bucket)
+        
+        # Initialiser LAI keywords depuis S3
+        logger.info("Étape 2.7 : Initialisation des LAI keywords depuis S3")
+        initialize_lai_keywords(s3_io, config_bucket)
         
         logger.info(f"Nombre de sources à traiter : {len(resolved_sources)}")
         

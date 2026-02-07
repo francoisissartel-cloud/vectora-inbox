@@ -51,9 +51,9 @@ def create_vectora_core_layer():
         shutil.copytree(src_core, dest_core)
         log(f"[OK] vectora_core copié: {src_core}")
         
-        # Installer dépendances (pyyaml, requests, boto3)
+        # Installer dépendances (pyyaml, requests, boto3, beautifulsoup4, feedparser)
         log("Installation dépendances...")
-        dependencies = ["pyyaml", "requests", "boto3"]
+        dependencies = ["pyyaml", "requests", "boto3", "beautifulsoup4", "feedparser"]
         for dep in dependencies:
             pip_command = f"pip install {dep} -t {layer_dir} --quiet"
             result = subprocess.run(pip_command, shell=True, capture_output=True, text=True)
