@@ -1,9 +1,13 @@
 # CLAUDE.md — Règles de travail Vectora Inbox V1
 
-**Version** : 1.2
-**Date** : 2026-04-24
+**Version** : 1.4
+**Date** : 2026-04-25
 **Pour qui** : Claude (assistant IA) qui travaille avec Frank sur ce projet
 **À valider par Frank avant adoption**
+
+**Changements V1.3** : intégration du tableau de bord vivant `STATUS.md` (à la racine) et du dossier `docs/decisions/` (ADRs). Nouvelle section §16 "Documentation vivante" qui formalise l'usage de ces artefacts.
+
+**Changements V1.4** : ajout de trois sections opérationnelles cruciales — §17 méthode incrémentale (small batches), §18 plans de mini-sprints (format et workflow), §19 résilience aux plantages (disciplines préventives + plan de récupération). Création du dossier `docs/sprints/` avec un template réutilisable.
 
 ---
 
@@ -438,8 +442,8 @@ CLAUDE.md est **chargé automatiquement** par Cowork et par Claude Code à chaqu
 
 ### Phrase d'introduction obligatoire en début de session de développement
 
-Au début d'une nouvelle conversation **de développement** (pas de cadrage / pas de discussion ouverte), Claude doit ouvrir en disant en deux à trois phrases :
-1. **Où on en est** dans les paliers (ex: "On est en Niveau 2, le module `sources/` est partiellement implémenté")
+Au début d'une nouvelle conversation **de développement** (pas de cadrage / pas de discussion ouverte), Claude doit **lire `STATUS.md` à la racine** puis ouvrir en disant en deux à trois phrases :
+1. **Où on en est** dans les paliers (extrait de `STATUS.md` section "Où on en est")
 2. **Ce qu'il s'apprête à faire** (ex: "Je vais finir le `validator.py` du module `sources/`")
 3. **La règle de CLAUDE.md** qui guide ce qu'il fait (ex: "Conformément à §5, je commence par écrire les types et les docstrings")
 
@@ -628,4 +632,288 @@ Frank configure une limite mensuelle dans son compte Anthropic (ex: 50 USD/mois)
 
 ---
 
-*Fin du CLAUDE.md V1.2 — à valider par Frank.*
+## 16. Documentation vivante — STATUS.md et ADRs
+
+Cette section formalise l'usage des deux artefacts qui suivent l'évolution du projet dans le temps : le tableau de bord (`STATUS.md`) et les ADRs (`docs/decisions/`).
+
+### 16.1 STATUS.md — le tableau de bord vivant
+
+Fichier à la racine du repo. C'est le **premier document à consulter** quand on arrive sur le projet.
+
+**Contenu** :
+- Vision du projet en 3 phrases
+- Où on en est aujourd'hui (étape actuelle, statut, dernier livrable validé, prochaine étape immédiate)
+- Roadmap globale (les paliers, leur statut, leur critère de fin)
+- Tableau des décisions architecturales clés (avec liens vers les ADRs)
+- Tableau des difficultés rencontrées et leurs résolutions
+- Backlog "pour plus tard" (renvoi vers `future_optimizations.md`)
+- Idées en cours de réflexion (non encore décidées)
+- Comment naviguer dans le projet (table des liens vers les docs principaux)
+
+**Règles d'usage pour Claude** :
+
+- **À chaque début de session de développement** : lire `STATUS.md` (cf. §14 — phrase d'introduction obligatoire)
+- **À chaque jalon validé** par Frank :
+  - Mettre à jour la roadmap (statut ✅)
+  - Mettre à jour la section "Où on en est"
+  - Préciser la nouvelle prochaine étape immédiate
+- **À chaque difficulté rencontrée et résolue** : ajouter une ligne dans le tableau "Difficultés rencontrées"
+- **À chaque idée "pour plus tard"** :
+  - L'enregistrer dans `docs/architecture/future_optimizations.md`
+  - Mentionner dans `STATUS.md` (section backlog)
+- **À chaque idée en cours de réflexion** (pas encore tranchée) : ajouter dans la section dédiée de `STATUS.md`
+
+**Règles d'usage pour Frank** :
+
+- Frank peut éditer `STATUS.md` librement à tout moment
+- Frank peut demander à tout moment : "où en est-on sur X ?" → Claude répond en se référant à `STATUS.md`
+- Si Frank trouve `STATUS.md` désynchronisé de la réalité, il le signale, Claude corrige
+
+### 16.2 docs/decisions/ — les ADRs (Architecture Decision Records)
+
+Dossier qui contient l'**historique des décisions architecturales** du projet. Chaque ADR est une fiche courte (1 page max) qui explique une décision : contexte, options envisagées, décision prise, justification, conséquences.
+
+**Format** : `docs/decisions/NNN-titre-court.md`, numéroté chronologiquement.
+
+**Statuts possibles** :
+- `Accepté` : décision active
+- `Superseded by ADR-XXX` : décision remplacée (mais l'ADR reste pour mémoire historique)
+- `Rejected` : option étudiée puis non retenue (pour mémoire de l'analyse)
+- `Proposed` : en cours de discussion
+
+**Règle d'or** : **une ADR est immutable** une fois acceptée. Si on revient sur une décision, on en écrit une nouvelle qui supersede l'ancienne. La précédente n'est jamais modifiée.
+
+**Règles d'usage pour Claude** :
+
+- **À chaque décision architecturale majeure** prise avec Frank : Claude crée une nouvelle ADR
+- **Avant toute proposition** qui revient sur une décision existante : Claude lit l'ADR concernée pour comprendre pourquoi la décision avait été prise
+- **Lors de la mise à jour de `STATUS.md`** : Claude ajoute la nouvelle décision dans le tableau avec lien vers son ADR
+- **Une décision = une ADR** : pas de regroupement, pas de fusion. Une ADR par décision.
+
+**Qu'est-ce qu'une "décision architecturale majeure"** :
+- Choix de stack technique (LLM, format de stockage, base de données)
+- Choix structurel (organisation du code, structure du datalake)
+- Choix de processus (workflow, méthode de travail)
+- Choix de scope (qu'est-ce qu'on fait, qu'est-ce qu'on ne fait pas)
+- Toute décision qu'on regretterait de ne pas pouvoir expliquer dans 6 mois
+
+**Ne sont PAS des ADRs** :
+- Les détails d'implémentation (choix d'un nom de variable, d'un layout de fichier interne)
+- Les configurations (valeurs de paramètres, listes de mots-clés) — celles-ci vont dans `canonical/`
+- Les corrections de bugs (sauf si le bug a révélé un problème de design)
+
+### 16.3 Workflow de mise à jour
+
+Quand on prend une décision en discussion :
+
+```
+Frank propose ou accepte une décision
+            ↓
+Claude rédige l'ADR (NNN-titre.md)
+            ↓
+Claude met à jour STATUS.md (tableau des décisions + section où on en est si pertinent)
+            ↓
+Si la décision a un impact sur le design : Claude met à jour datalake_v1_design.md
+            ↓
+Si la décision a un impact sur les règles : Claude propose une mise à jour de CLAUDE.md
+            ↓
+Tout est commité ENSEMBLE dans un seul commit cohérent
+```
+
+Le but : à tout moment, **STATUS.md, les ADRs, le design doc et CLAUDE.md sont cohérents entre eux**. Aucun de ces fichiers ne doit contredire les autres.
+
+### 16.4 Cas particulier : les idées "à garder pour plus tard"
+
+Frank peut à tout moment dire : *"là j'ai une idée, mais on garde ça pour le maquillage"* ou *"là je pense qu'on peut améliorer en visant cette fonction"*.
+
+**Réflexe Claude** :
+1. Écouter et reformuler l'idée pour s'assurer de comprendre
+2. **Évaluer** : c'est urgent ou différable ?
+   - **Urgent** → on en discute et ça devient une nouvelle décision (ADR + mise à jour STATUS + impact design)
+   - **Différable** → enregistrement dans `future_optimizations.md` + mention dans `STATUS.md` (section backlog)
+3. Confirmer à Frank ce qui a été enregistré
+
+Le but : **aucune idée de Frank ne se perd**, même si elle ne se concrétise pas tout de suite.
+
+---
+
+## 17. Méthode de travail incrémentale (small batches)
+
+Cette section pose la discipline fondamentale du développement : **développer par petits bouts**. C'est ce qui rend le travail traçable, débuggable, et réversible. Sans cette discipline, on accumule du code non testé qui devient ingérable dès qu'un problème surgit.
+
+### 17.1 Principe central
+
+> Si tu changes 50 choses d'un coup et que ça plante, tu ne sais pas laquelle a cassé.
+> Si tu changes 1 chose et tu testes, tu sais immédiatement.
+
+À chaque fois que Claude est tenté de "faire d'un coup" plusieurs modifications, c'est un signal qu'il faut découper.
+
+### 17.2 Règles concrètes
+
+**Règle A — Une feature à la fois**
+Claude ne commence jamais une nouvelle fonctionnalité avant que la précédente soit terminée + testée + commitée + validée par Frank. Pas de "je commence ça en parallèle pour avancer".
+
+**Règle B — Limite de taille par commit**
+Un commit ne doit pas changer plus de **5 fichiers** ou ajouter plus de **300 lignes** sans raison forte. Si Claude s'apprête à dépasser, il découpe en plusieurs commits logiques.
+
+**Exceptions légitimes** : ménage en bloc (Phase 2.0), génération de boilerplate (créer une arborescence vide), fixtures de test volumineuses. Dans ces cas, Claude justifie explicitement l'exception dans le message de commit.
+
+**Règle C — Cycle court : écrire → tester → commiter**
+Toutes les **15 à 30 minutes** de travail effectif, Claude doit pouvoir dire "j'ai un truc qui marche, commit". Si Claude passe **plus d'1h sans commiter**, c'est un signal d'alerte qu'il est parti trop loin sans validation. Il s'arrête, fait le point avec Frank.
+
+**Règle D — Test avant complexification**
+Quand une version simple d'une fonction marche : on commit. Si on veut ensuite l'optimiser ou la complexifier, **dans un autre commit**. Ainsi si la version optimisée plante, on revient à la simple en 1 ligne (`git revert`).
+
+**Règle E — Pas de refactor + nouvelle feature dans le même commit**
+Un commit = une intention. Si on veut renommer ET ajouter une fonction, on fait 2 commits successifs : d'abord le refactor (sans changement de comportement), puis la nouvelle fonction.
+
+**Règle F — Validation utilisateur fréquente**
+À chaque fin de mini-sprint (cf. §18), Claude présente le travail et Frank valide avant que Claude passe au suivant. Pas d'enchaînement de 5 mini-sprints en une seule session sans validation intermédiaire.
+
+### 17.3 Signaux d'alerte (pour Claude lui-même et pour Frank)
+
+Si Claude se rend compte de l'un de ces signes, il s'arrête et alerte Frank :
+- Plus d'1h sans commit
+- Plus de 5 fichiers modifiés non commités
+- Changement qui touche à plusieurs modules en même temps
+- Tentation de "faire ça en passant" pendant qu'on travaille sur autre chose
+- Un test qui ne passe plus mais qu'on a envie d'ignorer
+
+Frank peut, à tout moment, demander : *"Combien de fichiers tu as modifiés sans commit ?"* — Claude doit pouvoir répondre précisément et proposer de commiter avant de continuer.
+
+---
+
+## 18. Plans de mini-sprints
+
+Pour structurer le développement de chaque palier (Niveau 1, 2, 3), on travaille par **mini-sprints** : des unités de travail courtes, planifiées en amont, exécutées et validées.
+
+### 18.1 Hiérarchie
+
+```
+Palier (Niveau 1, 2, 3)
+  ├── Plan de palier (vue d'ensemble du palier)
+  │     └── docs/architecture/level_X_plan.md
+  └── Mini-sprints (livrables atomiques au sein du palier)
+        └── docs/sprints/sprint_NNN_titre.md (un fichier par sprint)
+```
+
+### 18.2 Granularité
+
+**Un mini-sprint = entre 30 min et 4h de travail effectif.**
+
+Plus court que 30 min : c'est un commit, pas un sprint.
+Plus long que 4h : on doit redécouper.
+
+Pour donner une idée : le **Niveau 1 (Fondations)** sera probablement décomposé en 8-12 mini-sprints.
+
+### 18.3 Format type d'un mini-sprint
+
+Chaque mini-sprint a son propre fichier markdown court (~1 page) avec les sections suivantes (cf. `docs/sprints/_TEMPLATE.md` pour le template complet) :
+
+- **Statut** : ⏸ Planifié | 🔵 En cours | ✅ Validé
+- **Palier** : Niveau X
+- **Estimation** : ~Xh
+- **Objectif** : une phrase claire
+- **Critère de fin testable** : checklist concrète
+- **Tâches détaillées** dans l'ordre
+- **Fichiers créés / modifiés / supprimés** (précis)
+- **Règles à suivre** (références aux sections de CLAUDE.md)
+- **Points de validation par Frank** (où il doit valider en cours)
+- **Risques identifiés** + mitigations
+- **Dépendances** (sprints précédents, ADRs, etc.)
+- **Bilan post-exécution** (à remplir après)
+
+### 18.4 Workflow d'un mini-sprint
+
+```
+1. Claude rédige le plan dans docs/sprints/sprint_NNN.md
+2. Frank lit et valide (ou demande des modifications)
+3. Claude exécute le sprint en suivant le plan
+4. Aux points de validation prévus dans le plan, Claude s'arrête et présente
+5. Frank valide chaque étape ou demande corrections
+6. Une fois le sprint fini, Claude remplit la section "Bilan post-exécution"
+7. Claude met à jour STATUS.md avec le sprint terminé
+8. Si une décision architecturale a été prise pendant le sprint → nouvelle ADR
+9. Commit + push de tout (sprint terminé + STATUS + ADR éventuelle)
+```
+
+### 18.5 Règles d'or
+
+- **Pas de code sans plan validé** : si le sprint n'est pas écrit ou pas validé, on ne code pas
+- **Pas de "j'ajoute ça au passage"** : si une opportunité d'amélioration apparaît pendant un sprint, elle est notée dans `STATUS.md` (idées en cours de réflexion) ou `future_optimizations.md`, mais elle ne contamine pas le sprint en cours
+- **Un sprint = un fichier** : pas de sprint éclaté sur plusieurs fichiers de plan
+- **Le sprint est immutable une fois exécuté** : on ne réécrit pas l'histoire du plan. Si on doit faire autre chose, c'est un nouveau sprint.
+
+---
+
+## 19. Résilience aux plantages — éviter le scénario "too much context"
+
+Les outils LLM (Claude Code, Cowork) peuvent planter, freeze, ou atteindre des limites de contexte. Frank a vécu ce scénario avec Q Developer ("too much context loaded"). Cette section formalise les disciplines pour que le projet **survive aux plantages** et qu'on puisse reprendre rapidement.
+
+### 19.1 Disciplines préventives
+
+**Discipline 1 — Commit fréquent**
+Tout travail non commité est perdu en cas de crash. Donc : commit toutes les **15-30 min** de progrès. Jamais plus d'**1h de travail "WIP non commité"**.
+
+**Discipline 2 — `STATUS.md` à jour en permanence**
+Si Claude plante au milieu d'un sprint, `STATUS.md` doit indiquer où il en était : sprint en cours, dernière étape validée, prochaine étape prévue. Frank rouvre une session, on lit `STATUS.md`, on reprend. **`STATUS.md` est la mémoire externalisée du projet.**
+
+**Discipline 3 — Sprints courts**
+Un sprint qui dure 4h max → si Claude plante au milieu, on perd au pire 2h. Et avec la Discipline 1, ces 2h sont commitées en plusieurs morceaux récupérables.
+
+**Discipline 4 — Lecture sélective de fichiers**
+Claude ne charge en contexte **que les fichiers dont il a vraiment besoin** pour le sprint en cours. Si le sprint touche à `datalake/item_id.py`, Claude ne lit pas tout `canonical/` dans la foulée. Économie de contexte = moins de risque de saturation.
+
+**Discipline 5 — Détection précoce de lenteur**
+Si Claude sent qu'il devient lent (réponses longues, hésitations, tournage en rond), il **alerte explicitement Frank** :
+> "Je deviens lent, on devrait peut-être terminer le sprint en cours et redémarrer une session avant d'attaquer le suivant."
+
+Frank décide : on continue ou on coupe.
+
+### 19.2 Plan de récupération en cas de plantage
+
+Si Claude Code plante / freeze / sature :
+
+**Étape 1** : Frank ferme Claude Code (le panneau ou tout VS Code)
+**Étape 2** : Frank rouvre VS Code et relance Claude Code
+**Étape 3** : Premier message à la nouvelle session :
+```
+On reprend après un plantage de la session précédente.
+Lis STATUS.md à la racine et le sprint en cours dans docs/sprints/.
+Dis-moi où on en était et ce qui reste à faire avant de reprendre.
+```
+**Étape 4** : Claude lit, fait son point, demande validation avant de reprendre l'exécution.
+
+C'est exactement le même mécanisme que pour démarrer une nouvelle conversation propre (cf. §14 — phrase d'introduction obligatoire de session).
+
+### 19.3 Mémoire externalisée — la promesse
+
+Avec ces disciplines, **un plantage fait perdre au pire 30 minutes** (le temps depuis le dernier commit). Pas une demi-journée comme avec Q Developer.
+
+La promesse est simple : **tout l'état du projet est dans le repo, pas dans la mémoire de Claude**.
+- Architecture → `docs/architecture/datalake_v1_design.md`
+- Décisions → `docs/decisions/*.md`
+- Où on en est → `STATUS.md`
+- Sprint en cours → `docs/sprints/sprint_NNN.md`
+- Règles → `CLAUDE.md`
+
+Si Claude plante, l'information n'est pas perdue — elle est dans le repo, lisible par n'importe quelle nouvelle session de Claude.
+
+### 19.4 Si Frank constate un comportement bizarre de Claude
+
+Au-delà des plantages purs, Claude peut parfois "dériver" : devenir incohérent, oublier des règles, perdre le contexte. Si Frank constate un de ces signes :
+- Réponses qui contredisent CLAUDE.md
+- Oubli d'une règle qu'on a établie
+- Lenteur anormale
+- Réponses très longues ou tournant en rond
+- Demande de relire des choses déjà discutées
+
+→ Frank dit simplement : *"Je pense que tu dérives. Termine ce que tu fais proprement, et on redémarre une nouvelle session."*
+
+Claude finit son action en cours, commit ce qui est commitable, met à jour `STATUS.md`, et on redémarre.
+
+**Aucune honte à redémarrer**. Une session fraîche est plus productive qu'une session saturée.
+
+---
+
+*Fin du CLAUDE.md V1.4 — à valider par Frank.*

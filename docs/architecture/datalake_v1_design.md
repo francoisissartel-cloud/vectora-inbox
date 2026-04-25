@@ -13,6 +13,8 @@ Ce document consolide toutes les décisions architecturales prises pendant la Ph
 
 **Changements V1.3** : §13 (plan de transition) restructuré par paliers de fonctionnalité (Niveaux 1 Fondations / 2 Cœur / 3 Maquillage) plutôt que par phases techniques séquentielles. Chaque niveau produit quelque chose d'utilisable et testable.
 
+**Note V1.3.1** : la **Phase 2.0** (hygiène complète du repo : Git + structure) a été détaillée dans un document dédié `docs/architecture/phase2.0_repo_structure.md` (V2.0 du 2026-04-25). Cette Phase 2.0 inclut désormais le volet Git (tag legacy, archive branch, merge des docs Phase 1, suppression des vieilles branches) en plus de la réorganisation des dossiers. À exécuter depuis Claude Code dans VS Code, avant Phase 2.1.bis.
+
 ---
 
 ## 1. Vision et principes
@@ -1021,45 +1023,52 @@ src_vectora_inbox_v1/
 
 ## 13. Plan de transition (Phase 2)
 
-### 13.1 Phase 2.1 — Ménage du repo (commit unique)
+### 13.0 Phase 2.0 — Hygiène complète du repo (Git + structure)
 
-**Ce qui est archivé** sous un nouveau `archive/legacy_pre_pivot_20260424/` :
-- `src_v3/sauvegarde 2204 15h07vectora_core - Copie/`
-- `src_v3/sauvegarde 2204 apres midi vectora_core - Copie/`
-- `src_v3/sauvegarde 2304 09h08 vectora_core - Copie/`
-- `backup_code/` complet
-- `backups/pre_warehouse_deployment_*` (3 dossiers)
-- `layer_build_temp/`
-- `scripts/ingestion 2204 15h07 - Copie/`
-- `scripts/sauvegarde 2304 09h08ingestion - Copie/`
-- `snapshots/` (déjà une archive, on déplace vers `archive/legacy_pre_pivot_20260424/snapshots_original/`)
-- Tous les fichiers `* - Copie.yaml` dans `canonical/`
+**Document de référence dédié** : `docs/architecture/phase2.0_repo_structure.md` (V2.0).
 
-**Ce qui reste actif et intact** :
-- `src_v3/vectora_core/` (code ingest V3 fonctionnel, on le réutilisera)
-- `canonical/` après nettoyage
-- `config/clients/` (tel quel, on réduira les sections plus tard)
-- `data/warehouse/` (on ne touche pas — il sera juste ignoré et remplacé par `data/datalake_v1/`)
+Cette phase précède toute écriture de code. Elle traite **deux volets complémentaires** :
 
-**Ce qui est supprimé purement** :
-- `temp_feed.xml`, `temp_rss.xml` (vides, résidus)
-- `$null` (fichier vide)
+**Volet Git** (sur GitHub et localement) :
+- Sécuriser l'historique : tag `legacy-pre-pivot-20260425` + branche `archive/legacy-pre-pivot`
+- Merger les 6 docs Phase 1 (actuellement sur la branche `docs/phase1-design`) dans `main`
+- Supprimer les 6 vieilles branches legacy + la branche `docs/phase1-design` une fois mergée
+- Nettoyer les stashs locaux
 
-**Livrable Phase 2.1** : un commit `chore: cleanup repo before v1 rewrite` avec un avant/après clair.
+**Volet Structure** (réorganisation du contenu du repo) :
+- Création de l'arborescence cible (8 dossiers à la racine)
+- Archivage du legacy sous `archive/legacy_pre_pivot_20260425/`
+- Rapatriement de `cache/` et `output/` sous `data/`
+- Swap de `CLAUDE.md` (ancien → archive, nouveau V1.2 → racine)
+- Suppression des fichiers résidus
+- Mise à jour de `.gitignore`
 
-### 13.2 Phase 2.1.bis — Audit de nommage exhaustif (NOUVEAU)
+**Critère de fin** : le repo a uniquement `main` + `archive/legacy-pre-pivot` sur GitHub, l'arborescence locale respecte la structure cible, le legacy est archivé.
 
-Avant tout code, **rapport d'audit** produit dans `docs/architecture/naming_audit_phase21.md` qui liste :
+**Environnement d'exécution** : depuis Claude Code dans VS Code (Cowork rencontre des problèmes de permissions sur le `.git/` à cause de la synchronisation OneDrive du dossier).
 
-1. Tous les fichiers du repo qui contiennent les mots `domain`, `watch_domain`, `bedrock`, `newsletter`, `scoring`, `matching`, `lambda`, `aws`, `s3` (vocabulaire à migrer ou archiver)
-2. Tous les noms de variables/fonctions/classes dans le code qui utilisent ce vocabulaire
+---
+
+### 13.1 Phase 2.1 — Audit nommage et consolidation canonical (anciennement appelé Phase 2.1.bis)
+
+**Note** : ce qui était décrit ici (archivage des sauvegardes, des backups, des résidus) **a été déplacé dans Phase 2.0** (volet Structure). Voir `docs/architecture/phase2.0_repo_structure.md` §3.3.
+
+Phase 2.1 se concentre désormais uniquement sur l'**audit de nommage exhaustif** et la **consolidation des fichiers canonical** qui n'ont pas pu être traités lors de Phase 2.0 (parce qu'ils nécessitent une analyse fine, pas juste un déplacement).
+
+**Livrable Phase 2.1** : un rapport d'audit `docs/architecture/naming_audit_phase21.md` listant chaque entrée à renommer/garder/archiver dans `canonical/`, validé par Frank, suivi d'un commit `refactor: rename ecosystem vocabulary, consolidate canonical`.
+
+**Détail de l'audit Phase 2.1**
+
+Le rapport d'audit liste, après que Phase 2.0 a déjà déplacé l'essentiel :
+
+1. Tous les fichiers résiduels du repo qui contiennent les mots `domain`, `watch_domain`, `bedrock`, `newsletter`, `scoring`, `matching`, `lambda`, `aws`, `s3` (vocabulaire à migrer)
+2. Tous les noms de variables/fonctions/classes dans le code restant qui utilisent ce vocabulaire
 3. Toutes les valeurs de configuration dans `canonical/` et `config/clients/` qui le référencent
-4. Les noms de dossiers qui doivent être renommés ou archivés
-5. Les noms de fichiers dont le nom ne reflète plus leur contenu après pivot
+4. Les noms de fichiers dont le nom ne reflète plus leur contenu après pivot
 
 Pour chaque entrée, je propose : **garder tel quel / renommer en X / archiver / supprimer**.
 
-Frank valide en bloc, j'exécute le refactor dans un commit dédié `refactor: rename ecosystem vocabulary, archive newsletter legacy`.
+Frank valide en bloc, j'exécute le refactor dans un commit dédié.
 
 **Renommages clés déjà identifiés** :
 
