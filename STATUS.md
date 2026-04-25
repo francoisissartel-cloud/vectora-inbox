@@ -1,6 +1,6 @@
 # Vectora Inbox V1 — Project Status
 
-**Dernière mise à jour** : 2026-04-25 (Claude — Phase 2.0 volet Structure terminé, prêt pour merge)
+**Dernière mise à jour** : 2026-04-25 (Claude — Phase 2.0 terminée et mergée sur main)
 **Version actuelle du chantier** : Phase 1 cadrage validée. Phase 2.0 prête à exécuter.
 
 > Ce fichier est le **tableau de bord vivant** du projet. À ouvrir en premier quand on arrive sur le projet (Frank ou Claude). Mis à jour à chaque jalon validé.
@@ -17,14 +17,20 @@ Vectora Inbox V1 est un moteur **local-first** d'alimentation d'un datalake de v
 
 ## Où on en est aujourd'hui
 
-**Étape actuelle** : 🔵 Phase 2.0 — Hygiène repo (terminée, en attente merge sur main)
-**Statut** : Volets Git et Structure terminés sur la branche `refactor/v1-repo-cleanup`. PR à ouvrir pour merge final sur main.
+**Étape actuelle** : ✅ Phase 2.0 — Hygiène repo (terminée et mergée le 25/04/2026)
+**Statut** : Volets Git et Structure complets. Mergé sur main via le commit `70be5ae`. Repo dans son état V1 propre, prêt pour Phase 2.1.
 
-**Dernier livrable validé** : ✅ Phase 1 — Cadrage complet (25/04/2026)
+**Dernier livrable validé** : ✅ Phase 2.0 — Hygiène complète du repo (25/04/2026)
+- Volet Git : tag `legacy-pre-pivot-20260425`, branche `archive/legacy-pre-pivot`, merge Phase 1 dans main, suppression de 7 branches obsolètes + 2 stashs
+- Volet Structure : nouvelle arborescence (8 dossiers racine), legacy archivé sous `archive/legacy_pre_pivot_20260425/`, swap `CLAUDE.md` V3 → V1.4, `.gitignore` réécrit, `README.md` et `pyproject.toml` minimal créés
+- 10 scripts de référence récupérés dans `scripts/legacy_reference/` pour capitalisation au Niveau 1
+- Le tag `legacy-pre-pivot-20260425` et la branche `archive/legacy-pre-pivot` préservent intégralement l'état pré-pivot
+
+**Précédent livrable** : ✅ Phase 1 — Cadrage complet (25/04/2026)
 - Audit du repo existant (`docs/architecture/phase1_audit_pivot_datalake.md`)
-- Design canonique du datalake V1.3 (`docs/architecture/datalake_v1_design.md`)
+- Design canonique du datalake V1.3.1 (`docs/architecture/datalake_v1_design.md`)
 - Plan Phase 2.0 V2.0 (`docs/architecture/phase2.0_repo_structure.md`)
-- Règles de travail CLAUDE.md V1.2 (`docs/CLAUDE_v1_proposal.md`)
+- Règles de travail `CLAUDE.md` V1.4 (à la racine)
 - Template `.env.example`
 - Optimisations différées tracées (`docs/architecture/future_optimizations.md`)
 - 10 ADRs des décisions Phase 1 (`docs/decisions/`)
@@ -42,7 +48,7 @@ Vectora Inbox V1 est un moteur **local-first** d'alimentation d'un datalake de v
 | # | Jalon | Statut | Date validation | Doc de référence |
 |---|---|---|---|---|
 | 1 | **Phase 1** — Cadrage et design | ✅ Fait | 25/04/2026 | `docs/architecture/datalake_v1_design.md` |
-| 2 | **Phase 2.0** — Hygiène repo | 🔵 Volets Git et Structure faits, en attente merge | - | `docs/architecture/phase2.0_repo_structure.md` |
+| 2 | **Phase 2.0** — Hygiène repo | ✅ Fait | 25/04/2026 | `docs/architecture/phase2.0_repo_structure.md` |
 | 3 | **Phase 2.1** — Audit nommage canonical | ⏸ À venir | - | (à créer en Phase 2.1) |
 | 4 | **Niveau 1** — Fondations | ⏸ À venir | - | `datalake_v1_design.md` §13.3 |
 | 5 | **Niveau 2** — Cœur | ⏸ À venir | - | `datalake_v1_design.md` §13.4 |
