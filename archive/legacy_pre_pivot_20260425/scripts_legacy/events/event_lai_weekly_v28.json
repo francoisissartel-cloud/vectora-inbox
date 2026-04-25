@@ -1,0 +1,6 @@
+{
+  "client_id": "lai_weekly",
+  "period_days": 30,
+  "force_reprocess": false,
+  "scoring_mode": "balanced"
+}

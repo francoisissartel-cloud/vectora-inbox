@@ -1,0 +1,3206 @@
+sources:
+- source_key: press_corporate__medincell
+  company_id: medincell
+  source_type: press_corporate
+  homepage_url: https://www.medincell.com/
+  rss_url: ''
+  html_url: https://www.medincell.com/news/
+  ingestion_mode: html
+  enabled: true
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  - pure_player
+  notes: MedinCell (France) - Pure player LAI
+- source_key: press_corporate__camurus
+  company_id: camurus
+  source_type: press_corporate
+  homepage_url: https://www.camurus.com/
+  rss_url: ''
+  html_url: https://www.camurus.com/media/press-releases/
+  ingestion_mode: html
+  enabled: true
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  - pure_player
+  notes: Camurus (Suède) - Pure player LAI
+- source_key: press_corporate__delsitech
+  company_id: delsitech
+  source_type: press_corporate
+  homepage_url: https://www.delsitech.com/
+  rss_url: ''
+  html_url: https://www.delsitech.com/news/
+  ingestion_mode: html
+  enabled: true
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  - pure_player
+  notes: DelSiTech (Finlande) - Technologie LAI
+- source_key: press_corporate__nanexa
+  company_id: nanexa
+  source_type: press_corporate
+  homepage_url: https://www.nanexa.se/
+  rss_url: ''
+  html_url: https://www.nanexa.se/en/press/
+  ingestion_mode: html
+  enabled: true
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  - pure_player
+  notes: Nanexa (Suède) - Technologie LAI
+- source_key: press_corporate__peptron
+  company_id: peptron
+  source_type: press_corporate
+  homepage_url: https://www.peptron.co.kr/eng/
+  rss_url: ''
+  html_url: https://www.peptron.co.kr/eng/pr/news.php
+  ingestion_mode: html
+  enabled: true
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  - pure_player
+  notes: Peptron (Corée du Sud) - Société LAI
+- source_key: press_sector__fiercebiotech
+  source_type: press_sector
+  homepage_url: https://www.fiercebiotech.com/
+  rss_url: https://www.fiercebiotech.com/rss/xml
+  html_url: ''
+  ingestion_mode: rss
+  enabled: true
+  default_language: en
+  tags:
+  - pharma-biotech
+  - press
+  notes: FierceBiotech - Presse biotech
+- source_key: press_sector__fiercepharma
+  source_type: press_sector
+  homepage_url: https://www.fiercepharma.com/
+  rss_url: https://www.fiercepharma.com/rss/xml
+  html_url: ''
+  ingestion_mode: rss
+  enabled: true
+  default_language: en
+  tags:
+  - pharma-biotech
+  - press
+  notes: FiercePharma - Presse pharma
+- source_key: press_sector__endpoints_news
+  source_type: press_sector
+  homepage_url: https://endpts.com/
+  rss_url: https://endpts.com/feed/
+  html_url: ''
+  ingestion_mode: rss
+  enabled: true
+  default_language: en
+  tags:
+  - pharma-biotech
+  - press
+  notes: Endpoints News - Presse biotech/pharma
+- source_key: press_corporate__89bio
+  source_type: press_corporate
+  homepage_url: https://89bio.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de 89bio. Point d'entrée pour les news LAI.
+  company_id: 89bio
+- source_key: press_corporate__abbvie
+  source_type: press_corporate
+  homepage_url: https://www.abbvie.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de AbbVie. Point d'entrée pour les news LAI.
+  company_id: abbvie
+- source_key: press_corporate__activate_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.activatetherapeutics.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Activate Therapeutics. Point d'entrée
+    pour les news LAI.
+  company_id: activate_therapeutics
+- source_key: press_corporate__adare_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://adarepharmasolutions.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Adare Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: adare_pharmaceuticals
+- source_key: press_corporate__adocia
+  source_type: press_corporate
+  homepage_url: https://www.adocia.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Adocia. Point d'entrée pour les news LAI.
+  company_id: adocia
+- source_key: press_corporate__akari_therapeutics
+  source_type: press_corporate
+  homepage_url: https://akaritx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Akari Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: akari_therapeutics
+- source_key: press_corporate__akero_therapeutics
+  source_type: press_corporate
+  homepage_url: https://akerotx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Akero Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: akero_therapeutics
+- source_key: press_corporate__alar_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://alarpharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Alar Pharmaceuticals. Point d'entrée pour
+    les news LAI.
+  company_id: alar_pharmaceuticals
+- source_key: press_corporate__alcon
+  source_type: press_corporate
+  homepage_url: https://www.alcon.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Alcon. Point d'entrée pour les news LAI.
+  company_id: alcon
+- source_key: press_corporate__alexion_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://alexion.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Alexion Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: alexion_pharmaceuticals
+- source_key: press_corporate__alk_abello
+  source_type: press_corporate
+  homepage_url: https://www.alk.com
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de ALK-Abello. Point d'entrée pour les news
+    LAI.
+  company_id: alk_abello
+- source_key: press_corporate__alkermes
+  source_type: press_corporate
+  homepage_url: https://www.alkermes.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Alkermes. Point d'entrée pour les news
+    LAI.
+  company_id: alkermes
+- source_key: press_corporate__allay_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.allaytx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Allay Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: allay_therapeutics
+- source_key: press_corporate__allysta_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.allysta.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Allysta Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: allysta_pharmaceuticals
+- source_key: press_corporate__alma_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.almatherapeutics.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Alma Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: alma_therapeutics
+- source_key: press_corporate__alteogen
+  source_type: press_corporate
+  homepage_url: https://alteogen.com
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Alteogen. Point d'entrée pour les news
+    LAI.
+  company_id: alteogen
+- source_key: press_corporate__amgen
+  source_type: press_corporate
+  homepage_url: https://www.amgen.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Amgen. Point d'entrée pour les news LAI.
+  company_id: amgen
+- source_key: press_corporate__amplicore
+  source_type: press_corporate
+  homepage_url: https://www.amplicorepharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Amplicore. Point d'entrée pour les news
+    LAI.
+  company_id: amplicore
+- source_key: press_corporate__anhui_anke_biotechnology
+  source_type: press_corporate
+  homepage_url: https://www.ankebio.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Anhui Anke Biotechnology. Point d'entrée
+    pour les news LAI.
+  company_id: anhui_anke_biotechnology
+- source_key: press_corporate__ankyra_therapeutics
+  source_type: press_corporate
+  homepage_url: https://ankyratx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Ankyra Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: ankyra_therapeutics
+- source_key: press_corporate__anthos_therapeutics
+  source_type: press_corporate
+  homepage_url: https://anthostherapeutics.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Anthos Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: anthos_therapeutics
+- source_key: press_corporate__antlia_bioscience
+  source_type: press_corporate
+  homepage_url: https://antliabio.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Antlia Bioscience. Point d'entrée pour
+    les news LAI.
+  company_id: antlia_bioscience
+- source_key: press_corporate__aprilbio
+  source_type: press_corporate
+  homepage_url: http://www.aprilbio.com/en
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de AprilBio. Point d'entrée pour les news
+    LAI.
+  company_id: aprilbio
+- source_key: press_corporate__asahi_kasei_pharma
+  source_type: press_corporate
+  homepage_url: https://www.asahi-kasei.co.jp/pharma/en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Asahi Kasei Pharma. Point d'entrée pour
+    les news LAI.
+  company_id: asahi_kasei_pharma
+- source_key: press_corporate__ascendis_pharma
+  source_type: press_corporate
+  homepage_url: https://ascendispharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Ascendis Pharma. Point d'entrée pour les
+    news LAI.
+  company_id: ascendis_pharma
+- source_key: press_corporate__ascletis_biopharmaceutical
+  source_type: press_corporate
+  homepage_url: https://www.ascletis.com/Index/index/index/l/en-us.html
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Ascletis Biopharmaceutical. Point d'entrée
+    pour les news LAI.
+  company_id: ascletis_biopharmaceutical
+- source_key: press_corporate__asta_medica_baxter
+  source_type: press_corporate
+  homepage_url: https://www.baxter.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de ASTA Medica (Baxter). Point d'entrée pour
+    les news LAI.
+  company_id: asta_medica_baxter
+- source_key: press_corporate__astellas_pharma
+  source_type: press_corporate
+  homepage_url: https://www.astellas.com/en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Astellas Pharma. Point d'entrée pour les
+    news LAI.
+  company_id: astellas_pharma
+- source_key: press_corporate__astrazeneca
+  source_type: press_corporate
+  homepage_url: https://www.astrazeneca.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de AstraZeneca. Point d'entrée pour les news
+    LAI.
+  company_id: astrazeneca
+- source_key: press_corporate__astria_therapeutics
+  source_type: press_corporate
+  homepage_url: https://astriatx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Astria Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: astria_therapeutics
+- source_key: press_corporate__bayer
+  source_type: press_corporate
+  homepage_url: https://www.bayer.com/en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Bayer. Point d'entrée pour les news LAI.
+  company_id: bayer
+- source_key: press_corporate__beone
+  source_type: press_corporate
+  homepage_url: https://beonemedicines.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de BeOne. Point d'entrée pour les news LAI.
+  company_id: beone
+- source_key: press_corporate__betta_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.bettapharma.com/en.php
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Betta Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: betta_pharmaceuticals
+- source_key: press_corporate__biocon
+  source_type: press_corporate
+  homepage_url: https://www.biocon.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Biocon. Point d'entrée pour les news LAI.
+  company_id: biocon
+- source_key: press_corporate__bioverativ
+  source_type: press_corporate
+  homepage_url: https://www.sanofi.com/en
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Bioverativ. Point d'entrée pour les news
+    LAI.
+  company_id: bioverativ
+- source_key: press_corporate__bolder_biotechnology
+  source_type: press_corporate
+  homepage_url: https://www.bolderbio.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Bolder BioTechnology. Point d'entrée pour
+    les news LAI.
+  company_id: bolder_biotechnology
+- source_key: press_corporate__boston_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.bostonpharmaceuticals.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Boston Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: boston_pharmaceuticals
+- source_key: press_corporate__braeburn
+  source_type: press_corporate
+  homepage_url: https://braeburnrx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Braeburn. Point d'entrée pour les news
+    LAI.
+  company_id: braeburn
+- source_key: press_corporate__brii_biosciences
+  source_type: press_corporate
+  homepage_url: https://www.briibio.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Brii Biosciences. Point d'entrée pour
+    les news LAI.
+  company_id: brii_biosciences
+- source_key: press_corporate__cali_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.calibiosciences.com/EN
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Cali Pharmaceuticals. Point d'entrée pour
+    les news LAI.
+  company_id: cali_pharmaceuticals
+- source_key: press_corporate__canwell_pharma
+  source_type: press_corporate
+  homepage_url: https://canwellpharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Canwell Pharma. Point d'entrée pour les
+    news LAI.
+  company_id: canwell_pharma
+- source_key: press_corporate__carmot_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.gene.com/carmot
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Carmot Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: carmot_therapeutics
+- source_key: press_corporate__cheplapharm
+  source_type: press_corporate
+  homepage_url: https://www.cheplapharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de CHEPLAPHARM. Point d'entrée pour les news
+    LAI.
+  company_id: cheplapharm
+- source_key: press_corporate__chong_kun_dang_holdings
+  source_type: press_corporate
+  homepage_url: https://www.ckd-holdings.com/en/home
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Chong Kun Dang Holdings. Point d'entrée
+    pour les news LAI.
+  company_id: chong_kun_dang_holdings
+- source_key: press_corporate__chongqing_chen_an_biopharmaceutical_co_ltdco_ltd
+  source_type: press_corporate
+  homepage_url: ''
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Chongqing Chen'an Biopharmaceutical Co
+    LtdCo Ltd. Point d'entrée pour les news LAI.
+  company_id: chongqing_chen_an_biopharmaceutical_co_ltdco_ltd
+- source_key: press_corporate__chugai_pharmaceutical
+  source_type: press_corporate
+  homepage_url: https://www.chugai.com
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Chugai Pharmaceutical. Point d'entrée
+    pour les news LAI.
+  company_id: chugai_pharmaceutical
+- source_key: press_corporate__cidara_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.cidara.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Cidara Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: cidara_therapeutics
+- source_key: press_corporate__cipla_usa
+  source_type: press_corporate
+  homepage_url: https://usa.cipla.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Cipla USA. Point d'entrée pour les news
+    LAI.
+  company_id: cipla_usa
+- source_key: press_corporate__consegna_pharma
+  source_type: press_corporate
+  homepage_url: https://www.consegnapharma.com/pipeline
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Consegna Pharma. Point d'entrée pour les
+    news LAI.
+  company_id: consegna_pharma
+- source_key: press_corporate__contura
+  source_type: press_corporate
+  homepage_url: https://contura.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Contura. Point d'entrée pour les news
+    LAI.
+  company_id: contura
+- source_key: press_corporate__covis_pharma
+  source_type: press_corporate
+  homepage_url: https://covispharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Covis Pharma. Point d'entrée pour les
+    news LAI.
+  company_id: covis_pharma
+- source_key: press_corporate__cristal_therapeutics
+  source_type: press_corporate
+  homepage_url: https://cristaltherapeutics.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Cristal Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: cristal_therapeutics
+- source_key: press_corporate__csl_behring
+  source_type: press_corporate
+  homepage_url: https://www.csl.com/we-are-csl/our-businesses-and-products/csl-behring
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de CSL Behring. Point d'entrée pour les news
+    LAI.
+  company_id: csl_behring
+- source_key: press_corporate__daewon_pharm
+  source_type: press_corporate
+  homepage_url: https://www.daewonpharm.com/eng/main/index.jsp
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Daewon Pharm. Point d'entrée pour les
+    news LAI.
+  company_id: daewon_pharm
+- source_key: press_corporate__daewoong_pharmaceutical
+  source_type: press_corporate
+  homepage_url: https://crm.daewoong.co.kr/eng/main
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Daewoong Pharmaceutical. Point d'entrée
+    pour les news LAI.
+  company_id: daewoong_pharmaceutical
+- source_key: press_corporate__dare_bioscience
+  source_type: press_corporate
+  homepage_url: https://darebioscience.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Dare Bioscience. Point d'entrée pour les
+    news LAI.
+  company_id: dare_bioscience
+- source_key: press_corporate__debiopharm
+  source_type: press_corporate
+  homepage_url: https://www.debiopharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Debiopharm. Point d'entrée pour les news
+    LAI.
+  company_id: debiopharm
+- source_key: press_corporate__debiopharm_international
+  source_type: press_corporate
+  homepage_url: https://www.debiopharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Debiopharm International. Point d'entrée
+    pour les news LAI.
+  company_id: debiopharm_international
+- source_key: press_corporate__durect
+  source_type: press_corporate
+  homepage_url: https://www.bauschhealth.com/durect/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Durect. Point d'entrée pour les news LAI.
+  company_id: durect
+- source_key: press_corporate__eagle_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.eagleus.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Eagle Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: eagle_pharmaceuticals
+- source_key: press_corporate__eisai
+  source_type: press_corporate
+  homepage_url: https://www.eisai.com/index.html
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Eisai. Point d'entrée pour les news LAI.
+  company_id: eisai
+- source_key: press_corporate__eli_lilly
+  source_type: press_corporate
+  homepage_url: https://www.lilly.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Eli Lilly. Point d'entrée pour les news
+    LAI.
+  company_id: eli_lilly
+- source_key: press_corporate__endo_international
+  source_type: press_corporate
+  homepage_url: https://www.endo.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Endo International. Point d'entrée pour
+    les news LAI.
+  company_id: endo_international
+- source_key: press_corporate__enhanx_biopharm
+  source_type: press_corporate
+  homepage_url: https://www.enhanxbiopharm.eu/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de EnhanX Biopharm. Point d'entrée pour les
+    news LAI.
+  company_id: enhanx_biopharm
+- source_key: press_corporate__eupraxia_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://eupraxiapharma.gcs-web.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Eupraxia Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: eupraxia_pharmaceuticals
+- source_key: press_corporate__exavir_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.exavirtherapeutics.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Exavir Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: exavir_therapeutics
+- source_key: press_corporate__ferring
+  source_type: press_corporate
+  homepage_url: https://www.ferring.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Ferring. Point d'entrée pour les news
+    LAI.
+  company_id: ferring
+- source_key: press_corporate__foresee_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.foreseepharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Foresee Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: foresee_pharmaceuticals
+- source_key: press_corporate__frontier_biotechnologies
+  source_type: press_corporate
+  homepage_url: https://en.frontierbiotech.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Frontier Biotechnologies. Point d'entrée
+    pour les news LAI.
+  company_id: frontier_biotechnologies
+- source_key: press_corporate__g2gbio
+  source_type: press_corporate
+  homepage_url: https://www.g2gbio.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de G2GBio. Point d'entrée pour les news LAI.
+  company_id: g2gbio
+- source_key: press_corporate__genexine
+  source_type: press_corporate
+  homepage_url: http://www.genexine.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Genexine. Point d'entrée pour les news
+    LAI.
+  company_id: genexine
+- source_key: press_corporate__gilead_sciences
+  source_type: press_corporate
+  homepage_url: https://www.gilead.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Gilead Sciences. Point d'entrée pour les
+    news LAI.
+  company_id: gilead_sciences
+- source_key: press_corporate__glaxosmithkline
+  source_type: press_corporate
+  homepage_url: https://www.gsk.com/en-gb/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de GlaxoSmithKline. Point d'entrée pour les
+    news LAI.
+  company_id: glaxosmithkline
+- source_key: press_corporate__hanmi_pharmaceutical
+  source_type: press_corporate
+  homepage_url: https://www.hanmipharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Hanmi Pharmaceutical. Point d'entrée pour
+    les news LAI.
+  company_id: hanmi_pharmaceutical
+- source_key: press_corporate__hansoh_pharmaceutical
+  source_type: press_corporate
+  homepage_url: https://www.hspharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Hansoh Pharmaceutical. Point d'entrée
+    pour les news LAI.
+  company_id: hansoh_pharmaceutical
+- source_key: press_corporate__harrow
+  source_type: press_corporate
+  homepage_url: https://www.harrow.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Harrow. Point d'entrée pour les news LAI.
+  company_id: harrow
+- source_key: press_corporate__heron_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.herontx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Heron Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: heron_therapeutics
+- source_key: press_corporate__immunoforge_co
+  source_type: press_corporate
+  homepage_url: https://www.immunoforge.com/en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Immunoforge Co. Point d'entrée pour les
+    news LAI.
+  company_id: immunoforge_co
+- source_key: press_corporate__immunwork
+  source_type: press_corporate
+  homepage_url: https://www.immunwork.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Immunwork. Point d'entrée pour les news
+    LAI.
+  company_id: immunwork
+- source_key: press_corporate__imv
+  source_type: press_corporate
+  homepage_url: https://www.imv-technologies.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de IMV. Point d'entrée pour les news LAI.
+  company_id: imv
+- source_key: press_corporate__indivior
+  source_type: press_corporate
+  homepage_url: https://www.indivior.com/en
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Indivior. Point d'entrée pour les news
+    LAI.
+  company_id: indivior
+- source_key: press_corporate__insitu_biologics
+  source_type: press_corporate
+  homepage_url: https://insitubiologics.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de InSitu Biologics. Point d'entrée pour
+    les news LAI.
+  company_id: insitu_biologics
+- source_key: press_corporate__intra_cellular_therapies
+  source_type: press_corporate
+  homepage_url: https://www.intracellulartherapies.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Intra-Cellular Therapies. Point d'entrée
+    pour les news LAI.
+  company_id: intra_cellular_therapies
+- source_key: press_corporate__ipsen
+  source_type: press_corporate
+  homepage_url: https://www.ipsen.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Ipsen. Point d'entrée pour les news LAI.
+  company_id: ipsen
+- source_key: press_corporate__janssen
+  source_type: press_corporate
+  homepage_url: https://www.jnj.com/innovativemedicine/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Janssen. Point d'entrée pour les news
+    LAI.
+  company_id: janssen
+- source_key: press_corporate__janssen_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://google.com/search?q=Janssen+Pharmaceuticals.com&sca_esv=1a46a2fefbdb7a46&rlz=1C1VDKB_frFR1089FR1089&sxsrf=AE3TifOreNmLNJadnYFm7PdDKHeCPi5ieA%3A1762640101644&ei=5cAPaemNJ-aikdUPx6WP6QQ&ved=0ahUKEwiplICJyuOQAxVmUaQEHcfSI00Q4dUDCBE&uact=5&oq=Janssen+Pharmaceuticals.com&gs_lp=Egxnd3Mtd2l6LXNlcnAiG0phbnNzZW4gUGhhcm1hY2V1dGljYWxzLmNvbTIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeSMUNUL8FWL4IcAF4AZABAJgBVaABvAKqAQE0uAEDyAEA-AEBmAIFoALoAsICChAAGEcY1gQYsAPCAg0QABiABBiKBRhDGLADwgIOEAAY5AIY1gQYsAPYAQHCAhkQLhiABBiKBRhDGMcBGNEDGMgDGLAD2AEBwgITEC4YgAQYigUYQxjIAxiwA9gBAcICCBAAGBYYHhgKmAMAiAYBkAYRugYGCAEQARgJkgcBNaAHhBqyBwE0uAfYAsIHBTItNC4xyAcl&sclient=gws-wiz-serp
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Janssen Pharmaceuticals. Point d'entrée
+    pour les news LAI. (URL de recherche générique à nettoyer manuellement)
+  company_id: janssen_pharmaceuticals
+- source_key: press_corporate__jazz_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.jazzpharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Jazz Pharmaceuticals. Point d'entrée pour
+    les news LAI.
+  company_id: jazz_pharmaceuticals
+- source_key: press_corporate__jcr_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://jcrpharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de JCR Pharmaceuticals. Point d'entrée pour
+    les news LAI.
+  company_id: jcr_pharmaceuticals
+- source_key: press_corporate__jiangsu_hengrui_medicine
+  source_type: press_corporate
+  homepage_url: https://www.hengrui.com/en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Jiangsu Hengrui Medicine. Point d'entrée
+    pour les news LAI.
+  company_id: jiangsu_hengrui_medicine
+- source_key: press_corporate__jiangxi_puheng_pharmaceuticals_ltd_lidds_ab
+  source_type: press_corporate
+  homepage_url: ''
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Jiangxi Puheng Pharmaceuticals Ltd; LIDDS
+    AB. Point d'entrée pour les news LAI.
+  company_id: jiangxi_puheng_pharmaceuticals_ltd_lidds_ab
+- source_key: press_corporate__laboratorios_farmaceuticos_rovi
+  source_type: press_corporate
+  homepage_url: https://www.rovi.es/en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Laboratorios Farmaceuticos Rovi. Point
+    d'entrée pour les news LAI.
+  company_id: laboratorios_farmaceuticos_rovi
+- source_key: press_corporate__leadermed_health_group_ltd
+  source_type: press_corporate
+  homepage_url: ''
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de LeaderMed Health Group Ltd;. Point d'entrée
+    pour les news LAI.
+  company_id: leadermed_health_group_ltd
+- source_key: press_corporate__lee_s_pharmaceutical_holdings
+  source_type: press_corporate
+  homepage_url: https://www.leespharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Lee's Pharmaceutical Holdings. Point d'entrée
+    pour les news LAI.
+  company_id: lee_s_pharmaceutical_holdings
+- source_key: press_corporate__lepu_medical_technology_beijing_co_ltd
+  source_type: press_corporate
+  homepage_url: https://fr.lepumedical.com/explore-lepu-products-in-your-language.html
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Lepu Medical Technology (Beijing) Co Ltd.
+    Point d'entrée pour les news LAI.
+  company_id: lepu_medical_technology_beijing_co_ltd
+- source_key: press_corporate__lidds
+  source_type: press_corporate
+  homepage_url: https://liddspharma.com/en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de LIDDS. Point d'entrée pour les news LAI.
+  company_id: lidds
+- source_key: press_corporate__lipocure
+  source_type: press_corporate
+  homepage_url: https://lipocurerx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de LipoCure. Point d'entrée pour les news
+    LAI.
+  company_id: lipocure
+- source_key: press_corporate__lisata_therapeutics_inc_qilu_pharmaceutical_co_ltd
+  source_type: press_corporate
+  homepage_url: https://www.lisata.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Lisata Therapeutics Inc; Qilu Pharmaceutical
+    Co Ltd. Point d'entrée pour les news LAI.
+  company_id: lisata_therapeutics_inc_qilu_pharmaceutical_co_ltd
+- source_key: press_corporate__ltt_bio_pharma_co
+  source_type: press_corporate
+  homepage_url: https://www.ltt.co.jp/en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de LTT Bio-Pharma Co. Point d'entrée pour
+    les news LAI.
+  company_id: ltt_bio_pharma_co
+- source_key: press_corporate__lundbeck
+  source_type: press_corporate
+  homepage_url: https://www.lundbeck.com/global
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Lundbeck. Point d'entrée pour les news
+    LAI.
+  company_id: lundbeck
+- source_key: press_corporate__luye_pharma
+  source_type: press_corporate
+  homepage_url: https://www.luye.cn/lvye_en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Luye Pharma. Point d'entrée pour les news
+    LAI.
+  company_id: luye_pharma
+- source_key: press_corporate__mallinckrodt
+  source_type: press_corporate
+  homepage_url: https://www.mallinckrodt.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Mallinckrodt. Point d'entrée pour les
+    news LAI.
+  company_id: mallinckrodt
+- source_key: press_corporate__mapi_pharma
+  source_type: press_corporate
+  homepage_url: https://mapi-pharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Mapi Pharma. Point d'entrée pour les news
+    LAI.
+  company_id: mapi_pharma
+- source_key: press_corporate__merck_co
+  source_type: press_corporate
+  homepage_url: https://www.merck.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Merck & Co. Point d'entrée pour les news
+    LAI.
+  company_id: merck_co
+- source_key: press_corporate__metsera
+  source_type: press_corporate
+  homepage_url: https://metsera.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Metsera. Point d'entrée pour les news
+    LAI.
+  company_id: metsera
+- source_key: press_corporate__molecular_partners
+  source_type: press_corporate
+  homepage_url: https://www.molecularpartners.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Molecular Partners. Point d'entrée pour
+    les news LAI.
+  company_id: molecular_partners
+- source_key: press_corporate__mundipharma
+  source_type: press_corporate
+  homepage_url: https://fr.mundipharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Mundipharma. Point d'entrée pour les news
+    LAI.
+  company_id: mundipharma
+- source_key: press_corporate__nanology
+  source_type: press_corporate
+  homepage_url: https://nanology.us/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de NanOlogy. Point d'entrée pour les news
+    LAI.
+  company_id: nanology
+- source_key: press_corporate__neuraly
+  source_type: press_corporate
+  homepage_url: https://www.neuralymed.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Neuraly. Point d'entrée pour les news
+    LAI.
+  company_id: neuraly
+- source_key: press_corporate__nkd_pharm
+  source_type: press_corporate
+  homepage_url: https://www.nkdpharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de NKD Pharm. Point d'entrée pour les news
+    LAI.
+  company_id: nkd_pharm
+- source_key: press_corporate__novartis
+  source_type: press_corporate
+  homepage_url: ''
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Novartis. Point d'entrée pour les news
+    LAI.
+  company_id: novartis
+- source_key: press_corporate__novo_nordisk
+  source_type: press_corporate
+  homepage_url: https://www.novonordisk.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Novo Nordisk. Point d'entrée pour les
+    news LAI.
+  company_id: novo_nordisk
+- source_key: press_corporate__omeros
+  source_type: press_corporate
+  homepage_url: https://www.omeros.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Omeros. Point d'entrée pour les news LAI.
+  company_id: omeros
+- source_key: press_corporate__opko_health
+  source_type: press_corporate
+  homepage_url: https://www.opko.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de OPKO Health. Point d'entrée pour les news
+    LAI.
+  company_id: opko_health
+- source_key: press_corporate__original_biomedicals_implants
+  source_type: press_corporate
+  homepage_url: https://originalbiomedicalimplants.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Original BioMedicals Implants. Point d'entrée
+    pour les news LAI.
+  company_id: original_biomedicals_implants
+- source_key: press_corporate__pacira_biosciences
+  source_type: press_corporate
+  homepage_url: https://www.pacira.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Pacira BioSciences. Point d'entrée pour
+    les news LAI.
+  company_id: pacira_biosciences
+- source_key: press_corporate__painreform
+  source_type: press_corporate
+  homepage_url: https://painreform.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de PainReform. Point d'entrée pour les news
+    LAI.
+  company_id: painreform
+- source_key: press_corporate__pdx_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.pdxpharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de PDX Pharmaceuticals. Point d'entrée pour
+    les news LAI.
+  company_id: pdx_pharmaceuticals
+- source_key: press_corporate__peregrine_ophthalmic
+  source_type: press_corporate
+  homepage_url: https://peregrineophthalmic.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Peregrine Ophthalmic. Point d'entrée pour
+    les news LAI.
+  company_id: peregrine_ophthalmic
+- source_key: press_corporate__persica_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://persicapharmaceuticals.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Persica Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: persica_pharmaceuticals
+- source_key: press_corporate__pfizer
+  source_type: press_corporate
+  homepage_url: https://www.pfizer.com/
+  rss_url: ''
+  html_url: https://www.pfizer.com/newsroom
+  ingestion_mode: html
+  enabled: true
+  default_language: en
+  max_pages: 3
+  tags:
+  - LAI
+  - corporate
+  - hybrid_player
+  notes: Pfizer - Hybrid player pharma (newsroom avec pagination)
+  company_id: pfizer
+- source_key: press_corporate__pharmaessentia
+  source_type: press_corporate
+  homepage_url: https://pharmaessentiamedical.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de PharmaEssentia. Point d'entrée pour les
+    news LAI.
+  company_id: pharmaessentia
+- source_key: press_corporate__phasebio_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://phasebio.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de PhaseBio Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: phasebio_pharmaceuticals
+- source_key: press_corporate__polypid
+  source_type: press_corporate
+  homepage_url: https://www.polypid.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de PolyPid. Point d'entrée pour les news
+    LAI.
+  company_id: polypid
+- source_key: press_corporate__prolynx
+  source_type: press_corporate
+  homepage_url: https://prolynxinc.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Prolynx. Point d'entrée pour les news
+    LAI.
+  company_id: prolynx
+- source_key: press_corporate__protheragen
+  source_type: press_corporate
+  homepage_url: https://www.protheragen.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Protheragen. Point d'entrée pour les news
+    LAI.
+  company_id: protheragen
+- source_key: press_corporate__quiapeg_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.quiapeg.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de QuiaPEG Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: quiapeg_pharmaceuticals
+- source_key: press_corporate__rebelmedicine
+  source_type: press_corporate
+  homepage_url: https://www.rebelmedicine.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de RebelMedicine. Point d'entrée pour les
+    news LAI.
+  company_id: rebelmedicine
+- source_key: press_corporate__recordati
+  source_type: press_corporate
+  homepage_url: https://recordati.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Recordati. Point d'entrée pour les news
+    LAI.
+  company_id: recordati
+- source_key: press_corporate__regeneron_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.regeneron.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Regeneron Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: regeneron_pharmaceuticals
+- source_key: press_corporate__reliance_life_sciences
+  source_type: press_corporate
+  homepage_url: https://www.rellife.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Reliance Life Sciences. Point d'entrée
+    pour les news LAI.
+  company_id: reliance_life_sciences
+- source_key: press_corporate__revance_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.revance.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Revance Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: revance_therapeutics
+- source_key: press_corporate__rhythm_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://rhythmtx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Rhythm Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: rhythm_pharmaceuticals
+- source_key: press_corporate__roxall_medizin
+  source_type: press_corporate
+  homepage_url: https://www.roxall.com
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Roxall Medizin. Point d'entrée pour les
+    news LAI.
+  company_id: roxall_medizin
+- source_key: press_corporate__samyang_corp
+  source_type: press_corporate
+  homepage_url: https://www.samyangcorp.com/en/index
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Samyang Corp. Point d'entrée pour les
+    news LAI.
+  company_id: samyang_corp
+- source_key: press_corporate__sanofi
+  source_type: press_corporate
+  homepage_url: https://www.sanofi.com/en
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Sanofi. Point d'entrée pour les news LAI.
+  company_id: sanofi
+- source_key: press_corporate__scilex_holding
+  source_type: press_corporate
+  homepage_url: https://www.scilexholding.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Scilex Holding. Point d'entrée pour les
+    news LAI.
+  company_id: scilex_holding
+- source_key: press_corporate__serina_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.serinatx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Serina Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: serina_therapeutics
+- source_key: press_corporate__shionogi_co
+  source_type: press_corporate
+  homepage_url: https://www.shionogi.com/global/en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Shionogi & Co. Point d'entrée pour les
+    news LAI.
+  company_id: shionogi_co
+- source_key: press_corporate__silexion_therapeutics
+  source_type: press_corporate
+  homepage_url: https://silexion.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Silexion Therapeutics. Point d'entrée
+    pour les news LAI.
+  company_id: silexion_therapeutics
+- source_key: press_corporate__sonoran_biosciences
+  source_type: press_corporate
+  homepage_url: https://www.sonoranbiosciences.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Sonoran Biosciences. Point d'entrée pour
+    les news LAI.
+  company_id: sonoran_biosciences
+- source_key: press_corporate__spectrum_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.spectrumtherapeutics.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Spectrum Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: spectrum_pharmaceuticals
+- source_key: press_corporate__spinethera
+  source_type: press_corporate
+  homepage_url: https://www.frenellepharma.com/spinethera
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de SpineThera. Point d'entrée pour les news
+    LAI.
+  company_id: spinethera
+- source_key: press_corporate__spinnaker_biosciences
+  source_type: press_corporate
+  homepage_url: https://www.spinnakerbiosciences.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Spinnaker Biosciences. Point d'entrée
+    pour les news LAI.
+  company_id: spinnaker_biosciences
+- source_key: press_corporate__spiral_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.spiraltx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Spiral Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: spiral_therapeutics
+- source_key: press_corporate__sun_pharmaceutical
+  source_type: press_corporate
+  homepage_url: https://sunpharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Sun Pharmaceutical. Point d'entrée pour
+    les news LAI.
+  company_id: sun_pharmaceutical
+- source_key: press_corporate__synartro
+  source_type: press_corporate
+  homepage_url: https://synartro.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Synartro. Point d'entrée pour les news
+    LAI.
+  company_id: synartro
+- source_key: press_corporate__taiwan_liposome
+  source_type: press_corporate
+  homepage_url: https://www.tlcbio.com/en
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Taiwan Liposome. Point d'entrée pour les
+    news LAI.
+  company_id: taiwan_liposome
+- source_key: press_corporate__takeda_pharmaceutical
+  source_type: press_corporate
+  homepage_url: https://www.takeda.com
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Takeda Pharmaceutical. Point d'entrée
+    pour les news LAI.
+  company_id: takeda_pharmaceutical
+- source_key: press_corporate__targtex
+  source_type: press_corporate
+  homepage_url: https://targtex.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de TargTex. Point d'entrée pour les news
+    LAI.
+  company_id: targtex
+- source_key: press_corporate__teva_pharmaceutical
+  source_type: press_corporate
+  homepage_url: https://www.tevapharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Teva Pharmaceutical. Point d'entrée pour
+    les news LAI.
+  company_id: teva_pharmaceutical
+- source_key: press_corporate__theraly_fibrosis
+  source_type: press_corporate
+  homepage_url: https://www.tedcomd.com/portfolio/theraly-fibrosis
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Theraly Fibrosis. Point d'entrée pour
+    les news LAI.
+  company_id: theraly_fibrosis
+- source_key: press_corporate__urogen_pharma
+  source_type: press_corporate
+  homepage_url: https://www.urogen.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de UroGen Pharma. Point d'entrée pour les
+    news LAI.
+  company_id: urogen_pharma
+- source_key: press_corporate__vanda_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.vandapharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Vanda Pharmaceuticals. Point d'entrée
+    pour les news LAI.
+  company_id: vanda_pharmaceuticals
+- source_key: press_corporate__vasa_therapeutics
+  source_type: press_corporate
+  homepage_url: https://vasatherapeutics.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Vasa Therapeutics. Point d'entrée pour
+    les news LAI.
+  company_id: vasa_therapeutics
+- source_key: press_corporate__vifor_pharma
+  source_type: press_corporate
+  homepage_url: https://www.csl.com/we-are-csl/our-businesses-and-products/csl-vifor
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Vifor Pharma. Point d'entrée pour les
+    news LAI.
+  company_id: vifor_pharma
+- source_key: press_corporate__viiv_healthcare
+  source_type: press_corporate
+  homepage_url: https://viivhealthcare.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de ViiV Healthcare. Point d'entrée pour les
+    news LAI.
+  company_id: viiv_healthcare
+- source_key: press_corporate__viriom
+  source_type: press_corporate
+  homepage_url: https://www.viriom.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Viriom. Point d'entrée pour les news LAI.
+  company_id: viriom
+- source_key: press_corporate__zealand_pharma
+  source_type: press_corporate
+  homepage_url: https://www.zealandpharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - lai
+  notes: Site institutionnel / corporate de Zealand Pharma. Point d'entrée pour les
+    news LAI.
+  company_id: zealand_pharma
+- source_key: science_pubmed_api
+  source_type: api_pubmed
+  homepage_url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - science
+  - pharma-biotech
+  notes: 'API NCBI E-utilities pour interroger PubMed. Le filtrage (ex: LAI) se fait
+    via des requêtes construites par la Lambda. L''authentification peut utiliser
+    une clé stockée dans AWS Systems Manager Parameter Store, accessible via une variable
+    d''environnement (ex: PUBMED_API_KEY_PARAM).
+
+    '
+- source_key: trials_ctgov_api
+  source_type: api_clinicaltrials
+  homepage_url: https://clinicaltrials.gov/api/v2/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - trials
+  - pharma-biotech
+  notes: 'API ClinicalTrials.gov pour interroger les essais cliniques. Le filtrage
+    (ex: LAI) se fait via des paramètres de requête construits par la Lambda. Aucun
+    secret n''est requis pour un MVP (API publique).
+
+    '
+- source_key: reg_fda_labels_api
+  source_type: api_fda_labels
+  homepage_url: https://api.fda.gov/drug/label.json
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - regulatory
+  - pharma-biotech
+  notes: 'API openFDA pour récupérer les drug labels. Peut être utilisée pour des
+    produits LAI (ou d''autres verticales). L''accès de base est public, mais l''utilisation
+    d''une clé API reste possible pour augmenter les limites de requêtes si nécessaire.
+
+    '
+- source_key: press_sector__applied_clinical_trials
+  source_type: press_sector
+  homepage_url: https://placeholder/applied-clinical-trials.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse essais cliniques / CRO (Applied Clinical Trials).
+- source_key: press_sector__biocentury
+  source_type: press_sector
+  homepage_url: https://placeholder/biocentury.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse biotech / venture / IPO (BioCentury).
+- source_key: press_sector__biospace
+  source_type: press_sector
+  homepage_url: https://placeholder/biospace.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse emploi / actu biotech (BioSpace).
+- source_key: press_sector__bioworld
+  source_type: press_sector
+  homepage_url: https://placeholder/bioworld.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse biotech/pharma avec focus deals et régulation (BioWorld).
+- source_key: press_sector__drug_discovery_today
+  source_type: press_sector
+  homepage_url: https://placeholder/drug-discovery-today.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse R&D / drug discovery (Drug Discovery Today).
+- source_key: press_sector__firstword_pharma
+  source_type: press_sector
+  homepage_url: https://placeholder/firstword-pharma.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse pharma orientée deals / réglementation (FirstWord Pharma).
+- source_key: press_sector__genetic_engineering_news
+  source_type: press_sector
+  homepage_url: https://placeholder/genetic-engineering-news.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse biotech / gene therapy / génomique (GEN).
+- source_key: press_sector__labiotech
+  source_type: press_sector
+  homepage_url: https://placeholder/labiotech.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse biotech européenne (Labiotech).
+- source_key: press_sector__nature_biotechnology
+  source_type: press_sector
+  homepage_url: https://placeholder/nature-biotechnology.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse scientifique / biotech (Nature Biotechnology).
+- source_key: press_sector__pharmaceutical_commerce
+  source_type: press_sector
+  homepage_url: https://placeholder/pharmaceutical-commerce.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse supply chain / distribution pharma (Pharmaceutical Commerce).
+- source_key: press_sector__pharmaceutical_technology
+  source_type: press_sector
+  homepage_url: https://placeholder/pharmaceutical-technology.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse pharma / manufacturing / innovation (Pharmaceutical Technology).
+- source_key: press_sector__pharmaphorum
+  source_type: press_sector
+  homepage_url: https://placeholder/pharmaphorum.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse sectorielle pharma / digital health (pharmaphorum).
+- source_key: press_sector__pharmatimes
+  source_type: press_sector
+  homepage_url: https://placeholder/pharmatimes.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse sectorielle pharma (PharmaTimes, UK/EU).
+- source_key: press_sector__pink_sheet
+  source_type: press_sector
+  homepage_url: https://placeholder/pink-sheet.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse premium centrée réglementation / FDA (Pink Sheet).
+- source_key: press_sector__scrip_intelligence
+  source_type: press_sector
+  homepage_url: https://placeholder/scrip-intelligence.rss
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse pharma, accès au marché et pricing (Scrip Intelligence).
+- source_key: press_sector__fiercehealthcare
+  source_type: press_sector
+  homepage_url: https://www.fiercehealthcare.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - pharma-biotech
+  notes: Presse sectorielle orientée systèmes de santé / payers (FierceHealthcare).
+bouquets:
+- bouquet_id: lai_corporate_mvp
+  description: 5 pure players LAI + 1 hybrid player (Pfizer)
+  source_keys:
+  - press_corporate__medincell
+  - press_corporate__camurus
+  - press_corporate__delsitech
+  - press_corporate__nanexa
+  - press_corporate__peptron
+  - press_corporate__pfizer
+- bouquet_id: lai_press_mvp
+  description: 3 sources presse sectorielle
+  source_keys:
+  - press_sector__fiercebiotech
+  - press_sector__fiercepharma
+  - press_sector__endpoints_news
+- source_key: press_corporate__89bio
+  source_type: press_corporate
+  homepage_url: https://89bio.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: 89bio - Site corporate
+- source_key: press_corporate__abbvie
+  source_type: press_corporate
+  homepage_url: https://www.abbvie.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: AbbVie - Site corporate
+- source_key: press_corporate__activate_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.activatetherapeutics.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Activate Therapeutics - Site corporate
+- source_key: press_corporate__adare_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://adarepharmasolutions.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Adare Pharmaceuticals - Site corporate
+- source_key: press_corporate__adocia
+  source_type: press_corporate
+  homepage_url: https://www.adocia.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Adocia - Site corporate
+- source_key: press_corporate__akari_therapeutics
+  source_type: press_corporate
+  homepage_url: https://akaritx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Akari Therapeutics - Site corporate
+- source_key: press_corporate__akero_therapeutics
+  source_type: press_corporate
+  homepage_url: https://akerotx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Akero Therapeutics - Site corporate
+- source_key: press_corporate__alar_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://alarpharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Alar Pharmaceuticals - Site corporate
+- source_key: press_corporate__alcon
+  source_type: press_corporate
+  homepage_url: https://www.alcon.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Alcon - Site corporate
+- source_key: press_corporate__alexion_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://alexion.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Alexion Pharmaceuticals - Site corporate
+- source_key: press_corporate__alk_abello
+  source_type: press_corporate
+  homepage_url: https://www.alk.com
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: ALK-Abello - Site corporate
+- source_key: press_corporate__alkermes
+  source_type: press_corporate
+  homepage_url: https://www.alkermes.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Alkermes - Site corporate
+- source_key: press_corporate__allay_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.allaytx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Allay Therapeutics - Site corporate
+- source_key: press_corporate__allysta_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.allysta.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Allysta Pharmaceuticals - Site corporate
+- source_key: press_corporate__alma_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.almatherapeutics.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Alma Therapeutics - Site corporate
+- source_key: press_corporate__alteogen
+  source_type: press_corporate
+  homepage_url: https://alteogen.com
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Alteogen - Site corporate
+- source_key: press_corporate__amgen
+  source_type: press_corporate
+  homepage_url: https://www.amgen.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Amgen - Site corporate
+- source_key: press_corporate__amplicore
+  source_type: press_corporate
+  homepage_url: https://www.amplicorepharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Amplicore - Site corporate
+- source_key: press_corporate__anhui_anke_biotechnology
+  source_type: press_corporate
+  homepage_url: https://www.ankebio.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Anhui Anke Biotechnology - Site corporate
+- source_key: press_corporate__ankyra_therapeutics
+  source_type: press_corporate
+  homepage_url: https://ankyratx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Ankyra Therapeutics - Site corporate
+- source_key: press_corporate__anthos_therapeutics
+  source_type: press_corporate
+  homepage_url: https://anthostherapeutics.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Anthos Therapeutics - Site corporate
+- source_key: press_corporate__antlia_bioscience
+  source_type: press_corporate
+  homepage_url: https://antliabio.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Antlia Bioscience - Site corporate
+- source_key: press_corporate__aprilbio
+  source_type: press_corporate
+  homepage_url: http://www.aprilbio.com/en
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: AprilBio - Site corporate
+- source_key: press_corporate__asahi_kasei_pharma
+  source_type: press_corporate
+  homepage_url: https://www.asahi-kasei.co.jp/pharma/en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Asahi Kasei Pharma - Site corporate
+- source_key: press_corporate__ascendis_pharma
+  source_type: press_corporate
+  homepage_url: https://ascendispharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Ascendis Pharma - Site corporate
+- source_key: press_corporate__ascletis_biopharmaceutical
+  source_type: press_corporate
+  homepage_url: https://www.ascletis.com/Index/index/index/l/en-us.html
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Ascletis Biopharmaceutical - Site corporate
+- source_key: press_corporate__asta_medica_baxter
+  source_type: press_corporate
+  homepage_url: https://www.baxter.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: ASTA Medica (Baxter) - Site corporate
+- source_key: press_corporate__astellas_pharma
+  source_type: press_corporate
+  homepage_url: https://www.astellas.com/en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Astellas Pharma - Site corporate
+- source_key: press_corporate__astrazeneca
+  source_type: press_corporate
+  homepage_url: https://www.astrazeneca.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: AstraZeneca - Site corporate
+- source_key: press_corporate__astria_therapeutics
+  source_type: press_corporate
+  homepage_url: https://astriatx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Astria Therapeutics - Site corporate
+- source_key: press_corporate__bayer
+  source_type: press_corporate
+  homepage_url: https://www.bayer.com/en/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Bayer - Site corporate
+- source_key: press_corporate__beone
+  source_type: press_corporate
+  homepage_url: https://beonemedicines.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: BeOne - Site corporate
+- source_key: press_corporate__betta_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.bettapharma.com/en.php
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Betta Pharmaceuticals - Site corporate
+- source_key: press_corporate__biocon
+  source_type: press_corporate
+  homepage_url: https://www.biocon.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Biocon - Site corporate
+- source_key: press_corporate__bioverativ
+  source_type: press_corporate
+  homepage_url: https://www.sanofi.com/en
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Bioverativ - Site corporate
+- source_key: press_corporate__bolder_biotechnology
+  source_type: press_corporate
+  homepage_url: https://www.bolderbio.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Bolder BioTechnology - Site corporate
+- source_key: press_corporate__boston_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.bostonpharmaceuticals.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Boston Pharmaceuticals - Site corporate
+- source_key: press_corporate__braeburn
+  source_type: press_corporate
+  homepage_url: https://braeburnrx.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Braeburn - Site corporate
+- source_key: press_corporate__brii_biosciences
+  source_type: press_corporate
+  homepage_url: https://www.briibio.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Brii Biosciences - Site corporate
+- source_key: press_corporate__cali_pharmaceuticals
+  source_type: press_corporate
+  homepage_url: https://www.calibiosciences.com/EN
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Cali Pharmaceuticals - Site corporate
+- source_key: press_corporate__canwell_pharma
+  source_type: press_corporate
+  homepage_url: https://canwellpharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Canwell Pharma - Site corporate
+- source_key: press_corporate__carmot_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.gene.com/carmot
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Carmot Therapeutics - Site corporate
+- source_key: press_corporate__cheplapharm
+  source_type: press_corporate
+  homepage_url: https://www.cheplapharm.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: CHEPLAPHARM - Site corporate
+- source_key: press_corporate__chong_kun_dang_holdings
+  source_type: press_corporate
+  homepage_url: https://www.ckd-holdings.com/en/home
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Chong Kun Dang Holdings - Site corporate
+- source_key: press_corporate__chugai_pharmaceutical
+  source_type: press_corporate
+  homepage_url: https://www.chugai.com
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Chugai Pharmaceutical - Site corporate
+- source_key: press_corporate__cidara_therapeutics
+  source_type: press_corporate
+  homepage_url: https://www.cidara.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Cidara Therapeutics - Site corporate
+- source_key: press_corporate__cipla_usa
+  source_type: press_corporate
+  homepage_url: https://usa.cipla.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Cipla USA - Site corporate
+- source_key: press_corporate__consegna_pharma
+  source_type: press_corporate
+  homepage_url: https://www.consegnapharma.com/pipeline
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Consegna Pharma - Site corporate
+- source_key: press_corporate__contura
+  source_type: press_corporate
+  homepage_url: https://contura.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Contura - Site corporate
+- source_key: press_corporate__covis_pharma
+  source_type: press_corporate
+  homepage_url: https://covispharma.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Covis Pharma - Site corporate
+- source_key: press_corporate__cristal_therapeutics
+  source_type: press_corporate
+  homepage_url: https://cristaltherapeutics.com/
+  rss_url: ''
+  html_url: ''
+  ingestion_mode: html
+  enabled: false
+  default_language: en
+  tags:
+  - LAI
+  - corporate
+  notes: Cristal Therapeutics - Site corporate
+- bouquet_id: lai_corporate_all
+  description: Bouquet pour les flux corporate des principaux acteurs LAI.
+  source_keys:
+  - press_corporate__89bio
+  - press_corporate__abbvie
+  - press_corporate__activate_therapeutics
+  - press_corporate__adare_pharmaceuticals
+  - press_corporate__adocia
+  - press_corporate__akari_therapeutics
+  - press_corporate__akero_therapeutics
+  - press_corporate__alar_pharmaceuticals
+  - press_corporate__alcon
+  - press_corporate__alexion_pharmaceuticals
+  - press_corporate__alk_abello
+  - press_corporate__alkermes
+  - press_corporate__allay_therapeutics
+  - press_corporate__allysta_pharmaceuticals
+  - press_corporate__alma_therapeutics
+  - press_corporate__alteogen
+  - press_corporate__amgen
+  - press_corporate__amplicore
+  - press_corporate__anhui_anke_biotechnology
+  - press_corporate__ankyra_therapeutics
+  - press_corporate__anthos_therapeutics
+  - press_corporate__antlia_bioscience
+  - press_corporate__aprilbio
+  - press_corporate__asahi_kasei_pharma
+  - press_corporate__ascendis_pharma
+  - press_corporate__ascletis_biopharmaceutical
+  - press_corporate__asta_medica_baxter
+  - press_corporate__astellas_pharma
+  - press_corporate__astrazeneca
+  - press_corporate__astria_therapeutics
+  - press_corporate__bayer
+  - press_corporate__beone
+  - press_corporate__betta_pharmaceuticals
+  - press_corporate__biocon
+  - press_corporate__bioverativ
+  - press_corporate__bolder_biotechnology
+  - press_corporate__boston_pharmaceuticals
+  - press_corporate__braeburn
+  - press_corporate__brii_biosciences
+  - press_corporate__cali_pharmaceuticals
+  - press_corporate__camurus
+  - press_corporate__canwell_pharma
+  - press_corporate__carmot_therapeutics
+  - press_corporate__cheplapharm
+  - press_corporate__chong_kun_dang_holdings
+  - press_corporate__chongqing_chen_an_biopharmaceutical_co_ltdco_ltd
+  - press_corporate__chugai_pharmaceutical
+  - press_corporate__cidara_therapeutics
+  - press_corporate__cipla_usa
+  - press_corporate__consegna_pharma
+  - press_corporate__contura
+  - press_corporate__covis_pharma
+  - press_corporate__cristal_therapeutics
+  - press_corporate__csl_behring
+  - press_corporate__daewon_pharm
+  - press_corporate__daewoong_pharmaceutical
+  - press_corporate__dare_bioscience
+  - press_corporate__debiopharm
+  - press_corporate__debiopharm_international
+  - press_corporate__delsitech
+  - press_corporate__durect
+  - press_corporate__eagle_pharmaceuticals
+  - press_corporate__eisai
+  - press_corporate__eli_lilly
+  - press_corporate__endo_international
+  - press_corporate__enhanx_biopharm
+  - press_corporate__eupraxia_pharmaceuticals
+  - press_corporate__exavir_therapeutics
+  - press_corporate__ferring
+  - press_corporate__foresee_pharmaceuticals
+  - press_corporate__frontier_biotechnologies
+  - press_corporate__g2gbio
+  - press_corporate__genexine
+  - press_corporate__gilead_sciences
+  - press_corporate__glaxosmithkline
+  - press_corporate__hanmi_pharmaceutical
+  - press_corporate__hansoh_pharmaceutical
+  - press_corporate__harrow
+  - press_corporate__heron_therapeutics
+  - press_corporate__immunoforge_co
+  - press_corporate__immunwork
+  - press_corporate__imv
+  - press_corporate__indivior
+  - press_corporate__insitu_biologics
+  - press_corporate__intra_cellular_therapies
+  - press_corporate__ipsen
+  - press_corporate__janssen
+  - press_corporate__janssen_pharmaceuticals
+  - press_corporate__jazz_pharmaceuticals
+  - press_corporate__jcr_pharmaceuticals
+  - press_corporate__jiangsu_hengrui_medicine
+  - press_corporate__jiangxi_puheng_pharmaceuticals_ltd_lidds_ab
+  - press_corporate__laboratorios_farmaceuticos_rovi
+  - press_corporate__leadermed_health_group_ltd
+  - press_corporate__lee_s_pharmaceutical_holdings
+  - press_corporate__lepu_medical_technology_beijing_co_ltd
+  - press_corporate__lidds
+  - press_corporate__lipocure
+  - press_corporate__lisata_therapeutics_inc_qilu_pharmaceutical_co_ltd
+  - press_corporate__ltt_bio_pharma_co
+  - press_corporate__lundbeck
+  - press_corporate__luye_pharma
+  - press_corporate__mallinckrodt
+  - press_corporate__mapi_pharma
+  - press_corporate__medincell
+  - press_corporate__merck_co
+  - press_corporate__metsera
+  - press_corporate__molecular_partners
+  - press_corporate__mundipharma
+  - press_corporate__nanology
+  - press_corporate__neuraly
+  - press_corporate__nkd_pharm
+  - press_corporate__novartis
+  - press_corporate__novo_nordisk
+  - press_corporate__omeros
+  - press_corporate__opko_health
+  - press_corporate__original_biomedicals_implants
+  - press_corporate__pacira_biosciences
+  - press_corporate__painreform
+  - press_corporate__pdx_pharmaceuticals
+  - press_corporate__peptron
+  - press_corporate__peregrine_ophthalmic
+  - press_corporate__persica_pharmaceuticals
+  - press_corporate__pfizer
+  - press_corporate__pharmaessentia
+  - press_corporate__phasebio_pharmaceuticals
+  - press_corporate__polypid
+  - press_corporate__prolynx
+  - press_corporate__protheragen
+  - press_corporate__quiapeg_pharmaceuticals
+  - press_corporate__rebelmedicine
+  - press_corporate__recordati
+  - press_corporate__regeneron_pharmaceuticals
+  - press_corporate__reliance_life_sciences
+  - press_corporate__revance_therapeutics
+  - press_corporate__rhythm_pharmaceuticals
+  - press_corporate__roxall_medizin
+  - press_corporate__samyang_corp
+  - press_corporate__sanofi
+  - press_corporate__scilex_holding
+  - press_corporate__serina_therapeutics
+  - press_corporate__shionogi_co
+  - press_corporate__silexion_therapeutics
+  - press_corporate__sonoran_biosciences
+  - press_corporate__spectrum_pharmaceuticals
+  - press_corporate__spinethera
+  - press_corporate__spinnaker_biosciences
+  - press_corporate__spiral_therapeutics
+  - press_corporate__sun_pharmaceutical
+  - press_corporate__synartro
+  - press_corporate__taiwan_liposome
+  - press_corporate__takeda_pharmaceutical
+  - press_corporate__targtex
+  - press_corporate__teva_pharmaceutical
+  - press_corporate__theraly_fibrosis
+  - press_corporate__urogen_pharma
+  - press_corporate__vanda_pharmaceuticals
+  - press_corporate__vasa_therapeutics
+  - press_corporate__vifor_pharma
+  - press_corporate__viiv_healthcare
+  - press_corporate__viriom
+  - press_corporate__zealand_pharma
+- bouquet_id: science_pubmed_lai
+  description: 'Bouquet pour interroger PubMed sur des requêtes LAI (requêtes construites
+    côté Lambda ou config).
+
+    '
+  source_keys:
+  - science_pubmed_api
+- bouquet_id: trials_ctgov_lai
+  description: 'Bouquet pour interroger ClinicalTrials.gov sur les études cliniques
+    LAI (filtres construits côté Lambda ou config).
+
+    '
+  source_keys:
+  - trials_ctgov_api
+- bouquet_id: reg_fda_labels_lai
+  description: 'Bouquet pour interroger l''API openFDA sur des labels de produits
+    LAI. La sélection des produits/termes LAI est gérée côté Lambda ou config.
+
+    '
+  source_keys:
+  - reg_fda_labels_api
+- bouquet_id: press_biotech_premium
+  description: Bouquet pour une sélection de sites de presse biotech/pharma.
+  source_keys:
+  - press_sector__applied_clinical_trials
+  - press_sector__biocentury
+  - press_sector__biospace
+  - press_sector__bioworld
+  - press_sector__drug_discovery_today
+  - press_sector__endpoints_news
+  - press_sector__fiercebiotech
+  - press_sector__fiercehealthcare
+  - press_sector__fiercepharma
+  - press_sector__firstword_pharma
+  - press_sector__genetic_engineering_news
+  - press_sector__labiotech
+  - press_sector__nature_biotechnology
+  - press_sector__pharmaceutical_commerce
+  - press_sector__pharmaceutical_technology
+  - press_sector__pharmaphorum
+  - press_sector__pharmatimes
+  - press_sector__pink_sheet
+  - press_sector__scrip_intelligence

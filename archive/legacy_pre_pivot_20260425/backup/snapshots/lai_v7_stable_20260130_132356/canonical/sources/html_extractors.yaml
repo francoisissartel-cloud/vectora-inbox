@@ -1,0 +1,61 @@
+# Configuration des extracteurs HTML spécifiques
+# Utilisés uniquement pour les sources avec structures HTML complexes
+# Fallback automatique sur le parser générique si pas de configuration
+
+extractors:
+  # Camurus - Site avec structure spécifique
+  press_corporate__camurus:
+    description: "Extracteur spécifique pour Camurus press releases"
+    selectors:
+      container: "div.press-releases, div.news-list, main"
+      item: "div.press-release-item, div.news-item, article, div[class*='press'], div[class*='news']"
+      title: "h3 a, h2 a, h4 a, a[class*='title'], .title a"
+      url: "h3 a, h2 a, h4 a, a[class*='title'], .title a"
+      date: "time, .date, .published, span[class*='date'], div[class*='date']"
+      description: "div.excerpt, .summary, .description, p"
+    date_format: "%B %d, %Y"  # Format: January 15, 2025
+    base_url: "https://www.camurus.com"
+    max_items: 20
+    notes: "Structure HTML avec press releases dans conteneur spécifique"
+
+  # Peptron - Site coréen avec problèmes SSL
+  press_corporate__peptron:
+    description: "Extracteur spécifique pour Peptron news (site coréen)"
+    selectors:
+      container: "table.board_list, table[class*='list'], .news-table, main"
+      item: "tr, li, div.news-item"
+      title: "td.subject a, td[class*='title'] a, .title a, a"
+      url: "td.subject a, td[class*='title'] a, .title a, a"
+      date: "td.date, td[class*='date'], .date, time"
+      description: "td.content, .content, .summary"
+    date_format: "%Y.%m.%d"  # Format coréen: 2025.01.15
+    base_url: "https://www.peptron.co.kr"
+    ssl_verify: false  # Certificat SSL invalide
+    max_items: 20
+    notes: "Site coréen avec table HTML et certificat SSL problématique"
+
+# Configuration globale pour les extracteurs
+global_settings:
+  # Timeout spécifique pour les extracteurs (en secondes)
+  extraction_timeout: 10
+  
+  # Nombre maximum d'items par source
+  default_max_items: 20
+  
+  # Patterns de date par défaut si non spécifiés
+  default_date_patterns:
+    - "%Y-%m-%d"          # 2025-01-15
+    - "%B %d, %Y"         # January 15, 2025
+    - "%d %B %Y"          # 15 January 2025
+    - "%d/%m/%Y"          # 15/01/2025
+    - "%m/%d/%Y"          # 01/15/2025
+    - "%Y.%m.%d"          # 2025.01.15
+  
+  # Sélecteurs de fallback si les sélecteurs spécifiques échouent
+  fallback_selectors:
+    container: "main, .content, .news, .press, body"
+    item: "article, div[class*='news'], div[class*='press'], div[class*='item'], li"
+    title: "h1, h2, h3, h4, a"
+    url: "a[href]"
+    date: "time, .date, .published, span[class*='date']"
+    description: "p, .summary, .excerpt, .description"

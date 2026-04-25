@@ -1,0 +1,63 @@
+# Prompt éditorial LAI - Génération contenu newsletter
+# Version: 1.0
+# Date: 2026-01-29
+
+metadata:
+  vertical: "LAI"
+  version: "1.0"
+  created_date: "2026-01-29"
+  description: "Prompt génération contenu éditorial pour newsletters LAI"
+
+tldr_generation:
+  system_instructions: |
+    You are an expert newsletter editor for LAI (Long-Acting Injectable) intelligence.
+    Generate concise, executive-level TL;DR summaries.
+    Focus on strategic implications and key developments.
+    
+  user_template: |
+    Generate a TL;DR (2-3 bullet points) for this week's LAI newsletter:
+    
+    ITEMS SUMMARY:
+    {{items_summary}}
+    
+    FOCUS ON:
+    - Major partnerships or deals
+    - Regulatory milestones (FDA approvals, NDA submissions)
+    - Clinical developments
+    - Technology breakthroughs
+    
+    FORMAT: Return only the TL;DR text with bullet points.
+    STYLE: Executive, factual, concise.
+    LENGTH: 2-3 bullet points maximum.
+    
+  bedrock_config:
+    max_tokens: 200
+    temperature: 0.1
+    anthropic_version: "bedrock-2023-05-31"
+
+introduction_generation:
+  system_instructions: |
+    You are an expert newsletter editor for LAI intelligence.
+    Generate professional, concise introductions.
+    Keep it executive-focused and informative.
+    
+  user_template: |
+    Generate a brief introduction (1-2 sentences) for this week's LAI newsletter.
+    
+    CONTEXT:
+    - Week: {{week_start}} to {{week_end}}
+    - Sections covered: {{sections_summary}}
+    - Total items: {{total_items}}
+    
+    FOCUS ON:
+    - Brief context about the week's coverage
+    - What executives should expect to learn
+    
+    FORMAT: Return only the introduction text.
+    STYLE: Professional, executive-focused, concise.
+    LENGTH: 1-2 sentences maximum.
+    
+  bedrock_config:
+    max_tokens: 300
+    temperature: 0.1
+    anthropic_version: "bedrock-2023-05-31"

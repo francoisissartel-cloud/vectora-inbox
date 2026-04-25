@@ -1,0 +1,181 @@
+# Catalogue global des sources pour Vectora Inbox MVP LAI
+# Ce fichier utilise le nouveau modèle avec ingestion_mode, enabled, homepage_url, rss_url, html_url
+
+sources:
+  # ========================================================================
+  # SOURCES CORPORATE LAI - PRIORITAIRES POUR MVP
+  # ========================================================================
+  
+  - source_key: "press_corporate__medincell"
+    company_id: "medincell"
+    homepage_url: "https://www.medincell.com/"
+    rss_url: ""
+    html_url: "https://www.medincell.com/news/"
+    ingestion_mode: "html"
+    enabled: true
+    source_type: "press_corporate"
+    default_language: "en"
+    tags: ["LAI", "corporate"]
+    ingestion_profile: "corporate_pure_player_broad"
+    date_extraction_patterns:
+      - r"Published:\s*(\d{4}-\d{2}-\d{2})"
+      - r"Date:\s*(\w+ \d{1,2}, \d{4})"
+      # NOUVEAUX patterns pour contenu corporate
+      - r"(\w+ \d{1,2}, \d{4})\w*"              # "December 9, 2025December"
+      - r"(\d{1,2} \w+ \d{4})"                  # "10 December, 2025"
+      - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
+      - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
+      # Patterns avec contexte
+      - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
+    content_enrichment: "full_article"
+    max_content_length: 2000
+    notes: "MedinCell (France) - Société LAI leader. Ingestion HTML sur page news."
+
+  - source_key: "press_corporate__camurus"
+    company_id: "camurus"
+    homepage_url: "https://www.camurus.com/"
+    rss_url: ""
+    html_url: "https://www.camurus.com/media/press-releases/"
+    ingestion_mode: "html"
+    enabled: true
+    source_type: "press_corporate"
+    default_language: "en"
+    tags: ["LAI", "corporate"]
+    ingestion_profile: "corporate_pure_player_broad"
+    date_extraction_patterns:
+      - r"(\d{1,2} \w+ \d{4})"
+      - r"(\w+ \d{1,2}, \d{4})"
+      # NOUVEAUX patterns enrichis
+      - r"(\w+ \d{1,2}, \d{4})\w*"              # "December 9, 2025December"
+      - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
+      - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
+      - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
+    content_enrichment: "full_article"
+    max_content_length: 2000
+    notes: "Camurus (Suède) - Société LAI leader. Ingestion HTML sur page press releases."
+
+  - source_key: "press_corporate__delsitech"
+    company_id: "delsitech"
+    homepage_url: "https://www.delsitech.com/"
+    rss_url: ""
+    html_url: "https://www.delsitech.com/news/"
+    ingestion_mode: "html"
+    enabled: true
+    source_type: "press_corporate"
+    default_language: "en"
+    tags: ["LAI", "corporate"]
+    ingestion_profile: "corporate_pure_player_broad"
+    date_extraction_patterns:
+      - r"(\w+ \d{1,2}, \d{4})\w*"              # "December 9, 2025December"
+      - r"(\d{1,2} \w+ \d{4})"                  # "10 December, 2025"
+      - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
+      - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
+      - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
+    content_enrichment: "full_article"
+    max_content_length: 2000
+    notes: "DelSiTech (Finlande) - Technologie LAI. Ingestion HTML sur page news."
+
+  - source_key: "press_corporate__nanexa"
+    company_id: "nanexa"
+    homepage_url: "https://www.nanexa.se/"
+    rss_url: ""
+    html_url: "https://www.nanexa.se/en/press/"
+    ingestion_mode: "html"
+    enabled: true
+    source_type: "press_corporate"
+    default_language: "en"
+    tags: ["LAI", "corporate"]
+    ingestion_profile: "corporate_pure_player_broad"
+    date_extraction_patterns:
+      - r"(\w+ \d{1,2}, \d{4})\w*"              # "December 9, 2025December"
+      - r"(\d{1,2} \w+ \d{4})"                  # "10 December, 2025"
+      - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
+      - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
+      - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
+    content_enrichment: "full_article"
+    max_content_length: 2000
+    notes: "Nanexa (Suède) - Technologie LAI. Ingestion HTML sur page press."
+
+  - source_key: "press_corporate__peptron"
+    company_id: "peptron"
+    homepage_url: "https://www.peptron.co.kr/eng/"
+    rss_url: ""
+    html_url: "https://www.peptron.co.kr/eng/pr/news.php"
+    ingestion_mode: "html"
+    enabled: true
+    source_type: "press_corporate"
+    default_language: "en"
+    tags: ["LAI", "corporate"]
+    ingestion_profile: "corporate_pure_player_broad"
+    date_extraction_patterns:
+      - r"(\w+ \d{1,2}, \d{4})\w*"              # "December 9, 2025December"
+      - r"(\d{1,2} \w+ \d{4})"                  # "10 December, 2025"
+      - r"(\w+\s+\d{1,2},\s+\d{4})"            # "November 5, 2025"
+      - r"(\d{4}-\d{2}-\d{2})"                 # ISO format
+      - r"(?:published|released|announced).*?(\w+ \d{1,2}, \d{4})"
+    content_enrichment: "full_article"
+    max_content_length: 2000
+    notes: "Peptron (Corée du Sud) - Société LAI. Ingestion HTML sur page news."
+
+  # ========================================================================
+  # SOURCES PRESSE SECTORIELLE - PRIORITAIRES POUR MVP
+  # ========================================================================
+  
+  - source_key: "press_sector__fiercebiotech"
+    homepage_url: "https://www.fiercebiotech.com/"
+    rss_url: "https://www.fiercebiotech.com/rss/xml"
+    html_url: ""
+    ingestion_mode: "rss"
+    enabled: true
+    source_type: "press_sector"
+    default_language: "en"
+    tags: ["pharma-biotech"]
+    ingestion_profile: "press_technology_focused"
+    content_enrichment: "full_article"
+    max_content_length: 2000
+    notes: "FierceBiotech - Presse biotech. Flux RSS disponible."
+
+  - source_key: "press_sector__fiercepharma"
+    homepage_url: "https://www.fiercepharma.com/"
+    rss_url: "https://www.fiercepharma.com/rss/xml"
+    html_url: ""
+    ingestion_mode: "rss"
+    enabled: true
+    source_type: "press_sector"
+    default_language: "en"
+    tags: ["pharma-biotech"]
+    ingestion_profile: "press_technology_focused"
+    notes: "FiercePharma - Presse pharma. Flux RSS disponible."
+
+  - source_key: "press_sector__endpoints_news"
+    homepage_url: "https://endpts.com/"
+    rss_url: "https://endpts.com/feed/"
+    html_url: ""
+    ingestion_mode: "rss"
+    enabled: true
+    source_type: "press_sector"
+    default_language: "en"
+    tags: ["pharma-biotech"]
+    ingestion_profile: "press_technology_focused"
+    notes: "Endpoints News - Presse biotech/pharma. Flux RSS disponible."
+
+bouquets:
+  # ========================================================================
+  # BOUQUETS MVP
+  # ========================================================================
+  
+  - bouquet_id: "lai_corporate_mvp"
+    description: "Bouquet MVP : 5 sources corporate LAI pilotes avec ingestion HTML activée."
+    source_keys:
+      - "press_corporate__medincell"
+      - "press_corporate__camurus"
+      - "press_corporate__delsitech"
+      - "press_corporate__nanexa"
+      - "press_corporate__peptron"
+
+  - bouquet_id: "lai_press_mvp"
+    description: "Bouquet MVP : 3 sources presse sectorielle avec flux RSS activés."
+    source_keys:
+      - "press_sector__fiercebiotech"
+      - "press_sector__fiercepharma"
+      - "press_sector__endpoints_news"

@@ -1,0 +1,198 @@
+# Domain Definitions - Matching and Scoring Rules
+# Version: 1.0.0
+# Last Updated: 2026-02-03
+# 
+# ÉVOLUTION: Ce fichier sera enrichi au fil des tests E2E
+# - Ajouter signaux détectés dans les faux négatifs
+# - Retirer signaux générant du bruit (faux positifs)
+# - Ajuster scores basés sur feedback utilisateur
+#
+# WORKFLOW D'AMÉLIORATION:
+# 1. Test E2E avec version actuelle
+# 2. Analyser faux positifs/négatifs
+# 3. Modifier ce fichier (incrémenter version)
+# 4. Sync vers S3 (pas de redéploiement code)
+# 5. Re-tester et comparer métriques
+
+lai_domain_definition:
+  _metadata:
+    version: "1.0.0"
+    description: "LAI domain definition for matching and scoring"
+    last_updated: "2026-02-03"
+    created_by: "Correctif matching - baseline from diagnostic"
+    
+    changelog:
+      - version: "1.0.0"
+        date: "2026-02-03"
+        changes: "Initial version - baseline from diagnostic"
+        test_run: "lai_weekly_v12"
+        author: "Diagnostic matching v11"
+        notes: |
+          Baseline créée depuis diagnostic_matching_lai_weekly_v11_2026-02-03.md
+          Utilise références dynamiques vers scopes canonical existants
+          Objectif: Débloquer matching (0% → >50%)
+  
+  # =========================================================================
+  # SIGNAUX FORTS (high confidence match)
+  # =========================================================================
+  # Source: Références dynamiques vers scopes canonical existants
+  # Évolution: Ajouter signaux détectés dans faux négatifs
+  
+  core_technologies:
+    # Références vers scopes existants
+    - "{{ref:lai_keywords.core_phrases}}"
+    - "{{ref:lai_keywords.technology_terms_high_precision}}"
+  
+  pure_player_companies:
+    # Référence vers scope existant
+    - "{{ref:lai_companies_mvp_core}}"
+  
+  trademarks:
+    # Référence vers scope existant
+    - "{{ref:lai_trademarks_global}}"
+  
+  # =========================================================================
+  # SIGNAUX MOYENS (medium confidence)
+  # =========================================================================
+  # Évolution: Ajuster si trop permissifs (faux positifs)
+  
+  technology_families:
+    # Référence vers scope existant
+    - "{{ref:lai_keywords.technology_use}}"
+  
+  dosing_intervals:
+    # Référence vers scope existant
+    - "{{ref:lai_keywords.interval_patterns}}"
+  
+  # =========================================================================
+  # SIGNAUX FAIBLES (low confidence)
+  # =========================================================================
+  # Évolution: Augmenter seuil si trop de bruit
+  
+  routes:
+    # Référence vers scope existant
+    - "{{ref:lai_keywords.route_admin_terms}}"
+  
+  molecules:
+    # Référence vers scope existant
+    - "{{ref:lai_molecules_global}}"
+  
+  # =========================================================================
+  # EXCLUSIONS (anti-LAI)
+  # =========================================================================
+  # Évolution: Ajouter termes générant du bruit
+  
+  exclusions:
+    # Référence vers scope existant
+    - "{{ref:lai_keywords.negative_terms}}"
+  
+  # =========================================================================
+  # RÈGLES DE MATCHING
+  # =========================================================================
+  # Évolution: Ajuster seuils basés sur métriques E2E
+  
+  matching_rules:
+    high_confidence:
+      description: "1+ strong signal → high confidence match"
+      conditions:
+        - "1+ core_technology"
+        - "1+ pure_player_company"
+        - "1+ trademark"
+      min_score: 70
+      notes: "Items avec signaux forts sont toujours pertinents"
+    
+    medium_confidence:
+      description: "2+ medium signals → medium confidence match"
+      conditions:
+        - "2+ technology_families"
+        - "1+ dosing_interval + 1+ route"
+      min_score: 40
+      notes: "Combinaison de signaux moyens indique pertinence"
+    
+    low_confidence:
+      description: "3+ weak signals + 0 exclusions → low confidence match"
+      conditions:
+        - "3+ weak signals"
+        - "0 exclusions"
+      min_score: 20
+      notes: "Signaux faibles seuls nécessitent validation humaine"
+    
+    reject:
+      description: "1+ exclusion → reject"
+      conditions:
+        - "1+ exclusion"
+      notes: "Exclusions sont des signaux forts de non-pertinence"
+  
+  # =========================================================================
+  # SCORES DE BASE PAR TYPE D'ÉVÉNEMENT
+  # =========================================================================
+  # Évolution: Ajuster basés sur valeur business réelle
+  # Source: Analyse des newsletters précédentes
+  
+  event_type_base_scores:
+    partnership: 60
+    regulatory: 70
+    clinical_update: 50
+    financial_results: 40
+    corporate_move: 45
+    scientific_publication: 35
+    other: 20
+  
+  # =========================================================================
+  # BOOSTS PAR TYPE D'ENTITÉ
+  # =========================================================================
+  # Évolution: Ajuster basés sur corrélation avec pertinence
+  # Source: Analyse des items haute qualité
+  
+  entity_boosts:
+    pure_player_company: 25
+    trademark: 20
+    core_technology: 15
+    technology_family: 10
+    molecule: 8
+    dosing_interval: 5
+    route: 3
+  
+  # =========================================================================
+  # BOOST DE RÉCENCE
+  # =========================================================================
+  # Évolution: Ajuster decay_days basé sur fréquence newsletter
+  
+  recency_boost:
+    max_boost: 10
+    decay_days: 30
+    notes: "Items récents sont plus pertinents pour newsletter hebdomadaire"
+  
+  # =========================================================================
+  # PÉNALITÉ DE CONFIANCE
+  # =========================================================================
+  # Évolution: Ajuster si trop de faux positifs en low confidence
+  
+  confidence_penalty:
+    low_confidence: -5
+    medium_confidence: 0
+    high_confidence: 0
+    notes: "Pénalité pour signaux faibles seuls"
+
+# =============================================================================
+# NOTES D'ÉVOLUTION
+# =============================================================================
+#
+# VERSION 1.0.0 (2026-02-03):
+# - Baseline créée depuis diagnostic
+# - Utilise références dynamiques vers scopes existants
+# - Scores et seuils basés sur analyse manuelle items v11
+#
+# PROCHAINES VERSIONS:
+# - v1.1.0: Ajustements basés sur résultats E2E v12
+# - v1.2.0: Ajustements basés sur résultats E2E v13
+# - v2.0.0: Refonte majeure si nécessaire
+#
+# MÉTRIQUES À TRACKER:
+# - Match rate (objectif: 60-80%)
+# - Precision (objectif: >80%)
+# - Recall (objectif: >70%)
+# - False positive rate (objectif: <20%)
+# - False negative rate (objectif: <30%)
+#
+# =============================================================================

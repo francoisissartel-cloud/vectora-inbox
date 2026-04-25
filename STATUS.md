@@ -1,6 +1,6 @@
 # Vectora Inbox V1 — Project Status
 
-**Dernière mise à jour** : 2026-04-25 (Claude)
+**Dernière mise à jour** : 2026-04-25 (Claude — Phase 2.0 volet Structure terminé, prêt pour merge)
 **Version actuelle du chantier** : Phase 1 cadrage validée. Phase 2.0 prête à exécuter.
 
 > Ce fichier est le **tableau de bord vivant** du projet. À ouvrir en premier quand on arrive sur le projet (Frank ou Claude). Mis à jour à chaque jalon validé.
@@ -17,8 +17,8 @@ Vectora Inbox V1 est un moteur **local-first** d'alimentation d'un datalake de v
 
 ## Où on en est aujourd'hui
 
-**Étape actuelle** : 🔵 Phase 2.0 — Hygiène repo (Git + structure)
-**Statut** : Plan validé, exécution à lancer depuis Claude Code dans VS Code
+**Étape actuelle** : 🔵 Phase 2.0 — Hygiène repo (terminée, en attente merge sur main)
+**Statut** : Volets Git et Structure terminés sur la branche `refactor/v1-repo-cleanup`. PR à ouvrir pour merge final sur main.
 
 **Dernier livrable validé** : ✅ Phase 1 — Cadrage complet (25/04/2026)
 - Audit du repo existant (`docs/architecture/phase1_audit_pivot_datalake.md`)
@@ -29,9 +29,11 @@ Vectora Inbox V1 est un moteur **local-first** d'alimentation d'un datalake de v
 - Optimisations différées tracées (`docs/architecture/future_optimizations.md`)
 - 10 ADRs des décisions Phase 1 (`docs/decisions/`)
 
-**Prochaine étape immédiate** : Exécuter Phase 2.0 depuis Claude Code
-1. Volet Git : tag `legacy-pre-pivot-20260425` + branche `archive/legacy-pre-pivot` + merge `docs/phase1-design` dans main + suppression des 6 vieilles branches
-2. Volet Structure : archivage du legacy sous `archive/legacy_pre_pivot_20260425/` + nouvelle arborescence (8 dossiers à la racine) + swap CLAUDE.md (V1.2 à la racine, ancien archivé)
+**Prochaine étape immédiate** : Merger la PR Phase 2.0 sur main, puis enchaîner sur Phase 2.1 — Audit nommage canonical
+- Vérifier la PR `refactor/v1-repo-cleanup` → main sur GitHub
+- Merger la PR (validation Frank)
+- Mettre à jour STATUS.md (fin Phase 2.0)
+- Enchaîner sur Phase 2.1 (audit nommage exhaustif dans `canonical/`)
 
 ---
 
@@ -40,7 +42,7 @@ Vectora Inbox V1 est un moteur **local-first** d'alimentation d'un datalake de v
 | # | Jalon | Statut | Date validation | Doc de référence |
 |---|---|---|---|---|
 | 1 | **Phase 1** — Cadrage et design | ✅ Fait | 25/04/2026 | `docs/architecture/datalake_v1_design.md` |
-| 2 | **Phase 2.0** — Hygiène repo | 🔵 À exécuter | - | `docs/architecture/phase2.0_repo_structure.md` |
+| 2 | **Phase 2.0** — Hygiène repo | 🔵 Volets Git et Structure faits, en attente merge | - | `docs/architecture/phase2.0_repo_structure.md` |
 | 3 | **Phase 2.1** — Audit nommage canonical | ⏸ À venir | - | (à créer en Phase 2.1) |
 | 4 | **Niveau 1** — Fondations | ⏸ À venir | - | `datalake_v1_design.md` §13.3 |
 | 5 | **Niveau 2** — Cœur | ⏸ À venir | - | `datalake_v1_design.md` §13.4 |
@@ -84,6 +86,7 @@ Chaque décision a son ADR (Architecture Decision Record) dans `docs/decisions/`
 | Date | Difficulté | Résolution |
 |---|---|---|
 | 25/04 | Lock `.git/index.lock` bloqué — Cowork ne peut pas le manipuler à cause du repo dans OneDrive | Bascule vers Claude Code dans VS Code (Windows natif) — fonctionne. Recommandation long terme : déplacer le repo hors OneDrive. |
+| 25/04 | Repo dédié à Claude (`vectora-inbox - claude/`) avait un état partiel : sources `.py` des scripts d'ingestion/discovery/validation manquaient (seulement `.pyc` compilés). Frank avait les `.py` dans son repo principal `vectora-inbox/`. | Récupération via `cp -r` depuis `vectora-inbox/scripts/` vers `scripts/legacy_reference/` du repo de travail. 10 fichiers conservés comme référence à adapter au Niveau 1. |
 
 ---
 

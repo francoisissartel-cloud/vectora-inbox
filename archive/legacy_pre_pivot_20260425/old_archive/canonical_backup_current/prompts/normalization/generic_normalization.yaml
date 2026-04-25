@@ -1,0 +1,104 @@
+# Generic Normalization Prompt
+# 100% vertical-agnostic - works for LAI, siRNA, cell therapy, etc.
+# Extracts factual information only, no domain-specific scoring
+
+metadata:
+  prompt_id: "generic_normalization"
+  version: "2.0"
+  created_date: "2026-01-31"
+  description: "Generic normalization for biotech/pharma news - vertical-agnostic"
+  replaces: "lai_normalization.yaml v1.1"
+
+system_instructions: |
+  You are a specialized AI assistant for biotech/pharma news analysis.
+  Extract structured factual information with high precision.
+  DO NOT evaluate relevance to any specific domain - just extract facts.
+
+user_template: |
+  Analyze this biotech/pharma news item and extract structured information.
+
+  CRITICAL RULES:
+  1. Only extract entities EXPLICITLY mentioned in the text
+  2. DO NOT invent, infer, or hallucinate entities not present
+  3. DO NOT evaluate domain relevance (LAI, siRNA, etc.) - just extract facts
+  4. Extract publication date with high priority
+
+  TEXT TO ANALYZE:
+  Title: {{item_title}}
+  Content: {{item_text}}
+
+  EXTRACTION TASKS:
+
+  1. SUMMARY (2-3 sentences)
+     - Concise factual summary of the news
+     - Focus on key facts: who, what, when
+     - IMPORTANT: If LAI-related terms detected (dosing intervals, technologies),
+       include them explicitly in summary
+
+  2. PUBLICATION DATE (CRITICAL - REQUIRED)
+     - Look for dates like "27 January 2026", "January 28, 2026", "09 January 2026"
+     - Return format: YYYY-MM-DD (REQUIRED)
+     - If multiple dates, choose publication date (not future event dates)
+     - If no clear date found, return null
+     - Provide confidence: 0.0-1.0 (1.0=certain, 0.5=uncertain, 0.0=no date)
+
+  3. EVENT CLASSIFICATION
+     - Classify into ONE primary type:
+       * partnership (collaborations, licensing, M&A, grants, funding, research agreements)
+       * regulatory (approvals, submissions, designations)
+       * clinical_update (trial results, enrollments, milestones)
+       * corporate_move (leadership, strategy, restructuring)
+       * financial_results (earnings, funding, investments)
+       * other (if none of above fit)
+     
+     CRITICAL DISTINCTIONS:
+     - Grant/funding for R&D → partnership (NOT financial_results)
+     - Quarterly earnings → financial_results
+     
+     EXAMPLES:
+     - "Company awarded $5M grant for malaria research" → partnership
+     - "Company reports Q3 earnings" → financial_results
+
+  4. ENTITY EXTRACTION (ALL explicitly mentioned)
+     - Companies: ALL pharmaceutical/biotech company names mentioned in text
+       CRITICAL: Extract EVERY company name that appears in the text
+       Examples: Teva, MedinCell, Camurus, Johnson & Johnson, Pfizer, Novartis
+       DO NOT limit to examples - extract ALL companies mentioned
+     - Molecules: ALL drug/molecule names (INN, generic names)
+     - Technologies: ALL technology keywords (e.g., "microspheres", "PEGylation")
+     - Trademarks: ALL commercial product names (e.g., "UZEDY®", "Ozempic")
+     - Indications: ALL therapeutic indications/diseases mentioned
+     - Dosing Intervals: ALL dosing frequency terms EXPLICITLY mentioned
+       Examples: "once-weekly", "once-monthly", "once every 3 months", 
+                 "q4w", "q8w", "q12w", "quarterly", "semi-annual"
+       CRITICAL: Extract from BOTH title AND content
+       Priority: Check title FIRST (dosing often in headlines)
+
+  RESPONSE FORMAT (JSON only, no additional text):
+  {
+    "title": "...",
+    "summary": "...",
+    "extracted_date": "2026-01-27",
+    "date_confidence": 0.95,
+    "event_type": "partnership",
+    "companies_detected": ["Company A", "Company B"],
+    "molecules_detected": ["Molecule X"],
+    "technologies_detected": ["Technology Y"],
+    "trademarks_detected": ["Trademark Z"],
+    "indications_detected": ["Indication W"],
+    "dosing_intervals_detected": ["once-weekly"]
+  }
+
+  CRITICAL: Fields "extracted_date" and "date_confidence" are REQUIRED.
+  Respond with ONLY the JSON, no additional text.
+
+bedrock_config:
+  max_tokens: 1000
+  temperature: 0.0
+  anthropic_version: "bedrock-2023-05-31"
+
+validation_rules:
+  - "All entities must be explicitly mentioned in text"
+  - "No domain-specific scoring (no lai_relevance_score)"
+  - "No inference beyond what's stated"
+  - "Date extraction is mandatory"

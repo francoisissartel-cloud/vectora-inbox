@@ -1,63 +1,51 @@
-# ========================================
-# FICHIERS ÉPHÉMÈRES (JAMAIS COMMITER)
-# ========================================
+# =====================================================================
+# .gitignore — Vectora Inbox V1
+# =====================================================================
+# Voir docs/architecture/datalake_v1_design.md §3 pour le contexte data/.
+# =====================================================================
 
-# Temporaires de test
-.tmp/
-event_*.json
-payload*.json
-response_*.json
-items_*.json
-ingested_items_*.json
-newsletter_*.json
-logs_*.txt
-bedrock_logs.json
-simple_payload.json
-$null
+# ---------------------------------------------------------------------
+# 1. Données produites au runtime (le datalake)
+# ---------------------------------------------------------------------
+# Tout sous data/ est ignoré SAUF les .gitkeep qui matérialisent
+# l'arborescence cible dans Git.
+data/**
+!data/**/
+!data/**/.gitkeep
 
-# Artefacts de build
-.build/workspace/
-.build/layers/*.zip
-.build/layers/manifest.json
-*.zip
-output/lambda_packages/
-
-# Layer ARNs (sauvegardés dans layer_management/)
-*_layer_arn.txt
-vectora_core_layer_arn.txt
-vectora-inbox-common-deps-dev_arn.txt
-vectora-inbox-vectora-core-approche-b-dev_arn.txt
-
-# Configs temporaires (sauf exemples)
-lai_weekly_v*.yaml
-!client-config-examples/lai_weekly_v*.yaml
-global_prompts.yaml
-!canonical/prompts/global_prompts.yaml
-source_catalog.yaml
-!canonical/sources/source_catalog.yaml
-
-# Scripts one-shot
-execute_*.py
-phase6_*.py
-phase7_*.py
-
-# ========================================
-# DOSSIERS SYSTÈME
-# ========================================
-__pycache__/
-*.pyc
-.pytest_cache/
-.vscode/
-.idea/
-
-# ========================================
-# DONNÉES SENSIBLES
-# ========================================
+# ---------------------------------------------------------------------
+# 2. Secrets
+# ---------------------------------------------------------------------
+.env
 *.env
-.aws/credentials
+!.env.example
 secrets/
 
-# ========================================
-# ARCHIVE
-# ========================================
-archive/
+# ---------------------------------------------------------------------
+# 3. Python
+# ---------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# ---------------------------------------------------------------------
+# 4. Éditeurs et OS
+# ---------------------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ---------------------------------------------------------------------
+# 5. Temporaires
+# ---------------------------------------------------------------------
+.tmp/
+*.swp
+*~
