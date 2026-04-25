@@ -1,0 +1,15 @@
+# Scopes d'indications thérapeutiques.
+# Mots-clés et expressions indiquant les indications thérapeutiques cibles.
+
+# Mots-clés pour addiction / OUD (Opioid Use Disorder).
+# Exemples à ajouter plus tard : "opioid use disorder", "OUD", "addiction",
+# "substance abuse", "opioid dependence", "medication-assisted treatment", "MAT", etc.
+addiction_keywords: []
+
+# Mots-clés pour psychiatrie (schizophrénie, bipolarité, etc.).
+# Exemples à ajouter plus tard : "schizophrenia", "bipolar disorder", "psychosis",
+# "schizoaffective disorder", "major depressive disorder", "MDD", etc.
+psychiatry_keywords: []
+
+# Autres indications (segments divers).
+other_indications_keywords: []

@@ -1,0 +1,10 @@
+[project]
+name = "vectora-inbox"
+version = "0.1.0-phase2.0"
+description = "Local-first datalake engine for pharmaceutical competitive intelligence"
+requires-python = ">=3.11"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"

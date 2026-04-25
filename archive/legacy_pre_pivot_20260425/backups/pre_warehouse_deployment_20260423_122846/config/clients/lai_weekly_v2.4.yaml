@@ -1,0 +1,94 @@
+# LAI INTELLIGENCE WEEKLY - CLIENT CONFIG v2.4 (Test Data Fraîches)
+
+client_profile:
+  name: "LAI Intelligence Weekly v2.4"
+  client_id: "lai_weekly_v2.4"
+  active: true
+  language: "en"
+  frequency: "weekly"
+  tone: "executive"
+  voice: "concise"
+  target_audience: "executives"
+
+pipeline:
+  newsletter_mode: "latest_run_only"
+  default_period_days: 7
+  notes: "Version v2.4 - Test ingestion data fraiches AWS dev"
+
+bedrock_config:
+  normalization_prompt: "generic_normalization"
+  domain_scoring_prompt: "lai_domain_scoring"
+  editorial_prompt: "lai_editorial"
+  enable_domain_scoring: true
+
+watch_domains:
+  - id: "tech_lai_ecosystem"
+    type: "technology"
+    priority: "high"
+    technology_scope: "lai_keywords"
+    company_scope: "lai_companies_global"
+    molecule_scope: "lai_molecules_global"
+    trademark_scope: "lai_trademarks_global"
+    technology_profile: "technology_complex"
+    matching_profile: "balanced"
+    enabled: true
+
+source_config:
+  source_bouquets_enabled:
+    - "lai_corporate_mvp"
+
+  sources_extra_enabled: []
+  content_filters:
+    min_word_count: 50
+
+newsletter_selection:
+  max_items_total: 20
+  min_score_threshold: 0
+
+newsletter_layout:
+  distribution_strategy: "specialized_with_fallback"
+  sections:
+    - id: "regulatory_updates"
+      title: "Regulatory Updates"
+      source_domains: ["tech_lai_ecosystem"]
+      max_items: 6
+      filter_event_types: ["regulatory"]
+      priority: 1
+    - id: "partnerships_deals"
+      title: "Partnerships & Deals"
+      source_domains: ["tech_lai_ecosystem"]
+      max_items: 4
+      filter_event_types: ["partnership", "corporate_move"]
+      priority: 2
+    - id: "clinical_updates"
+      title: "Clinical Updates"
+      source_domains: ["tech_lai_ecosystem"]
+      max_items: 5
+      filter_event_types: ["clinical_update"]
+      priority: 3
+    - id: "others"
+      title: "Other Signals"
+      source_domains: ["tech_lai_ecosystem"]
+      max_items: 8
+      filter_event_types: ["*"]
+      priority: 999
+
+newsletter_delivery:
+  format: "markdown"
+  include_tldr: true
+  include_intro: true
+  include_metrics: true
+  delivery_method: "s3"
+
+metadata:
+  template_version: "25.0.0"
+  created_date: "2026-02-13"
+  created_by: "Test Ingestion Data Fraîches"
+  min_runtime_version: "2.0.0"
+  canonical_version: "2.4"
+  vertical: "LAI"
+  creation_notes: |
+    Test ingestion data fraîches AWS dev:
+    - Copie de lai_weekly_v2.3
+    - Configuration identique pour validation
+    - Test sur environnement dev

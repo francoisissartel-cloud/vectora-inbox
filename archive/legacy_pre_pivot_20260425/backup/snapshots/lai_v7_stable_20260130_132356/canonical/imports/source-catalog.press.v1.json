@@ -1,0 +1,2077 @@
+[
+  {
+    "sourceId": "pharmaphorum",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/pharmaphorum.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "pharma",
+      "digital-health",
+      "marketing"
+    ],
+    "entityTags": [
+      "big-pharma"
+    ],
+    "geoTags": [
+      "UK",
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "pharmatimes",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/pharmatimes.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "pharma",
+      "regulatory",
+      "manufacturing"
+    ],
+    "entityTags": [
+      "big-pharma"
+    ],
+    "geoTags": [
+      "UK",
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "labiotech",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/labiotech.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "biotech",
+      "gene-therapy",
+      "innovation"
+    ],
+    "entityTags": [
+      "biotech",
+      "startup"
+    ],
+    "geoTags": [
+      "EU",
+      "UK"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "firstword-pharma",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/firstword-pharma.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "pharma",
+      "regulatory",
+      "market-access"
+    ],
+    "entityTags": [
+      "big-pharma"
+    ],
+    "geoTags": [
+      "UK",
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "pharmaceutical-technology",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/pharmaceutical-technology.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "pharma",
+      "manufacturing",
+      "innovation"
+    ],
+    "entityTags": [
+      "big-pharma"
+    ],
+    "geoTags": [
+      "UK",
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "pink-sheet",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/pink-sheet.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 3,
+    "topicTags": [
+      "pharma",
+      "regulatory",
+      "fda"
+    ],
+    "entityTags": [
+      "big-pharma"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "scrip-intelligence",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/scrip-intelligence.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "pharma",
+      "market-access",
+      "pricing"
+    ],
+    "entityTags": [
+      "big-pharma"
+    ],
+    "geoTags": [
+      "UK",
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "biocentury",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/biocentury.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 3,
+    "topicTags": [
+      "biotech",
+      "venture-capital",
+      "ipo"
+    ],
+    "entityTags": [
+      "biotech",
+      "startup"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "nature-biotechnology",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/nature-biotechnology.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 3,
+    "topicTags": [
+      "biotech",
+      "research",
+      "innovation"
+    ],
+    "entityTags": [
+      "academia",
+      "biotech"
+    ],
+    "geoTags": [
+      "US",
+      "EU",
+      "UK"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "genetic-engineering-news",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/genetic-engineering-news.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "gene-therapy",
+      "crispr",
+      "genomics"
+    ],
+    "entityTags": [
+      "biotech",
+      "academia"
+    ],
+    "geoTags": [
+      "US",
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "biospace",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/biospace.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "biotech",
+      "clinical-trials",
+      "ipo"
+    ],
+    "entityTags": [
+      "biotech",
+      "startup"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "bioworld",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/bioworld.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "biotech",
+      "pharma",
+      "regulatory"
+    ],
+    "entityTags": [
+      "biotech",
+      "big-pharma"
+    ],
+    "geoTags": [
+      "US",
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "drug-discovery-today",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/drug-discovery-today.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "pharma",
+      "research",
+      "drug-discovery"
+    ],
+    "entityTags": [
+      "big-pharma",
+      "academia"
+    ],
+    "geoTags": [
+      "UK",
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "pharmaceutical-commerce",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/pharmaceutical-commerce.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "pharma",
+      "supply-chain",
+      "distribution"
+    ],
+    "entityTags": [
+      "big-pharma"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "applied-clinical-trials",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/applied-clinical-trials.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "clinical-trials",
+      "cro",
+      "regulatory"
+    ],
+    "entityTags": [
+      "big-pharma",
+      "biotech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "medtech-dive",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/medtech-dive.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 3,
+    "topicTags": [
+      "medical-devices",
+      "diagnostics",
+      "ai"
+    ],
+    "entityTags": [
+      "medtech",
+      "startup"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "massdevice",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/massdevice.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "medical-devices",
+      "regulatory",
+      "fda"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "medical-device-network",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/medical-device-network.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "medical-devices",
+      "manufacturing",
+      "innovation"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "UK",
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "mddi-online",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/mddi-online.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "medical-devices",
+      "design",
+      "manufacturing"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "medical-design-technology",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/medical-design-technology.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "medical-devices",
+      "innovation",
+      "design"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "UK"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "devicetalks",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/devicetalks.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "medical-devices",
+      "regulatory",
+      "quality"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "meddeviceonline",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/meddeviceonline.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "medical-devices",
+      "manufacturing",
+      "supply-chain"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "medical-product-outsourcing",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/medical-product-outsourcing.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "medical-devices",
+      "outsourcing",
+      "manufacturing"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "qmed",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/qmed.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "medical-devices",
+      "quality",
+      "regulatory"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "medtech-breakthrough",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/medtech-breakthrough.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "medical-devices",
+      "innovation",
+      "startups"
+    ],
+    "entityTags": [
+      "medtech",
+      "startup"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "tctmd",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/tctmd.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "cardiovascular-devices",
+      "cardiology",
+      "interventional"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "24x7mag",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/24x7mag.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "medical-devices",
+      "biomedical-engineering",
+      "maintenance"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "medical-electronics-design",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/medical-electronics-design.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "medical-devices",
+      "electronics",
+      "sensors"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "orthopedic-design-technology",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/orthopedic-design-technology.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "orthopedic-devices",
+      "implants",
+      "surgery"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "diagnostic-imaging",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/diagnostic-imaging.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "imaging-devices",
+      "radiology",
+      "diagnostics"
+    ],
+    "entityTags": [
+      "medtech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "mobihealthnews",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/mobihealthnews.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 3,
+    "topicTags": [
+      "digital-health",
+      "mhealth",
+      "telemedicine"
+    ],
+    "entityTags": [
+      "health-tech",
+      "startup"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "healthcare-it-news",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/healthcare-it-news.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "health-it",
+      "ehr",
+      "interoperability"
+    ],
+    "entityTags": [
+      "health-tech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "rock-health-insights",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/rock-health-insights.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "digital-health",
+      "venture-capital",
+      "startups"
+    ],
+    "entityTags": [
+      "health-tech",
+      "startup"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "healthtech-magazine",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/healthtech-magazine.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "health-tech",
+      "ai",
+      "innovation"
+    ],
+    "entityTags": [
+      "health-tech"
+    ],
+    "geoTags": [
+      "UK"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "digital-health-news",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/digital-health-news.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "digital-health",
+      "apps",
+      "wearables"
+    ],
+    "entityTags": [
+      "health-tech",
+      "startup"
+    ],
+    "geoTags": [
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "healthcare-finance-news",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/healthcare-finance-news.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "healthcare-finance",
+      "reimbursement",
+      "policy"
+    ],
+    "entityTags": [
+      "health-tech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "fierce-healthcare",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/fierce-healthcare.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "healthcare",
+      "policy",
+      "digital-transformation"
+    ],
+    "entityTags": [
+      "health-tech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "healthcareitnews",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/healthcareitnews.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "health-it",
+      "cybersecurity",
+      "cloud"
+    ],
+    "entityTags": [
+      "health-tech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "himss-insights",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/himss-insights.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "health-it",
+      "interoperability",
+      "standards"
+    ],
+    "entityTags": [
+      "health-tech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "digital-health-global",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/digital-health-global.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "digital-health",
+      "telemedicine",
+      "ai"
+    ],
+    "entityTags": [
+      "health-tech"
+    ],
+    "geoTags": [
+      "EU",
+      "UK"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "cosmeticsdesign",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/cosmeticsdesign.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "cosmetics",
+      "ingredients",
+      "formulation"
+    ],
+    "entityTags": [
+      "cosmeto"
+    ],
+    "geoTags": [
+      "US",
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "cosmeticsdesign-europe",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/cosmeticsdesign-europe.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "cosmetics",
+      "regulatory",
+      "sustainability"
+    ],
+    "entityTags": [
+      "cosmeto"
+    ],
+    "geoTags": [
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "cosmeticsdesign-asia",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/cosmeticsdesign-asia.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "cosmetics",
+      "k-beauty",
+      "innovation"
+    ],
+    "entityTags": [
+      "cosmeto"
+    ],
+    "geoTags": [
+      "CN",
+      "JP",
+      "KR"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "global-cosmetics-news",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/global-cosmetics-news.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "cosmetics",
+      "market-trends",
+      "brands"
+    ],
+    "entityTags": [
+      "cosmeto"
+    ],
+    "geoTags": [
+      "US",
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "premium-beauty-news",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/premium-beauty-news.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "luxury-beauty",
+      "packaging",
+      "innovation"
+    ],
+    "entityTags": [
+      "cosmeto"
+    ],
+    "geoTags": [
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "beauty-independent",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/beauty-independent.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "indie-beauty",
+      "natural-cosmetics",
+      "startups"
+    ],
+    "entityTags": [
+      "cosmeto",
+      "startup"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "allure-business",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/allure-business.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "beauty-business",
+      "retail",
+      "consumer-trends"
+    ],
+    "entityTags": [
+      "cosmeto"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "beauty-packaging",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/beauty-packaging.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "cosmetic-packaging",
+      "sustainability",
+      "design"
+    ],
+    "entityTags": [
+      "cosmeto"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "skin-inc",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/skin-inc.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "skincare",
+      "dermatology",
+      "aesthetics"
+    ],
+    "entityTags": [
+      "cosmeto"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "perfumer-flavorist",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/perfumer-flavorist.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "fragrance",
+      "flavors",
+      "ingredients"
+    ],
+    "entityTags": [
+      "cosmeto"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "nutraingredients",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/nutraingredients.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "nutraceuticals",
+      "functional-foods",
+      "supplements"
+    ],
+    "entityTags": [
+      "nutraceuticals"
+    ],
+    "geoTags": [
+      "US",
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "nutraingredients-usa",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/nutraingredients-usa.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "dietary-supplements",
+      "fda",
+      "regulatory"
+    ],
+    "entityTags": [
+      "nutraceuticals"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "natural-products-insider",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/natural-products-insider.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "natural-products",
+      "organic",
+      "clean-label"
+    ],
+    "entityTags": [
+      "nutraceuticals"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "nutritional-outlook",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/nutritional-outlook.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "nutrition-science",
+      "research",
+      "clinical-studies"
+    ],
+    "entityTags": [
+      "nutraceuticals"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "food-navigator",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/food-navigator.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "functional-foods",
+      "probiotics",
+      "nutrition"
+    ],
+    "entityTags": [
+      "nutraceuticals"
+    ],
+    "geoTags": [
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "vitafoods-insights",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/vitafoods-insights.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "nutraceuticals",
+      "sports-nutrition",
+      "healthy-aging"
+    ],
+    "entityTags": [
+      "nutraceuticals"
+    ],
+    "geoTags": [
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "supplement-business-report",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/supplement-business-report.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "supplement-industry",
+      "market-analysis",
+      "trends"
+    ],
+    "entityTags": [
+      "nutraceuticals"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "natural-products-expo",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/natural-products-expo.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "natural-products",
+      "trade-shows",
+      "innovation"
+    ],
+    "entityTags": [
+      "nutraceuticals"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "probiotic-news",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/probiotic-news.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "probiotics",
+      "microbiome",
+      "gut-health"
+    ],
+    "entityTags": [
+      "nutraceuticals"
+    ],
+    "geoTags": [
+      "US",
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "omega-3-insights",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/omega-3-insights.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 0,
+    "topicTags": [
+      "omega-3",
+      "fish-oil",
+      "cardiovascular-health"
+    ],
+    "entityTags": [
+      "nutraceuticals"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "clinical-trials-arena",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/clinical-trials-arena.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "clinical-trials",
+      "cro",
+      "patient-recruitment"
+    ],
+    "entityTags": [
+      "big-pharma",
+      "biotech"
+    ],
+    "geoTags": [
+      "UK",
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "trialsite-news",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/trialsite-news.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "clinical-research",
+      "global-trials",
+      "regulatory"
+    ],
+    "entityTags": [
+      "big-pharma",
+      "biotech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "centerwatch",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/centerwatch.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 2,
+    "topicTags": [
+      "clinical-trials",
+      "site-management",
+      "patient-recruitment"
+    ],
+    "entityTags": [
+      "big-pharma",
+      "biotech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "clinical-leader",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/clinical-leader.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "clinical-operations",
+      "trial-management",
+      "technology"
+    ],
+    "entityTags": [
+      "big-pharma",
+      "biotech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "clinical-research-news",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/clinical-research-news.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "clinical-research",
+      "data-management",
+      "biostatistics"
+    ],
+    "entityTags": [
+      "big-pharma",
+      "biotech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "outsourced-pharma",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/outsourced-pharma.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "pharma-outsourcing",
+      "cmo",
+      "cro"
+    ],
+    "entityTags": [
+      "big-pharma",
+      "biotech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "clinical-trials-insight",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/clinical-trials-insight.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "clinical-trials",
+      "regulatory-affairs",
+      "quality"
+    ],
+    "entityTags": [
+      "big-pharma",
+      "biotech"
+    ],
+    "geoTags": [
+      "UK"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "good-clinical-practice",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/good-clinical-practice.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "gcp",
+      "clinical-quality",
+      "auditing"
+    ],
+    "entityTags": [
+      "big-pharma",
+      "biotech"
+    ],
+    "geoTags": [
+      "US",
+      "EU"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "clinical-data-management",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/clinical-data-management.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 0,
+    "topicTags": [
+      "clinical-data",
+      "edc",
+      "data-integrity"
+    ],
+    "entityTags": [
+      "big-pharma",
+      "biotech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  },
+  {
+    "sourceId": "patient-engagement-hit",
+    "type": "press",
+    "sections": [
+      "deals",
+      "competitors"
+    ],
+    "endpoints": [
+      {
+        "kind": "rss",
+        "url": "https://placeholder/patient-engagement-hit.rss"
+      }
+    ],
+    "enabled": true,
+    "qualityScore": 1,
+    "topicTags": [
+      "patient-engagement",
+      "clinical-trials",
+      "digital-health"
+    ],
+    "entityTags": [
+      "big-pharma",
+      "health-tech"
+    ],
+    "geoTags": [
+      "US"
+    ],
+    "origin": "seed",
+    "language": "en"
+  }
+]

@@ -1,71 +1,50 @@
 # Vectora Inbox
 
-Système intelligent de veille et génération de newsletters pour le secteur pharmaceutique.
+Moteur **local-first** d'alimentation d'un datalake de veille pharmaceutique. Ingère des sources web (corporate, presse sectorielle, FDA, PubMed) et produit deux dépôts d'items : un **raw** (brut) et un **curated** (enrichi par l'API Anthropic).
 
-## 🎯 Contexte Business
+**Premier écosystème ciblé** : Long-Acting Injectables (LAI), 8 sources MVP.
 
-**Vectora Inbox = Moteur de newsletters ultra-spécialisées sur des marchés de niche biotech/pharma**
+> Le datalake est l'artefact produit. Les newsletters, rapports et RAG futurs sont des **consommateurs séparés**, hors scope V1.
 
-- **Première newsletter**: Long-Acting Injectables (LAI) - 200+ entreprises, aucune newsletter dédiée existante
-- **Avantage compétitif**: Expertise métier rare (11 ans pharma) + Capacité technique (Q Developer)
-- **Modèle**: Newsletter générique LAI (B2C) + Newsletters sur-mesure (B2B)
-- **Vision**: Extension à d'autres niches (siRNA, cell therapy, gene therapy)
+## Documents de référence
 
-📖 **Lire**: [Contexte Business Complet](docs/business/CONTEXTE_BUSINESS_VECTORA.md)
+| Tu veux comprendre... | Va voir... |
+|---|---|
+| L'**architecture** du datalake et du moteur | [docs/architecture/datalake_v1_design.md](docs/architecture/datalake_v1_design.md) |
+| Les **règles de travail** Frank ↔ Claude | [CLAUDE.md](CLAUDE.md) |
+| L'**état du projet** (vivant) | [STATUS.md](STATUS.md) |
+| L'**historique des décisions** | [docs/decisions/](docs/decisions/) |
 
-## 🚀 Démarrage Rapide
+## État actuel
 
-**📚 Toute la documentation est centralisée dans [`.q-context/README.md`](.q-context/README.md)**
+**Phase 2.0 (hygiène repo)** : terminée le 2026-04-24. Le repo est dans son état "V1 propre", prêt à recevoir le code du moteur.
 
-### Commandes Essentielles
-```bash
-# Build et deploy dev
-python scripts/build/build_all.py
-python scripts/deploy/deploy_env.py --env dev
+**Prochaine étape** : Niveau 1 — Fondations (squelette de code dans `src_vectora_inbox_v1/`, première ingestion bout-en-bout).
 
-# Test
-python scripts/invoke/invoke_normalize_score_v2.py --client-id lai_weekly_v7
-
-# Promouvoir vers stage
-python scripts/deploy/promote.py --to stage --version X.Y.Z
-```
-
-### Prérequis
-- Python 3.11+
-- AWS CLI configuré (profil `rag-lai-prod`)
-- Accès compte AWS 786469175371
-
-## 🏗️ Architecture
-
-**Architecture 3 Lambdas V2 (Validée E2E)**
+## Structure du repo
 
 ```
-ingest-v2 → normalize-score-v2 → newsletter-v2
+vectora-inbox/
+├── CLAUDE.md                    # règles de travail Frank ↔ Claude
+├── STATUS.md                    # tableau de bord vivant
+├── README.md                    # ce fichier
+├── VERSION                      # version sémantique
+├── .env.example                 # template des secrets
+├── pyproject.toml               # dépendances Python
+├── src_vectora_inbox_v1/        # code source (vide, peuplé en Niveau 1)
+├── canonical/                   # gouvernance métier (sources, scopes, prompts)
+├── config/clients/              # configs client
+├── data/                        # produits du runtime (gitignored)
+├── scripts/                     # entrées CLI
+├── tests/                       # tests unitaires et d'intégration
+├── docs/                        # design, runbooks, ADRs
+└── archive/                     # legacy pré-pivot (commit one-shot)
 ```
 
-**Client de référence**: lai_weekly_v3  
-**Statut**: ✅ Architecture V2 validée E2E
+## Démarrage
 
-## 🌍 Environnements
-
-| Environnement | Statut | Usage |
-|---------------|--------|---------|
-| **dev** | ✅ Opérationnel | Développement et tests |
-| **stage** | ✅ Opérationnel | Pré-production et validation |
-| **prod** | 🚧 À créer | Production clients |
-
-## 📚 Documentation Complète
-
-**Index centralisé**: [`.q-context/README.md`](.q-context/README.md)
-
-**Documents clés**:
-- [Gouvernance](.q-context/vectora-inbox-governance.md) - Workflow et règles
-- [Architecture](.q-context/vectora-inbox-architecture-overview.md) - Vue technique complète
-- [Blueprint](docs/architecture/blueprint-v2-ACTUAL-2026.yaml) - 📋 **Système complet + Guide d'ajustement**
-- [Maintenance Blueprint](docs/architecture/BLUEPRINT_MAINTENANCE.md) - 🔧 **Comment maintenir le blueprint à jour**
-- [Workflows](.q-context/vectora-inbox-workflows.md) - Scénarios détaillés
-- [Guide Q Developer](.q-context/vectora-inbox-q-prompting-guide.md) - Comment prompter Q
+Pas encore de code en V1. Le runbook de démarrage rapide sera dans [docs/runbooks/](docs/runbooks/) au Niveau 2.
 
 ---
 
-*Gouvernance opérationnelle - Prêt pour développement*
+*Vectora Inbox V1 — pivot datalake local-first, avril 2026.*

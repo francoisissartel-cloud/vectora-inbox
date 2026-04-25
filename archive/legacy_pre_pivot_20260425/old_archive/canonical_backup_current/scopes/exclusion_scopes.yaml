@@ -1,0 +1,177 @@
+# Scopes d'exclusion.
+# Mots-clés et contextes à exclure pour réduire le bruit (faux positifs).
+# Utilisés par les profils d'ingestion pour filtrer le contenu non pertinent.
+
+# Termes génériques à excluer (cosmétique, vétérinaire, etc.).
+lai_exclude_noise:
+  - implantable device
+  - surgically implanted
+  - transdermal patch
+  - oral tablet
+  - oral capsule
+  - topical cream
+  - gene therapy
+  - cell therapy
+  - CAR-T
+  - vaccine
+  - vaccination
+  - prophylactic vaccine
+  - cosmetic
+  - veterinary
+  - diagnostic
+
+# ========================================================================
+# SCOPES D'EXCLUSION POUR PROFILS D'INGESTION
+# ========================================================================
+
+# Contenu RH/Ressources Humaines (pour filtrage corporate)
+hr_content:
+  - "job opening"
+  - "career opportunity"
+  - "we are hiring"
+  - "join our team"
+  - "human resources"
+  - "employee benefits"
+  - "workplace culture"
+  - "diversity and inclusion"
+  - "employee recognition"
+  - "staff appointment"
+  - "new hire"
+  - "promotion announcement"
+  - "retirement announcement"
+  - "leadership change"
+  - "organizational restructuring"
+  - "employee training"
+  - "professional development"
+  - "company retreat"
+  - "team building"
+  - "employee survey"
+  - "compensation review"
+
+# Termes de recrutement spécifiques (ajout pour filtrage LAI)
+hr_recruitment_terms:
+  - "hiring"
+  - "seeks.*engineer"
+  - "seeks.*director"
+  - "seeks.*experienced"
+  - "recruiting"
+  - "job opening"
+  - "career opportunity"
+  - "position available"
+  - "we are looking for"
+  - "join our team"
+  - "process engineer"
+  - "quality director"
+
+# Contenu ESG généraliste (Environnement, Social, Gouvernance)
+esg_generic:
+  - "sustainability report"
+  - "environmental impact"
+  - "carbon footprint"
+  - "green initiative"
+  - "renewable energy"
+  - "corporate social responsibility"
+  - "CSR report"
+  - "community outreach"
+  - "charitable donation"
+  - "volunteer program"
+  - "board of directors"
+  - "governance framework"
+  - "compliance training"
+  - "ethics policy"
+  - "whistleblower policy"
+  - "annual general meeting"
+  - "shareholder meeting"
+  - "proxy statement"
+  - "corporate governance"
+  - "executive compensation"
+
+# Contenu financier généraliste (non spécifique aux produits)
+financial_generic:
+  - "quarterly earnings"
+  - "financial results"
+  - "revenue guidance"
+  - "cost reduction"
+  - "operational efficiency"
+  - "market capitalization"
+  - "stock price"
+  - "dividend payment"
+  - "share buyback"
+  - "credit rating"
+  - "debt refinancing"
+  - "cash flow"
+  - "working capital"
+  - "capital expenditure"
+  - "return on investment"
+  - "profit margin"
+  - "EBITDA"
+  - "balance sheet"
+  - "income statement"
+  - "financial guidance"
+
+# Termes de reporting financier spécifiques (ajout pour filtrage LAI)
+financial_reporting_terms:
+  - "publishes.*financial results"
+  - "consolidated.*results"
+  - "interim report.*january"
+  - "half-year.*results"
+  - "quarterly.*results"
+  - "financial results"
+  - "earnings"
+  - "revenue"
+  - "guidance"
+  - "financial performance"
+  # Termes boursiers
+  - "MSCI"
+  - "MSCI World"
+  - "MSCI Small Cap"
+  - "stock index"
+  - "market index"
+  - "benchmark index"
+  - "financial calendar"
+  - "interim report"
+  - "half-year results"
+  - "consolidated results"
+  - "market cap"
+  - "share price"
+  - "trading volume"
+
+# Nouvelles exclusions anti-LAI (Phase 1)
+anti_lai_routes:
+  - "oral tablet"
+  - "oral capsule"  
+  - "oral drug"
+  - "oral medication"
+  - "pill factory"
+  - "tablet manufacturing"
+
+# Contenu événementiel généraliste
+event_generic:
+  - "conference participation"
+  - "trade show"
+  - "industry event"
+  - "webinar announcement"
+  - "company presentation"
+  - "investor day"
+  - "analyst meeting"
+  - "press conference"
+  - "media interview"
+  - "award ceremony"
+  - "company milestone"
+  - "anniversary celebration"
+  - "office opening"
+  - "facility expansion"
+  - "manufacturing update"
+
+# Nouveaux termes corporate
+corporate_noise_terms:
+  - "appoints.*chief"
+  - "management to present"
+  - "participate in.*conference"
+  - "healthcare conference"
+  - "investor.*conference"
+
+# Contextes non pertinents (optionnel, à compléter si besoin).
+exclude_contexts: []
+
+lai_exclusion_scopes: []

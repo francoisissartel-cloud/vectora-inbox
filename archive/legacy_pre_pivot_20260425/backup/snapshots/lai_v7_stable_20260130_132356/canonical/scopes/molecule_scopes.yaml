@@ -1,0 +1,98 @@
+# Scopes de molécules / produits.
+# Chaque scope regroupe des molécules actives (DCI / INN) utilisées dans des formulations LAI.
+
+# Liste globale des molécules LAI utilisées par le MVP (tous segments confondus).
+lai_molecules_global:
+  - aripiprazole
+  - olanzapine
+  - paliperidone
+  - risperidone
+  - lumateperone tosylate
+  - leuprolide
+  - leuprorelin
+  - triptorelin
+  - goserelin
+  - degarelix
+  - abarelix
+  - cetrorelix
+  - octreotide
+  - lanreotide
+  - pasireotide pamoate
+  - somatropin
+  - somapacitan
+  - somatrogon
+  - lonapegsomatropin
+  - eftansomatropin
+  - testosterone
+  - estradiol cypionate
+  - medroxyprogesterone acetate
+  - etonogestrel
+  - hydroxyprogesterone
+  - insulin
+  - insulin icodec
+  - exenatide
+  - semaglutide
+  - liraglutide
+  - dulaglutide
+  - tirzepatide
+  - efpeglenatide
+  - efinopegdutide
+  - mazdutide
+  - amycretin
+  - cagrilintide
+  - buprenorphine
+  - naltrexone
+  - naloxone
+  - bupivacaine
+  - ropivacaine
+  - morphine
+  - cabotegravir
+  - rilpivirine
+  - lenacapavir
+  - islatravir
+  - vancomycin
+  - tobramycin
+  - moxifloxacin
+  - ciprofloxacin
+  - paclitaxel
+  - docetaxel
+  - doxorubicin
+  - irinotecan
+  - cytarabine
+  - mitomycin C
+  - fulvestrant
+  - dexamethasone
+  - triamcinolone
+  - methylprednisolone
+  - betamethasone
+  - diclofenac
+  - meloxicam
+  - celecoxib
+  - bevacizumab
+  - aflibercept
+  - ravulizumab
+  - satralizumab
+  - efanesoctocog alfa
+  - efmoroctocog alfa
+  - eftrenonacog alfa
+  - nonacog beta pegol
+  - rurioctocog alfa pegol
+  - turoctocog alfa pegol
+  - damoctocog alfa pegol
+  - darbepoetin alfa
+  - peginterferon alfa-2a
+  - ropeginterferon alfa-2b
+  - pegaspargase
+  - pegvisomant
+
+# Molécules LAI pour addiction / OUD (ex: buprenorphine, naltrexone).
+lai_molecules_addiction: []
+
+# Molécules LAI pour psychiatrie (ex: paliperidone, aripiprazole, risperidone).
+lai_molecules_psychiatry: []
+
+# Autres molécules LAI (segments divers).
+lai_molecules_other: []
+
+# Union de tous les scopes de molécules LAI (à remplir manuellement ou par script).
+lai_molecules_all: []

@@ -1,0 +1,299 @@
+# .q-context/blueprint-v2-current.yaml
+# Blueprint Vectora Inbox V2 - Architecture 3 Lambdas Validée
+# Reflète l'état réel du système après stabilisation (18 décembre 2025)
+#
+# Basé sur :
+# - docs/diagnostics/src_v2_hygiene_audit_v2.md (conformité 100% validée)
+# - docs/design/vectora_inbox_v2_engine_overview.md (architecture documentée)
+# - docs/design/vectora_inbox_v2_bedrock_calls_map_lai_weekly_v3.md (appels validés)
+# - Validation E2E sur lai_weekly_v3 (15 items réels traités avec succès)
+
+project:
+  name: "Vectora Inbox V2"
+  description: "Moteur d'intelligence sectorielle automatisée - Architecture 3 Lambdas stabilisée"
+  aws_profile: "rag-lai-prod"
+  aws_account_id: "786469175371"
+  region: "eu-west-3"
+  envs:
+    - "dev"
+
+bedrock:
+  region: "us-east-1"  # Région validée E2E
+  usage: "Cerveau linguistique pour normalisation (extraction entités, classification événements) et génération éditoriale"
+  default_model: "anthropic.claude-3-sonnet-20240229-v1:0"  # Modèle validé E2E
+  models:
+    normalize: "anthropic.claude-3-sonnet-20240229-v1:0"
+    matching: "anthropic.claude-3-sonnet-20240229-v1:0"
+    editorial: "anthropic.claude-3-sonnet-20240229-v1:0"
+  performance_validated:
+    calls_per_run: 30  # 15 normalisation + 15 matching (lai_weekly_v3)
+    avg_time_per_call: "5.4s"
+    success_rate: "100%"
+    cost_per_run: "$0.21"
+  notes:
+    - "Modèle Claude Sonnet 3 validé sur 15 items LAI réels"
+    - "30 appels Bedrock par run lai_weekly_v3 (normalisation + matching sémantique)"
+    - "Performance : 163s total, 100% succès, $0.21/run"
+    - "Bedrock IS used for: entity extraction, event classification, semantic domain matching, newsletter writing"
+    - "Bedrock is NOT used for: HTTP requests, RSS parsing, deterministic scoring"
+    - "Prompts canonicalisés dans canonical/prompts/global_prompts.yaml"
+
+naming:
+  resource_prefix: "vectora-inbox"
+  stack_prefix: "vectora-inbox"
+  version_suffix: "-v2"
+  env_suffix: "-dev"
+  stacks:
+    - "s0-core"      # Core S3 buckets
+    - "s0-iam"       # IAM roles séparés
+    - "s1-runtime"   # 3 Lambdas V2
+
+repo_layout:
+  root: "vectora-inbox/"
+  code_reference: "src_v2/"  # Source of truth validée
+  folders:
+    - path: "src_v2/"
+      purpose: "Code de référence - Architecture 3 Lambdas V2 conforme aux règles d'hygiène V4"
+      structure:
+        - "lambdas/ingest/handler.py"
+        - "lambdas/normalize_score/handler.py" 
+        - "lambdas/newsletter/handler.py"
+        - "vectora_core/ (modules métier réutilisables)"
+    - path: "canonical/"
+      purpose: "Scopes métier et prompts canonicalisés - pilotent le comportement"
+    - path: "client-config-examples/"
+      purpose: "Configurations client (lai_weekly_v3.yaml validé)"
+    - path: "contracts/"
+      purpose: "Contrats métier synchronisés avec le code réel"
+    - path: "docs/design/"
+      purpose: "Documentation architecture V2 stabilisée"
+
+infra_stacks:
+  s0-core:
+    description: "Buckets S3 core validés"
+    requirements:
+      region: "eu-west-3"
+      profile: "rag-lai-prod"
+    resources:
+      s3_buckets:
+        - id: "config_bucket"
+          name: "vectora-inbox-config-dev"
+          purpose: "Configurations client + canonical (scopes, prompts)"
+        - id: "data_bucket"
+          name: "vectora-inbox-data-dev"
+          purpose: >
+            Données de traitement avec structure V2 validée:
+            
+            Ingested layer (sortie ingest-v2):
+              ingested/<client_id>/<YYYY>/<MM>/<DD>/items.json
+              - Items parsés depuis sources externes
+              - Exemple validé: ingested/lai_weekly_v3/2025/12/17/items.json (15 items)
+            
+            Curated layer (sortie normalize-score-v2):
+              curated/<client_id>/<YYYY>/<MM>/<DD>/items.json
+              - Items normalisés, matchés et scorés
+              - Prêts pour génération newsletter
+            
+            Raw layer (optionnel, debug):
+              raw/<client_id>/<source_key>/<YYYY>/<MM>/<DD>/raw.json
+        - id: "newsletters_bucket"
+          name: "vectora-inbox-newsletters-dev"
+          purpose: "Newsletters finales générées (Markdown/HTML)"
+
+  s0-iam:
+    description: "Rôles IAM pour les 3 Lambdas V2"
+    requirements:
+      region: "eu-west-3"
+      profile: "rag-lai-prod"
+    resources:
+      iam_roles:
+        - id: "ingest_role"
+          name: "vectora-inbox-ingest-v2-role"
+          permissions:
+            - "s3:GetObject on vectora-inbox-config-dev/*"
+            - "s3:PutObject on vectora-inbox-data-dev/ingested/*"
+            - "s3:PutObject on vectora-inbox-data-dev/raw/*"
+        - id: "normalize_score_role"
+          name: "vectora-inbox-normalize-score-v2-role"
+          permissions:
+            - "s3:GetObject on vectora-inbox-config-dev/*"
+            - "s3:GetObject on vectora-inbox-data-dev/ingested/*"
+            - "s3:PutObject on vectora-inbox-data-dev/curated/*"
+            - "bedrock:InvokeModel"
+        - id: "newsletter_role"
+          name: "vectora-inbox-newsletter-v2-role"
+          permissions:
+            - "s3:GetObject on vectora-inbox-config-dev/*"
+            - "s3:GetObject on vectora-inbox-data-dev/curated/*"
+            - "s3:PutObject on vectora-inbox-newsletters-dev/*"
+            - "bedrock:InvokeModel"
+
+  s1-runtime:
+    description: "3 Lambdas V2 - Architecture modulaire validée"
+    requirements:
+      region: "eu-west-3"
+      profile: "rag-lai-prod"
+    resources:
+      lambda_layers:
+        - id: "vectora_core_layer"
+          name: "vectora-inbox-vectora-core-dev"
+          content: "src_v2/vectora_core/ (modules métier)"
+          size: "180KB"
+        - id: "common_deps_layer"
+          name: "vectora-inbox-common-deps-dev"
+          content: "PyYAML, requests, boto3, feedparser (mode pur Python)"
+          size: "15MB"
+      
+      lambdas:
+        - id: "ingest_lambda_v2"
+          name: "vectora-inbox-ingest-v2-dev"
+          runtime: "python3.11"
+          handler: "src_v2/lambdas/ingest/handler.py::lambda_handler"
+          orchestration_function: "vectora_core.ingest.run_ingest_for_client"
+          needs_bedrock: false
+          size: "15KB"
+          environment_variables:
+            - "ENV=dev"
+            - "CONFIG_BUCKET=vectora-inbox-config-dev"
+            - "DATA_BUCKET=vectora-inbox-data-dev"
+            - "LOG_LEVEL=INFO"
+          phases:
+            - "Ingestion brute depuis sources externes (RSS, APIs, scraping)"
+            - "Parsing en items structurés"
+            - "Stockage dans S3 ingested/"
+          validation_status: "✅ Fonctionnel - Validé E2E sur lai_weekly_v3"
+
+        - id: "normalize_score_lambda_v2"
+          name: "vectora-inbox-normalize-score-v2-dev"
+          runtime: "python3.11"
+          handler: "src_v2/lambdas/normalize_score/handler.py::lambda_handler"
+          orchestration_function: "vectora_core.normalization.run_normalize_score_for_client"
+          needs_bedrock: true
+          size: "18KB"
+          environment_variables:
+            - "ENV=dev"
+            - "CONFIG_BUCKET=vectora-inbox-config-dev"
+            - "DATA_BUCKET=vectora-inbox-data-dev"
+            - "BEDROCK_MODEL_ID=anthropic.claude-3-sonnet-20240229-v1:0"
+            - "BEDROCK_REGION=us-east-1"
+            - "MAX_BEDROCK_WORKERS=1"
+            - "LOG_LEVEL=INFO"
+          phases:
+            - "Normalisation Bedrock (extraction entités, classification événements)"
+            - "Matching sémantique Bedrock aux domaines de veille"
+            - "Scoring déterministe basé sur règles métier"
+            - "Stockage dans S3 curated/"
+          validation_status: "✅ Fonctionnel - 15 items traités, 30 appels Bedrock, 100% succès"
+
+        - id: "newsletter_lambda_v2"
+          name: "vectora-inbox-newsletter-v2-dev"
+          runtime: "python3.11"
+          handler: "src_v2/lambdas/newsletter/handler.py::lambda_handler"
+          orchestration_function: "vectora_core.newsletter.run_newsletter_for_client"
+          needs_bedrock: true
+          size: "12KB"
+          environment_variables:
+            - "ENV=dev"
+            - "CONFIG_BUCKET=vectora-inbox-config-dev"
+            - "DATA_BUCKET=vectora-inbox-data-dev"
+            - "NEWSLETTERS_BUCKET=vectora-inbox-newsletters-dev"
+            - "BEDROCK_MODEL_ID=anthropic.claude-3-sonnet-20240229-v1:0"
+            - "BEDROCK_REGION=us-east-1"
+            - "LOG_LEVEL=INFO"
+          phases:
+            - "Lecture items curés depuis S3"
+            - "Génération éditoriale Bedrock par section"
+            - "Assemblage newsletter finale (Markdown)"
+            - "Stockage dans S3 newsletters/"
+          validation_status: "🚧 Structure prête - Implémentation à compléter"
+
+# Configuration pilotée (client_config + canonical)
+configuration_driven:
+  client_config_example: "lai_weekly_v3.yaml"
+  client_config_controls:
+    - "Sources d'ingestion (bouquets + sources individuelles)"
+    - "Domaines de veille (watch_domains avec scopes)"
+    - "Seuils de matching (min_domain_score, fallback_mode)"
+    - "Bonus de scoring (pure_player_companies, trademark_mentions)"
+    - "Structure newsletter (sections, max_items, filtres)"
+    - "Fenêtre temporelle (default_period_days)"
+  
+  canonical_controls:
+    - "Scopes métier (companies, molecules, technologies, trademarks)"
+    - "Prompts Bedrock (normalisation, matching, éditorial)"
+    - "Règles de scoring (poids par type d'événement)"
+    - "Catalogues de sources (180+ sources, bouquets prédéfinis)"
+  
+  no_code_changes_required:
+    - "Ajustement seuils de matching"
+    - "Modification bonus de scoring"
+    - "Restructuration newsletter"
+    - "Ajout nouvelles entités métier"
+    - "Modification prompts Bedrock"
+
+# Validation E2E
+validation_e2e:
+  client_reference: "lai_weekly_v3"
+  last_validation: "2025-12-18"
+  results:
+    items_processed: 15
+    sources_active: 8
+    entities_extracted: 36
+    bedrock_calls: 30
+    execution_time: "163s"
+    success_rate: "100%"
+    cost_per_run: "$0.21"
+    synthetic_data_eliminated: true
+  
+  data_flow_validated:
+    - "Sources externes → S3 ingested/ (15 items LAI réels)"
+    - "S3 ingested/ → Bedrock → S3 curated/ (normalisation + matching)"
+    - "Configuration lai_weekly_v3.yaml appliquée correctement"
+    - "Entités LAI extraites : MedinCell, UZEDY®, Nanexa, BEPO, etc."
+
+# Conformité et bonnes pratiques
+compliance:
+  hygiene_rules: "src_lambda_hygiene_v4.md"
+  compliance_score: "100%"
+  violations: "Aucune"
+  
+  architecture_principles:
+    - "3 Lambdas séparées avec responsabilités distinctes"
+    - "Handlers minimalistes délégant à vectora_core"
+    - "Aucune pollution par dépendances tierces"
+    - "Configuration pilote entièrement le comportement"
+    - "Modules partagés via Lambda Layers"
+    - "Taille optimale (handlers < 20KB, layers < 50MB)"
+
+# Évolutions futures
+roadmap:
+  immediate:
+    - "Compléter implémentation newsletter V2"
+    - "Valider pipeline E2E complet"
+  
+  short_term:
+    - "Tester migration Bedrock vers eu-west-3"
+    - "Évaluer modèle Sonnet 4.5"
+    - "Optimiser parallélisation Bedrock"
+  
+  medium_term:
+    - "Extension à nouveaux clients/verticaux"
+    - "Monitoring avancé et alertes"
+    - "Optimisation coûts multi-clients"
+
+metadata:
+  version: "2.0"
+  created_date: "2025-12-18"
+  based_on: "Architecture V2 stabilisée et validée E2E"
+  replaces: "blueprint-draft-vectora-inbox.yaml (architecture V1 historique)"
+  validation_docs:
+    - "docs/diagnostics/src_v2_hygiene_audit_v2.md"
+    - "docs/design/vectora_inbox_v2_engine_overview.md"
+    - "docs/design/vectora_inbox_v2_bedrock_calls_map_lai_weekly_v3.md"
+    - "docs/design/vectora_inbox_v2_blueprint_alignment_report.md"
+  
+  changelog:
+    - version: "2.0"
+      date: "2025-12-18"
+      changes: "Création blueprint V2 aligné sur architecture 3 Lambdas validée"
+      validation: "E2E sur lai_weekly_v3 - 15 items réels, 100% succès"
