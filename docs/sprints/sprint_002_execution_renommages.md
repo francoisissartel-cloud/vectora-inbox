@@ -1,6 +1,6 @@
 # Sprint 002 — Exécution des renommages Phase 2.1
 
-**Statut** : 🔵 En cours
+**Statut** : ✅ Validé
 **Palier** : Pré-Niveau 1 (Phase 2.1 — nettoyage vocabulaire legacy)
 **Date effective** : 2026-04-25
 **Estimation** : ~2h
@@ -43,12 +43,16 @@ archivages des dossiers hors scope V1, suppressions des configs/tests obsolètes
 
 ### Commits effectués
 
-- (à remplir)
+1. `refactor(canonical): rename domains/ to ecosystems/, domain_id to ecosystem_id, remove redundant domain_definitions.yaml`
+2. `refactor(canonical): rename bedrock_config to llm_config, domains to ecosystems in active YAMLs`
+3. `chore(canonical): archive matching/ and scoring/ — out of scope V1 datalake`
+4. `chore(canonical): archive domain_scoring/, editorial/ prompts and newsletter overview — out of scope V1`
+5. `chore(cleanup): remove V2/V3 client configs, obsolete tests, source_catalog_backup — phase 2.1 finalization`
 
 ### Difficultés rencontrées
 
-- (à remplir)
+- Aucune. Toutes les actions ont été exécutées proprement.
 
 ### Validation Frank
 
-- Date : (à remplir)
+- Date : 2026-04-25

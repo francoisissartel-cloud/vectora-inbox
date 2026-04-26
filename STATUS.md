@@ -17,10 +17,10 @@ Vectora Inbox V1 est un moteur **local-first** d'alimentation d'un datalake de v
 
 ## Où on en est aujourd'hui
 
-**Étape actuelle** : ✅ Sprint 000 — Remise en ordre méthodologique (terminé le 25/04/2026)
-**Statut** : Séparation architecture cible / plans d'exécution effectuée. `datalake_v1_design.md` §13 refactoré (V1.4). Plans de palier créés. Sprint 001 prêt à exécuter.
+**Étape actuelle** : ✅ Sprint 002 — Exécution renommages Phase 2.1 (terminé le 25/04/2026)
+**Statut** : Phase 2.1 complète. Vocabulaire V1 en place dans `canonical/`. Prêt pour Niveau 1 (Fondations).
 
-**Dernier livrable validé** : ✅ Sprint 000 — Remise en ordre méthodologique (25/04/2026)
+**Dernier livrable validé** : ✅ Sprint 002 — Renommages Phase 2.1 (25/04/2026)
 - `datalake_v1_design.md` §13 refactoré : devient une vue d'ensemble courte (tableau des paliers + liens vers docs dédiés)
 - Création de `docs/architecture/level_1_plan.md` : plan complet du Niveau 1 (8 mini-sprints prévus, composants, séquencement, principe config-driven)
 - Création de `docs/architecture/level_2_plan.md` et `level_3_plan.md` : squelettes à étoffer
@@ -32,11 +32,10 @@ Vectora Inbox V1 est un moteur **local-first** d'alimentation d'un datalake de v
 - Volet Structure : nouvelle arborescence (8 dossiers racine), legacy archivé, `CLAUDE.md` V1.4, `.gitignore` réécrit, `README.md` et `pyproject.toml` créés
 - 10 scripts récupérés dans `scripts/legacy_reference/` pour capitalisation au Niveau 1
 
-**Prochaine étape immédiate** : Sprint 001 — Audit nommage canonical (Phase 2.1)
-- Ouvrir une nouvelle session avec modèle **Sonnet**
-- Lire `STATUS.md` + `docs/sprints/sprint_001_audit_nommage_canonical.md`
-- Exécuter l'audit (scan `canonical/`, `config/`, docs, scripts) et produire `docs/architecture/naming_audit_phase21.md`
-- Valider le rapport avec Frank → puis Sprint 002 (exécution des renommages)
+**Prochaine étape immédiate** : Niveau 1 — Fondations
+- Lire `docs/architecture/level_1_plan.md` pour le plan détaillé
+- Premier sprint du Niveau 1 : bootstrapper `src_vectora_inbox_v1/` (datalake + item_id)
+- Critère de fin global Niveau 1 : `python run_pipeline.py --source press_corporate__medincell` produit 1 item raw puis 1 item curated
 
 ---
 
@@ -47,7 +46,7 @@ Vectora Inbox V1 est un moteur **local-first** d'alimentation d'un datalake de v
 | 1 | **Phase 1** — Cadrage et design | ✅ Fait | 25/04/2026 | `docs/architecture/datalake_v1_design.md` |
 | 2 | **Phase 2.0** — Hygiène repo | ✅ Fait | 25/04/2026 | `docs/architecture/phase2.0_repo_structure.md` |
 | 3 | **Sprint 000** — Remise en ordre méthodologique | ✅ Fait | 25/04/2026 | `docs/sprints/sprint_000_remise_ordre_methodo.md` |
-| 4 | **Phase 2.1** — Audit nommage canonical | ⏸ À venir | - | `docs/sprints/sprint_001_audit_nommage_canonical.md` |
+| 4 | **Phase 2.1** — Audit + renommages canonical | ✅ Fait | 25/04/2026 | `docs/sprints/sprint_001_audit_nommage_canonical.md` |
 | 5 | **Niveau 1** — Fondations | ⏸ À venir | - | `docs/architecture/level_1_plan.md` |
 | 6 | **Niveau 2** — Cœur | ⏸ À venir | - | `docs/architecture/level_2_plan.md` |
 | 7 | **Niveau 3** — Maquillage | ⏸ À venir | - | `docs/architecture/level_3_plan.md` |
