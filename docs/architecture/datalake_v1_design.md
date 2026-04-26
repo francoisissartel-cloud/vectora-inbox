@@ -1,7 +1,7 @@
 # Vectora Inbox — Design du Datalake V1
 
-**Version** : 1.3
-**Date** : 2026-04-24
+**Version** : 1.4
+**Date** : 2026-04-25
 **Auteurs** : Frank (produit) + Claude (architecte)
 **Statut** : à valider par Frank avant Phase 2
 
@@ -1021,238 +1021,26 @@ src_vectora_inbox_v1/
 
 ---
 
-## 13. Plan de transition (Phase 2)
+## 13. Plan de transition — vue d'ensemble
 
-### 13.0 Phase 2.0 — Hygiène complète du repo (Git + structure)
+Phase 2.0 (hygiène repo) est **terminée** le 25/04/2026. L'état pré-pivot est préservé dans `archive/legacy_pre_pivot_20260425/` et tagué `legacy-pre-pivot-20260425`. Voir `docs/architecture/phase2.0_repo_structure.md` pour le détail.
 
-**Document de référence dédié** : `docs/architecture/phase2.0_repo_structure.md` (V2.0).
+### Tableau des paliers
 
-Cette phase précède toute écriture de code. Elle traite **deux volets complémentaires** :
+| Palier | Objectif | Critère de fin testable | Statut | Doc de référence |
+|---|---|---|---|---|
+| **Phase 2.0** — Hygiène repo | Repo V1 propre | `main` propre + arborescence V1 + legacy archivé | ✅ Fait | `docs/architecture/phase2.0_repo_structure.md` |
+| **Phase 2.1** — Audit nommage | Vocabulaire V2/V3 audité | Rapport `naming_audit_phase21.md` validé par Frank | ⏸ Sprint 001 | `docs/sprints/sprint_001_audit_nommage_canonical.md` |
+| **Niveau 1** — Fondations | 1 item LAI bout-en-bout | `run_pipeline.py --source press_corporate__medincell` produit 1 item curated | ⏸ Après Phase 2.1 | `docs/architecture/level_1_plan.md` |
+| **Niveau 2** — Cœur | 8 sources MVP + onboarding | `run_pipeline.py --client mvp_test_30days` + `onboard_source.py` | ⏸ Après Niveau 1 | `docs/architecture/level_2_plan.md` |
+| **Niveau 3** — Maquillage | Moteur stable + documenté | Rapports auto, revalidation, doc suffisante | ⏸ Après Niveau 2 | `docs/architecture/level_3_plan.md` |
 
-**Volet Git** (sur GitHub et localement) :
-- Sécuriser l'historique : tag `legacy-pre-pivot-20260425` + branche `archive/legacy-pre-pivot`
-- Merger les 6 docs Phase 1 (actuellement sur la branche `docs/phase1-design`) dans `main`
-- Supprimer les 6 vieilles branches legacy + la branche `docs/phase1-design` une fois mergée
-- Nettoyer les stashs locaux
+### Principes
 
-**Volet Structure** (réorganisation du contenu du repo) :
-- Création de l'arborescence cible (8 dossiers à la racine)
-- Archivage du legacy sous `archive/legacy_pre_pivot_20260425/`
-- Rapatriement de `cache/` et `output/` sous `data/`
-- Swap de `CLAUDE.md` (ancien → archive, nouveau V1.2 → racine)
-- Suppression des fichiers résidus
-- Mise à jour de `.gitignore`
-
-**Critère de fin** : le repo a uniquement `main` + `archive/legacy-pre-pivot` sur GitHub, l'arborescence locale respecte la structure cible, le legacy est archivé.
-
-**Environnement d'exécution** : depuis Claude Code dans VS Code (Cowork rencontre des problèmes de permissions sur le `.git/` à cause de la synchronisation OneDrive du dossier).
-
----
-
-### 13.1 Phase 2.1 — Audit nommage et consolidation canonical (anciennement appelé Phase 2.1.bis)
-
-**Note** : ce qui était décrit ici (archivage des sauvegardes, des backups, des résidus) **a été déplacé dans Phase 2.0** (volet Structure). Voir `docs/architecture/phase2.0_repo_structure.md` §3.3.
-
-Phase 2.1 se concentre désormais uniquement sur l'**audit de nommage exhaustif** et la **consolidation des fichiers canonical** qui n'ont pas pu être traités lors de Phase 2.0 (parce qu'ils nécessitent une analyse fine, pas juste un déplacement).
-
-**Livrable Phase 2.1** : un rapport d'audit `docs/architecture/naming_audit_phase21.md` listant chaque entrée à renommer/garder/archiver dans `canonical/`, validé par Frank, suivi d'un commit `refactor: rename ecosystem vocabulary, consolidate canonical`.
-
-**Détail de l'audit Phase 2.1**
-
-Le rapport d'audit liste, après que Phase 2.0 a déjà déplacé l'essentiel :
-
-1. Tous les fichiers résiduels du repo qui contiennent les mots `domain`, `watch_domain`, `bedrock`, `newsletter`, `scoring`, `matching`, `lambda`, `aws`, `s3` (vocabulaire à migrer)
-2. Tous les noms de variables/fonctions/classes dans le code restant qui utilisent ce vocabulaire
-3. Toutes les valeurs de configuration dans `canonical/` et `config/clients/` qui le référencent
-4. Les noms de fichiers dont le nom ne reflète plus leur contenu après pivot
-
-Pour chaque entrée, je propose : **garder tel quel / renommer en X / archiver / supprimer**.
-
-Frank valide en bloc, j'exécute le refactor dans un commit dédié.
-
-**Renommages clés déjà identifiés** :
-
-| Avant | Après |
-|---|---|
-| `watch_domains` (client_config) | `ecosystems` |
-| `domain_id` | `ecosystem_id` |
-| `watch_domain_resolver` | `ecosystem_resolver` |
-| `canonical/domains/` | `canonical/ecosystems/` (avec restructuration) |
-| `canonical/scopes/domain_definitions.yaml` | fusionné dans `canonical/ecosystems/{eco}.yaml` |
-| `canonical/sources/source_catalog_v3.yaml` | `canonical/sources/source_catalog.yaml` |
-| `canonical/ingestion/ingestion_profiles_v3.yaml` | `canonical/ingestion/ingestion_profiles.yaml` |
-| `canonical/ingestion/filter_rules_v3.yaml` | `canonical/ingestion/filter_rules.yaml` |
-| `canonical/ingestion/source_configs_v3.yaml` | `canonical/ingestion/source_configs.yaml` |
-
-### 13.3 Phase 2.2 — Niveau 1 : Fondations
-
-**Objectif** : un seul item LAI ingéré, normalisé, retrouvable bout-en-bout. Le squelette qui prouve que l'architecture tient debout.
-
-**Composants livrés**
-
-*Datalake (essentiel)* :
-- `datalake/storage.py` : read/write JSONL minimal (append, scan séquentiel)
-- `datalake/item_id.py` : canonicalisation URL + calcul `item_id`. Règles minimales : strip params utm, fragment, lowercase host.
-- `datalake/raw.py` : `RawStore` avec insert + lookup. **Un seul index `by_item_id`** suffit ici.
-- `datalake/curated.py` : `CuratedStore` symétrique
-- `datalake/url_cache.py` : `UrlCache` avec les 3 cas de comportement (ingested / rejected / absent)
-
-*Ingest (RSS uniquement)* :
-- `ingest/source_runner.py` : `ingest_source()` atomique
-- `ingest/orchestrator.py` : `ClientOrchestrator` basique (sans `--resume` ni `--retry-failed`)
-- `ingest/fetcher.py` : HTTP fetcher
-- `ingest/parsers/rss.py` : parser RSS
-
-*Detect* :
-- `detect/gap.py` : raw \ curated → liste pending
-
-*Normalize* :
-- `normalize/llm/base.py` : interface `LLMClient`
-- `normalize/llm/anthropic.py` : implémentation Claude (sans retry sophistiqué)
-- `normalize/orchestrator.py` : boucle sur pending
-- `normalize/prompts.py` : chargement du prompt
-- `normalize/parser.py` : parse minimal de la réponse JSON LLM
-
-*Config* :
-- `config/canonical_loader.py`
-- `config/client_loader.py`
-- `config/schemas.py` (dataclasses)
-
-*Canonical minimal* :
-- `canonical/ecosystems/tech_lai_ecosystem.yaml`
-- `canonical/prompts/normalization/generic_normalization.yaml`
-- `canonical/sources/source_catalog.yaml` avec **1 seule source** : `press_corporate__medincell`
-- `canonical/ingestion/source_configs.yaml` avec medincell `validated: true`
-- `canonical/scopes/technology_scopes.yaml` (lai_keywords)
-- `canonical/scopes/exclusion_scopes.yaml`
-- `canonical/parsing/url_canonicalization.yaml` (règles minimales)
-
-*Script* :
-- `scripts/run_pipeline.py` : enchaîne Ingest → Detect → Normalize
-
-**Critère de fin testable**
-
-```bash
-python run_pipeline.py --client mvp_test_30days --source press_corporate__medincell
-```
-
-Doit produire : ≥ 1 item dans `datalake_v1/raw/`, le même item dans `datalake_v1/curated/` après normalisation. Un lookup `by_item_id` retourne l'item dans les deux. Le pipeline tourne bout-en-bout sur 1 source RSS, 1 item.
-
-À ce stade : pas de filtres canoniques (juste accept-all), pas de retry, pas de stats, pas de discovery, pas de cache invalidation. C'est volontaire — on prouve l'architecture, on n'optimise pas.
-
----
-
-### 13.4 Phase 2.3 — Niveau 2 : Cœur
-
-**Objectif** : moteur utilisable au quotidien sur les 8 sources MVP LAI, avec le workflow d'onboarding de source.
-
-**Composants livrés (en plus du Niveau 1)**
-
-*Ingest enrichi* :
-- `ingest/parsers/html.py` : parser HTML (la majorité des sources LAI)
-- `ingest/parsers/rss.py` : ajout du `prefetch_filter` (économie HTTP)
-- `ingest/filters/period.py` : filtre période
-- `ingest/filters/lai_keywords.py` : filtre LAI keywords (scopes canoniques)
-- `ingest/filters/exclusions.py` : filtre exclusions
-- `ingest/source_router.py` : résolution bouquets → sources
-- Tous les indexes secondaires raw : `by_source_key`, `by_source_type`, `by_ecosystem`, `by_company_id`, `by_date`
-
-*Normalize enrichi* :
-- `normalize/validator.py` : anti-hallucinations LLM (logique récupérée de V2)
-- `normalize/entities.py` : résolution `canonical_id` companies
-- Retry LLM **complet** (3 niveaux : intra-run, inter-run, marquage failed à 5 tentatives)
-- Tous les indexes secondaires curated : `by_event_type`, `by_company_id`, `by_molecule`, `by_technology`, `by_trademark`, `by_date`
-- `curated/curation_log.jsonl` opérationnel
-
-*Sources (module dédié, NOUVEAU)* :
-- `sources/candidates.py` : gestion du backlog
-- `sources/discovery.py` : repris/amélioré du legacy
-- `sources/validation.py` : repris/amélioré du legacy
-- `sources/promoters.py` : promotion candidate → validated
-- Scripts CLI : `discover_source.py`, `validate_source.py`, `promote_source.py`, `onboard_source.py`, `list_candidates.py`
-
-*Stats opérationnels* :
-- `stats/health.py` : mise à jour `health.json` à chaque run
-- `stats/gap_report.py` : génération automatique du `gap_report.json`
-
-*Scripts runtime enrichis* :
-- `run_ingest.py` avec : `--resume`, `--retry-failed`, `--source`, `--bouquet`, `--no-cache`, `--rebuild-cache`, `--fail-fast`
-- `run_normalize.py` avec `--retry-failed`, `--max-items`
-
-*Canonical complet* :
-- 8 sources LAI MVP validées dans `source_configs.yaml` (medincell, camurus, delsitech, nanexa, pfizer, lidds, taiwan_liposome, fiercepharma + endpoints_news)
-- Bouquet `lai_full_mvp` complet dans `source_catalog.yaml`
-- Tous les scopes LAI : `company_scopes.yaml`, `molecule_scopes.yaml`, `technology_scopes.yaml`, `trademark_scopes.yaml`, `indication_scopes.yaml`
-
-**Critère de fin testable**
-
-```bash
-# Run complet
-python run_pipeline.py --client mvp_test_30days
-# → ingère les 8 sources, normalise, produit gap_report.json + health.json
-# → datalake_v1/raw/ et /curated/ remplis avec items réels LAI
-
-# Onboarding d'une 9e source
-python onboard_source.py --source press_corporate__taiwan_liposome
-# → discovery + validation + promotion automatique si PASSED
-# → la source est ensuite ingérable par tout client incluant son bouquet
-```
-
-À ce stade : le datalake LAI MVP est **vivant**, les 8 sources tournent, on peut ajouter de nouvelles sources via le workflow d'onboarding, on a une visibilité opérationnelle minimale (health, gap). C'est utilisable au quotidien.
-
----
-
-### 13.5 Phase 2.4 — Niveau 3 : Maquillage
-
-**Objectif** : moteur stable, observable en profondeur, robuste, documenté. Qualité de vie pour l'usage long terme.
-
-**Composants livrés (en plus du Niveau 2)**
-
-*Stats avancés* :
-- `stats/daily.py` : append `stats_daily.jsonl` (snapshot quotidien)
-- `stats/reports.py` : génération de `report_raw.md`, `report_curated.md`, `report_sources.md`, `report_full.md`
-- `scripts/generate_report.py` : CLI rapports
-
-*Maintenance et hygiène* :
-- `scripts/recompute_stats.py`
-- `scripts/rebuild_indexes.py`
-- `scripts/rebuild_cache.py`
-- `scripts/validate_datalake.py` : cohérence JSONL ↔ indexes
-- `scripts/validate_cache.py` : cohérence cache ↔ datalake
-- `scripts/revalidate_all.py` : revalidation périodique des sources actives
-- `sources/revalidator.py` : module dédié à la revalidation périodique
-
-*Robustesse* :
-- Cost cap LLM par run (`cost_cap_usd_per_run` réellement appliqué, alerte si proche du seuil)
-- Tests unitaires complets : canonicalisation URL, item_id, indexes, parsers, filters, validator anti-hallucinations
-- Tests d'intégration sur le pipeline bout-en-bout
-- `ingest/parsers/pdf.py` (si on en a besoin pour FDA labels — sinon différé)
-
-*Documentation* :
-- README dans `src_vectora_inbox_v1/` : guide utilisateur (commandes courantes, dépannage)
-- Mise à jour de `CLAUDE.md` : remplace les règles V2/V3 par celles de V1
-- Mise à jour de `docs/architecture/` : pointe vers ce design en référence
-- Inventaire à jour des sources validées avec leurs configurations
-
-**Critère de fin testable**
-
-- Le rapport hebdomadaire `report_full.md` est généré automatiquement et lisible par un consommateur sans contexte
-- Le moteur tourne sans surveillance pendant plusieurs semaines
-- Les incidents sont diagnostiquables via les outils de validation/maintenance
-- La documentation est suffisante pour qu'une autre personne reprenne le projet
-- Les sources actives sont revalidées trimestriellement, les cassures sont détectées avant qu'elles n'affectent silencieusement l'ingestion
-
----
-
-### 13.6 Vue d'ensemble des paliers
-
-| Palier | Objectif | Livrable testable | Composants à ajouter |
-|---|---|---|---|
-| **Niveau 1 — Fondations** | 1 item bout-en-bout | `run_pipeline.py` produit 1 item curated | datalake/, ingest RSS minimal, normalize basique, canonical minimal |
-| **Niveau 2 — Cœur** | 8 sources MVP utilisables au quotidien | `run_pipeline.py --client mvp_test_30days` ingère et normalise les 8 sources, `onboard_source.py` ajoute une 9e source | parsers HTML, filtres, retry complet, indexes secondaires, module sources/, stats minimaux |
-| **Niveau 3 — Maquillage** | Moteur stable + observable + documenté | Rapports auto, revalidation périodique, maintenance complète, doc | reports, validations, tests, revalidator, cost cap |
-
-**Principe clé** : on ne passe au niveau N+1 qu'après avoir validé que le critère de fin du niveau N est atteint. À tout moment, le moteur est dans un état stable et utilisable, juste plus ou moins riche fonctionnellement.
+- On ne passe au palier N+1 qu'après validation du critère de fin du palier N.
+- Les plans détaillés par palier (composants, séquencement, mini-sprints prévus) sont dans `docs/architecture/level_X_plan.md`.
+- Les sprints d'exécution (tâches, critères, bilan) sont dans `docs/sprints/sprint_NNN_*.md`.
+- Les décisions architecturales prises à chaque palier sont tracées dans `docs/decisions/`.
 
 ---
 
