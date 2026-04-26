@@ -140,7 +140,7 @@ profiles:
     
     applicable_contexts:
       source_types: ["press_sector"]
-      domains: ["tech_lai_ecosystem"]  # Lié aux watch_domains du client
+      ecosystems: ["tech_lai_ecosystem"]  # Lié aux watch_domains du client
     
     runtime_config:
       default_action: "filter_out"
@@ -180,7 +180,7 @@ profiles:
     
     applicable_contexts:
       source_types: ["academic_database"]
-      domains: ["tech_lai_ecosystem"]
+      ecosystems: ["tech_lai_ecosystem"]
     
     runtime_config:
       default_action: "filter_out"
@@ -215,7 +215,7 @@ profiles:
     
     applicable_contexts:
       source_types: ["academic_database"]
-      domains: ["indication_addiction", "indication_schizophrenia"]
+      ecosystems: ["indication_addiction", "indication_schizophrenia"]
     
     runtime_config:
       default_action: "filter_out"

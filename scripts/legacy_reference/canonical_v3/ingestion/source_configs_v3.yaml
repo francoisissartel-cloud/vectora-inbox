@@ -1,0 +1,242 @@
+# Config technique d'ingestion par source — Vectora Inbox V3
+# RÔLE : COMMENT on ingère chaque source (config validée manuellement)
+#
+# STATUT : CE FICHIER EST UN BROUILLON — aucune source n'est encore validée
+# Remplir via : python scripts/validate_source.py --source <source_key>
+# Mettre validated: true uniquement après avoir vérifié le résultat du script
+#
+# RÈGLE CRITIQUE : JAMAIS DE LIMITATION TEMPORELLE DANS CE FICHIER
+# ❌ INTERDIT : patterns avec années (2024, 2025, 2026, etc.)
+# ✅ OBLIGATOIRE : patterns génériques (/press-releases/, /news/, etc.)
+# 🔍 VALIDATION : python scripts/validation/validate_temporal_limits.py
+#
+# Règles moteur :
+#   - source absente = jamais ingérée
+#   - validated: false = ignorée silencieusement
+#   - news_url ne doit jamais être vide
+#   - SEUL LE CLIENT_CONFIG contrôle la période temporelle
+#
+# Profils disponibles → ingestion_profiles_v3.yaml
+#   rss_full | rss_with_fetch | html_generic | html_pdf
+#
+# 📚 GUIDE DES BEST PRACTICES → source_config_best_practices.md
+#   Problèmes courants, solutions éprouvées, scripts de diagnostic
+
+metadata:
+  version: "3.0"
+  last_updated: "2026-04-21"
+  status: "en cours — 11/11 sources traitées (8 validées, 1 hors ligne, 2 nouvelles validées) - Phase 1 améliorations qualité + validation automatisée"
+
+sources:
+
+  # -------------------------------------------------------------------------
+  # Sources actives MVP : medincell, camurus, delsitech, nanexa, pfizer,
+  #                        fiercebiotech, fiercepharma, endpoints_news
+  # Sources non activees : peptron (site hors ligne)
+  # -------------------------------------------------------------------------
+
+  press_corporate__medincell:
+    validated: true
+    validated_date: "2026-02-15"
+    news_url: "https://www.medincell.com/news/"
+    ingestion_profile: html_generic
+    listing_selectors:
+      container: "article.masonry-blog-item"
+      link: "a"
+    date_selectors:
+      css: "span.meta-date.date.published"
+    extraction_notes: >
+      12 articles sur la page news. Format HTML pur, pas de PDF pour les news.
+      Date dans span.meta-date.date.published (ex: 'March 5, 2026').
+      Pas de JSON-LD ni meta tag date — extraction depuis selector CSS.
+      Contenu ~5000 chars par article, complet en HTML.
+
+  press_corporate__camurus:
+    validated: true
+    validated_date: "2026-04-21"
+    news_url: "https://www.camurus.com/media/press-releases/"
+    ingestion_profile: html_generic
+    listing_selectors:
+      container: "a[href*='/press-releases/']"
+      url_pattern: "/press-releases/"
+      url_exclude_patterns:
+        - "/media/press-releases/?$"  # Exclure la page de listing elle-même
+        - "/press-releases/?$"        # Exclure les pages de listing
+    date_selectors:
+      strategy: text_extraction     # date dans le texte visible ex: '12 February 2026'
+    extraction_notes: >
+      25 liens press-release sur la page, URL pattern /media/press-releases/YYYY/slug.
+      Pas de JSON-LD ni time tag. Date dans le texte visible (ex: '12 February 2026').
+      Contenu HTML ~4300 chars par article. Certains articles ont un PDF annexe
+      (rapport annuel) mais le contenu principal est en HTML.
+      AMÉLIORATION 2026-04-21 : Correction CRITIQUE - Selectors élargis de '/press-releases/2026/'
+      vers '/press-releases/' pour éviter limitation temporelle. Cette correction a permis de
+      passer de 5 articles trouvés à 20 articles, incluant les news LAI importantes manquées.
+      RÈGLE : Seul le client_config contrôle la période, jamais les source_configs.
+
+  press_corporate__delsitech:
+    validated: true
+    validated_date: "2026-04-21"
+    news_url: "https://www.delsitech.com/news/"
+    ingestion_profile: html_generic
+    listing_selectors:
+      container: "article.fusion-post-timeline"
+      link: "a"
+      url_exclude_patterns:
+        - "/author/"
+        - "/category/"
+        - "/tag/"
+    date_selectors:
+      strategy: text_extraction     # date dans texte visible ex: 'April 20th, 2026'
+    extraction_notes: >
+      10 articles sur la page (WordPress Fusion theme). Selector article.fusion-post-timeline.
+      Pas de JSON-LD ni time tag. Date dans le texte visible après le nom de l'auteur
+      (ex: 'Milla Runsala 2026-04-20T11:37 April 20th, 2026').
+      Contenu HTML ~800-1600 chars par article. Attention : inclut des events (ChinaBio,
+      BioEquity) — le filtre exclusions event_generic doit les éliminer.
+      AMÉLIORATION 2026-04-21 : Ajout patterns exclusion pour éviter pages auteur/catégorie.
+
+  press_corporate__nanexa:
+    validated: true
+    validated_date: "2026-02-15"
+    news_url: "https://nanexa.com/pressreleases/"
+    ingestion_profile: html_generic
+    listing_selectors:
+      container: "a"
+      url_pattern: "/mfn_news/"    # 148 articles via pattern mfn_news
+    date_selectors:
+      strategy: json_ld_graph       # datePublished dans JSON-LD @graph WebPage
+    extraction_notes: >
+      ATTENTION : la news_url correcte est https://nanexa.com/pressreleases/
+      (pas https://www.nanexa.se/en/press/ qui redirige vers des PDFs génériques).
+      148 articles listés via liens /mfn_news/. Date dans JSON-LD @graph
+      (WebPage.datePublished), confidence 0.95. Contenu HTML ~4700 chars par article.
+      Certains articles ont un PDF annexe (rapport annuel) mais contenu principal HTML.
+
+  press_corporate__peptron:
+    validated: false
+    validated_date: null
+    news_url: "https://www.peptron.co.kr/eng/pr/news.php"
+    ingestion_profile: null
+    listing_selectors: null
+    extraction_notes: >
+      SITE HORS LIGNE (2026-02-15) : la page retourne une erreur d'hebergement Gabia.
+      Le domaine est enregistre mais le serveur web ne repond pas correctement.
+      Probleme SSL en plus (certificat invalide pour www.peptron.co.kr).
+      A RE-TESTER ulterieurement ou a remplacer par une autre source Peptron.
+      Ne pas activer tant que le site n'est pas accessible.
+
+  # -------------------------------------------------------------------------
+  # HYBRID PLAYERS
+  # -------------------------------------------------------------------------
+
+  press_corporate__pfizer:
+    validated: true
+    validated_date: "2026-02-15"
+    news_url: "https://www.pfizer.com/newsroom/press-releases"
+    ingestion_profile: html_generic
+    listing_selectors:
+      url_pattern: "/press-release-detail/"  # 12 articles par page
+    pagination:
+      enabled: true
+      pattern: "?page={n}"                   # ?page=0, ?page=1, ...
+      max_pages: 1                            # page 0 suffit pour 7 jours (3-5 articles/semaine)
+      total_pages_available: 5               # 5 pages au total sur le site
+    date_selectors:
+      css: "div.article-date"                # ex: 'Monday, April 20, 2026 - 06:45am'
+    extraction_notes: >
+      5 pages de 12 articles chacune (60 articles total). Pagination via ?page=N.
+      Pour une ingestion hebdomadaire, page 0 suffit (3-5 articles/semaine).
+      Date dans div.article-date, format 'Monday, April 20, 2026 - 06:45am'.
+      Contenu HTML ~40000 chars par article (page complete).
+      HYBRID PLAYER : filtrage LAI keywords obligatoire.
+      Article LAI confirme page 1 : 'Ultra-Long-Acting Injectable GLP-1 RA'.
+
+  press_corporate__lidds:
+    validated: false
+    validated_date: null
+    news_url: "https://lidds.se/news/"
+    ingestion_profile: html_generic
+    listing_selectors:
+      container: "article"
+      link: "a"
+    date_selectors:
+      strategy: text_extraction
+    extraction_notes: >
+      ÉCHEC VALIDATION (2026-04-21) : Problème SSL - certificat invalide pour lidds.se et www.lidds.se.
+      Erreur : "certificate verify failed: Hostname mismatch, certificate is not valid for 'lidds.se'"
+      Le site est inaccessible via HTTPS. Nécessite investigation supplémentaire ou remplacement
+      par une autre source Lidds. Ne pas activer tant que le problème SSL n'est pas résolu.
+
+  press_corporate__taiwan_liposome:
+    validated: true
+    validated_date: "2026-04-21"
+    news_url: "https://www.tlcbio.com/en/news/"
+    ingestion_profile: html_generic
+    listing_selectors:
+      url_pattern: "/en/news/detail/"    # 6 vrais articles (excluant pages listing)
+      url_exclude_patterns:
+        - "/en/news/Press Releases$"     # Exclure page Press Releases
+        - "/en/news/Media Library$"      # Exclure page Media Library
+        - "/en/news/?$"                  # Exclure page de listing principale
+    date_selectors:
+      strategy: text_extraction
+    title_selectors:
+      # Configuration spéciale pour Taiwan Liposome - titre dans <title>
+      custom_selectors: ["title", "h1", ".title"]
+      min_length: 5  # Réduire la limite pour accepter "goldennet"
+    extraction_notes: >
+      PROBLÈME RÉSOLU (2026-04-21) : Le site a des titres génériques "goldennet" (9 chars)
+      dans h1, mais vrais titres dans <title>. Configuration spéciale pour privilégier
+      <title> et réduire limite min_length à 5 chars. Cela devrait permettre d'extraire
+      les 6 articles au lieu de 2.
+
+  # -------------------------------------------------------------------------
+  # PRESSE SECTORIELLE
+  # -------------------------------------------------------------------------
+
+  press_sector__fiercebiotech:
+    validated: true
+    validated_date: "2026-04-21"
+    news_url: "https://www.fiercebiotech.com/rss/xml"
+    ingestion_profile: rss_full
+    prefetch_filter: false        # N/A pour rss_full
+    listing_selectors: null
+    extraction_notes: >
+      25 entries dans le feed RSS. Mode rss_full : utilise le contenu RSS directement.
+      Pas de fetch des articles individuels (contournement anti-scraping).
+      Contenu limité (~200 chars par article) mais fonctionnel.
+      Date dans le feed (pubDate) fiable : 'Apr 20, 2026 9:37am'.
+      Titre encodé en HTML dans le feed (balise <a href=...>) - nettoyé automatiquement.
+      PRESS SECTOR : filtrage LAI keywords obligatoire sur contenu RSS.
+
+  press_sector__fiercepharma:
+    validated: true
+    validated_date: "2026-04-21"
+    news_url: "https://www.fiercepharma.com/rss/xml"
+    ingestion_profile: rss_full
+    prefetch_filter: false        # N/A pour rss_full
+    listing_selectors: null
+    extraction_notes: >
+      25 entries dans le feed RSS. Mode rss_full : utilise le contenu RSS directement.
+      Pas de fetch des articles individuels (contournement anti-scraping).
+      Contenu limité (~200 chars par article) mais fonctionnel.
+      Date dans le feed (pubDate) fiable : 'Apr 20, 2026 10:21am'.
+      Titre encodé en HTML dans le feed (balise <a href=...>) - nettoyé automatiquement.
+      PRESS SECTOR : filtrage LAI keywords obligatoire sur contenu RSS.
+
+  press_sector__endpoints_news:
+    validated: true
+    validated_date: "2026-02-15"
+    news_url: "https://endpts.com/feed/"
+    ingestion_profile: rss_with_fetch
+    prefetch_filter: false        # DÉSACTIVÉ - laisse le filtrage LAI sur contenu complet
+    listing_selectors: null
+    extraction_notes: >
+      24 entries dans le feed. Contenu TRONQUE dans le feed (~198 chars).
+      Profil rss_with_fetch : RSS pour le listing, fetch article complet pour le contenu.
+      prefetch_filter=false : on fetch tous les articles puis filtre sur contenu complet.
+      Économie moindre mais meilleure précision pour détecter les articles LAI.
+      Date dans le feed (pubDate) fiable ISO : 'Mon, 20 Apr 2026 14:45:13 +0000'.
+      Titre propre (pas de HTML encode). URL sur endpoints.news (pas endpts.com).
+      PRESS SECTOR : filtrage LAI keywords obligatoire sur contenu complet.

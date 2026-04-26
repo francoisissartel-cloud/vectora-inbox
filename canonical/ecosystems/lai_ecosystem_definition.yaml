@@ -1,13 +1,13 @@
-# LAI Domain Definition - Unified
-# Single source of truth for Long-Acting Injectables domain
+# LAI Ecosystem Definition - Unified
+# Single source of truth for Long-Acting Injectables ecosystem
 # Replaces 8 fragmented files with 1 coherent definition
 
-domain_id: lai
-domain_name: "Long-Acting Injectables"
+ecosystem_id: lai
+ecosystem_name: "Long-Acting Injectables"
 version: "2.0"
 created_date: "2026-01-31"
 
-# Conceptual definition for Bedrock understanding
+# Conceptual definition for LLM understanding
 definition: |
   Long-Acting Injectables (LAI) are pharmaceutical formulations designed to 
   provide sustained drug release over extended periods (weeks to months) 
