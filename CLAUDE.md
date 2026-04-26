@@ -207,6 +207,8 @@ Exemples :
 
 Claude **fait le push sans demander** vers la branche feature/refactor/fix sur laquelle il travaille. Le push rend le travail visible sur GitHub mais ne touche pas à `main`. Aucun risque.
 
+**Limitation Cowork** : quand Claude travaille depuis Cowork (sandbox Linux qui monte le filesystem Windows), les commandes git ne fonctionnent pas de façon fiable (index corrompu, verrous, problèmes de filesystem cross-platform). Dans ce cas, Claude prépare les fichiers et donne à Frank les commandes exactes à lancer depuis **VS Code / terminal Windows**. C'est toujours VS Code qui fait le commit et le push quand on travaille depuis Cowork.
+
 ### Merge sur main — validation Frank obligatoire
 
 Quand un palier est fini et validé, Claude **propose** la fusion sur `main`. Frank décide :
@@ -432,6 +434,7 @@ Le projet est compatible avec **deux environnements** :
 - **Le projet doit fonctionner identiquement** quel que soit l'outil utilisé. Pas de hack spécifique à Cowork ou à Claude Code.
 - **Quand on bascule** entre les deux, Claude reprend exactement là où il en était : CLAUDE.md et les docs d'architecture sont la mémoire partagée.
 - **Frank a déjà l'extension Anthropic installée dans VS Code** ; aucun setup supplémentaire n'est nécessaire pour basculer.
+- **Git (commit + push) se fait toujours depuis VS Code / terminal Windows**. Cowork tourne dans une sandbox Linux qui monte le filesystem Windows — les commandes git y sont instables (verrous, index corrompu, problèmes cross-platform). Règle simple : Claude prépare les fichiers depuis Cowork, Frank exécute le commit/push depuis VS Code.
 
 ---
 

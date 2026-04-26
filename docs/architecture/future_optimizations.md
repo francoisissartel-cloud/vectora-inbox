@@ -128,4 +128,14 @@ Ce document est la **mémoire des décisions reportées**. Aucun élément ici n
 
 ---
 
+## ✅ 11. Repo hors OneDrive — RÉALISÉ (Sprint 003, 2026-04-26)
+
+**Idée** : déplacer le repo de `C:\Users\franc\OneDrive\Bureau\vectora-inbox - claude\` vers `C:\Users\franc\dev\vectora-inbox-claude\` pour éviter les conflits de sync OneDrive avec Git (lock `.git/index.lock`, fichiers fantômes, latences).
+
+**Pourquoi différé initialement** : techniquement non bloquant en Phase 2 (ménage/audit). Devenu bloquant pour le Niveau 1 (développement actif).
+
+**Réalisé** : Sprint 003 — déménagement effectué par Frank depuis VS Code/PowerShell, Cowork remonté sur le nouveau chemin. Voir `docs/runbooks/move_repo_out_of_onedrive.md`.
+
+---
+
 *Mis à jour à chaque fois qu'une décision est consciemment reportée.*
