@@ -127,6 +127,7 @@ Récap des principales :
 | Le **plan d'action** en cours d'exécution | Section "Où on en est" ci-dessus |
 | Le **mini-sprint en cours** | `docs/sprints/sprint_NNN_*.md` (cf. roadmap) |
 | Le **template** pour créer un sprint | `docs/sprints/_TEMPLATE.md` |
+| Quel **modèle** (Haiku/Sonnet/Opus) utiliser pour quelle tâche | `CLAUDE.md` §20 |
 | La **mémoire des décisions** prises | `docs/decisions/` |
 | Les **optimisations différées** | `docs/architecture/future_optimizations.md` |
 | Comment **structurer le repo** | `docs/architecture/phase2.0_repo_structure.md` |

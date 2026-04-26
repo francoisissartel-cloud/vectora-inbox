@@ -1,12 +1,14 @@
 # CLAUDE.md — Règles de travail Vectora Inbox V1
 
-**Version** : 1.4
+**Version** : 1.5
 **Date** : 2026-04-25
 **Pour qui** : Claude (assistant IA) qui travaille avec Frank sur ce projet
 
 **Changements V1.3** : intégration du tableau de bord vivant `STATUS.md` (à la racine) et du dossier `docs/decisions/` (ADRs). Nouvelle section §16 "Documentation vivante" qui formalise l'usage de ces artefacts.
 
 **Changements V1.4** : ajout de trois sections opérationnelles cruciales — §17 méthode incrémentale (small batches), §18 plans de mini-sprints (format et workflow), §19 résilience aux plantages (disciplines préventives + plan de récupération). Création du dossier `docs/sprints/` avec un template réutilisable.
+
+**Changements V1.5** : ajout de §20 sur la gestion fine des modèles (Haiku / Sonnet / Opus) et des fenêtres de conversation. Le but : économiser le quota Pro de Frank en utilisant le bon modèle pour chaque type de tâche, et changer de fenêtre de conversation au bon moment.
 
 ---
 
@@ -915,4 +917,126 @@ Claude finit son action en cours, commit ce qui est commitable, met à jour `STA
 
 ---
 
-*Fin du CLAUDE.md V1.4 — à valider par Frank.*
+## 20. Gestion fine des modèles et des sessions
+
+Le quota Pro de Frank est une **ressource finie**. Bien gérer le choix de modèle et la durée des conversations peut multiplier sa capacité de travail par 5 à 10. Cette section formalise les règles.
+
+### 20.1 Trois modèles, trois usages
+
+| Modèle | Coût relatif | Vitesse | Quand l'utiliser |
+|---|---|---|---|
+| **🟢 Claude Haiku** | ×1 (le moins cher) | Rapide | Tâches mécaniques : audit nommage, recherche, lecture, listage, renommage simple, formatage, validation syntaxique, mise à jour de fichiers de stats |
+| **🟡 Claude Sonnet** | ×3 à ×5 vs Haiku | Moyen | Tâches courantes de développement : écriture de code, refactoring, design d'API, debug, tests, rédaction d'ADR ou de plan de sprint |
+| **🔴 Claude Opus** | ×5 à ×10 vs Sonnet | Lent | Tâches stratégiques rares : architecture profonde ambiguë, debug très tordu d'un bug intermittent, optimisation algorithme critique. **À utiliser exceptionnellement.** |
+
+**Économie potentielle** : passer une tâche "audit nommage" d'Opus à Haiku, c'est diviser le coût par ~30. Pour Frank, ça peut faire la différence entre "session bloquée mardi midi" et "session active toute la semaine".
+
+### 20.2 Classement par tâche du projet
+
+**🟢 Haiku par défaut** :
+- Phase 2.1 — audit nommage canonical (lecture massive, peu de création)
+- Mise à jour de `STATUS.md` à la fin d'un sprint
+- Cartographie / exploration d'un dossier
+- Recherche d'occurrences (équivalent grep)
+- Renommage massif d'occurrences (après plan validé)
+- Génération de rapports basés sur des données existantes
+
+**🟡 Sonnet par défaut** :
+- Niveaux 1, 2, 3 (Fondations, Cœur, Maquillage) — écriture de code
+- Rédaction d'un plan de palier ou d'un sprint
+- Rédaction d'une ADR
+- Debug d'une erreur
+- Discussion stratégique (ce que tu fais avec Claude dans Cowork)
+- Revue de design
+
+**🔴 Opus exceptionnellement** :
+- Trancher une décision architecturale ambiguë qu'aucune ADR existante n'éclaire
+- Identifier la cause racine d'un bug intermittent reproductible
+- Faire une revue critique approfondie d'une architecture complète
+- En pratique : 1-2% des tâches du projet maximum
+
+### 20.3 Comment changer de modèle dans l'interface
+
+#### Dans Claude Code (extension VS Code)
+
+Selon la version de l'extension :
+- **Slash command** : taper `/model` dans la zone de saisie → menu déroulant avec les modèles disponibles
+- **Liste des slash commands** : taper juste `/` pour voir toutes les commandes disponibles, repérer celle liée au modèle
+- **Palette de commandes VS Code** : `Ctrl+Shift+P` → "Claude" → "Select Model" ou similaire
+- **Paramètres VS Code** : `Ctrl+,` → cherche "claude model" → dropdown
+
+Le changement s'applique au **prochain message** envoyé. Tu peux changer en cours de conversation.
+
+#### Dans Cowork (Claude desktop)
+
+- **Dropdown en haut de la fenêtre** : sélecteur de modèle généralement à côté du titre de la conversation ou dans la zone supérieure
+- **Important — modèle figé pour une conversation** : si une conversation existante affiche **"legacy model"** ou ne permet pas de changer, c'est par design. Cowork verrouille le modèle pour toute la durée d'une conversation.
+
+**Conséquence pratique pour Cowork** :
+- Une conversation ancienne reste sur son modèle d'origine, même si on voudrait passer à un modèle plus récent
+- Pour utiliser un modèle plus récent : **ouvrir une nouvelle conversation** (icône `+` ou "Nouvelle conversation")
+- La nouvelle conversation prend par défaut le modèle actuel récent
+
+### 20.4 Gestion des fenêtres de conversation
+
+Plus une conversation est longue, plus chaque message coûte cher (l'historique complet est rejoué à chaque tour). Donc il faut savoir quand changer de fenêtre.
+
+#### Garder la même fenêtre
+
+- En plein milieu d'un sprint
+- Quand on a besoin de l'historique récent de la discussion
+- Quand on enchaîne des échanges courts sur un même thème
+- Quand on vient juste de poser un contexte qu'on va exploiter
+
+#### Changer de fenêtre
+
+- Un sprint vient d'être validé et on attaque le suivant (notamment après un gros sprint)
+- On change radicalement de sujet
+- La conversation dépasse 50-80 échanges denses
+- On démarre une nouvelle journée de travail
+- Claude semble lent ou redemande des choses qu'on a déjà dites
+
+#### Le pont entre fenêtres : la mémoire externalisée
+
+Quand on change de fenêtre, **on ne perd RIEN du projet** parce qu'on a designé pour ça :
+- `STATUS.md` dit où on en est
+- `docs/decisions/` dit pourquoi on a décidé X et Y
+- `CLAUDE.md` dit comment travailler
+- `docs/sprints/` dit ce qu'on est en train de faire
+
+Le seul "coût" du changement de fenêtre, c'est de dire au début à Claude : *"Lis `STATUS.md` et le sprint en cours, puis fais-moi un point"* (cf. §14 — phrase d'introduction obligatoire de session).
+
+### 20.5 Règles concrètes pour Claude
+
+**Avant chaque sprint** :
+- Recommander explicitement le modèle adapté : *"Pour ce sprint, je recommande **Haiku** car c'est principalement de la lecture/recherche."* ou *"Pour ce sprint, je recommande **Sonnet** car on écrit du nouveau code."*
+- Le mentionner dans le plan de sprint (champ "Modèle recommandé" du template)
+
+**En cours de sprint** :
+- Si une tâche en Haiku se révèle plus complexe que prévu, alerter Frank et proposer de switcher : *"Cette partie demande plus de raisonnement, je recommande de switcher sur Sonnet."*
+- Si Claude sent qu'il sature ou que la conversation est devenue très longue, suggérer un changement de fenêtre : *"On vient de finir un gros sprint, et cette conversation est longue. Je suggère de fermer cette fenêtre et d'en ouvrir une nouvelle pour la suite. Avant de fermer, je mets à jour `STATUS.md`."*
+
+**À la fin d'une session** :
+- Mettre à jour `STATUS.md` même si tout n'est pas fini (mémoire externalisée)
+- Commit ce qui est commitable
+- Confirmer à Frank que la prochaine session pourra reprendre proprement
+
+### 20.6 Discipline de session
+
+**Sessions courtes** : 1-2h max par bloc, avec pause entre.
+
+**Max 2 sprints par session** : enchaîner 5 sprints d'affilée sature le contexte de Claude et fatigue le quota. Mieux vaut splitter sur plusieurs jours.
+
+**Commit fréquent** (déjà §17) : non négociable.
+
+**Alertes proactives de Claude** : si Claude détecte une de ces situations, il alerte Frank :
+- Conversation > 80 échanges denses
+- Plus d'1h sans commit
+- Tâche en cours plus complexe que le modèle utilisé ne le permet
+- Sentiment de saturation / dérive
+
+**Frank peut à tout moment demander** : *"Quel modèle on est en train d'utiliser ? Tu recommandes quoi pour la prochaine étape ?"* — Claude répond directement.
+
+---
+
+*Fin du CLAUDE.md V1.5 — à valider par Frank.*
