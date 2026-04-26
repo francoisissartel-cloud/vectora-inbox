@@ -1,0 +1,42 @@
+# Configuration parsing pour Vectora Inbox
+# Patterns de dates, sélecteurs CSS, règles d'extraction
+
+metadata:
+  version: "1.0"
+  description: "Configuration parsing par source_type"
+
+# Patterns de dates par source_type
+date_patterns:
+  press_corporate:
+    patterns:
+      - "(\\w+ \\d{1,2}, \\d{4})\\w*"              # "December 9, 2025December"
+      - "(\\d{1,2} \\w+ \\d{4})"                  # "10 December, 2025"
+      - "(\\w+\\s+\\d{1,2},\\s+\\d{4})"            # "November 5, 2025"
+      - "(\\d{4}-\\d{2}-\\d{2})"                 # ISO format
+      - "(?:published|released|announced).*?(\\w+ \\d{1,2}, \\d{4})"
+    notes: "Patterns génériques pour sites corporate"
+  
+  press_sector:
+    patterns:
+      - "(\\d{4}-\\d{2}-\\d{2})"                 # ISO format (RSS)
+      - "(\\w+ \\d{1,2}, \\d{4})"                # "December 9, 2025"
+    notes: "Patterns pour flux RSS (dates standardisées)"
+
+# Sélecteurs CSS par source (overrides spécifiques)
+html_selectors:
+  default:
+    article_list: "article, .post, .news-item"
+    title: "h1, h2, h3, .title, .headline"
+    link: "a"
+    date: "time, .date, .published"
+    content: ".content, .body, article"
+
+# Configuration enrichissement
+content_enrichment:
+  default:
+    mode: "full_article"
+    max_length: 2000
+  
+  press_sector:
+    mode: "full_article"
+    max_length: 2000

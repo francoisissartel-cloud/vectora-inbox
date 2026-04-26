@@ -1,7 +1,7 @@
 # Vectora Inbox V1 — Project Status
 
-**Dernière mise à jour** : 2026-04-25 (Claude — Sprint 000 terminé, Sprint 001 prêt)
-**Version actuelle du chantier** : Phase 2.0 ✅. Sprint 000 ✅. Sprint 001 (audit nommage) à démarrer.
+**Dernière mise à jour** : 2026-04-26 (Sprint 003 ✅ — sortie OneDrive + bug regex YAML corrigé)
+**Version actuelle du chantier** : Phases 1, 2.0, 2.1 + Sprints 000-003 ✅. Sprint 004 (ADRs 011-015 + design doc V1.5) est la prochaine étape.
 
 > Ce fichier est le **tableau de bord vivant** du projet. À ouvrir en premier quand on arrive sur le projet (Frank ou Claude). Mis à jour à chaque jalon validé.
 
@@ -17,25 +17,33 @@ Vectora Inbox V1 est un moteur **local-first** d'alimentation d'un datalake de v
 
 ## Où on en est aujourd'hui
 
-**Étape actuelle** : ✅ Sprint 002 — Exécution renommages Phase 2.1 (terminé le 25/04/2026)
-**Statut** : Phase 2.1 complète. Vocabulaire V1 en place dans `canonical/`. Prêt pour Niveau 1 (Fondations).
+**Étape actuelle** : ⏸ Sprint 004 — ADRs 011-015 + refonte `datalake_v1_design.md` V1.5 (à démarrer)
+**Statut** : Sprint 003 terminé et validé (26/04/2026). Repo sur `C:\Users\franc\dev\vectora-inbox-claude\`, bug regex YAML corrigé (28 patterns sur 5 sources), script de validation créé.
 
-**Dernier livrable validé** : ✅ Sprint 002 — Renommages Phase 2.1 (25/04/2026)
-- `datalake_v1_design.md` §13 refactoré : devient une vue d'ensemble courte (tableau des paliers + liens vers docs dédiés)
-- Création de `docs/architecture/level_1_plan.md` : plan complet du Niveau 1 (8 mini-sprints prévus, composants, séquencement, principe config-driven)
-- Création de `docs/architecture/level_2_plan.md` et `level_3_plan.md` : squelettes à étoffer
-- Création de `docs/sprints/sprint_001_audit_nommage_canonical.md` : Sprint 001 prêt à exécuter (modèle Sonnet)
-- `CLAUDE.md` V1.5 : ajout §20 gestion fine des modèles (Haiku / Sonnet / Opus)
+**Audit Opus** : ✅ livré (`docs/architecture/audit_opus_response_20260425.md`, 26/04/2026)
+- 9 tensions du brief arbitrées + 6 tensions additionnelles identifiées
+- Top 3 risques identifiés : corruption silencieuse du datalake, abandon avant fin N1 (séquencement bottom-up), bug parser regex au premier run
+- 5 décisions structurantes validées par Frank (à matérialiser en ADRs 011-015 au Sprint 004)
 
-**Précédent livrable** : ✅ Phase 2.0 — Hygiène complète du repo (25/04/2026)
-- Volet Git : tag `legacy-pre-pivot-20260425`, branche `archive/legacy-pre-pivot`, 7 branches obsolètes supprimées, 2 stashs nettoyés
-- Volet Structure : nouvelle arborescence (8 dossiers racine), legacy archivé, `CLAUDE.md` V1.4, `.gitignore` réécrit, `README.md` et `pyproject.toml` créés
-- 10 scripts récupérés dans `scripts/legacy_reference/` pour capitalisation au Niveau 1
+**Décisions validées par Frank suite à l'audit** :
+1. SQLite pour les indexes + cache (JSONL conservé pour les items) — ADR 011 à créer
+2. CLI unifiée Typer (au lieu de 20+ scripts) — ADR 012 à créer
+3. Onboarding source par paliers : Validation N2, Discovery N3+, Promotion supprimée — ADR 013 à créer
+4. Signaux factuels dans le curated (pas de scoring) — ADR 014 à créer
+5. Pydantic V2 pour tous les modèles de données — ADR 015 à créer
+6. Niveau 1 en walking skeleton, source pilote = medincell HTML (estimé 12-16h, pas 8-12h)
+7. Sortie OneDrive immédiate (Sprint 003)
 
-**Prochaine étape immédiate** : Niveau 1 — Fondations
-- Lire `docs/architecture/level_1_plan.md` pour le plan détaillé
-- Premier sprint du Niveau 1 : bootstrapper `src_vectora_inbox_v1/` (datalake + item_id)
-- Critère de fin global Niveau 1 : `python run_pipeline.py --source press_corporate__medincell` produit 1 item raw puis 1 item curated
+**Sprints planifiés (mise à niveau pré-Niveau 1)** :
+- **Sprint 003** ✅ — Stabilisation infrastructure : sortie OneDrive vers `C:\Users\franc\dev\vectora-inbox-claude\` + correction bug regex `r"..."` dans `source_catalog.yaml` + création runbook (~1h30)
+- **Sprint 004** ⏸ — ADRs 011-015 + refonte `datalake_v1_design.md` V1.5 (~3h, après validation Sprint 003)
+- **Sprint 005** ⏸ — Refonte `level_1_plan.md` V2 (walking skeleton + medincell HTML) + CLAUDE.md V1.6 (extraction §15 §20 vers runbooks) (~2h30, après validation Sprint 004)
+
+**Précédents livrables** :
+- ✅ Sprint 002 — Renommages Phase 2.1 (25/04/2026) : `datalake_v1_design.md` §13 refactoré, `level_X_plan.md` créés, `CLAUDE.md` V1.5
+- ✅ Phase 2.0 — Hygiène complète du repo (25/04/2026) : Git nettoyé, arborescence V1, legacy archivé
+
+**Prochaine étape immédiate** : Démarrer Sprint 004 — rédiger les ADRs 011-015 (SQLite, CLI Typer, onboarding par paliers, signaux factuels, Pydantic V2) et mettre à jour `datalake_v1_design.md` en V1.5. Frank valide le plan avant exécution.
 
 ---
 
@@ -47,9 +55,13 @@ Vectora Inbox V1 est un moteur **local-first** d'alimentation d'un datalake de v
 | 2 | **Phase 2.0** — Hygiène repo | ✅ Fait | 25/04/2026 | `docs/architecture/phase2.0_repo_structure.md` |
 | 3 | **Sprint 000** — Remise en ordre méthodologique | ✅ Fait | 25/04/2026 | `docs/sprints/sprint_000_remise_ordre_methodo.md` |
 | 4 | **Phase 2.1** — Audit + renommages canonical | ✅ Fait | 25/04/2026 | `docs/sprints/sprint_001_audit_nommage_canonical.md` |
-| 5 | **Niveau 1** — Fondations | ⏸ À venir | - | `docs/architecture/level_1_plan.md` |
-| 6 | **Niveau 2** — Cœur | ⏸ À venir | - | `docs/architecture/level_2_plan.md` |
-| 7 | **Niveau 3** — Maquillage | ⏸ À venir | - | `docs/architecture/level_3_plan.md` |
+| 5 | **Audit stratégique Opus** — pré-code V1 | ✅ Fait | 26/04/2026 | `docs/architecture/audit_opus_response_20260425.md` |
+| 6 | **Sprint 003** — Stabilisation infra (sortie OneDrive + bug regex) | ✅ Fait | 26/04/2026 | `docs/sprints/sprint_003_stabilisation_infrastructure.md` |
+| 7 | **Sprint 004** — ADRs 011-015 + design doc V1.5 | ⏸ À venir | - | `docs/sprints/sprint_004_adrs_et_refonte_design_doc.md` |
+| 8 | **Sprint 005** — Plans V2 + CLAUDE.md V1.6 | ⏸ À venir | - | `docs/sprints/sprint_005_refonte_plans_et_claudemd.md` |
+| 9 | **Niveau 1** — Fondations (walking skeleton, medincell HTML) | ⏸ À venir | - | `docs/architecture/level_1_plan.md` (à passer V2 au Sprint 005) |
+| 10 | **Niveau 2** — Cœur | ⏸ À venir | - | `docs/architecture/level_2_plan.md` |
+| 11 | **Niveau 3** — Maquillage | ⏸ À venir | - | `docs/architecture/level_3_plan.md` |
 
 **Légende** : ✅ Fait / 🔵 En cours / ⏸ À venir / ⚠️ Bloqué
 
@@ -89,6 +101,9 @@ Chaque décision a son ADR (Architecture Decision Record) dans `docs/decisions/`
 | Date | Difficulté | Résolution |
 |---|---|---|
 | 25/04 | Lock `.git/index.lock` bloqué — Cowork ne peut pas le manipuler à cause du repo dans OneDrive | Bascule vers Claude Code dans VS Code (Windows natif) — fonctionne. Recommandation long terme : déplacer le repo hors OneDrive. |
+| 26/04 | Repo dans OneDrive : sync interférait avec Git (locks, latences) | Sprint 003 — déménagement vers `C:\Users\franc\dev\vectora-inbox-claude\` effectué par Frank. Cowork remonté sur le nouveau chemin. |
+| 26/04 | Bug regex YAML : 28 patterns préfixés `r"..."` (syntaxe Python) dans `source_catalog.yaml` — invalides en YAML pur | Sprint 003 — correction automatisée vers single-quoted `'...'`. Script `scripts/maintenance/validate_yaml_regexes.py` créé pour CI futur. |
+| 26/04 | Bug regex YAML : 7 patterns `r"..."` dans `canonical/parsing/parsing_config.yaml` — corrigé vers `"\\..."` | Sprint 003 — même correction que source_catalog.yaml |
 | 25/04 | Repo dédié à Claude (`vectora-inbox - claude/`) avait un état partiel : sources `.py` des scripts d'ingestion/discovery/validation manquaient (seulement `.pyc` compilés). Frank avait les `.py` dans son repo principal `vectora-inbox/`. | Récupération via `cp -r` depuis `vectora-inbox/scripts/` vers `scripts/legacy_reference/` du repo de travail. 10 fichiers conservés comme référence à adapter au Niveau 1. |
 
 ---
@@ -107,7 +122,7 @@ Récap des principales :
 7. Politique de retention / purge
 8. Scheduler automatique (cron / APScheduler)
 9. Dashboard HTML pour stats
-10. Repo hors OneDrive (technique)
+10. ~~Repo hors OneDrive (technique)~~ ✅ Fait — Sprint 003 (26/04/2026)
 
 ### Idées en cours de réflexion (non encore décidées)
 
@@ -119,6 +134,7 @@ Récap des principales :
 
 | Tu veux comprendre... | Va voir... |
 |---|---|
+| La **vision business** et le contexte produit V1 | `docs/business/contexte_business_v1.md` |
 | L'**architecture** du datalake et du moteur | `docs/architecture/datalake_v1_design.md` |
 | Les **règles de travail** Frank ↔ Claude | `CLAUDE.md` (à la racine) |
 | Le **plan d'action** en cours d'exécution | Section "Où on en est" ci-dessus |
