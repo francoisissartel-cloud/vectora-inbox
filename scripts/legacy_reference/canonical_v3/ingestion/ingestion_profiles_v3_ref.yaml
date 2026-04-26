@@ -1,0 +1,116 @@
+# Profils d'ingestion pour Vectora Inbox V2
+# Pilotage 100% canonical - AUCUN hardcoding
+
+metadata:
+  version: "2.0"
+  created_date: "2026-02-06"
+  description: "Profils d'ingestion simplifiés - pilotés par canonical"
+
+# Mapping source_type → profile
+source_type_profiles:
+  press_corporate:
+    profile_name: "corporate_profile"
+    description: "Sources corporate (communiqués entreprises)"
+  
+  press_sector:
+    profile_name: "press_profile"
+    description: "Presse sectorielle (FierceBiotech, etc.)"
+
+# Définition des profils
+profiles:
+  corporate_profile:
+    description: "Profil corporate avec distinction pure/hybrid players"
+    
+    rules:
+      # Pure players LAI : ingestion permissive
+      pure_players:
+        company_scope: "lai_companies_pure_players"
+        ingestion_mode: "permissive"
+        
+        # Exclusions IDENTIQUES à hybrid
+        apply_exclusions: true
+        exclusion_scopes:
+          - "hr_content"
+          - "hr_recruitment_terms"
+          - "esg_generic"
+          - "financial_generic"
+          - "financial_reporting_terms"
+          - "anti_lai_routes"
+          - "event_generic"
+          - "corporate_noise_terms"
+        
+        # PAS de filtrage LAI keywords
+        require_lai_keywords: false
+        
+        description: "Pure players: exclusions complètes, pas de filtrage LAI"
+      
+      # Hybrid players : ingestion filtrée
+      hybrid_players:
+        company_scope: "lai_companies_hybrid"
+        ingestion_mode: "filtered"
+        
+        # Exclusions IDENTIQUES à pure players
+        apply_exclusions: true
+        exclusion_scopes:
+          - "hr_content"
+          - "hr_recruitment_terms"
+          - "esg_generic"
+          - "financial_generic"
+          - "financial_reporting_terms"
+          - "anti_lai_routes"
+          - "event_generic"
+          - "corporate_noise_terms"
+        
+        # Filtrage LAI keywords REQUIS
+        require_lai_keywords: true
+        lai_keyword_scopes:
+          - "lai_keywords.core_phrases"
+          - "lai_keywords.technology_terms_high_precision"
+          - "lai_keywords.interval_patterns"
+          - "lai_trademarks_global"
+        min_lai_signals: 1
+        
+        description: "Hybrid: LAI keywords requis, pas d'exclusions"
+  
+  press_profile:
+    description: "Profil presse sectorielle - filtrage strict"
+    
+    rules:
+      default:
+        ingestion_mode: "filtered"
+        
+        # Exclusions pour presse
+        apply_exclusions: true
+        exclusion_scopes:
+          - "hr_content"
+          - "esg_generic"
+          - "financial_generic"
+          - "event_generic"
+          - "anti_lai_routes"
+        
+        # Filtrage LAI keywords REQUIS
+        require_lai_keywords: true
+        lai_keyword_scopes:
+          - "lai_keywords.core_phrases"
+          - "lai_keywords.technology_terms_high_precision"
+          - "lai_keywords.interval_patterns"
+          - "lai_trademarks_global"
+        min_lai_signals: 1
+        
+        description: "Presse: exclusions + mots-clés LAI obligatoires"
+
+# Modes d'ingestion globaux (override via event)
+ingestion_modes:
+  strict:
+    description: "Filtrage maximal pour tous types"
+    force_lai_keywords: true
+    force_exclusions: true
+  
+  balanced:
+    description: "Profils différenciés par type (défaut)"
+    use_profiles: true
+  
+  broad:
+    description: "Ingestion large pour tous types"
+    force_lai_keywords: false
+    apply_exclusions: false

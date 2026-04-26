@@ -1,0 +1,189 @@
+# Règles de filtrage post-extraction — Vectora Inbox V3
+# RÔLE : QUOI garder après extraction — règles par actor_type
+#
+# Ce fichier répond à : quels articles conserver après extraction
+# Il ne contient AUCUNE stratégie d'extraction (listing, fetch, pagination)
+# Stratégies d'extraction → ingestion_profiles_v3.yaml
+#
+# Articulation avec les autres fichiers canonical :
+#   - actor_type résolu via company_id dans canonical/scopes/company_scopes.yaml
+#   - valeurs des termes d'exclusion dans canonical/scopes/exclusion_scopes.yaml
+#   - valeurs des LAI keywords dans canonical/scopes/technology_scopes.yaml
+#                                  et canonical/scopes/trademark_scopes.yaml
+#   - période de recherche dans config/clients/{client_id}.yaml
+#
+# Le moteur charge ce fichier au runtime.
+# Modifier le comportement de filtrage = modifier ce fichier uniquement.
+# Jamais de valeurs hardcodées dans le code Python.
+
+metadata:
+  version: "3.0"
+  last_updated: "2026-02-15"
+
+# ---------------------------------------------------------------------------
+# PREFETCH FILTER — pour profil rss_with_fetch
+# Appliqué AVANT le fetch de l'article complet
+# ---------------------------------------------------------------------------
+prefetch_filter:
+  description: >
+    Pour les sources avec profil rss_with_fetch et prefetch_filter=true,
+    le moteur applique un filtre LAI keywords sur le titre + resume RSS
+    AVANT de fetcher l'article complet.
+    Objectif : eviter de fetcher des articles non-LAI (economie de requetes HTTP).
+  logic:
+    - "Lire titre + resume depuis le feed RSS"
+    - "Chercher >= 1 LAI keyword dans titre + resume"
+    - "Si keyword trouve  -> fetch article complet -> filtre final sur contenu complet"
+    - "Si keyword absent  -> skip, pas de fetch, item ignore"
+  keyword_scopes:
+    - lai_keywords.core_phrases
+    - lai_keywords.technology_terms_high_precision
+    - lai_keywords.interval_patterns
+    - lai_trademarks_global
+  min_signals: 1
+  match_fields: [title, summary_rss]
+  applies_to_profiles: [rss_with_fetch]
+  note: >
+    Le prefetch_filter est active source par source via prefetch_filter: true
+    dans source_configs_v3.yaml. Il n'est pas active par defaut sur tous les profils
+    rss_with_fetch — uniquement sur les sources qui le declarent explicitement.
+
+# ---------------------------------------------------------------------------
+# RÉSOLUTION DE L'ACTOR_TYPE
+# Le moteur résout l'actor_type au runtime pour chaque source
+# ---------------------------------------------------------------------------
+actor_type_resolution:
+  lookup_file: "canonical/scopes/company_scopes.yaml"
+  logic:
+    - condition: "company_id dans lai_companies_pure_players"
+      result: "pure_lai"
+    - condition: "company_id dans lai_companies_hybrid"
+      result: "hybrid"
+    - condition: "source_type == press_sector"
+      result: "press_sector"
+    - condition: "default"
+      result: "unknown"
+  note: >
+    L'actor_type n'est jamais stocké statiquement dans source_catalog_v3.yaml.
+    Il est toujours résolu dynamiquement au runtime via company_scopes.yaml.
+    Ajouter une entreprise dans company_scopes.yaml suffit — pas besoin de
+    modifier source_catalog_v3.yaml.
+
+# ---------------------------------------------------------------------------
+# FILTRE PÉRIODE
+# Appliqué en premier — avant exclusions et LAI keywords
+# ---------------------------------------------------------------------------
+period_filter:
+  source: "config/clients/{client_id}.yaml"
+  field: "pipeline.default_period_days"
+  rule: "published_at >= (extraction_date - period_days)"
+  no_date_rule: "exclu systématiquement — jamais de fallback sur date du jour"
+  note: >
+    La période est définie par client, pas par source.
+    Un item sans date publiée est toujours exclu, quelle que soit la source.
+
+# ---------------------------------------------------------------------------
+# RÈGLES DE FILTRAGE PAR ACTOR_TYPE
+# Appliquées après le filtre période
+# ---------------------------------------------------------------------------
+filter_rules:
+
+  pure_lai:
+    description: >
+      Pure players LAI : entreprises dont le business model est centré
+      exclusivement sur les LAI. Tout ce qui tombe dans la période est pertinent.
+      On retire uniquement le bruit évident.
+    apply_exclusions: true
+    exclusion_scopes:
+      - hr_content
+      - hr_recruitment_terms
+      - financial_generic
+      - financial_reporting_terms
+      - esg_generic
+      - event_generic
+      - corporate_noise_terms
+      - anti_lai_routes
+    require_lai_keywords: false
+    lai_keyword_scopes: []
+    min_lai_signals: 0
+
+  hybrid:
+    description: >
+      Hybrid players : big pharma / mid pharma avec portfolio diversifié incluant
+      des LAI. Volume élevé de news non-LAI — filtrage strict requis.
+    apply_exclusions: true
+    exclusion_scopes:
+      - hr_content
+      - hr_recruitment_terms
+      - financial_generic
+      - financial_reporting_terms
+      - esg_generic
+      - event_generic
+      - corporate_noise_terms
+      - anti_lai_routes
+    require_lai_keywords: true
+    lai_keyword_scopes:
+      - lai_keywords.core_phrases
+      - lai_keywords.technology_terms_high_precision
+      - lai_keywords.interval_patterns
+      - lai_trademarks_global
+    min_lai_signals: 1
+    match_fields: [title, content]
+
+  press_sector:
+    description: >
+      Presse sectorielle pharma/biotech : volume très élevé, sujets très variés.
+      Filtrage strict requis — on ne garde que les articles avec signal LAI explicite.
+    apply_exclusions: true
+    exclusion_scopes:
+      - hr_content
+      - hr_recruitment_terms
+      - financial_generic
+      - financial_reporting_terms
+      - esg_generic
+      - event_generic
+      - corporate_noise_terms
+      - anti_lai_routes
+    require_lai_keywords: true
+    lai_keyword_scopes:
+      - lai_keywords.core_phrases
+      - lai_keywords.technology_terms_high_precision
+      - lai_keywords.interval_patterns
+      - lai_trademarks_global
+    min_lai_signals: 1
+    match_fields: [title, content]
+
+  unknown:
+    description: >
+      Actor type non résolu — traité comme hybrid par sécurité (filtrage strict).
+    apply_exclusions: true
+    exclusion_scopes:
+      - hr_content
+      - hr_recruitment_terms
+      - financial_generic
+      - financial_reporting_terms
+      - esg_generic
+      - event_generic
+      - corporate_noise_terms
+      - anti_lai_routes
+    require_lai_keywords: true
+    lai_keyword_scopes:
+      - lai_keywords.core_phrases
+      - lai_keywords.technology_terms_high_precision
+      - lai_keywords.interval_patterns
+      - lai_trademarks_global
+    min_lai_signals: 1
+    match_fields: [title, content]
+
+# ---------------------------------------------------------------------------
+# RÉSUMÉ — QUI FAIT QUOI
+# ---------------------------------------------------------------------------
+# Ce fichier        → règles de filtrage par actor_type (quoi garder)
+# ingestion_profiles_v3.yaml → stratégie d'extraction (comment fetcher)
+# source_configs_v3.yaml     → config validée par source (où chercher)
+# source_catalog_v3.yaml     → registre métier (qui surveiller)
+# company_scopes.yaml        → listes pure_players / hybrid (résolution actor_type)
+# exclusion_scopes.yaml      → valeurs des termes d'exclusion
+# technology_scopes.yaml     → valeurs des LAI keywords
+# trademark_scopes.yaml      → valeurs des trademarks LAI
+# client_config.yaml         → période de recherche (period_days)
