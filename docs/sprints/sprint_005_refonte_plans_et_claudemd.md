@@ -1,6 +1,6 @@
 # Sprint 005 — Refonte level_1_plan + CLAUDE.md V1.6
 
-**Statut** : ⏸ Planifié (bloqué jusqu'à validation Sprint 004)
+**Statut** : ⛔ Superseded by Sprint 006 — sera renuméroté Sprint 008 et exécuté dans le nouveau repo vectora
 **Palier** : Pré-Niveau 1 (mise à niveau post-audit Opus)
 **Date prévue** : après validation Sprint 004
 **Date effective** : (à remplir à l'exécution)

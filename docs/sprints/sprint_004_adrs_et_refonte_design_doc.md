@@ -1,6 +1,6 @@
 # Sprint 004 — ADRs post-audit + refonte du design doc
 
-**Statut** : ⏸ Planifié (bloqué jusqu'à validation Sprint 003)
+**Statut** : ⛔ Superseded by Sprint 006 — sera renuméroté Sprint 007 et exécuté dans le nouveau repo vectora
 **Palier** : Pré-Niveau 1 (mise à niveau post-audit Opus)
 **Date prévue** : après validation Sprint 003
 **Date effective** : (à remplir à l'exécution)
