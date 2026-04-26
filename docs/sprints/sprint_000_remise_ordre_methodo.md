@@ -1,11 +1,11 @@
 # Sprint 000 — Remise en ordre méthodologique
 
-**Statut** : ⏸ Planifié
+**Statut** : ✅ Validé
 **Palier** : Pré-Niveau 1 (méta — remise en ordre avant les paliers de fonctionnalité)
 **Date prévue** : 2026-04-25
-**Date effective** : (à remplir à l'exécution)
+**Date effective** : 2026-04-25
 **Estimation** : ~1h
-**Durée réelle** : (à remplir post-exécution)
+**Durée réelle** : ~1h30
 **Modèle recommandé** : 🟡 Sonnet (cf. CLAUDE.md §20)
 **Justification du modèle** : restructuration de documentation existante, raisonnement structuré nécessaire mais pas d'invention architecturale. Pas Haiku (plus que de la lecture mécanique). Pas Opus (overkill, aucune décision ouverte à trancher).
 
@@ -183,27 +183,28 @@ Aucune dépendance bloquante.
 
 ## Bilan post-exécution
 
-À remplir UNE FOIS le sprint terminé.
-
 ### Durée réelle vs estimation
 - Estimé : ~1h
-- Réel : (à remplir)
-- Écart : (justifier si > 50%)
+- Réel : ~1h30
+- Écart : +50% — justifié par l'ajout du tableau config-driven dans `level_1_plan.md` (clarification demandée par Frank en cours de sprint) et le changement de modèle Haiku → Sonnet pour Sprint 001.
 
 ### Commits effectués
-- (à remplir)
+- `7faf3be` : `docs(workflow): add CLAUDE.md v1.5 section §20 model guidance and Sprint 000 plan` (preamble Cowork)
+- `3cf27e1` : `refactor(docs): split execution plans from architecture design` (Sprint 000 exécution)
 
 ### Difficultés rencontrées
-- (à remplir)
+- Aucune difficulté technique. Un ajustement de contenu en cours de sprint : Frank a précisé que le principe config-driven devait être explicite dans `level_1_plan.md` dès le Niveau 1 — ajouté avec un tableau "qui répond quoi" et l'anti-pattern à éviter.
 
 ### Décisions prises en cours de route
-- (à remplir — si majeures, créer une ADR)
+- Modèle Sprint 001 : Sonnet (et non Haiku comme prévu initialement). Frank a estimé que la qualification des occurrences nécessite du jugement, pas seulement de la lecture mécanique. Mis à jour dans `sprint_001_audit_nommage_canonical.md`.
 
 ### Ce qui reste pour le prochain sprint
-- (à remplir — normalement Sprint 001 prêt à être exécuté en Haiku)
+- Sprint 001 prêt à exécuter : `docs/sprints/sprint_001_audit_nommage_canonical.md`
+- Ouvrir une nouvelle session (nouvelle fenêtre de conversation) avec modèle **Sonnet**
+- Lire STATUS.md + sprint_001 → valider le plan → exécuter l'audit
 
 ### Validation Frank
-- Date de validation : (à remplir)
+- Date de validation : 2026-04-25
 - Commentaires éventuels :
 
 ---
