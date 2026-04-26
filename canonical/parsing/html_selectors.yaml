@@ -1,0 +1,8 @@
+sources:
+  press_corporate__camurus:
+    container: 'div.newsitems-filter, li'
+    title: 'h2, h3, h4, .title, a'
+    link: 'a'
+    date: 'time, .date, .published, span[class*="date"]'
+    summary: 'p, .excerpt, .description'
+    notes: 'Camurus press releases - Identified 2026-02-11'
