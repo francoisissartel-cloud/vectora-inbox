@@ -79,7 +79,7 @@ user_template: |
   CRITICAL: Fields "extracted_date" and "date_confidence" are REQUIRED.
   Respond with ONLY the JSON, no additional text.
 
-bedrock_config:
+llm_config:
   max_tokens: 1000
   temperature: 0.0
   anthropic_version: "bedrock-2023-05-31"
