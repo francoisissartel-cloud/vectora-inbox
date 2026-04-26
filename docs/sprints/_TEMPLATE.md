@@ -9,6 +9,8 @@
 **Date effective** : (à remplir à l'exécution)
 **Estimation** : ~Xh
 **Durée réelle** : (à remplir post-exécution)
+**Modèle recommandé** : 🟢 Haiku | 🟡 Sonnet | 🔴 Opus (cf. CLAUDE.md §20)
+**Justification du modèle** : (pourquoi ce modèle pour ce sprint)
 
 ---
 

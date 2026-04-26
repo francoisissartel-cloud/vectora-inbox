@@ -1,7 +1,7 @@
 # Vectora Inbox V1 — Project Status
 
-**Dernière mise à jour** : 2026-04-25 (Claude — Phase 2.0 terminée et mergée sur main)
-**Version actuelle du chantier** : Phase 1 cadrage validée. Phase 2.0 prête à exécuter.
+**Dernière mise à jour** : 2026-04-25 (Claude — Sprint 000 terminé, Sprint 001 prêt)
+**Version actuelle du chantier** : Phase 2.0 ✅. Sprint 000 ✅. Sprint 001 (audit nommage) à démarrer.
 
 > Ce fichier est le **tableau de bord vivant** du projet. À ouvrir en premier quand on arrive sur le projet (Frank ou Claude). Mis à jour à chaque jalon validé.
 
@@ -17,29 +17,26 @@ Vectora Inbox V1 est un moteur **local-first** d'alimentation d'un datalake de v
 
 ## Où on en est aujourd'hui
 
-**Étape actuelle** : ✅ Phase 2.0 — Hygiène repo (terminée et mergée le 25/04/2026)
-**Statut** : Volets Git et Structure complets. Mergé sur main via le commit `70be5ae`. Repo dans son état V1 propre, prêt pour Phase 2.1.
+**Étape actuelle** : ✅ Sprint 000 — Remise en ordre méthodologique (terminé le 25/04/2026)
+**Statut** : Séparation architecture cible / plans d'exécution effectuée. `datalake_v1_design.md` §13 refactoré (V1.4). Plans de palier créés. Sprint 001 prêt à exécuter.
 
-**Dernier livrable validé** : ✅ Phase 2.0 — Hygiène complète du repo (25/04/2026)
-- Volet Git : tag `legacy-pre-pivot-20260425`, branche `archive/legacy-pre-pivot`, merge Phase 1 dans main, suppression de 7 branches obsolètes + 2 stashs
-- Volet Structure : nouvelle arborescence (8 dossiers racine), legacy archivé sous `archive/legacy_pre_pivot_20260425/`, swap `CLAUDE.md` V3 → V1.4, `.gitignore` réécrit, `README.md` et `pyproject.toml` minimal créés
-- 10 scripts de référence récupérés dans `scripts/legacy_reference/` pour capitalisation au Niveau 1
-- Le tag `legacy-pre-pivot-20260425` et la branche `archive/legacy-pre-pivot` préservent intégralement l'état pré-pivot
+**Dernier livrable validé** : ✅ Sprint 000 — Remise en ordre méthodologique (25/04/2026)
+- `datalake_v1_design.md` §13 refactoré : devient une vue d'ensemble courte (tableau des paliers + liens vers docs dédiés)
+- Création de `docs/architecture/level_1_plan.md` : plan complet du Niveau 1 (8 mini-sprints prévus, composants, séquencement, principe config-driven)
+- Création de `docs/architecture/level_2_plan.md` et `level_3_plan.md` : squelettes à étoffer
+- Création de `docs/sprints/sprint_001_audit_nommage_canonical.md` : Sprint 001 prêt à exécuter (modèle Sonnet)
+- `CLAUDE.md` V1.5 : ajout §20 gestion fine des modèles (Haiku / Sonnet / Opus)
 
-**Précédent livrable** : ✅ Phase 1 — Cadrage complet (25/04/2026)
-- Audit du repo existant (`docs/architecture/phase1_audit_pivot_datalake.md`)
-- Design canonique du datalake V1.3.1 (`docs/architecture/datalake_v1_design.md`)
-- Plan Phase 2.0 V2.0 (`docs/architecture/phase2.0_repo_structure.md`)
-- Règles de travail `CLAUDE.md` V1.4 (à la racine)
-- Template `.env.example`
-- Optimisations différées tracées (`docs/architecture/future_optimizations.md`)
-- 10 ADRs des décisions Phase 1 (`docs/decisions/`)
+**Précédent livrable** : ✅ Phase 2.0 — Hygiène complète du repo (25/04/2026)
+- Volet Git : tag `legacy-pre-pivot-20260425`, branche `archive/legacy-pre-pivot`, 7 branches obsolètes supprimées, 2 stashs nettoyés
+- Volet Structure : nouvelle arborescence (8 dossiers racine), legacy archivé, `CLAUDE.md` V1.4, `.gitignore` réécrit, `README.md` et `pyproject.toml` créés
+- 10 scripts récupérés dans `scripts/legacy_reference/` pour capitalisation au Niveau 1
 
-**Prochaine étape immédiate** : Merger la PR Phase 2.0 sur main, puis enchaîner sur Phase 2.1 — Audit nommage canonical
-- Vérifier la PR `refactor/v1-repo-cleanup` → main sur GitHub
-- Merger la PR (validation Frank)
-- Mettre à jour STATUS.md (fin Phase 2.0)
-- Enchaîner sur Phase 2.1 (audit nommage exhaustif dans `canonical/`)
+**Prochaine étape immédiate** : Sprint 001 — Audit nommage canonical (Phase 2.1)
+- Ouvrir une nouvelle session avec modèle **Sonnet**
+- Lire `STATUS.md` + `docs/sprints/sprint_001_audit_nommage_canonical.md`
+- Exécuter l'audit (scan `canonical/`, `config/`, docs, scripts) et produire `docs/architecture/naming_audit_phase21.md`
+- Valider le rapport avec Frank → puis Sprint 002 (exécution des renommages)
 
 ---
 
@@ -49,10 +46,11 @@ Vectora Inbox V1 est un moteur **local-first** d'alimentation d'un datalake de v
 |---|---|---|---|---|
 | 1 | **Phase 1** — Cadrage et design | ✅ Fait | 25/04/2026 | `docs/architecture/datalake_v1_design.md` |
 | 2 | **Phase 2.0** — Hygiène repo | ✅ Fait | 25/04/2026 | `docs/architecture/phase2.0_repo_structure.md` |
-| 3 | **Phase 2.1** — Audit nommage canonical | ⏸ À venir | - | (à créer en Phase 2.1) |
-| 4 | **Niveau 1** — Fondations | ⏸ À venir | - | `datalake_v1_design.md` §13.3 |
-| 5 | **Niveau 2** — Cœur | ⏸ À venir | - | `datalake_v1_design.md` §13.4 |
-| 6 | **Niveau 3** — Maquillage | ⏸ À venir | - | `datalake_v1_design.md` §13.5 |
+| 3 | **Sprint 000** — Remise en ordre méthodologique | ✅ Fait | 25/04/2026 | `docs/sprints/sprint_000_remise_ordre_methodo.md` |
+| 4 | **Phase 2.1** — Audit nommage canonical | ⏸ À venir | - | `docs/sprints/sprint_001_audit_nommage_canonical.md` |
+| 5 | **Niveau 1** — Fondations | ⏸ À venir | - | `docs/architecture/level_1_plan.md` |
+| 6 | **Niveau 2** — Cœur | ⏸ À venir | - | `docs/architecture/level_2_plan.md` |
+| 7 | **Niveau 3** — Maquillage | ⏸ À venir | - | `docs/architecture/level_3_plan.md` |
 
 **Légende** : ✅ Fait / 🔵 En cours / ⏸ À venir / ⚠️ Bloqué
 
@@ -127,11 +125,16 @@ Récap des principales :
 | Le **plan d'action** en cours d'exécution | Section "Où on en est" ci-dessus |
 | Le **mini-sprint en cours** | `docs/sprints/sprint_NNN_*.md` (cf. roadmap) |
 | Le **template** pour créer un sprint | `docs/sprints/_TEMPLATE.md` |
+| Quel **modèle** (Haiku/Sonnet/Opus) utiliser pour quelle tâche | `CLAUDE.md` §20 |
 | La **mémoire des décisions** prises | `docs/decisions/` |
 | Les **optimisations différées** | `docs/architecture/future_optimizations.md` |
 | Comment **structurer le repo** | `docs/architecture/phase2.0_repo_structure.md` |
 | L'**audit initial** du repo legacy | `docs/architecture/phase1_audit_pivot_datalake.md` |
 | Le template des **secrets** | `.env.example` |
+| Le **plan de palier Niveau 1** (composants, séquence, sprints) | `docs/architecture/level_1_plan.md` |
+| Le **plan de palier Niveau 2** (squelette) | `docs/architecture/level_2_plan.md` |
+| Le **plan de palier Niveau 3** (squelette) | `docs/architecture/level_3_plan.md` |
+| Le **prochain sprint à exécuter** (Phase 2.1 audit) | `docs/sprints/sprint_001_audit_nommage_canonical.md` |
 
 ---
 
